@@ -70,6 +70,13 @@ unit-test-sha256: test_sha256.o sha256.o
 	rm -f unit-test-sha256
 	$(CC) -o unit-test-sha256 test_sha256.o sha256.o $(L_FLAGS)
 
-unit-tests: unit-test-sha256
-	./unit-test-sha256
+comm-testable.o: comm.c ack.h
+	$(CC) -c $(C_FLAGS) -ffunction-sections -fdata-sections -Dmain=ack_main -o comm-testable.o comm.c
 
+unit-test-comm: test_comm.o comm-testable.o
+	rm -f unit-test-comm
+	$(CC) -Wl,--gc-sections -o unit-test-comm test_comm.o comm-testable.o $(L_FLAGS)
+
+unit-tests: unit-test-sha256 unit-test-comm
+	./unit-test-sha256
+	./unit-test-comm
