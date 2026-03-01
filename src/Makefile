@@ -70,6 +70,11 @@ unit-test-sha256: test_sha256.o sha256.o
 	rm -f unit-test-sha256
 	$(CC) -o unit-test-sha256 test_sha256.o sha256.o $(L_FLAGS)
 
-unit-tests: unit-test-sha256
+unit-test-save: test_save.o
+	rm -f unit-test-save
+	$(CC) -o unit-test-save test_save.o $(L_FLAGS)
+
+unit-tests: unit-test-sha256 unit-test-save
 	./unit-test-sha256
+	./unit-test-save
 

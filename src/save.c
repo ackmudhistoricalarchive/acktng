@@ -29,10 +29,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+
+#ifdef UNIT_TEST_SAVE
+#define MAX_STRING_LENGTH 4096
+#define LOWER(c) (char)tolower((unsigned char)(c))
+#define UPPER(c) (char)toupper((unsigned char)(c))
+#else
 #include "globals.h"
 #include "hash.h"
+#endif
 
-#if !defined(macintosh)
+#if !defined(UNIT_TEST_SAVE) && !defined(macintosh)
 extern int _filbuf args((FILE *));
 #endif
 
@@ -63,7 +70,6 @@ extern int _filbuf args((FILE *));
 
      */
 
-#define SAVE_REVISION 15
 char *cap_nocol(const char *str)
 {
    static char strcap[MAX_STRING_LENGTH];
@@ -75,6 +81,10 @@ char *cap_nocol(const char *str)
    strcap[0] = UPPER(strcap[0]);
    return strcap;
 }
+
+#ifndef UNIT_TEST_SAVE
+
+#define SAVE_REVISION 15
 
 /*
  * Array of containers read for proper re-nesting of objects.
@@ -2287,3 +2297,5 @@ void save_bans()
 
    return;
 }
+
+#endif /* UNIT_TEST_SAVE */
