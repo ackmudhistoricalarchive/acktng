@@ -1397,31 +1397,90 @@ Inside the East Gate of Midgaard~
 You are by two small towers that have been built into the city wall and
 connected with a footbridge across the heavy wooden gate.  Main Street leads
 west from here.  South of here is the wall road, but it looks dirty and 
-not too safe.
+You are at the poor alley.  South of here is the Grubby Inn and to the
+east you see common square.  The alley continues further west.
 ~
 0 1
+D0
+~
+~
+0 -1 3039
 D1
-You see the city gate.
+You see the common square.
 ~
 ~
-1 3133 3053
+0 -1 3025
+D2
+You see the Inn.
+~
+~
+0 -1 3048
 D3
-You see Main Street.~
+You see the poor alley.
+~
+0 -1 3044
+#3020
+The Armoury~
+The armoury with all kinds of armours on the walls and in the window.  You
+see helmets, shields and chain mails.  To the north is the main street.
+On the wall is a small note.
+1032 11
+D0
+You see the main street.
+~
+~
+0 -1 3013
+E
+note~
+You can use these commands for trading:
+
+  value <item>     To get the price of an item in your possession.
+  sell <item>      To sell something.
+  buy <item>       To buy something (provided that the shop has it in store).
+  list             Gives you a listing of the shop's inventory.
+
+	WE DON'T GIVE CREDIT; WE DON'T EXPECT TO RECEIVE CREDIT!
+			     NO HAGGLING
+~
+S
+#3016
+The Main Street~
+The main street, to the north is the weapon shop.  To the east you leave town
+and to the west the street leads to the market square. A doorway to the south
+marks the entrance to the Sample House.
+~
+0 1
+D0
+You see the weapon shop.
+~
+~
+0 -1 3011
+You see the city gate.
+~
+0 -1 3041
+D2
+~
+~
+0 -1 1001
+You see the main street leading to the market square.
+~
+0 -1 3015
+#3015
+The Main Street~
+You are on Main Street crossing through town.  To the north is the general
+store, and the main street continues east.  To the west you see and hear the
+market place and to the south is the Jeweller's Shop.
+0 1
+You see the general store.
+~
+0 -1 3010
+You see Main Street.
 ~
 0 -1 3016
-E
-wall~
-It is built from large grey rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.
+You see the Jeweller's Shop.
+0 -1 3034
+You see the market square.
 ~
-E
-tower towers~
-Both of the towers are built from large grey rocks that have been fastened to
-each other with some kind of mortar, just like the city wall.
-~
-E
-gate~
-It is a set of very big double doors made from hard wood.  They have been
 reinforced with large iron bands to make them even more sturdy.  One of the
 doors is equipped with a very big lock.
 ~
@@ -1528,60 +1587,23 @@ You see Main Street.
 ~
 0 -1 3015
 E
-sign~
-The golden letters say :-
-
-    Use 'list' to see what is in store,
-	'buy <item>' to buy an item,
-	'sell <item>' to sell an item and
-	'value <item>' to make the jeweller evaluate an item.
-~
-E
-desk~
-Your face is reflected in its surface.
-~
-E
-oil lamps~
-They are made from polished gold and looks as if they are securely fastened
-to the smooth stone walls.
-~
-S
-#3033
-The Magic Shop~
-You are in a small room that smells of rare chemicals and spices.
-Dividing the room in two is a large desk, and on the wall behind it are
-numerous shelves crammed with jars, bottles, books and scrolls of all
-sorts and sizes.
-~
-1032 11
-D2
 You see the main street.
-~
-~
-0 -1 3012
+0 -1 3015
 E
-scrolls~
-Each scroll is stored in a leather tube that protects it from moist.
-~
-E
-books~
-Most of them appear to be very old and dusty.
-~
-E
-jars bottles~
-Some of them are transparent enabling you to see that some contain colored
-powders while others contain body parts of various animals.
-~
+note~
+The note reads:
+
+  List  - Show which various items are in the store.
+  Buy   - Buy an item.
+  Value - The shopkeeper will (free of charge) tell how much he will
+	  pay for your item.
+  Sell  - Sell an item.
 S
-#3032
-Pet Shop Store~
-This is the small dark room in which the Pet Shop Boy keeps his pets.
-It is vital that this room be immediately after the pet shop.
-~
-12 11
-S
-#3031
-The Pet Shop~
+#3009
+The Bakery~
+You are standing inside the small bakery.  A sweet scent of Danish and
+fine bread fills the room.  The bread and Danish are arranged in fine order
+on the shelves, and seem to be of the finest quality.
 The Pet Shop is a small crowded store, full of cages and animals of
 various sorts and sizes.  There is a sign on the wall.
 ~
@@ -1638,83 +1660,134 @@ You are inside the only room in the old warehouse.  The place is very dusty
 ~
 8 11
 D0
-The Dark Alley.
-~
-~
-0 -1 3026
-E
-sign~
--x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-
-xWELCOME TO THE BLACK DETH'S CORPSE RETRIEVAL SERVICE!                        x
--                                                                             -
-x If you've died, and were unable to get back to your corpse, why not let the x
-- Black Deth use his dark powers to summon forth your rotting remains?        -
-x We offer reasonable rates:                                                  x
--                                                                             -
-x       Levels 1 to 10 : 1000 gold coins.                                     x
--       Levels 11 +    : 3000 gold coins.                                     -
-x                                                                             x
--                        Please note:                                         -
-x 1) NO REFUNDS!                                                              x
-- 2) If you pay for the Black Deth's services, and receive no corpse, tough.  -
-x 3) You will only receive the first corpse the Black Deth finds with his     x
--    dark powers.  So try not to die everywhere and expect him to get         -
-x    the corpse with your equipment first time.  Remember, time IS money!     x
-- 4) The prices shown are likely to change at any time.                       -
-x 5) E&OE                                                                     x
--x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-x-
+	  specialties, and tell the price of each.
 ~
 S
-#3026
-The Dark Alley~
-The dark alley, to the west is the common square.  The alley continues east.
-A forboding unused whorehouse lies to the south.
+#3006
+Entrance to the Grunting Boar Inn~
+You are standing in the entrance hall of the Grunting Boar Inn.  The hall
+has been wisely decorated with simple but functional furniture.  A small
+staircase leads up to the defunct reception room and the bar is to the east.
 ~
-0 1
+8 11
 D1
-The alley continues east.
+Surprise! You see the bar.
 ~
 ~
-0 -1 3045
-D2
-The Unused Whorehouse.
-~
-~
-0 -1 3029
+0 -1 3007
 D3
-You see the common square.
+You see the temple square.
 ~
-~
-0 -1 3025
+0 -1 3005
+D4
+You see the defunct reception room.
+~
+0 -1 3008
 S
-#3025
-The Common Square~
-The common square, people pass you, talking to each other.  To the west is
-the poor alley and to the east is the dark alley.  To the north, this square
-is connected to the market square.  From the south you notice a nasty smell.
+#3005
+The Temple Square~
+You are standing in Temple Square. Huge, marble steps lead up to the Temple
+Gate. Ye Old Grunting Boar Inn lies to the east. South of you is Market Square
+the center of Midgaard.
 ~
-0 1
+16400 1
 D0
-You see the market square.
+You see the temple.
 ~
-~
-0 -1 3014
+0 -1 3001
 D1
-You see the dark alley.
+You see the good old Grunting Boar Inn.
 ~
-~
-0 -1 3026
+0 -1 3006
 D2
-You see the city dump.
+You see the Market Square.
 ~
-~
-0 -1 3030
+0 -1 3014
 D3
-You see the poor alley.
-~
-~
-0 -1 3024
+0 -1 3038
+D4
+0 -1 3057
 D5
+0 -1 30100
+S
+#3001
+The Temple Of Midgaard~
+@@WYou stand at the southern end of the Temple Hall in the Temple of Midgaard.
+The Temple has been constructed from giant marble blocks, eternal in
+appearance.  Most of the walls are covered by ancient murals depicting Gods,
+Giants and peasants.
+   Large steps lead down through the Grand Temple Gate, descending the huge
+mound upon which the temple is built ending at the Temple Square below.
+   Equally large steps lead UP through a small door into the ENTRANCE to MUD
+SCHOOL.  (type '@@yup@@W' to go to @@RMUD SCHOOL@@W.)
+You see a small plaque and spy a small doorway to the east, which looks like
+it was just made, as well as a Grand Archway to the west.
+  The Temple itself with the Midgaard Healer lie North of here.
+~
+213020 8
+D0
+At the northern end of the temple hall is a statue and a huge altar.
+~
+0 -1 3054
+D1
+The Donation Area.
+~
+0 -1 3021
+D2
+You see the temple square.
+~
+0 -1 3005
+D3
+The Entrance Hall to the Player's Rooms.
+~
+0 -1 1101
+D4
+0 -1 3700
+D5
+0 -1 3002
+E
+plaque~
+This entire world has been integrated, modified, debugged, and enhanced by
+Hatchet, Kahn, and Furey of MERC Industries to be run by any MERC Mud.
+1992 December 17
+~
+S
+#3002
+The Bank of Midgaard~
+You are in a small room, home to the Midgaard branch of Globank, the bank that
+likes to say no.  The room is very small, and looks like most other banks
+-silent, and well-kept.  You hate it already.
+ 
+ 
+@@lYou notice a shadowy form in the corner, seemingly casing the joint.@@N
+~
+8 11
+D0
+0 -1 3003
+D3
+0 -1 3004
+D4
+0 -1 3001
+S
+#3003
+The Idea Board Room~
+~
+8 11
+D2
+~
+~
+0 -1 3002
+S
+#3037
+Calm room of relaxation and meditation.~
+Theres a natural mystic flowing through the air, and if you listen carefully
+you will hear, sweet sweet sounds of trickling water, gentle chiming and winds
+stirring through forrests. Calm feelings pervade the air, and you breathe
+deeply in an atmosphere of true relaxation and utmost tranquility
+ 
+1562 11
+D5
+~
 ~
 ~
 0 -1 21000
@@ -1780,31 +1853,82 @@ You are standing on the market square, the famous Square of Midgaard. A
 square, east   and westbound is the main street.  Some small steps lead down
 below the Square.
 ~
-0 1
-D0
-You see the temple square.
+This room is for use of contacting an immortal when none can be found thru
+other means. If you have bugs to report, reims to ask for, and other
+situations that need an immortals guidance please feel free to post here. This
+board is meant for that one purpose alone, excessive use will lead to the
+board being unavailable for the purposes which is was intended for, which is
+to help in coping with the frequest adsence of immortals when they are needed.
+
+1032 1
+D5
+~
+~
+0 -1 3030
+S
+#3062
+@@WTales of Power, Despair and Honor@@N~
+@@aThis room is placed for mortals to comment and compliment the roleplaying
+qualities of other players.  It is NOT here for in character stories, flames,
+or boosting your own multi-play characters.  Messages will be reviewed, and
+researched notes will be used in calculating the weekly roleplayer of the week
+award of 10 qps.@@N
+~
+1052 1
+D5
+~
+~
+0 -1 3014
+S
+#0
+#MOBILES
+#3015
+post postmaster master~
+The Postmaster~
+The Postmaster stands here, watching over you...
 ~
 ~
-0 -1 3005
-D1
-You see the main street.
+524299 8320 1000 S
+72 1
+#3020
+The Black Avenger~
+Cyberlich's Black Avenger.~
+Cyberlich's Black Avenger is here, staring at you with @@Rred eyes.@@g
+~
+3153927 1157800 1000 S
+140 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 64 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+#3144
+crier~
+the town crier~
+The town crier is here, weeping quietly.
+He is very good at his job - completely dissolved in tears.
 ~
-~
-0 -1 3015
-D2
-You see the common square.
-~
-~
-0 -1 3025
-D3
-You see the main street.
-~
-~
-0 -1 3013
-D4
-~
-~
-0 -1 3062
+1 0 900 S
+27 1
+#3143
+mayor~
+the mayor~
+The mayor is here.  He shakes your hand.
+He is a well-built, middle-aged man with thin, grey hair.
+1 8192 900 S
+19 1
+| 0 0 0 0 0 0 32
+#3142
+secretary~
+the secretary~
+A secretary is sitting at the desk.
+She looks very busy.
+The Secretary says 'Sorry, but the Mayor is extremely busy today'.
+The Secretary says 'Please sit down and have a seat in the meantime'.
+1 0 900 S
+19 2
+#3141
 D5
 Some steps lead this way....
 ~
@@ -1923,181 +2047,65 @@ S
 1052 1
 D5
 ~
-~
-0 -1 3014
-S
-#0
-#MOBILES
-#3015
-post postmaster master~
-The Postmaster~
-The Postmaster stands here, watching over you...
 ~
-~
-524299 8320 1000 S
-72 1
-#3020
-The Black Avenger~
-Cyberlich's Black Avenger.~
-Cyberlich's Black Avenger is here, staring at you with @@Rred eyes.@@g
-~
-3153927 1157800 1000 S
-140 0
+The wolf looks like a strong, fearless fighter.
+~
+1 0 0 S
+4 0
 0 0 0 0
 ! 0 0 0 7 0 0 0
-| 0 64 0 0 0 0 0
+#3093
+rottweiler~
+the rottweiler~
+A large, loyal rottweiler is here.
+The rottweiler looks like a strong, fierce fighter.
+1 0 400 S
+25 0
+#3092
+beagle~
+the beagle~
+A small, quick, loyal beagle is here.
+The beagle looks like a fierce fighter.
+1 0 400 S
+12 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
-#3144
-crier~
-the town crier~
-The town crier is here, weeping quietly.
-He is very good at his job - completely dissolved in tears.
+#3091
+puppy~
+the puppy~
+A small loyal puppy is here.
+The puppy looks like a cute, little, fierce fighter.
 ~
-1 0 900 S
-27 1
-#3143
-mayor~
-the mayor~
-The mayor is here.  He shakes your hand.
-He is a well-built, middle-aged man with thin, grey hair.
-1 8192 900 S
-19 1
-| 0 0 0 0 0 0 32
-#3142
-secretary~
-the secretary~
-A secretary is sitting at the desk.
-She looks very busy.
-The Secretary says 'Sorry, but the Mayor is extremely busy today'.
-The Secretary says 'Please sit down and have a seat in the meantime'.
-1 0 900 S
-19 2
-#3141
-A small sign is on the counter.
+1 0 400 S
+5 0
+| 0 0 0 0 0 0 0
+#3090
+kitten~
+the kitten~
+A small loyal kitten is here.
+The kitten looks like a cute, little, fierce fighter.
 ~
-1036 11
-D2
-You see the main street.
+1 0 400 S
+4 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+#3069
+cityguard guard~
+the cityguard~
+A cityguard is here, guarding the mayor.
 ~
-~
-0 -1 3013
-E
-sign~
-Free instructions provided by the store:
-
-   Buy  - Will buy you some bread or pastry.
-   List - The baker will kindly tell you the price and sort of the bread in
-	  his bakery.
+A big, strong, helpful, trustworthy guard.
 ~
-E
-danish pastry~
-You see that this is truly delicious pastry.  Must be made by a Dane from
-Denmark (which surely is not the capital of Sweden!).  Former ruler of
-Scandinavia, England, Northern Germany, Northern France, Russia, Greenland,
-Iceland, Estonia etc. etc.
-   The sight of those large, wholesome chokoladeboller makes your mouth water
-and your soul sing.
-
-~
-S
-#3008
-The lover's hideaway.~
-A quiet, ornately furnished room, for you to sit and chat with your loved one.
-Relax for a while, get the strains out of your system. In fact, its really
-just a glorified private room isnt it.
-~
-1548 11
-D4
-~
-~
-0 -1 3037
-D5
-You see the entrance hall.
-~
-~
-0 -1 3006
-S
-#3007
-The Grunting Boar~
-You are standing in the bar.  The bar is set against the northern wall, old
-archaic writing, carvings and symbols cover its top.  A fireplace is built into
-the western wall, and through the southeastern windows you can see the temple
-square.  This place makes you feel like home.
-A small sign with big letters is fastened to the bar.
-~
-8 11
-D3
-You see the exit to the entrance hall.
-~
-~
-0 -1 3006
-E
-writing carving carvings symbols symbol~
-Although it is very hard to understand, you think it looks a lot like beer,
-poems about beer, and small beer-mugs.
-~
-E
-sign~
-The sign reads:
-Free instructions provided by the Grunting Boar Inn.
-
-   Buy  - Buy something (drinkable) from the bartender.
-   List - The bartender will show you all the different drinks and
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-~
-
-concert shirt and Levi 501's.  His hair is pulled back into a pony tail.
-
-A beard and moustache complete the look.  Aod has brought some drugs
-
-with him from Generic Mud.
-
-~
-
-~
-
-but do not mess with him or else he'll get upset.
-
-~
-
+65 65538 1000 S
+3 1
 ~
 
 ~
@@ -2195,28 +2203,60 @@ D0
 ~
 0 -1 3059
 S
-#3059
-Leading to the pond~
-The tall grass starts to creep up on your sides, as the smell of water and
-green grass linger in the air. Gazing towards the north more you can barely
-make out what appears to be a pond.
+1 1
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+#3062
+bug~
+A bug~
+A furry little system bug is here.
+A system bug is something from a computer programer's worst nightmare.
 ~
-1024 2
-D0
+131201 40 -200 S
+14 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+#3061
+janitor~
+the janitor~
+A janitor is walking around, cleaning up.
+~
 ~
-~
-0 -1 3060
-D2
-~
-~
-0 -1 3058
-S
+1 0 900 S
+9 1
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
 #3060
-The shores of a small pond~
-You find yourself waist deep in tall grasses and cat-o-nine tails. The ground
-beneath your feet is soft and squishy. Kind of makes you feel like if you
-don't move soon you know your will become a permanent fixture here.
+cityguard guard~
+the cityguard~
+A cityguard stands here.
 ~
+A big, strong, helpful, trustworthy guard.
+~
+65 0 1000 S
+36 1
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+#3050
+dealer~
+Aod the Dealer~
+Aod the Dealer stands in the shadows here.
 1024 2
 D0
 ~
@@ -2318,28 +2358,52 @@ The captain of the guard is looking very upset.
 ~
 A big, strong, angry captain.
 ~
-1 8 1000 S
-18 1
+He is young and close-cropped and looks quite happy.
+~
+3 0 900 S
+71 1
 0 0 0 0
 ! 0 0 0 7 0 0 0
 | 0 0 0 0 0 0 0
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
-#3124
-duck~
-the duck~
-A duck is here, quacking happily.
+#3007
+sailor~
+the sailor~
+A sailor stands here, waiting to train you.
 ~
-The duck is quite fat.  It looks like it is enjoying life.
+He looks like a strong, fit sailor.
 ~
-1 0 1000 S
-7 0
+515 0 900 S
+71 1
 0 0 0 0
 ! 0 0 0 7 0 0 0
 | 0 0 0 0 0 0 0
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+#3006
+captain~
+the captain~
+A retired captain stands here, selling boats.
+~
+This captain has killed more sharks than you have eaten peas.
+~
+3 40 900 S
+22 1
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+#3005
+thief~
+the thief~
+A thief, all dressed in black.
+~
+Well COUNT your money!
 L 0 0 0 0 0 0 0 0 0 
 #3123
 sparrow~
@@ -2427,33 +2491,19 @@ A large, trained wolf is here.
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
 #3006
-captain~
-the captain~
-A retired captain stands here, selling boats.
-~
-This captain has killed more sharks than you have eaten peas.
-~
-3 40 900 S
-22 1
 0 0 0 0
 ! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
+| 0 128 0 0 0 0 16
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
-#3005
-thief~
-the thief~
-A thief, all dressed in black.
+#3095
+warhorse horse~
+@@WA Warhorse@@N~
+@@WA Warhorse snorts at you!@@N
 ~
-Well COUNT your money!
-~
-~
-The rottweiler looks like a strong, fierce fighter.
-
 ~
-
-~
+134217985 0 0 S
 
 ~
 
@@ -2645,68 +2695,35 @@ other side.
 ~
 
 ~
-
+#3012
+board notice bulletin~
+the test board.~
+There is a Test Bulletin Board here.~
+27 0 0 1
+10 1 1 1 0 0 0 0 0 0
+13
+1
+#3013
+Band Temp Wedding~
+@@WA @@ybeautiful @@gdiamond @@yring @@d<@@WT@@d>@@N~
+@@yA wide, plain circle of gold inscribed:~
+9 0 8396800 1
+1 0 0 0 0 0 0 0 0 0
+~
+L
+25
+#3016
+ring signet~
+a city guard signet ring~
+You see a ring with a strange symbol on the floor.~
+9 134217792 8396800 1
+0 0 0 0 0 0 0 0 0 0
+4
+A
+24 -2
+A
+17 -6
 ~
-
-~
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#3068
-cityguard guard~
-the cityguard~
-A cityguard is here, guarding the gate.
-~
-A big, strong, helpful, trustworthy guard.
-~
-65 0 1000 S
-27 1
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#3067
-cityguard guard~
-the cityguard~
-A cityguard is here, guarding the gate.
-~
-A big, strong, helpful, trustworthy guard.
-~
-65 0 1000 S
-11 1
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#3066
-cat~
-an alley cat~
-An alley cat hisses at you.
-~
-The alley cat is half starved and more than a little feral.
-~
-1 0 -200 S
-42 1
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#3065
-beggar~
-the beggar~
-A beggar is here, asking for a few coins.
-~
-The beggar looks like she is fed up with life.
-~
 1 0 400 S
 2 2
 0 0 0 0
@@ -2786,31 +2803,42 @@ filthy~
 Filthy~
 Filthy is standing here, eager to serve you a special drink.
 ~
-Filthy looks real, ehm, dirty. He likes to keep his costumers happy,
-but do not mess with him or else he'll get upset.
+boots~
+a pair of standard issue boots~
+You see a pair of standard issue boots here.~
+9 134217728 10485760 1
+5 0 0 0 0 0 0 0 0 0
+4
+E
+boots~
+You see boots of great craftsmanship.  Imprinted on the side is:
+Merc Industries
+25
+#3026
+leggings~
+a pair of standard issue leggings~
+You see a pair of standard issue leggings here.~
+9 134217728 9437184 1
+5 0 0 0 0 0 0 0 0 0
+4
+E
+leggings~
+You see leggings of great craftsmanship.  Imprinted on the side is:
+9 134217728 8454144 1
+5 0 0 0 0 0 0 0 0 0
+4
+You see a standard issue vest here.~
+9 134217728 8650752 1
+5 0 0 0 0 0 0 0 0 0
+18 2
+E
+mace~
+You see a mace of great craftsmanship.  Imprinted on the side is:
 ~
-3 0 600 S
-15 1
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#3040
-bartender~
-the bartender~
-A bartender watches you calmly, while he skillfully mixes a drink.
-~
-A tired looking Bartender who hates trouble in his bar.
-~
-8388611 0 900 S
-46 1
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
+25
+#3037
+sword~
+a standard issue sword~
 L 0 0 0 0 0 0 0 0 0 
 #3012
 healer~
@@ -2940,6 +2968,29 @@ A young weaponsmith, who still has lots to learn.
 0 0 0 0
 ! 0 0 0 7 0 0 0
 | 0 0 0 0 0 0 0
+a buffalo water skin~
+A bloated dead buffalo is on the floor.~
+17 0 8388608 1
+100 100 0 0 0 0 0 0 0 0
+4
+L
+1
+#3137
+key steel~
+a steel key~
+A large steel key has been left here.~
+18 0 8388608 1
+0 0 0 0 0 0 0 0 0 0
+4
+E
+key steel~
+A key of this size must fit a very strong lock.
+~
+L
+1
+#3136
+coins gold~
+a small pile of gold coins~
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
@@ -2982,7 +3033,9 @@ A wizard walks around behind the counter, talking to himself.
 The wizard looks old and senile, and yet he looks like a very powerful
 wizard. He is equipped with fine clothing, and is wearing many fine
 rings and bracelets.
-~
+1
+#3131
+~
 3 0 900 S
 74 1
 0 0 0 0
@@ -3158,6 +3211,16 @@ A tattered, well-read edition of Dark Horse Presents... lies forgotten here.~
 1 1 8421376 1
 0 0 -1 0 0 0 0 0 0 0
 4
+4 0 0 0 0 0 0 0 0 0
+4
+L
+15
+#3074
+skirt scale mail~
+a long scale mail skirt~
+A long scale mail skirt is lying on the ground.~
+9 134217728 9437184 1
+4 0 0 0 0 0 0 0 0 0
 A
 17 -100
 A
@@ -3288,31 +3351,9 @@ This is the official Merc war banner to see you through the darkest realm!
 
 ~
 L
-
-~
-
-~
-
-     ???
-
-    ?   ?
-
-       ?
-
-      ?
-
-      ?
-
-      *
-
-~
-
-~
-
-equipped with a handle to make it handy and a hood to protect its flame.
-
-Some letters have been scratched on its bottom.
-
+~
+L
+1
 ~
 25
 #3017
