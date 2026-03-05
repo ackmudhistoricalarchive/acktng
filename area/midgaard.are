@@ -3189,8 +3189,8 @@ D3
 0 -1 3162
 S
 #3164
-@@WAuburn Traverse@@N~
-The avenue broadens here into a lived-in civic pocket where spice factors and chanters repeatedly cross paths under strings of practical @@ylanterns@@N. The air carries beeswax polish, while hushed bargaining rises and falls between facades of stone and timber that have been repaired many times over generations. Underfoot, the paving shifts through carved curbstones, and at the edge of the street stands a guild marker hammered into the curb, giving this stretch of @@WMidgaard@@N a character all its own.~
+@@aStarweave Caster Armoury@@N~
+Moonthread curtains and rune-etched brass mirrors now divide this square into fitting bays for scholars, invokers, and war-sages. Apprentices compare sigil-stitched mantles while a master caster armourer checks seams for arcane flow, weighing each piece for balance and spellcraft mobility. Practical @@ylanterns@@N cast warm light across layered robes, spellbound girdles, and reinforced cowl displays, and the old civic paving is now overlaid with concentric ward circles that mark this as Midgaard's dedicated arcade for high-circle caster armor.~
 1 1
 D0
 ~
@@ -4682,6 +4682,21 @@ A scarred melee armourer in a soot-dark apron, fitting reinforced wargear for fr
 ~
 3 0 900 S
 58 1
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+#3253
+armourer armorer caster starweave astraloom~
+The Starweave Caster Armourer~
+The Starweave Caster Armourer arranges rune-bound vestments in careful rows.
+~
+A patient moonthread specialist who outfits archmages and battlecasters in high-circle defensive weave.
+~
+3 0 900 S
+62 2
 0 0 0 0
 ! 0 0 0 7 0 0 0
 | 0 0 0 0 0 0 0
@@ -6756,6 +6771,215 @@ A
 A
 19 23
 L
+#3200
+astralfocus diadem~
+an astralfocus diadem~
+An astralfocus diadem glows softly within a silver ward-circle.~
+9 0 8388616 2
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 30
+A
+13 24
+L
+105
+#3201
+voidsinger gorget~
+a voidsinger gorget~
+A voidsinger gorget rests on midnight velvet beside etched sigils.~
+9 0 8389632 3
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 31
+A
+13 24
+L
+110
+#3202
+spellquill mantle~
+a spellquill mantle~
+A spellquill mantle hangs beneath dancing mote-lights.~
+9 0 8392704 2
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 31
+A
+13 25
+L
+110
+#3203
+runeshard cuirass~
+a runeshard cuirass~
+A runeshard cuirass hums with layered abjuration threads.~
+9 0 8650752 4
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 32
+A
+13 25
+L
+115
+#3204
+glyphbound sleeves~
+glyphbound sleeves~
+Glyphbound sleeves are displayed across a lacquered fitting stand.~
+9 0 10485760 3
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 33
+A
+13 26
+L
+115
+#3205
+arcaneglass gloves~
+arcaneglass gloves~
+Arcaneglass gloves shimmer with thin crystal latticework.~
+9 0 9437184 2
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 33
+A
+13 26
+L
+120
+#3206
+starseal girdle~
+a starseal girdle~
+A starseal girdle is coiled beside polished rune-charms.~
+9 0 8388616 3
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 34
+A
+13 27
+L
+120
+#3207
+nightscribe greaves~
+nightscribe greaves~
+Nightscribe greaves stand ready beside a chalked spell grid.~
+9 0 8519680 4
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 34
+A
+13 27
+L
+125
+#3208
+constellation slippers~
+constellation slippers~
+Constellation slippers rest under a halo of pale starlight.~
+9 0 8454144 2
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 35
+A
+13 28
+L
+125
+#3209
+aeonveil cloak~
+an aeonveil cloak~
+An aeonveil cloak drapes from a frame etched with protective cantrips.~
+9 0 8421376 3
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 35
+A
+13 28
+L
+130
+#3210
+spiralmind helm~
+a spiralmind helm~
+A spiralmind helm glints with layered runic filigree.~
+9 0 8388616 2
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 36
+A
+13 29
+L
+130
+#3211
+riftward amulet~
+a riftward amulet~
+A riftward amulet hangs above a basin of silver ink.~
+9 0 8389632 3
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 36
+A
+13 29
+L
+135
+#3212
+quasarthread epaulets~
+quasarthread epaulets~
+Quasarthread epaulets ripple with restrained arcane force.~
+9 0 8392704 4
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 37
+A
+13 30
+L
+135
+#3213
+astralattice robe~
+an astralattice robe~
+An astralattice robe is suspended over a humming ward-anchor.~
+9 0 8650752 4
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 38
+A
+13 31
+L
+140
+#3214
+highsigil cuffs~
+highsigil cuffs~
+Highsigil cuffs rest within a ring of tiny orbiting glyphs.~
+9 0 10485760 2
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 39
+A
+13 31
+L
+145
+#3215
+thaumaforge handwraps~
+thaumaforge handwraps~
+Thaumaforge handwraps are laid beside tempered focus rods.~
+9 0 9437184 3
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 39
+A
+13 32
+L
+145
+3253 9 0 0 0 0 135 80 0 23
 100
 
 3252 9 0 0 0 0 135 75 0 23
@@ -7120,6 +7344,40 @@ E 0 3016 99 1           signet ring
 E 0 3037 199 16         sword
 
 E 0 3034 99 5           vest
+
+M 0 3253 1 3164       The Starweave caster armourer
+
+G 0 3200 100 
+
+G 0 3201 100 
+
+G 0 3202 100 
+
+G 0 3203 100 
+
+G 0 3204 100 
+
+G 0 3205 100 
+
+G 0 3206 100 
+
+G 0 3207 100 
+
+G 0 3208 100 
+
+G 0 3209 100 
+
+G 0 3210 100 
+
+G 0 3211 100 
+
+G 0 3212 100 
+
+G 0 3213 100 
+
+G 0 3214 100 
+
+G 0 3215 100 
 
 E 0 3025 99 8            boots
 
