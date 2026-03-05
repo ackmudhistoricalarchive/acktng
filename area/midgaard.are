@@ -3142,8 +3142,8 @@ D3
 0 -1 3159
 S
 #3161
-@@WCedar Square@@N~
-The avenue broadens here into a lived-in civic pocket where couriers and fishmongers repeatedly cross paths under strings of practical @@ylanterns@@N. The air carries wet stone and ash, while distant hymnwork rises and falls between facades of stone and timber that have been repaired many times over generations. Underfoot, the paving shifts through inlaid ward sigils, and at the edge of the street stands a public fountain carved with lions, giving this stretch of @@WMidgaard@@N a character all its own.~
+@@aMoonthread Clothier Court@@N~
+Dyed awnings of deep indigo and moss-green stretch above tidy racks of quilted robes, layered mantles, and rune-stitched travel cloth. Needles click from a nearby fitting table while apprentices brush lint from velvet mannequins, and the scent of linen oil and fresh wool hangs in the air. A polished signboard advertises arcane-ready fabrics for hedge mages, scholars, and wardens, marking this corner of @@WMidgaard@@N as a dedicated cloth armorer's court.~
 0 1
 D0
 ~
@@ -3159,8 +3159,8 @@ D2
 0 -1 3181
 S
 #3162
-@@WSilver Marketwalk@@N~
-The avenue broadens here into a lived-in civic pocket where apothecaries and couriers repeatedly cross paths under strings of practical @@ylanterns@@N. The air carries hot iron scale, while measured drill calls rises and falls between facades of stone and timber that have been repaired many times over generations. Underfoot, the paving shifts through painted survey marks, and at the edge of the street stands a prayer rail polished to a shine, giving this stretch of @@WMidgaard@@N a character all its own.~
+@@aIron Vanguard Armory@@N~
+Weapon racks and armored forms crowd this once-open corner, now converted into a melee outfitter's court where mercenaries test grips and check straps before marching out. The ring of whetstones, the thud of practice blows, and the scent of oiled steel and boiled leather fill the air while a disciplined armorer catalogs front-line gear by fit and role. Painted placards advertise reinforced harness, war cloaks, and heavy field kit for duelists, infantry, and shield-line veterans of @@WMidgaard@@N.~
 1 1
 D0
 ~
@@ -3180,8 +3180,8 @@ D3
 0 -1 3161
 S
 #3163
-@@WCrimson Concourse@@N~
-The avenue broadens here into a lived-in civic pocket where woodwrights and glassblowers repeatedly cross paths under strings of practical @@ylanterns@@N. The air carries fresh cedar shavings, while public proclamations rises and falls between facades of stone and timber that have been repaired many times over generations. Underfoot, the paving shifts through ashlar gutters, and at the edge of the street stands a memorial stele listing old defenders, giving this stretch of @@WMidgaard@@N a character all its own.~
+@@aStonewall Bulwark Depot@@N~
+Reinforced stands of tower shields and plated harness line the streetfront, turning this corner into Midgaard's dedicated tank armory where shieldbearers test weight and balance before deployment. Hammering rivets, barked drill calls, and the smell of oiled steel rise from fitted worktables while a hardened quartermaster inspects every buckle for siege-line reliability. Painted placards advertise bastion-grade plate, gatewarden shields, and impact-soaking war gear for guardians who anchor the city's front ranks.~
 1 1
 D0
 ~
@@ -3900,250 +3900,340 @@ post postmaster master~
 The Postmaster~
 The Postmaster stands here, watching over you...
 
-~
 ~
-524299 8320 1000 S
-72 1
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#3020
-The Black Avenger~
-Cyberlich's Black Avenger.~
-Cyberlich's Black Avenger is here, staring at you with @@Rred eyes.@@g
-
-~
 ~
-3153927 1157800 1000 S
-140 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 64 0 0 0 0 0
+
+~
+
+~
+
+~
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
-#3144
-crier~
-the town crier~
-The town crier is here, weeping quietly.
 
-~
-He is very good at his job - completely dissolved in tears.
+~
 
-~
-1 0 900 S
-27 1
+~
+
+~
+
+The Secretary says 'Sorry, but the Mayor is extremely busy today'.
+
+The Secretary says 'Please sit down and have a seat in the meantime'.
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+
+~
+
+~
+
+~
+
+~
+
+~
+
+for coming here more often.
+
+~
+! 0 0 0 7 0 0 0
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+
+~
+
+~
+
+~
+
+concert shirt and Levi 501's.  His hair is pulled back into a pony tail.
+
+A beard and moustache complete the look.  Aod has brought some drugs
+
+with him from Generic Mud.
+
+~
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+
+~
+
+but do not mess with him or else he'll get upset.
+
+~
+
+~
+
+~
+
+~
+
+~
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+
+~
+
+the look in her eyes that she enjoys seeing you cower in her presence.
+
+~
+
+~
+
+keep himself going.
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+lifetime than you have ever seen.
+
+~
+L 0 0 0 0 0 0 0 0 0 
+
+~
+
+~
+
+~
+
+~
+
+~
+
+body.~
+
+~
+
+rings and bracelets.
+
+~
 0 0 0 0
 ! 0 0 0 7 0 0 0
 | 0 0 0 0 0 0 0
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
-#3143
-mayor~
-the mayor~
-The mayor is here.  He shakes your hand.
 
-~
-He is a well-built, middle-aged man with thin, grey hair.
+@@W  Max the bank teller says, 'Have you seen those shady dudes loitering about?'@@N
 
-~
-1 8192 900 S
-19 1
-0 0 0 0
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
 ! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 32
+| 0 0 0 0 0 0 0
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
-#3142
-secretary~
-the secretary~
-A secretary is sitting at the desk.
 
-~
-She looks very busy.
+~
 
-The Secretary says 'Sorry, but the Mayor is extremely busy today'.
+~
 
-The Secretary says 'Please sit down and have a seat in the meantime'.
+~
 
-~
-1 0 900 S
-19 2
+~
+
+~
+
+~
+
+~
+
+~
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+#3251
+armorer clothier moonthread loomwarden~
+The Moonthread Loomwarden~
+The Moonthread Loomwarden smooths a tailored battle-robe across a fitting stand.
+~
+A meticulous cloth armorer specializing in layered spellcloth, warded wraps, and tailored field-robes.
+~
+3 0 900 S
+58 2
 0 0 0 0
 ! 0 0 0 7 0 0 0
 | 0 0 0 0 0 0 0
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
-#3141
-cityguard guard~
-the cityguard~
-A cityguard stands here, looking very upset.
 
-~
-A big, strong, angry guard.
-
-~
-1 0 1000 S
-8 1
+#3252
+armorer melee vanguard ironshield~
+The Iron Vanguard Armorer~
+The Iron Vanguard Armorer tightens straps on a scarred training harness.
+~
+A veteran melee armorer fitting disciplined front-line kit for soldiers, duelists, and shieldbearers.
+~
+3 0 900 S
+62 1
 0 0 0 0
 ! 0 0 0 7 0 0 0
 | 0 0 0 0 0 0 0
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
-#3140
-captain~
-the captain~
-The captain of the guard is looking very upset.
 
-~
-A big, strong, angry captain.
-
-~
-1 8 1000 S
-18 1
+#3253
+tank armorer bulwark stonewall bastion~
+The Stonewall Tank Armorer~
+The Stonewall Tank Armorer checks the weight of a plated bulwark harness.
+~
+A veteran tank armorer specializing in fortress-grade plate, shield rigs, and endurance kit for front-line guardians.
+~
+3 0 900 S
+66 1
 0 0 0 0
 ! 0 0 0 7 0 0 0
 | 0 0 0 0 0 0 0
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
-#3124
-duck~
-the duck~
-A duck is here, quacking happily.
 
-~
-The duck is quite fat.  It looks like it is enjoying life.
 
-~
-1 0 1000 S
-7 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#3123
-sparrow~
-the sparrow~
-A sparrow is flapping around on the ground.
+~
 
-~
-The sparrow looks like it is enjoying life.
+sad and evil soul.  You sense the power stored within this weapon to be awesome,
 
-~
-1 0 1000 S
-9 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#3122
-duckling~
-the duckling~
-A duckling is swimming around in the pond.
+ready to strike your enemies at the slightest chance.  You are forced to look
 
-~
-The duckling is adorable, it looks most of all like a tiny furball.
+away, rather than be dragged into it's dark heart....
 
-~
-1 0 1000 S
-1 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#3121
-swan~
-the swan~
-A swan is swimming around in the pond.
-
-~
-The white swan is very elegant.
-
-~
-1 0 1000 S
-2 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#3120
-sexton~
-the sexton~
-A sexton is sitting here, drinking hot tea.
-
-~
-The sexton looks like he is relaxing after another grave-digging job.
-
-~
-1 0 800 S
-10 1
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#3100
-maid~
-the maid~
-The maid is waiting for your order.
-
-~
-She is very beautiful with golden hair, and deep blue eyes. A good reason
-
-for coming here more often.
-
-~
-1 0 1000 S
-29 2
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#3094
-wolf~
-the wolf~
-A large, trained wolf is here.
-
-~
-The wolf looks like a strong, fearless fighter.
-
-~
-1 0 0 S
-4 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#3093
-rottweiler~
-the rottweiler~
-A large, loyal rottweiler is here.
-
-~
-The rottweiler looks like a strong, fierce fighter.
-
-~
+~
+~
 1 0 400 S
 25 0
 0 0 0 0
@@ -4791,95 +4881,108 @@ armourer armorer moonthread arcanoweaver~
 The Moonthread Arcanoweaver~
 The Moonthread Arcanoweaver adjusts rune-stitched armor on a dress form.
 
-~
-A meticulous moonthread armourer who tailors arcane vestments for hedge mages and archons alike.
 
-~
-3 0 900 S
-47 2
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#0
-#OBJECTS
-#3057
-ladder~
 ~
+
 ~
-1 0 0 1
-0 0 0 0 0 0 0 0 0 0
+
+Merc Industries
+
+~
+
+Merc Industries
+
+~
+
+Merc Industries
+
+~
+
+Merc Industries
+
+~
+
+Merc Industries
+
+~
 4
+
+Merc Industries
+
+~
+
+Merc Industries
+
+~
+
+Merc Industries
+
+~
+
+Merc Industries
+
+~
+
+Merc Industries
+
+~
+A
+
+Merc Industries
+
+~
+
+Merc Industries
+
+~
+
+Merc Industries
+
+~
+
+    To whom it may concern,
+
+	Merc Industries has charmed your money.  Apparently one's
+
+	gold will remain close, even beyond death. We are closing
+
+	down our offices and ATM machines.  Our services here are
+
+	no longer required.
+
+    Midgaard City Bank
+
+~
+
+~
+
+~
+
+towards the river so you can sit and watch the river and the houses on the
+
+other side.
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
 L
 1
-#3038
-darkness~
-@@GDarkness@@g~
-A blade of @@GDarkness@@g lies here.
 
-~
-5 134220288 8421376 33
-0 0 0 9 0 0 0 0 0 0
-8
-A
-18 35
-A
-19 35
-A
-14 100
-A
-12 20
-A
-13 20
-A
-17 -200
-E
-darkness~
-Looking at @@GDarkness@@g is like looking into the furthest corner of your
+~
 
-sad and evil soul.  You sense the power stored within this weapon to be awesome,
+~
 
-ready to strike your enemies at the slightest chance.  You are forced to look
+~
 
-away, rather than be dragged into it's dark heart....
-
-~
-L
-120
-#3039
-oil~
-some cinnamon massage oil~
-An oily patch on the ground~
-13 2 8388608 1
-0 0 0 0 0 0 0 0 0 0
-4
-L
-1
-#3043
-loren mask~
-loren's Silver Mask~
-The Mask of Loren lies here.~
-9 1 8388624 1
-0 0 0 0 0 0 0 0 0 0
-4
-A
-17 -100
-A
-18 15
-A
-19 15
-L
-1
-#3006
-ddagger~
-a dagger~
-A dagger lies here.~
-5 1 8421376 1
-0 0 0 11 0 0 0 0 0 0
-4
-A
+~
 19 20
 A
 18 30
@@ -5432,31 +5535,33 @@ water cup~
 a cup of water~
 A cup has been set here.~
 17 0 8388608 1
-2 2 0 0 0 0 0 0 0 0
-13
-E
-cup~
-It is a large simple cup.
 
-~
-L
-1
-#3101
-coffee cup~
-a cup of coffee~
-A cup has been set here.~
-17 0 8388608 1
-2 2 12 0 0 0 0 0 0 0
-13
+~
 E
-cup~
-It is a small simple cup.
 
-~
-L
-1
-#3100
-tea cup~
+~
+
+     ???
+
+    ?   ?
+
+       ?
+
+      ?
+
+      ?
+
+      *
+
+~
+
+~
+
+equipped with a handle to make it handy and a hood to protect its flame.
+
+Some letters have been scratched on its bottom.
+
+~
 a cup of tea~
 A cup has been set here.~
 17 0 8388608 1
@@ -5581,12 +5686,12 @@ L
 jerkin~
 a studded leather jerkin~
 A studded leather jerkin is lying on the ground.~
-9 134217728 8650752 1
-3 0 0 0 0 0 0 0 0 0
-8
-L
-40
-#3065
+
+spell.  The edge of the blade looks as if it could cut through anything
+
+or anyone.
+
+~
 sleeves~
 a pair of leather sleeves~
 A pair of leather sleeves is lying on the ground.~
@@ -5638,13 +5743,14 @@ E
 potion yellow~
 The potion has a small label 'Detect The Invisible'.
 
-~
-L
+~
+
+~
 1
-#3040
-scroll identify~
-a scroll of identify~
-A scroll has carelessly been left here.~
+
+~
+
+~
 2 64 8388608 1
 12 53 -1 -1 0 0 0 0 0 0
 4
@@ -5783,18 +5889,18 @@ It is quite heavy.  The blade is made of some metal that you can't even
 ~
 L
 120
-#3004
-bottle local~
-a bottle of local specialty~
-A dark bottle has been left here.~
-17 0 8388608 1
-8 8 8 0 0 0 0 0 0 0
+10
+30
+15
+25
+40
+15
 8
 L
-1
-#3003
-bottle firebreather~
-a bottle of firebreather~
+30
+40
+20
+45
 A firebreather has been left here.~
 17 0 8388608 1
 8 8 7 0 0 0 0 0 0 0
@@ -5976,122 +6082,836 @@ A bastion fieldcloak is folded with military precision.~
 0 0 0 0 0 0 0 0 0 0
 4
 A
-18 14
+10
 A
-19 12
+15
 L
-34
-#3166
-emberglass charm~
-an emberglass focus charm~
-An emberglass focus charm pulses faintly with arcane heat.~
+20
+20
+35
+20
+20
+25
+0 0 0 0 0 0 0 0 0 0
+4
+A
+35
+A
+25
+L
+35
+45
+armorer clothier moonthread loomwarden~
+The Moonthread Loomwarden~
+The Moonthread Loomwarden smooths a tailored battle-robe across a fitting stand.
+~
+A meticulous cloth armorer specializing in layered spellcloth, warded wraps, and tailored field-robes.
+~
+3 0 900 S
+58 2
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+
+armorer melee vanguard ironshield~
+The Iron Vanguard Armorer~
+The Iron Vanguard Armorer tightens straps on a scarred training harness.
+~
+A veteran melee armorer fitting disciplined front-line kit for soldiers, duelists, and shieldbearers.
+~
+3 0 900 S
+62 1
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+
+tank armorer bulwark stonewall bastion~
+The Stonewall Tank Armorer~
+The Stonewall Tank Armorer checks the weight of a plated bulwark harness.
+~
+A veteran tank armorer specializing in fortress-grade plate, shield rigs, and endurance kit for front-line guardians.
+~
+3 0 900 S
+66 1
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0 
+L 0 0 0 0 0 0 0 0 0 
+
+L
+15
+25
+30
+30
+35
+35
+0 0 0 0 0 0 0 0 0 0
+4
+A
+40
+A
+45
+L
+50
+#3267
+sunspun hood~
+a sunspun hood~
+A sunspun hood hangs from a lacquered pegboard.~
 9 0 8388624 2
 0 0 0 0 0 0 0 0 0 0
 4
 A
-12 4
+12 16
 A
-13 4
+13 12
 L
-8
-#3167
-sylphic lens~
-a sylphic prism lens~
-A sylphic prism lens spins slowly in place.~
+50
+#3268
+riverweave mantle~
+a riverweave mantle~
+A riverweave mantle shimmers with layered silk thread.~
 9 0 8388624 3
 0 0 0 0 0 0 0 0 0 0
 4
 A
-12 8
+12 17
 A
-13 7
+13 13
 L
-20
-#3168
-runespun clasp~
-a runespun mantle clasp~
-A runespun mantle clasp waits in a lacquered box.~
+55
+#3269
+whisperlinen sash~
+a whisperlinen sash~
+A whisperlinen sash is folded with precise pleats.~
+9 0 8388624 2
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 18
+A
+13 14
+L
+55
+#3270
+stormloom cuffs~
+stormloom cuffs~
+Stormloom cuffs rest beside a rack of spell-needles.~
+9 0 8388624 2
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 19
+A
+13 15
+L
+60
+#3271
+wardsilk shawl~
+a wardsilk shawl~
+A wardsilk shawl is draped over a cedar display frame.~
+9 0 8388624 3
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 20
+A
+13 16
+L
+65
+#3272
+runespun slippers~
+runespun slippers~
+Runespun slippers sit within a chalked fitting circle.~
+9 0 8388624 2
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 21
+A
+13 16
+L
+65
+#3273
+veilthread vest~
+a veilthread vest~
+A veilthread vest hangs beside polished tailoring shears.~
+9 0 8388624 3
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 22
+A
+13 17
+L
+70
+#3274
+moonquilt leggings~
+moonquilt leggings~
+Moonquilt leggings are rolled atop a padded bench.~
+9 0 8388624 3
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 23
+A
+13 18
+L
+70
+#3275
+sigilbound wrap~
+a sigilbound wrap~
+A sigilbound wrap hums faintly with stitched glyphwork.~
+9 0 8388624 2
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 24
+A
+13 18
+L
+75
+#3276
+azurethread gloves~
+azurethread gloves~
+Azurethread gloves lie pair-bound with silver cord.~
+9 0 8388624 2
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 25
+A
+13 19
+L
+75
+#3277
+starlace robe~
+a starlace robe~
+A starlace robe glows under lamplight with woven motes.~
 9 0 8388624 4
 0 0 0 0 0 0 0 0 0 0
 4
 A
-12 12
+12 26
 A
-13 10
+13 20
 L
-32
-#3169
-supply crate plate~
-a supply crate harness~
-A supply crate harness lies near bundled expedition goods.~
+80
+#3278
+galebound tabard~
+a galebound tabard~
+A galebound tabard ripples though the air stands still.~
+9 0 8388624 3
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 27
+A
+13 21
+L
+85
+#3279
+runeguard mantle~
+a runeguard mantle~
+A runeguard mantle is pinned with brass ward-tacks.~
+9 0 8388624 4
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 28
+A
+13 22
+L
+85
+#3280
+spellbloom hood~
+a spellbloom hood~
+A spellbloom hood rests on a polished oak bust.~
+9 0 8388624 3
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 29
+A
+13 23
+L
+90
+#3281
+wardwoven skirt~
+a wardwoven battle-skirt~
+A wardwoven battle-skirt hangs from a brass fitting rail.~
+9 0 8388624 3
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 30
+A
+13 24
+L
+90
+#3282
+astralbrocade cloak~
+an astralbrocade cloak~
+An astralbrocade cloak is lined with fine protective script.~
+9 0 8388624 4
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 31
+A
+13 25
+L
+95
+#3283
+loomwarden raiment~
+a loomwarden raiment~
+A loomwarden raiment drapes heavily with layered spellcloth.~
+9 0 8388624 4
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 32
+A
+13 26
+L
+100
+#3284
+moonthread grandrobe~
+a moonthread grandrobe~
+A moonthread grandrobe anchors the rear display in regal folds.~
+9 0 8388624 4
+0 0 0 0 0 0 0 0 0 0
+4
+A
+12 33
+A
+13 27
+L
+100
+#3285
+vanguard warhelm~
+a vanguard warhelm~
+A vanguard warhelm rests above a rack of sparring shields.~
+9 0 8388624 7
+0 0 0 0 0 0 0 0 0 0
+7
+A
+18 22
+A
+19 16
+L
+50
+#3286
+linebreaker pauldrons~
+linebreaker pauldrons~
+Linebreaker pauldrons are stacked beside a drill post.~
 9 0 8388624 12
 0 0 0 0 0 0 0 0 0 0
-4
+8
 A
-18 7
+18 24
 A
-19 7
+19 17
 L
-14
-#3170
-longmarch pauldrons~
-longmarch pauldrons~
-Longmarch pauldrons are stacked by the receiving desk.~
+55
+#3287
+bastion gorget~
+a bastion gorget~
+A bastion gorget sits on folded banner cloth.~
+9 0 8388624 2
+0 0 0 0 0 0 0 0 0 0
+7
+A
+18 21
+A
+19 16
+L
+55
+#3288
+reaver chainshirt~
+a reaver chainshirt~
+A reaver chainshirt hangs from a reinforced iron hook.~
+9 0 8388624 4
+0 0 0 0 0 0 0 0 0 0
+8
+A
+18 25
+A
+19 18
+L
+60
+#3289
+gatewatch bracers~
+gatewatch bracers~
+Gatewatch bracers lie in pairs on a cedar shelf.~
+9 0 8388624 3
+0 0 0 0 0 0 0 0 0 0
+7
+A
+18 23
+A
+19 17
+L
+60
+#3290
+stormmarch greaves~
+stormmarch greaves~
+Stormmarch greaves stand ready beside weighted practice dummies.~
+9 0 8388624 8
+0 0 0 0 0 0 0 0 0 0
+9
+A
+18 27
+A
+19 19
+L
+65
+#3291
+ironline cuirass~
+an ironline cuirass~
+An ironline cuirass bears fresh polish over old drill marks.~
+9 0 8388624 9
+0 0 0 0 0 0 0 0 0 0
+9
+A
+18 29
+A
+19 20
+L
+65
+#3292
+duelguard gloves~
+duelguard gloves~
+Duelguard gloves are bound with red leather ties.~
+9 0 8388624 10
+0 0 0 0 0 0 0 0 0 0
+7
+A
+18 24
+A
+19 18
+L
+70
+#3293
+siegeward belt~
+a siegeward belt~
+A siegeward belt hangs above a row of rivet tools.~
+9 0 8388624 11
+0 0 0 0 0 0 0 0 0 0
+7
+A
+18 25
+A
+19 18
+L
+70
+#3294
+warlance sabatons~
+warlance sabatons~
+Warlance sabatons are lined heel-to-heel by the fitting rail.~
 9 0 8388624 13
 0 0 0 0 0 0 0 0 0 0
-4
+8
 A
-18 11
+18 28
 A
-19 9
+19 20
 L
-26
-#3171
-convoy tower shield~
-a convoy tower shield~
-A convoy tower shield leans against a crate of hardtack.~
+75
+#3295
+veteran fieldcloak~
+a veteran fieldcloak~
+A veteran fieldcloak drapes heavily over an oak stand.~
 9 0 8388624 14
 0 0 0 0 0 0 0 0 0 0
-4
-A
-18 15
-A
-19 13
-L
-38
-#3172
-requisition sabre~
-a requisition sabre~
-A requisition sabre waits beside stamped manifests.~
-5 0 8421376 7
-0 0 0 11 0 0 0 0 0 0
 8
 A
-18 9
+18 30
 A
-19 8
+19 21
 L
-16
-#3173
-breach pike~
-a breach pike~
-A breach pike rests upright in a steel stand.~
-5 0 8421376 8
-0 0 0 11 0 0 0 0 0 0
+80
+#3296
+rampart platecoat~
+a rampart platecoat~
+A rampart platecoat waits beside stamped requisition tags.~
+9 0 8388624 4
+0 0 0 0 0 0 0 0 0 0
+9
+A
+18 31
+A
+19 22
+L
+80
+#3297
+ironbanner harness~
+an ironbanner harness~
+An ironbanner harness hangs from a steel gantry.~
+9 0 8388624 12
+0 0 0 0 0 0 0 0 0 0
+9
+A
+18 32
+A
+19 23
+L
+85
+#3298
+warpath vambraces~
+warpath vambraces~
+Warpath vambraces gleam under bright forge lamps.~
+9 0 8388624 3
+0 0 0 0 0 0 0 0 0 0
+7
+A
+18 29
+A
+19 21
+L
+85
+#3299
+bastion command helm~
+a bastion command helm~
+A bastion command helm crowns a mannequin in parade stance.~
+9 0 8388624 7
+0 0 0 0 0 0 0 0 0 0
 8
 A
-18 13
+18 33
 A
-19 11
+19 24
 L
-28
-#3174
-siege cleaver~
-a siege cleaver~
-A siege cleaver sits oiled and battle-ready.~
-5 0 8421376 9
-0 0 0 11 0 0 0 0 0 0
-8
+90
+#3300
+siegebreaker warplate~
+a siegebreaker warplate~
+A siegebreaker warplate dominates the center display.~
+9 0 8388624 9
+0 0 0 0 0 0 0 0 0 0
+9
+A
+18 35
+A
+19 25
+L
+95
+#3301
+citadel towerguard~
+a citadel towerguard harness~
+A citadel towerguard harness is strapped to a heavy dress form.~
+9 0 8388624 14
+0 0 0 0 0 0 0 0 0 0
+9
+A
+18 36
+A
+19 26
+L
+95
+#3302
+midgaard warlord panoply~
+a Midgaard warlord panoply~
+A Midgaard warlord panoply anchors the rear wall beneath banners.~
+9 0 8388624 4
+0 0 0 0 0 0 0 0 0 0
+9
+A
+18 38
+A
+19 27
+L
+100
+#3303
+stonewall greathelm~
+a stonewall greathelm~
+A stonewall greathelm crowns a suit of fortress plate.~
+9 0 8388624 7
+0 0 0 0 0 0 0 0 0 0
+12
+A
+18 26
+A
+19 20
+L
+50
+#3304
+bastion wardpauldrons~
+bastion wardpauldrons~
+Bastion wardpauldrons are stacked beside impact hammers.~
+9 0 8388624 12
+0 0 0 0 0 0 0 0 0 0
+12
+A
+18 28
+A
+19 21
+L
+55
+#3305
+gatehold gorget~
+a gatehold gorget~
+A gatehold gorget rests atop folded command banners.~
+9 0 8388624 2
+0 0 0 0 0 0 0 0 0 0
+12
+A
+18 25
+A
+19 20
+L
+55
+#3306
+ironbastion chestplate~
+an ironbastion chestplate~
+An ironbastion chestplate bears thick layered reinforcement.~
+9 0 8388624 4
+0 0 0 0 0 0 0 0 0 0
+13
+A
+18 30
+A
+19 22
+L
+60
+#3307
+wallguard vambraces~
+wallguard vambraces~
+Wallguard vambraces sit in matched pairs by the anvil rack.~
+9 0 8388624 3
+0 0 0 0 0 0 0 0 0 0
+12
+A
+18 27
+A
+19 21
+L
+65
+#3308
+rampart greaves~
+rampart greaves~
+Rampart greaves stand ready beside a shield drill circle.~
+9 0 8388624 8
+0 0 0 0 0 0 0 0 0 0
+13
+A
+18 31
+A
+19 23
+L
+65
+#3309
+anchorforge cuirass~
+an anchorforge cuirass~
+An anchorforge cuirass hangs from a reinforced steel frame.~
+9 0 8388624 9
+0 0 0 0 0 0 0 0 0 0
+14
+A
+18 33
+A
+19 24
+L
+70
+#3310
+bulwark gauntlets~
+bulwark gauntlets~
+Bulwark gauntlets are bound with thick leather straps.~
+9 0 8388624 10
+0 0 0 0 0 0 0 0 0 0
+12
+A
+18 29
+A
+19 22
+L
+70
+#3311
+siegewall girdle~
+a siegewall girdle~
+A siegewall girdle hangs above riveted plate laces.~
+9 0 8388624 11
+0 0 0 0 0 0 0 0 0 0
+12
+A
+18 30
+A
+19 22
+L
+75
+#3312
+adamant sabatons~
+adamant sabatons~
+Adamant sabatons are lined heel-to-heel under bright lamps.~
+9 0 8388624 13
+0 0 0 0 0 0 0 0 0 0
+13
+A
+18 32
+A
+19 24
+L
+80
+#3313
+fortress cloak~
+a fortress cloak~
+A fortress cloak drapes heavily over a plated mannequin.~
+9 0 8388624 14
+0 0 0 0 0 0 0 0 0 0
+12
+A
+18 34
+A
+19 25
+L
+80
+#3314
+citadel platecoat~
+a citadel platecoat~
+A citadel platecoat waits beside stamped garrison tags.~
+9 0 8388624 4
+0 0 0 0 0 0 0 0 0 0
+14
+A
+18 35
+A
+19 26
+L
+85
+#3315
+towerline harness~
+a towerline harness~
+A towerline harness hangs from a reinforced loading gantry.~
+9 0 8388624 12
+0 0 0 0 0 0 0 0 0 0
+14
+A
+18 36
+A
+19 27
+L
+85
+#3316
+ironward bracers~
+ironward bracers~
+Ironward bracers gleam under steady forge light.~
+9 0 8388624 3
+0 0 0 0 0 0 0 0 0 0
+12
+A
+18 33
+A
+19 25
+L
+90
+#3317
+wardenshield helm~
+a wardenshield helm~
+A wardenshield helm crowns a display of siege standards.~
+9 0 8388624 7
+0 0 0 0 0 0 0 0 0 0
+13
+A
+18 37
+A
+19 28
+L
+95
+#3318
+gatecrusher warplate~
+a gatecrusher warplate~
+A gatecrusher warplate dominates the armory centerline.~
+9 0 8388624 9
+0 0 0 0 0 0 0 0 0 0
+14
+A
+18 39
+A
+19 29
+L
+95
+#3319
+highwall guardian rig~
+a highwall guardian rig~
+A highwall guardian rig is strapped to a heavy oak stand.~
+9 0 8388624 14
+0 0 0 0 0 0 0 0 0 0
+14
+A
+18 40
+A
+19 30
+L
+100
+#3320
+midgaard bastion panoply~
+a Midgaard bastion panoply~
+A Midgaard bastion panoply anchors the rear wall beneath city banners.~
+9 0 8388624 4
+0 0 0 0 0 0 0 0 0 0
+14
+A
+18 42
+A
+19 31
+L
+100
+#0
+#SHOPS
+3100 0 0 0 0 0 110 90 6 23
+3050 0 0 0 0 0 100 50 0 23
+3046 0 0 0 0 0 100 90 0 23
+3040 0 0 0 0 0 110 100 0 23
+3010 9 0 0 0 0 110 90 8 21
+3009 8 31 0 0 0 150 50 0 23
+3006 22 0 0 0 0 120 90 6 22
+3004 9 0 0 0 0 100 50 0 23
+3003 5 6 7 0 0 130 40 0 23
+3002 1 8 13 15 19 150 40 0 23
+3140 5 9 0 0 0 120 90 0 23
+3142 29 0 0 0 0 120 90 0 23
+3143 25 26 27 0 0 125 85 0 23
+3150 5 9 0 0 0 130 60 0 23
+3151 9 0 0 0 0 120 70 0 23
+3152 2 3 4 10 0 120 70 0 23
+3153 9 13 15 0 0 120 65 0 23
+3154 5 9 0 0 0 135 60 0 23
+3155 2 3 4 0 0 120 70 0 23
+3156 5 9 2 0 0 125 65 0 23
+3157 9 0 0 0 0 130 65 0 23
+3250 9 0 0 0 0 125 70 0 23
+3251 9 0 0 0 0 130 70 0 23
+3252 9 0 0 0 0 130 65 0 23
+3253 9 0 0 0 0 135 65 0 23
+0
+#RESETS
+M 0 3011 1 3110       Gertrude the executioner
+
+E 0 3005 100 16         wield the executioners blade
+
+G 0 3040 500                Give identify scroll.
+
+G 0 3041 500                Give potion of see invisible.
+
+M 0 3004 1 3020       The armourer
+
+G 0 3072 100 
+
+G 0 3073 100 
+
+G 0 3074 100 
+
+G 0 3075 100 
+
+G 0 3076 100 
+
 A
 18 17
 A
@@ -6917,6 +7737,120 @@ E 0 3016 99 1           signet ring
 E 0 3037 199 16         sword
 
 E 0 3034 99 5           vest
+
+M 0 3251 1 3161       The Moonthread Loomwarden
+
+G 0 3267 100 
+
+G 0 3268 100 
+
+G 0 3269 100 
+
+G 0 3270 100 
+
+G 0 3271 100 
+
+G 0 3272 100 
+
+G 0 3273 100 
+
+G 0 3274 100 
+
+G 0 3275 100 
+
+G 0 3276 100 
+
+G 0 3277 100 
+
+G 0 3278 100 
+
+G 0 3279 100 
+
+G 0 3280 100 
+
+G 0 3281 100 
+
+G 0 3282 100 
+
+G 0 3283 100 
+
+G 0 3284 100 
+
+M 0 3252 1 3162       The Iron Vanguard Armorer
+
+G 0 3285 100 
+
+G 0 3286 100 
+
+G 0 3287 100 
+
+G 0 3288 100 
+
+G 0 3289 100 
+
+G 0 3290 100 
+
+G 0 3291 100 
+
+G 0 3292 100 
+
+G 0 3293 100 
+
+G 0 3294 100 
+
+G 0 3295 100 
+
+G 0 3296 100 
+
+G 0 3297 100 
+
+G 0 3298 100 
+
+G 0 3299 100 
+
+G 0 3300 100 
+
+G 0 3301 100 
+
+G 0 3302 100 
+
+M 0 3253 1 3163       The Stonewall Tank Armorer
+
+G 0 3303 100 
+
+G 0 3304 100 
+
+G 0 3305 100 
+
+G 0 3306 100 
+
+G 0 3307 100 
+
+G 0 3308 100 
+
+G 0 3309 100 
+
+G 0 3310 100 
+
+G 0 3311 100 
+
+G 0 3312 100 
+
+G 0 3313 100 
+
+G 0 3314 100 
+
+G 0 3315 100 
+
+G 0 3316 100 
+
+G 0 3317 100 
+
+G 0 3318 100 
+
+G 0 3319 100 
+
+G 0 3320 100 
 
 M 0 3060 20 3111      Cityguard 2
 
