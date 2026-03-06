@@ -6662,180 +6662,204 @@ This melee fighter wears @@llight blue@@N wraps, @@yyellow@@N sashes, and @@bbro
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
-#9907
-southern oasis bulwark tank patrol 107~
-@@lSouthern Oasis Bulwark@@N~
-@@lSouthern Oasis Bulwark@@N watches the caravan route with disciplined intent.
-~
-This tank fighter wears @@llight blue@@N wraps, @@yyellow@@N sashes, and @@bbrown@@N plates suited to desert warfare.
-~
-1 0 0 S
-66 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 4
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#9908
-southern oasis oracle caster patrol 108~
-@@ySouthern Oasis Oracle@@N~
-@@ySouthern Oasis Oracle@@N watches the caravan route with disciplined intent.
-~
-This caster fighter wears @@llight blue@@N wraps, @@yyellow@@N sashes, and @@bbrown@@N plates suited to desert warfare.
-~
-1 0 0 S
-67 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 4
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#9909
-southern oasis stalker melee patrol 109~
-@@bSouthern Oasis Stalker@@N~
-@@bSouthern Oasis Stalker@@N watches the caravan route with disciplined intent.
-~
-This melee fighter wears @@llight blue@@N wraps, @@yyellow@@N sashes, and @@bbrown@@N plates suited to desert warfare.
-~
-1 0 0 S
-68 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 4
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#9910
-southern oasis raider melee patrol 110~
-@@lSouthern Oasis Raider@@N~
-@@lSouthern Oasis Raider@@N watches the caravan route with disciplined intent.
-~
-This melee fighter wears @@llight blue@@N wraps, @@yyellow@@N sashes, and @@bbrown@@N plates suited to desert warfare.
-~
-1 0 0 S
-69 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 4
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#9911
-southern oasis warder tank patrol 111~
-@@ySouthern Oasis Warder@@N~
-@@ySouthern Oasis Warder@@N watches the caravan route with disciplined intent.
-~
-This tank fighter wears @@llight blue@@N wraps, @@yyellow@@N sashes, and @@bbrown@@N plates suited to desert warfare.
-~
-1 0 0 S
-70 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 4
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#9912
-southern oasis seer caster patrol 112~
-@@bSouthern Oasis Seer@@N~
-@@bSouthern Oasis Seer@@N watches the caravan route with disciplined intent.
-~
-This caster fighter wears @@llight blue@@N wraps, @@yyellow@@N sashes, and @@bbrown@@N plates suited to desert warfare.
-~
-1 0 0 S
-55 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 4
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#9913
-southern oasis skirmisher melee patrol 113~
-@@lSouthern Oasis Skirmisher@@N~
-@@lSouthern Oasis Skirmisher@@N watches the caravan route with disciplined intent.
-~
-This melee fighter wears @@llight blue@@N wraps, @@yyellow@@N sashes, and @@bbrown@@N plates suited to desert warfare.
-~
-1 0 0 S
-56 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 4
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#9914
-southern oasis phalanx tank patrol 114~
-@@ySouthern Oasis Phalanx@@N~
-@@ySouthern Oasis Phalanx@@N watches the caravan route with disciplined intent.
-~
-This tank fighter wears @@llight blue@@N wraps, @@yyellow@@N sashes, and @@bbrown@@N plates suited to desert warfare.
-~
-1 0 0 S
-57 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 4
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#9915
-southern oasis invoker caster patrol 115~
-@@bSouthern Oasis Invoker@@N~
-@@bSouthern Oasis Invoker@@N watches the caravan route with disciplined intent.
-~
-This caster fighter wears @@llight blue@@N wraps, @@yyellow@@N sashes, and @@bbrown@@N plates suited to desert warfare.
-~
-1 0 0 S
-58 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 4
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#9916
-southern oasis duelist melee patrol 116~
-@@lSouthern Oasis Duelist@@N~
-@@lSouthern Oasis Duelist@@N watches the caravan route with disciplined intent.
-~
-This melee fighter wears @@llight blue@@N wraps, @@yyellow@@N sashes, and @@bbrown@@N plates suited to desert warfare.
-~
-1 0 0 S
-59 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 4
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#9917
-southern oasis bulwark tank patrol 117~
-@@ySouthern Oasis Bulwark@@N~
-@@ySouthern Oasis Bulwark@@N watches the caravan route with disciplined intent.
-~
-This tank fighter wears @@llight blue@@N wraps, @@yyellow@@N sashes, and @@bbrown@@N plates suited to desert warfare.
-~
-1 0 0 S
-60 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 4
-+ 0 0 0 0 0 0 0 0 0
-l 0 0 0 0 0 0 0 0 0 0 
-L 0 0 0 0 0 0 0 0 0 
-#9918
-southern oasis oracle caster patrol 118~
-@@bSouthern Oasis Oracle@@N~
-@@bSouthern Oasis Oracle@@N watches the caravan route with disciplined intent.
-~
-This caster fighter wears @@llight blue@@N wraps, @@yyellow@@N sashes, and @@bbrown@@N plates suited to desert warfare.
-~
-1 0 0 S
-61 0
+9 268435584 8388609 1
+9 268435584 8388610 1
+9 268435584 8388612 1
+9 268435584 8388616 1
+9 268435584 8388624 1
+9 268435584 8388640 1
+9 268435584 8388672 1
+9 268435584 8388736 1
+9 268435584 8388864 1
+9 268435584 8389120 1
+9 268435584 8389632 1
+9 268435584 8390656 1
+9 268435584 8392704 1
+9 268435584 8396800 1
+9 268435584 8421376 1
+9 268435584 8454144 1
+9 268435584 8519680 1
+9 268435584 8650752 1
+9 268435584 9437184 1
+9 268435584 10485760 1
+9 268435584 12582912 1
+9 268435584 8388609 1
+9 268435584 8388610 1
+9 268435584 8388612 1
+9 268435584 8388616 1
+9 268435584 8388624 1
+9 268435584 8388640 1
+9 268435584 8388672 1
+9 268435584 8388736 1
+9 268435584 8388864 1
+9 268435584 8389120 1
+9 268435584 8389632 1
+9 268435584 8390656 1
+9 268435584 8392704 1
+9 268435584 8396800 1
+9 268435584 8421376 1
+9 268435584 8454144 1
+9 268435584 8519680 1
+9 268435584 8650752 1
+9 268435584 9437184 1
+9 268435584 10485760 1
+9 268435584 12582912 1
+9 268435584 8388609 1
+9 268435584 8388610 1
+9 268435584 8388612 1
+9 268435584 8388616 1
+9 268435584 8388624 1
+9 268435584 8388640 1
+9 268435584 8388672 1
+9 268435584 8388736 1
+9 268435584 8388864 1
+9 268435584 8389120 1
+9 268435584 8389632 1
+9 268435584 8390656 1
+9 268435584 8392704 1
+9 268435584 8396800 1
+9 268435584 8421376 1
+9 268435584 8454144 1
+9 268435584 8519680 1
+9 268435584 8650752 1
+9 268435584 9437184 1
+9 268435584 10485760 1
+9 268435584 12582912 1
+9 268435584 8388609 1
+9 268435584 8388610 1
+9 268435584 8388612 1
+9 268435584 8388616 1
+9 268435584 8388624 1
+9 268435584 8388640 1
+9 268435584 8388672 1
+9 268435584 8388736 1
+9 268435584 8388864 1
+9 268435584 8389120 1
+9 268435584 8389632 1
+9 268435584 8390656 1
+9 268435584 8392704 1
+9 268435584 8396800 1
+9 268435584 8421376 1
+9 268435584 8454144 1
+9 268435584 8519680 1
+9 268435584 8650752 1
+9 268435584 9437184 1
+9 268435584 10485760 1
+9 268435584 12582912 1
+9 268435584 8388609 1
+9 268435584 8388610 1
+9 268435584 8388612 1
+9 268435584 8388616 1
+9 268435584 8388624 1
+9 268435584 8388640 1
+9 268435584 8388672 1
+9 268435584 8388736 1
+9 268435584 8388864 1
+9 268435584 8389120 1
+9 268435584 8389632 1
+9 268435584 8390656 1
+9 268435584 8392704 1
+9 268435584 8396800 1
+9 268435584 8421376 1
+9 268435584 8454144 1
+9 268435584 8519680 1
+9 268435584 8650752 1
+9 268435584 9437184 1
+9 268435584 10485760 1
+9 268435584 12582912 1
+9 268435584 8388609 1
+9 268435584 8388610 1
+9 268435584 8388612 1
+9 268435584 8388616 1
+9 268435584 8388624 1
+9 268435584 8388640 1
+9 268435584 8388672 1
+9 268435584 8388736 1
+9 268435584 8388864 1
+9 268435584 8389120 1
+9 268435584 8389632 1
+9 268435584 8390656 1
+9 268435584 8392704 1
+9 268435584 8396800 1
+9 268435584 8421376 1
+9 268435584 8454144 1
+9 268435584 8519680 1
+9 268435584 8650752 1
+9 268435584 9437184 1
+9 268435584 10485760 1
+9 268435584 12582912 1
+9 268435584 8388609 1
+9 268435584 8388610 1
+9 268435584 8388612 1
+9 268435584 8388616 1
+9 268435584 8388624 1
+9 268435584 8388640 1
+9 268435584 8388672 1
+9 268435584 8388736 1
+9 268435584 8388864 1
+9 268435584 8389120 1
+9 268435584 8389632 1
+9 268435584 8390656 1
+9 268435584 8392704 1
+9 268435584 8396800 1
+9 268435584 8421376 1
+9 268435584 8454144 1
+9 268435584 8519680 1
+9 268435584 8650752 1
+9 268435584 9437184 1
+9 268435584 10485760 1
+9 268435584 12582912 1
+9 268435584 8388609 1
+9 268435584 8388610 1
+9 268435584 8388612 1
+9 268435584 8388616 1
+9 268435584 8388624 1
+9 268435584 8388640 1
+9 268435584 8388672 1
+9 268435584 8388736 1
+9 268435584 8388864 1
+9 268435584 8389120 1
+9 268435584 8389632 1
+9 268435584 8390656 1
+9 268435584 8392704 1
+9 268435584 8396800 1
+9 268435584 8421376 1
+9 268435584 8454144 1
+9 268435584 8519680 1
+9 268435584 8650752 1
+9 268435584 9437184 1
+9 268435584 10485760 1
+9 268435584 12582912 1
+9 268435584 8388609 1
+9 268435584 8388610 1
+9 268435584 8388612 1
+9 268435584 8388616 1
+9 268435584 8388624 1
+9 268435584 8388640 1
+9 268435584 8388672 1
+9 268435584 8388736 1
+9 268435584 8388864 1
+9 268435584 8389120 1
+9 268435584 8389632 1
+9 268435584 8390656 1
+9 268435584 8392704 1
+9 268435584 8396800 1
+9 268435584 8421376 1
+9 268435584 8454144 1
+9 268435584 8519680 1
+9 268435584 8650752 1
+9 268435584 9437184 1
+9 268435584 10485760 1
+9 128 8388609 1
+9 268435648 8388616 1
+9 268435648 9437184 1
+9 268435648 8392704 1
+9 268435648 8650752 1
+9 268435648 10485760 1
+9 268435648 8454144 1
+9 268435648 8519680 1
+9 268435648 8421376 1
+9 268435648 8389120 1
 0 0 0 0
 ! 0 0 0 7 0 0 0
 | 0 0 0 0 0 0 4
