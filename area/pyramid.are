@@ -3070,11 +3070,12 @@ D0
 The drip chamber lies to the north.
 ~
 ~
-0 0 30523
-D1
-The outer ring continues east.
-~
-~
+32867 0 -250 S
+16451 0 -100 S
+16451 0 -150 S
+16451 0 -200 S
+32867 0 -300 S
+16451 0 -100 S
 0 0 30533
 D2
 The corridor curves south.
@@ -3233,17 +3234,21 @@ The passage leads south to the inner complex.
 ~
 ~
 0 0 30552
-S
-#30542
-@@yThe Deep Catacomb Corridor@@N~
-The primary north-south spine of the deep catacomb stretches ahead, its ceiling
-higher here than in the approach passages, the walls bearing a continuous mural of
-the underworld's geography that has never been studied by any living scholar.
-~
-0 3
-D0
-The deep catacomb entry lies to the north.
-~
+32867 0 -150 S
+16451 0 -250 S
+32867 0 -300 S
+32867 0 -250 S
+32867 0 -150 S
+16451 0 -150 S
+16451 0 -200 S
+16451 0 -350 S
+16451 0 -250 S
+16451 0 -100 S
+32867 0 -150 S
+32867 0 -250 S
+16451 0 -300 S
+32867 0 -300 S
+16451 0 -400 S
 ~
 0 0 30528
 D1
@@ -3791,7 +3796,7 @@ The void vault entrance lies to the south.
 ~
 0 0 30574
 S
-#30571
+32867 0 -300 S
 @@yThe Void Vault@@N~
 A vast chamber of perfectly smooth black stone that absorbs all light, the walls
 receding into absolute darkness at every direction, the floor cold enough to ache
@@ -3843,9 +3848,10 @@ The void vault approach lies to the north.
 ~
 0 0 30570
 D2
-The void vault proper lies to the south.
-~
-~
+16451 0 -150 S
+16451 0 -300 S
+16451 0 -250 S
+16451 0 -300 S
 0 0 30571
 S
 #30575
@@ -4052,7 +4058,8 @@ L 0 0 0 0 0 0 0 0 0
 death_asp asp~
 @@ya Death Asp@@N~
 A death asp rears its hooded head, throat pulsing with dark necrotic light.
-~
+32867 0 -350 S
+~
 Jet-black scales ripple across a serpent of unnatural length as it rears its
 hooded head, revealing a throat that glows with dark necrotic energy.
 ~
@@ -4108,7 +4115,7 @@ A wild-eyed devotee in black and gold robes brandishes a curved ceremonial blade
 101 0
 0 0 4 4
 ! 2 7 3 7 65 0 2
-| 0 0 0 0 0 0 0
+16451 0 -350 S
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
@@ -4180,7 +4187,7 @@ L 0 0 0 0 0 0 0 0 0
 stone_sentinel sentinel~
 @@ya Stone Sentinel@@N~
 A stone sentinel pulls itself free from the carved wall, towering above all else.
-~
+16451 0 -200 S
 Two enormous stone hands emerge from carved niches in the wall and pull free
 an entire stone body that stands twice the height of any mortal, unyielding.
 ~
