@@ -3070,7 +3070,7 @@ D0
 The drip chamber lies to the north.
 ~
 ~
-0 0 30523
+32867 0 -250 S
 D1
 The outer ring continues east.
 ~
@@ -3158,7 +3158,7 @@ S
 @@yThe Blind Passage@@N~
 A deliberately disorienting passage with no distinguishing features and identical
 junctions at each end, a trap for the unwary designed to send intruders circling
-indefinitely, its floor worn smooth by the confused pacing of those who fell for it.
+32867 0 -300 S
 ~
 0 3
 D1
@@ -3233,11 +3233,12 @@ The passage leads south to the inner complex.
 ~
 ~
 0 0 30552
-S
+32867 0 -150 S
 #30542
-@@yThe Deep Catacomb Corridor@@N~
-The primary north-south spine of the deep catacomb stretches ahead, its ceiling
-higher here than in the approach passages, the walls bearing a continuous mural of
+32867 0 -300 S
+32867 0 -250 S
+32867 0 -150 S
+higher here than in the approach passages, the walls bearing a continuous mural of
 the underworld's geography that has never been studied by any living scholar.
 ~
 0 3
@@ -3435,20 +3436,25 @@ The passage continues south to the inner complex proper.
 0 0 30562
 S
 #30552
-@@yThe West Inner Complex Passage@@N~
-Matching the eastern passage, this western corridor bears the faces of the
-condemned rather than their names, hundreds of individual portrait reliefs carved
-over centuries by different hands, the styles shifting but the subjects' expressions uniform.
-~
-0 3
-D0
-The west deep passage lies to the north.
-~
+32867 0 -150 S
+32867 0 -250 S
+32867 0 -300 S
+67108899 0 -500 S
+67108899 0 -500 S
+67108899 0 -500 S
+67108899 0 -500 S
+67108899 0 -500 S
+67108899 0 -1000 S
+67108899 0 -400 S
+67108899 0 -500 S
+67108899 0 -500 S
+67108899 0 -600 S
+16483 0 -200 S
+16483 0 -150 S
+16483 0 -250 S
+16483 0 -200 S
+16483 0 -150 S
 ~
-0 0 30541
-D2
-The passage continues south.
-~
 ~
 0 0 30563
 S
@@ -3764,9 +3770,10 @@ The approach to the deepest sacred chamber descends through this passage where
 64 3
 D0
 The deepest sacred passage lies to the north.
-~
-~
-0 0 30565
+16483 0 -150 S
+16483 0 -200 S
+32867 0 -300 S
+16483 0 -250 S
 D2
 The sacred descent passage leads to the final chamber.
 ~
@@ -3909,21 +3916,24 @@ S
 @@yThe Sealed One's Prison@@N~
 A chamber sealed within a chamber within a chamber, each layer of containment
 visible as a different quality of stone, the innermost being the oldest and roughest,
-built in desperate haste around something that was not expected to ever be here.
-~
-64 3
-D3
-A passage leads west to the primary deep chamber.
-~
-~
-0 0 30545
-S
-#0
-#MOBILES
-#30526
-pyramid_guard guard~
-@@ya Pyramid Guard@@N~
-A pyramid guardian clad in ancient golden armor stands here, spear at the ready.
+16483 0 -100 S
+16483 0 -300 S
+16483 0 -350 S
+16483 0 -400 S
+16483 0 -300 S
+32867 0 -350 S
+16483 0 -200 S
+16483 0 -250 S
+16483 0 -300 S
+16483 0 -200 S
+16483 0 -400 S
+16483 0 -150 S
+67108899 0 -400 S
+67108899 0 -500 S
+67108899 0 -600 S
+67108899 0 -500 S
+67108899 0 -700 S
+67108899 0 -800 S
 ~
 A broad-shouldered guardian clad in layered golden armor stands at attention,
 spear leveled at any who dare approach without invitation.
