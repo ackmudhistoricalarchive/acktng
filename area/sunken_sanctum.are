@@ -355,7 +355,7 @@ An Ashwalker floats inches above the ground, trailing wisps of grey ash.
 ! 0 0 0 7 0 0 0
 | 0 0 0 0 0 0 0
 + 0 0 0 0 0 0 0 0 0
-l 100 9511 9512 0 0 0 0 0 0 0 
+9 201326592 8486912 1
 L 60 40 0 0 0 0 0 0 0 
 #9502
 flamebound sentinel~
@@ -469,11 +469,11 @@ ruinwarden fragment stone fragment~
 @@Ya Fragment of the Warden@@N~
 A jagged piece of magically hardened stone lies here.
 ~
-9 201326592 8388624 1
+8 64 8388608 1
 0 0 0 0 0 0 0 0 0 0
-5
+18 64 8388608 1
 L
-150
+8 64 8388608 1
 #9511
 ashwalker cloak smoky~
 @@DAn Ashwalker's Cloak@@N~
