@@ -2294,7 +2294,7 @@ sorcerer lich minor~
 16481 524800 -1000 S
 58 0
 0 -30 0 0
-! 0 0 0 7 0 1573760 0
+5 134217728 8421376 0 0 0 0 0 0 0
 | 0 0 0 0 0 0 0
 + 90 0 0 0 0 0 0 0 0
 l 100 1448 1449 0 0 0 0 0 0 0 
@@ -2569,7 +2569,8 @@ catacomb crawler~
 @@DThe catacomb crawler is adapted for the narrow tunnels of the deep catacombs.
 Low to the ground and fast, it attacks with multiple @@Rlimbs simultaneously@@D,
 overwheling prey before it can respond.@@N
-~
+8 0
+~
 16481 512 -1000 S
 45 1
 0 -55 9 10
@@ -2633,546 +2634,355 @@ L 50 50 0 0 0 0 0 0 0
 #1456
 corrupted oak ancient tree~
 @@Ka corrupted oak@@N~
-@@KA corrupted oak@@D shudders into movement, @@Rroots ripping free of the soil@@D.@@N
-~
-@@DThis once-ancient tree has been infused with dark magic over centuries of
-proximity to Shadowmere's corruption. It attacks with @@Kbranches like siege
-weapons@@D and is extraordinarily difficult to damage.@@N
-~
-16481 512 -1000 S
-45 1
-0 -60 9 9
-! 0 0 0 7 24578 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 1418 1443 0 0 0 0 0 0 0 
-L 50 50 0 0 0 0 0 0 0 
-#1457
-night hag~
-@@Ra night hag@@N~
-@@RA night hag@@D hovers in the corridor, @@Kher form flickering between solid and shadow@@D.@@N
-~
-@@DThe night hag is a creature of pure malice - an ancient undead spellcaster
-who feeds on fear and despair. Her magical arsenal is @@Rdevastating and varied@@D,
-and she can sense weakness with @@Kunnatural precision@@D.@@N
-~
-16481 524800 -1000 S
-55 0
-0 -30 0 0
-! 0 0 0 7 0 1573760 0
-| 0 0 0 0 0 0 0
-+ 85 0 0 0 0 0 0 0 0
-l 100 1448 1501 0 0 0 0 0 0 0 
-L 50 50 0 0 0 0 0 0 0 
-#1458
-void dragon young~
-@@Ka young void dragon@@N~
-@@KA young void dragon@@D raises its head from the ruins, @@Reyes like extinguished stars@@D.@@N
-~
-@@DA dragon whose element is void rather than fire - this young specimen is
-already terrifyingly powerful, combining @@Rmassive physical attacks@@D with
-a breath weapon of @@Kpure annihilating darkness@@D.@@N
-~
-16481 512 -1000 S
-60 1
-0 -100 16 17
-! 0 0 0 7 60238 65616 0
-| 0 0 0 0 0 0 0
-+ 50 0 0 0 0 0 0 0 0
-l 100 1462 1526 0 0 0 0 0 0 0 
-L 50 50 0 0 0 0 0 0 0 
-#1459
-soulflayer worm~
-@@Ra soulflayer worm@@N~
-@@RA soulflayer worm@@D bursts from the earth, @@Rringed maw gaping@@D.@@N
-~
-@@DThe soulflayer worm is a massive subterranean predator whose feeding
-process @@Rextracts and consumes the soul@@D directly. It is purely physical
-in its methodology but @@Keffective to a horrifying degree@@D.@@N
-~
-97 0 -1000 S
-56 0
-0 -80 12 12
-! 0 0 0 7 24578 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 1418 1443 0 0 0 0 0 0 0 
-L 50 50 0 0 0 0 0 0 0 
-#1460
-crypt wight~
-@@Ka crypt wight@@N~
-@@KA crypt wight@@D emerges from a sealed niche, @@Kgrave-wrap still clinging to it@@D.@@N
-~
-@@DA powerful wight that has resided in the necropolis for centuries,
-growing steadily stronger. It combines formidable @@Rphysical attacks@@D with
-the ability to @@Kcall upon necromantic magic@@D learned from proximity to
-Shadowmere's dark power.@@N
-~
-16481 512 -1000 S
-48 1
-0 -65 10 11
-! 0 0 0 7 60238 12 0
-| 0 0 0 0 0 0 0
-+ 25 0 0 0 0 0 0 0 0
-l 100 1401 1430 0 0 0 0 0 0 0 
-L 50 50 0 0 0 0 0 0 0 
-#0
-#OBJECTS
-#1400
-bone shortsword sword~
-@@Ka bone shortsword@@N~
-@@KA bone shortsword@@D lies here, its edge @@Rstrangely sharp@@D.@@N~
-5 134217728 8421376 0
-2 2 3 11 0 0 0 0 0 0
-6
-A
-19 0
-A
-18 0
-L
-30
-#1401
-rusted longsword longsword~
-@@Da rusted longsword@@N~
-@@DA rusted longsword@@D with a @@Kcracked leather grip@@D lies discarded here.@@N~
-5 134217728 8421376 0
-3 3 5 3 0 0 0 0 0 0
-7
-A
-19 0
-A
-18 0
-L
-33
-#1402
-tainted dagger dagger~
-@@Ra tainted dagger@@N~
-@@RA tainted dagger@@D with a @@Kblack stained blade@@D has been dropped here.@@N~
-5 134217728 8421376 0
-1 2 2 11 0 0 0 0 0 0
-8
-A
-19 0
-A
-18 0
-L
-31
-#1403
-shadowsteel mace mace~
-@@Da shadowsteel mace@@N~
-@@DA shadowsteel mace@@D forged from @@Kdark metal@@D rests here, humming faintly.@@N~
-5 134217728 8421376 0
-3 4 5 8 0 0 0 0 0 0
-9
-A
-19 0
-A
-18 0
-L
-36
-#1404
-deathwarden axe axe~
-@@Ka deathwarden axe@@N~
-@@KA deathwarden axe@@D with @@Rblood-grooved blade@@D rests against the wall.@@N~
-5 134217728 8421376 0
-4 4 6 3 0 0 0 0 0 0
-10
-A
-19 0
-A
-18 0
-L
-40
-#1405
-soulrending blade greatsword~
-@@Ra soulrending blade@@N~
-@@RA soulrending blade@@D of black iron lies here, its edge @@Ktinged with violet@@D.@@N~
-5 134217728 8421376 0
-5 5 8 3 0 0 0 0 0 0
-6
-A
-19 0
-A
-18 0
-L
+8 0
 44
-#1406
-bonecrusher maul maul~
-@@Ka bonecrusher maul@@N~
-@@KA bonecrusher maul@@D of extraordinary weight has been left here.@@N~
-5 134217728 8421376 0
-5 5 9 8 0 0 0 0 0 0
-7
-A
-19 0
-A
-18 0
-L
-47
-#1407
-nightshroud blade nightshroud~
-@@Da nightshroud blade@@N~
-@@DA nightshroud blade@@D seems to @@Kabsorb the light@@D around it.@@N~
-5 134217728 8421376 0
-6 5 10 3 0 0 0 0 0 0
-8
-A
-19 0
-A
-18 0
-L
-50
-#1408
-necrotic spear spear~
-@@Ka necrotic spear@@N~
-@@KA necrotic spear@@D trails @@Rdark wisps@@D of energy from its tip.@@N~
-5 134217728 8421376 0
-4 5 8 6 0 0 0 0 0 0
-9
-A
-19 0
-A
-18 0
-L
-43
-#1409
-abyssal flail flail~
-@@Ka abyssal flail@@N~
-@@KA abyssal flail@@D with @@Kchains of dark iron@@D clinks heavily here.@@N~
-5 134217728 8421376 0
-5 5 9 8 0 0 0 0 0 0
-10
-A
-19 9
-A
-18 8
-L
-48
-#1410
-corroded chainmail chainmail~
-@@Ka corroded chainmail hauberk@@N~
-@@KA corroded chainmail hauberk@@D lies in a heap here, @@Rrust-stained@@D.@@N~
-9 134217728 8650752 0
-10 0 0 0 0 0 0 0 0 0
-11
-A
-17 0
-A
-13 0
-L
-30
-#1411
-tattered ringmail ringmail~
-@@Da tattered ringmail coat@@N~
-@@DA tattered ringmail coat@@D of @@Ksupple dark leather@@D has been discarded here.@@N~
-9 134217728 8650752 0
-8 0 0 0 0 0 0 0 0 0
-12
-A
-17 0
-A
-13 0
-L
-32
-#1412
-shadowforged breastplate breastplate~
-@@Ka shadowforged breastplate@@N~
-@@KA shadowforged breastplate@@D of @@Kblack steel@@D reflects no light at all.@@N~
-9 134217728 8650752 0
-5 134217728 8421376 0
-13
-A
-17 0
-A
-13 0
-L
-38
-#1413
-deathplate cuirass cuirass deathplate~
-@@Ra deathplate cuirass@@N~
-@@RA deathplate cuirass@@D covered in @@Kdeath runes@@D rests here.@@N~
-9 134217728 8650752 0
-18 0 0 0 0 0 0 0 0 0
-14
-A
-17 0
-A
-13 0
-L
-45
-#1414
-wraith-iron armor wraith iron~
-@@Ka suit of wraith-iron armor@@N~
-@@KA suit of wraith-iron armor@@D shimmers at its edges as if @@Knot quite real@@D.@@N~
-9 134217728 8650752 0
-22 0 0 0 0 0 0 0 0 0
-15
-A
-17 0
-A
-13 0
-L
-52
-#1415
-bone-helm helm skull~
-@@Ka skull helm@@N~
-@@KA skull helm@@D made from @@Ka real skull re-inforced with iron@@D has been left here.@@N~
-9 134217728 8388616 0
-8 0 0 0 0 0 0 0 0 0
-11
-A
-17 0
-A
-13 0
-L
-30
-#1416
-shadowsteel greathelm helm greathelm~
-@@Ka shadowsteel greathelm@@N~
-@@KA shadowsteel greathelm@@D of dark-forged metal rests here, @@Dvisor closed@@D.@@N~
-9 134217728 8388616 0
-14 0 0 0 0 0 0 0 0 0
-12
-A
-17 0
-A
-13 0
-L
-42
-#1417
-death-knight helm helm~
-@@Ra death-knight greathelm@@N~
-@@RA death-knight greathelm@@D crested with @@Kblack iron horns@@D rests here.@@N~
-9 268435456 8388616 0
-18 0 0 0 0 0 0 0 0 0
-13
-A
-17 0
-A
-13 0
-L
-50
-#1418
-iron greaves greaves~
-@@Ka pair of iron greaves@@N~
-@@KA pair of iron greaves@@D engraved with @@Rskull motifs@@D lies here.@@N~
-9 134217728 9437184 0
-10 0 0 0 0 0 0 0 0 0
-14
-A
-17 -12
-A
-14 10
-L
-31
-#1419
-shadowsteel legguards legguards~
-@@Ka pair of shadowsteel legguards@@N~
-@@KA pair of shadowsteel legguards@@D of @@Kknight's quality@@D rests here.@@N~
-9 0 9437184 0
-16 0 0 0 0 0 0 0 0 0
-15
-A
-17 -20
-A
-14 18
-L
-43
-#1420
-death-knight legplates legplates~
-@@Ra pair of death-knight legplates@@N~
-@@RA pair of death-knight legplates@@D of @@Kblack iron@@D rests here, @@Rheavy@@D.@@N~
-9 134217728 9437184 0
-20 0 0 0 0 0 0 0 0 0
-11
-A
-17 -25
-A
-14 22
-L
-53
-#1421
-iron sabatons sabatons boots~
-@@Ka pair of iron sabatons@@N~
-@@KA pair of iron sabatons@@D caked with @@Kdried mud@@D rests here.@@N~
-9 134217728 10485760 0
-10 0 0 0 0 0 0 0 0 0
-12
-A
-17 0
-A
-14 0
-L
-30
-#1422
-shadowsteel plate boots boots~
-@@Ka pair of shadowsteel plate boots@@N~
-@@KA pair of shadowsteel plate boots@@D of @@Kdark forging@@D sits here.@@N~
-9 134217728 10485760 0
-16 0 0 0 0 0 0 0 0 0
-9
-A
-17 0
-A
-14 0
-L
-44
-#1423
-iron gauntlets gauntlets~
-@@Ka pair of iron gauntlets@@N~
-@@KA pair of iron gauntlets@@D with @@Rknuckle spikes@@D lies here.@@N~
-9 134217728 8392704 0
-10 0 0 0 0 0 0 0 0 0
-9
-A
-17 0
-A
-19 0
-L
-32
-#1424
-shadowsteel gauntlets gauntlets~
-@@Ka pair of shadowsteel gauntlets@@N~
-@@KA pair of shadowsteel gauntlets@@D etched with @@Ksealing runes@@D lies here.@@N~
-9 134217728 8392704 0
-16 0 0 0 0 0 0 0 0 0
-10
-A
-17 0
-A
-19 0
-L
-46
-#1425
-bone vambraces vambraces arm guards~
-@@Ka pair of bone vambraces@@N~
-@@KA pair of bone vambraces@@D fitted with @@Rsteel brackets@@D lies here.@@N~
-9 134217728 8390656 0
-8 0 0 0 0 0 0 0 0 0
-11
-A
-17 0
-A
-13 0
-L
-33
-#1426
-shadowsteel vambraces vambraces~
-@@Ka pair of shadowsteel vambraces@@N~
-@@KA pair of shadowsteel vambraces@@D of @@Kdark crafting@@D rests here.@@N~
-9 134217728 8390656 0
-14 0 0 0 0 0 0 0 0 0
-12
-A
-17 0
-A
-13 0
-L
-47
-#1427
-iron pauldrons pauldrons shoulder guards~
-@@Ka pair of iron pauldrons@@N~
-@@KA pair of iron pauldrons@@D with @@Kchained spikes@@D has been discarded here.@@N~
-9 134217728 8389120 0
-10 0 0 0 0 0 0 0 0 0
-13
-A
-17 0
-A
-13 0
-L
-34
-#1428
-shadowsteel pauldrons pauldrons~
-@@Ka pair of shadowsteel pauldrons@@N~
-@@KA pair of shadowsteel pauldrons@@D decorated with @@Rbone inlays@@D rests here.@@N~
-9 134217728 8389120 0
-16 0 0 0 0 0 0 0 0 0
-9
-A
-17 0
-A
-13 0
-L
-49
-#1429
-iron bracers bracers~
-@@Ka pair of iron bracers@@N~
-@@KA pair of iron bracers@@D with @@Kchain lace@@D has been discarded here.@@N~
-9 134217728 8390656 0
-8 0 0 0 0 0 0 0 0 0
-6
-A
-17 0
-A
-13 0
-L
-30
-#1430
-shadow-iron bracers bracers~
-@@Ka pair of shadow-iron bracers@@N~
-@@KA pair of shadow-iron bracers@@D etched with @@Kcursed runes@@D rests here.@@N~
-9 134217728 2048 0
-14 0 0 0 0 0 0 0 0 0
-4
-A
-17 0
-A
-13 0
-L
-45
-#1431
-blackened shield kite shield~
-@@Ka blackened kite shield@@N~
-@@KA blackened kite shield@@D bearing a @@Rwhite skull device@@D rests here.@@N~
-9 134217728 8421376 0
-20 0 0 0 0 0 0 0 0 0
-12
-A
-17 0
-A
-13 0
-L
-35
-#1432
-shadowsteel tower shield tower shield~
-@@Ka shadowsteel tower shield@@N~
-@@KA shadowsteel tower shield@@D of enormous size rests against the wall.@@N~
-9 134217728 8421376 0
-30 0 0 0 0 0 0 0 0 0
-13
-A
-17 0
-A
-13 0
-L
-50
-#1433
-bone necklace necklace~
-@@Ka bone necklace@@N~
-@@KA bone necklace@@D strung with @@Ksmall carved skulls@@D lies here.@@N~
-9 134217728 8388736 0
+#1445
+shadowmere object 1445~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+1
+1
+#1446
+shadowmere object 1446~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
 0 0 0 0 0 0 0 0 0 0
-4
-A
-13 0
-A
-12 0
-L
-30
-#1434
-shadow pendant pendant~
-@@Da shadow pendant@@N~
-@@DA shadow pendant@@D of dark stone on a @@Ksilver chain@@D has been discarded here.@@N~
-9 134217728 8388736 0
+1
+1
+#1447
+shadowmere object 1447~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
 0 0 0 0 0 0 0 0 0 0
-9
-A
-13 0
-A
-12 0
+1
+1
+#1448
+shadowmere object 1448~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+1
+1
+#1449
+shadowmere object 1449~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+#1450
+shadowmere object 1450~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+#1451
+shadowmere object 1451~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+#1452
+shadowmere object 1452~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+#1453
+shadowmere object 1453~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+#1454
+shadowmere object 1454~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+#1455
+shadowmere object 1455~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
 L
-40
+1
+shadowmere object 1456~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1457~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1458~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1459~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1460~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1461~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1462~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+L
+1
+shadowmere object 1463~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1464~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1465~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1466~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1467~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1468~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1469~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1470~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1471~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+L
+1
+shadowmere object 1472~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1473~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1474~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1475~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1476~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1477~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1478~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+L
+1
+shadowmere object 1479~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1480~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1481~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1482~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1483~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+shadowmere object 1484~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1485~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+0 0 0 0 0 0 0 0 0 0
+1
+1
+shadowmere object 1486~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+1
+1
+shadowmere object 1487~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+1
+1
+shadowmere object 1488~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+1
+1
+shadowmere object 1489~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+1
+L
+1
+shadowmere object 1490~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+1
+shadowmere object 1491~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+1
+1
+shadowmere object 1492~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+1
+1
+shadowmere object 1493~
+@@Ka shadowmere object@@N~
+@@DA generic object placeholder in Shadowmere.@@N~
+1 0 0 0
+1
+1
 #1435
 obsidian amulet amulet~
 @@Ka obsidian amulet@@N~
