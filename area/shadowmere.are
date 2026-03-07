@@ -1976,8 +1976,7 @@ corrupted alchemist~
 @@DThis unfortunate scholar delved too deeply into the intersection of chemistry
 and necromancy. Its experiments continue beyond its death, its body acting as
 both @@Klaboratory and laboratory assistant@@D. It hurls @@Rcorrosive concoctions@@D.@@N
-~
-16481 0 -850 S
+physically devastating, @@Rimpossible to pin down@@D, and capable of a few well-
 50 0
 0 -30 0 0
 ! 0 0 0 7 0 1573760 0
@@ -2295,7 +2294,7 @@ sorcerer lich minor~
 0 -30 0 0
 ! 0 0 0 7 0 1573760 0
 | 0 0 0 0 0 0 0
-+ 90 0 0 0 0 0 0 0 0
+14 0 0 0 0 0 0 0 0 0
 l 100 1448 1449 0 0 0 0 0 0 0 
 L 50 50 0 0 0 0 0 0 0 
 #1437
@@ -2569,7 +2568,7 @@ catacomb crawler~
 Low to the ground and fast, it attacks with multiple @@Rlimbs simultaneously@@D,
 overwheling prey before it can respond.@@N
 ~
-16481 512 -1000 S
+12 0
 45 1
 0 -55 9 10
 ! 0 0 0 7 26630 0 0
@@ -2633,91 +2632,111 @@ L 50 50 0 0 0 0 0 0 0
 corrupted oak ancient tree~
 @@Ka corrupted oak@@N~
 @@KA corrupted oak@@D shudders into movement, @@Rroots ripping free of the soil@@D.@@N
-~
-@@DThis once-ancient tree has been infused with dark magic over centuries of
-proximity to Shadowmere's corruption. It attacks with @@Kbranches like siege
-weapons@@D and is extraordinarily difficult to damage.@@N
-~
-16481 512 -1000 S
-45 1
-0 -60 9 9
-! 0 0 0 7 24578 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 1418 1443 0 0 0 0 0 0 0 
-L 50 50 0 0 0 0 0 0 0 
-#1457
-night hag~
-@@Ra night hag@@N~
-@@RA night hag@@D hovers in the corridor, @@Kher form flickering between solid and shadow@@D.@@N
-~
-@@DThe night hag is a creature of pure malice - an ancient undead spellcaster
-who feeds on fear and despair. Her magical arsenal is @@Rdevastating and varied@@D,
-and she can sense weakness with @@Kunnatural precision@@D.@@N
-~
-16481 524800 -1000 S
-55 0
-0 -30 0 0
-! 0 0 0 7 0 1573760 0
-| 0 0 0 0 0 0 0
-+ 85 0 0 0 0 0 0 0 0
-l 100 1448 1501 0 0 0 0 0 0 0 
-L 50 50 0 0 0 0 0 0 0 
-#1458
-void dragon young~
-@@Ka young void dragon@@N~
-@@KA young void dragon@@D raises its head from the ruins, @@Reyes like extinguished stars@@D.@@N
-~
-@@DA dragon whose element is void rather than fire - this young specimen is
-already terrifyingly powerful, combining @@Rmassive physical attacks@@D with
-a breath weapon of @@Kpure annihilating darkness@@D.@@N
-~
-16481 512 -1000 S
-60 1
-0 -100 16 17
-! 0 0 0 7 60238 65616 0
-| 0 0 0 0 0 0 0
-+ 50 0 0 0 0 0 0 0 0
-l 100 1462 1526 0 0 0 0 0 0 0 
-L 50 50 0 0 0 0 0 0 0 
-#1459
-soulflayer worm~
-@@Ra soulflayer worm@@N~
-@@RA soulflayer worm@@D bursts from the earth, @@Rringed maw gaping@@D.@@N
-~
-@@DThe soulflayer worm is a massive subterranean predator whose feeding
-process @@Rextracts and consumes the soul@@D directly. It is purely physical
-in its methodology but @@Keffective to a horrifying degree@@D.@@N
-~
-97 0 -1000 S
-56 0
-0 -80 12 12
-! 0 0 0 7 24578 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 1418 1443 0 0 0 0 0 0 0 
-L 50 50 0 0 0 0 0 0 0 
-#1460
-crypt wight~
-@@Ka crypt wight@@N~
-@@KA crypt wight@@D emerges from a sealed niche, @@Kgrave-wrap still clinging to it@@D.@@N
-~
-@@DA powerful wight that has resided in the necropolis for centuries,
-growing steadily stronger. It combines formidable @@Rphysical attacks@@D with
-the ability to @@Kcall upon necromantic magic@@D learned from proximity to
-Shadowmere's dark power.@@N
-~
-16481 512 -1000 S
-48 1
-0 -65 10 11
-! 0 0 0 7 60238 12 0
-| 0 0 0 0 0 0 0
-+ 25 0 0 0 0 0 0 0 0
-l 100 1401 1430 0 0 0 0 0 0 0 
-L 50 50 0 0 0 0 0 0 0 
-#0
-#OBJECTS
-#1400
+17 0
+43
+#1445
+dark visage mask mask~
+@@Ka dark visage mask@@N~
+@@KA dark visage mask@@D carved from @@Kbone@@D with @@Rstaring eye-holes@@D rests here.@@N~
+8 134217728 8388624 0
+11
+17 0
+13 0
+32
+#1446
+iron death-mask mask visor~
+@@Ka iron death-mask@@N~
+@@Ka iron death-mask@@D with @@Kscreaming features@@D has been left here.@@N~
+9 134217728 8388624 0
+0 0 0 0 0 0 0 0 0 0
+9
+17 0
+13 0
+46
+#1447
+necrotic tome tome~
+@@Ka necrotic tome@@N~
+@@KA necrotic tome@@D bound in @@Kdark leather@@D rests here, @@Rfaintly warm@@D to the touch.@@N~
+9 134217728 8421376 0
+0 0 0 0 0 0 0 0 0 0
+3
+27 0
+12 0
+35
+#1448
+grimoire corruption grimoire~
+@@Ra grimoire of corruption@@N~
+@@RA grimoire of corruption@@D bleeds @@Kdark energy from its spine@@D where it lies.@@N~
+9 134217728 8388609 0
+4
+27 0
+12 0
+52
+#1449
+phylactery shard shard crystal~
+@@Da phylactery shard@@N~
+@@DA phylactery shard@@D of @@Kdeep violet crystal@@D pulses with @@Rcaptured life-energy@@D here.@@N~
+9 134217728 8388610 0
+0 0 0 0 0 0 0 0 0 0
+5
+27 0
+13 0
+45
+#1450
+shadowpiercer blade sword boss~
+@@KShadowpiercer@@N~
+@@KShadowpiercer@@D, a @@Rvibrant blade of pure shadow-steel@@D, floats above the ground here.@@N~
+5 134217728 8421376 0
+8 8 14 11 0 0 0 0 0 0
+6
+19 0
+18 0
+17 0
+55
+#1451
+bonelord maul maul boss hammer~
+@@KThe Bonelord's Maul@@N~
+@@KThe Bonelord's Maul@@D, a weapon @@Rbuilt from fused femur and iron@@D, lies here.@@N~
+5 134217728 8421376 0
+10 9 16 8 0 0 0 0 0 0
+7
+19 0
+18 0
+13 0
+#1452
+valzareth robe robe boss~
+@@KValzareth's Shadowweave Robe@@N~
+@@KValzareth's Shadowweave Robe@@D of @@Rliving shadow-thread@@D lies crumpled here.@@N~
+9 134217792 8650752 0
+3
+17 -40
+27 30
+12 80
+#1453
+bonelord chestplate chestplate boss plate~
+@@KThe Bonelord's Chestplate@@N~
+@@KThe Bonelord's Chestplate@@D of @@Kfused bone and cursed iron@@D rests here.@@N~
+9 134217728 8650752 0
+35 0 0 0 0 0 0 0 0 0
+9
+17 0
+13 0
+19 0
+#1454
+valzareth phylactery crown crown boss~
+@@KValzareth's Phylactery Crown@@N~
+@@KValzareth's Phylactery Crown@@D of @@Kblack bone set with violet gems@@D hovers here.@@N~
+9 134217792 8388616 0
+25 0 0 0 0 0 0 0 0 0
+17 0
+27 0
+12 0
+#1455
+bonelord skull helm helm boss~
+@@KThe Bonelord's Skull Helm@@N~
+@@KThe Bonelord's Skull Helm@@D, a @@Kcrown of fused skulls@@D, rests here.@@N~
+9 134217728 8388616 0
+28 0 0 0 0 0 0 0 0 0
 bone shortsword sword~
 @@Ka bone shortsword@@N~
 @@KA bone shortsword@@D lies here, its edge @@Rstrangely sharp@@D.@@N~

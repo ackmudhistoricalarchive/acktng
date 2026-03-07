@@ -680,8 +680,8 @@ door~
 1 9426 9419
 D3
 ~
-door~
-1 9426 9421
+A bone guardian stands in eerie stillness here.~
+Forged through profane sorcery, this construct carries two blades of shadow-iron and wears armor
 E
 mechanism wheels levers~
 The mechanism seems designed to either purify the pool or to corrupt it
@@ -737,9 +737,9 @@ doors sealed nine mechanisms~
 Each mechanism is unique -- a combination lock, a key-lock, a pressure mechanism,
 a word-lock, a sound-lock, and four others whose function is not immediately
 obvious. All nine must be satisfied to open the doors.~
-S
-#9429
-The Final Sanctum~
+l 100 9406 9407 0 0 0 0 0 0 0 
+L 50 50 0 0 0 0 0 0 0 
+#9407
 The deepest room of the Crypts of Kel'Shadra. A vast chamber, cathedral-like,
 where the architecture reaches its apex of dark grandeur. The floor here is
 living shadow, shifting and writhing underfoot. The ceiling is so high it
