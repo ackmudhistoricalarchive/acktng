@@ -3085,9 +3085,11 @@ The corridor curves south.
 S
 #30533
 @@yThe East Outer Ring@@N~
-The eastern section of the outer ring corridor, where several sealed alcoves
-suggest experiments in containment, each alcove door carved with the same binding
-symbol repeated in obsessive iteration, the repetition suggesting the carver's fear.
+16419 0 -100 S
+16419 0 -150 S
+16419 0 -200 S
+16419 0 -100 S
+symbol repeated in obsessive iteration, the repetition suggesting the carver's fear.
 ~
 0 3
 D2
@@ -3250,7 +3252,7 @@ The passage leads south to the inner complex.
 32867 0 -300 S
 16451 0 -400 S
 ~
-0 0 30528
+16419 0 -250 S
 D1
 A side passage leads east.
 ~
@@ -3339,10 +3341,11 @@ The outer ring corridor curves here following the natural shape of the cavern sy
 ~
 0 3
 D0
-The outer ring corridor lies to the north.
-~
-~
-0 0 30532
+16419 0 -150 S
+16419 0 -200 S
+16419 0 -350 S
+16419 0 -250 S
+16419 0 -100 S
 D2
 The ring corridor continues south.
 ~
@@ -3477,8 +3480,8 @@ The lateral passage leads east.
 D2
 The main corridor continues south.
 ~
-~
-0 0 30564
+16419 0 -300 S
+16419 0 -400 S
 D3
 The lateral passage leads west.
 ~
@@ -3848,10 +3851,10 @@ The void vault approach lies to the north.
 ~
 0 0 30570
 D2
-16451 0 -150 S
-16451 0 -300 S
-16451 0 -250 S
-16451 0 -300 S
+16419 0 -150 S
+16419 0 -300 S
+16419 0 -250 S
+16419 0 -300 S
 0 0 30571
 S
 #30575
@@ -4115,7 +4118,7 @@ A wild-eyed devotee in black and gold robes brandishes a curved ceremonial blade
 101 0
 0 0 4 4
 ! 2 7 3 7 65 0 2
-16451 0 -350 S
+16419 0 -350 S
 + 0 0 0 0 0 0 0 0 0
 l 0 0 0 0 0 0 0 0 0 0 
 L 0 0 0 0 0 0 0 0 0 
@@ -4187,7 +4190,7 @@ L 0 0 0 0 0 0 0 0 0
 stone_sentinel sentinel~
 @@ya Stone Sentinel@@N~
 A stone sentinel pulls itself free from the carved wall, towering above all else.
-16451 0 -200 S
+16419 0 -200 S
 Two enormous stone hands emerge from carved niches in the wall and pull free
 an entire stone body that stands twice the height of any mortal, unyielding.
 ~
