@@ -12,6 +12,391 @@ U The air grows cold and the shadows seem to breathe around you.~
 O virant~
 R all~
 W all~
+#MOBILES
+#9400
+grave crawler crypt~
+a grave crawler~
+A grave crawler scuttles through the shadows here.
+This pale, eyeless creature moves on too many legs, its translucent skin
+revealing dark organs beneath. It was once a person. Now it seeks only to
+consume and infect.~
+167772225 512 -500 S
+150 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 100 9400 9401 0 0 0 0 0 0 0 
+L 50 30 0 0 0 0 0 0 0 
+#9401
+shadow wraith phantom~
+a shadow wraith~
+A shadow wraith drifts through the darkness here.
+This creature appears as a tattered silhouette with no distinct form, its edges
+fraying into darkness. Its presence causes an unnatural chill and a feeling of
+profound despair. It feeds on fear and memory.~
+167903297 524800 -750 S
+152 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 100 9400 9401 0 0 0 0 0 0 0 
+L 50 30 0 0 0 0 0 0 0 
+#9402
+bone guardian skeleton~
+a bone guardian~
+A bone guardian stands watch with ancient vigilance.
+Assembled from the bones of multiple warriors and bound together by dark
+sorcery, this construct carries two blades of shadow-iron and wears armor
+fashioned from its own ribs. Its skull bears an eternal grin of menace.
+It exists only to destroy the living.~
+167772257 512 -1000 S
+155 1
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 100 9402 9403 0 0 0 0 0 0 0 
+L 30 50 0 0 0 0 0 0 0 
+#9403
+crypt horror abomination~
+a crypt horror~
+A crypt horror lurches forward, its form barely contained.
+Whatever this creature was before the crypt claimed it, it is now a mass of
+necrotic flesh and fractured bone, barely holding together, driven by a rage
+that transcends death. Its wounds are too numerous to count, yet it does not
+fall. It simply endures and attacks.~
+167772257 512 -750 S
+155 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 100 9402 9403 0 0 0 0 0 0 0 
+L 30 50 0 0 0 0 0 0 0 
+#9404
+dark cultist zealot priest~
+a dark cultist~
+A dark cultist regards you with fanatic eyes.
+Gaunt and tattooed with ritual sigils, this individual was once a willing
+member of the order of Kel'Shadra. Centuries of the crypt's influence have
+not made them sane. They clutch a blade in one hand and a tome in the other,
+muttering a continuous prayer to something that does not love them.~
+167772257 512 -500 S
+155 2
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 100 9404 9405 0 0 0 0 0 0 0 
+L 30 50 0 0 0 0 0 0 0 
+#9405
+maze runner lost soul~
+a maze runner~
+A maze runner scurries frantically through the passages.
+Once a living person who entered the labyrinth seeking treasure or knowledge,
+this creature has been trapped here so long it has become part of the maze.
+It knows every passage by memory but can no longer comprehend escape. It
+attacks anything it encounters out of mindless territorial aggression.~
+167772257 512 -250 S
+153 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 100 9400 9401 0 0 0 0 0 0 0 
+L 50 30 0 0 0 0 0 0 0 
+#9406
+void stalker shadow predator~
+a void stalker~
+A void stalker slides through the shadows, barely visible.
+This creature exists partially outside normal reality, its outline flickering
+between existence and absence. It hunts by sensing fear, tracking its prey
+through the emotional resonance of panic. Its touch causes temporary blindness
+and a profound sense of isolation. It appears to enjoy the hunt.~
+167903313 524800 -1000 S
+157 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 100 9402 9403 0 0 0 0 0 0 0 
+L 30 50 0 0 0 0 0 0 0 
+#9407
+death knight warden eternal~
+a death knight~
+A death knight blocks the way, black armor gleaming with cold light.
+This was once the greatest warrior of the order of Kel'Shadra, elevated
+in death to serve as its eternal guardian. The armor it wears is fused with
+its form, the sword it wields absorbs light, and its eyes burn with a cold
+hatred for all living things. It remembers the warmth of life and despises
+you for still possessing it.~
+167772257 131584 -1000 S
+160 1
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 100 9404 9405 9406 0 0 0 0 0 0 
+L 30 40 30 0 0 0 0 0 0 
+#9408
+shadow archon dark herald~
+a shadow archon~
+A shadow archon manifests from the darkness, immense and terrible.
+A being of pure solidified darkness, the shadow archon is a lieutenant of
+the entity sealed in the final sanctum. It speaks in a voice like collapsing
+structures and its presence warps light in a visible radius around it. It
+has been assigned to prevent any from reaching the depths of the crypt, and
+it takes its assignment with absolute seriousness.~
+167903313 524800 -1000 S
+162 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 100 9406 9407 0 0 0 0 0 0 0 
+L 20 50 30 0 0 0 0 0 0 
+#9409
+bone colossus construct ancient~
+a bone colossus~
+A bone colossus fills the passage, its size almost incomprehensible.
+Assembled from the remains of hundreds of individuals, this construct stands
+twelve feet tall and moves with a terrible grinding of bone on bone. It
+carries no weapon -- it uses its body as a weapon, crushing and sweeping
+with limbs composed of fused femurs and spinal columns. It is not intelligent.
+It is relentless.~
+167772257 512 -1000 S
+165 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 100 9404 9405 9406 0 0 0 0 0 0 
+L 25 40 35 0 0 0 0 0 0 
+#9410
+lich undead necromancer ancient~
+the Lich of Kel'Shadra~
+The Lich of Kel'Shadra presides here, ancient beyond reckoning.
+Once the greatest mage of the order, this being chose undeath rather than
+accept the end. Its physical form has been maintained by sheer will and
+dark magic for centuries, now little more than a skeleton in magnificent
+robes threaded with light-absorbing material. Its mind is vast, cold, and
+utterly alien in its perspective. It views the living with academic interest
+and combative enthusiasm. It is extremely dangerous.~
+167772257 131584 -1000 S
+170 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 100 9406 9407 9408 0 0 0 0 0 0 
+L 15 35 35 15 0 0 0 0 0 
+#9411
+nightmare steed dark horse~
+a nightmare steed~
+A nightmare steed paws the stone floor, trailing cold fire.
+This creature resembles a horse in the same way that a void resembles a room.
+Its body is formed of solidified darkness, its mane and tail of cold flame.
+Its eyes are blank white voids. It serves as a mount for the death knight
+and attacks independently with terrible hooves and teeth of shadow-iron.~
+167772257 512 -750 S
+158 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 100 9402 9403 0 0 0 0 0 0 0 
+L 30 50 0 0 0 0 0 0 0 
+#9412
+undying sentinel guardian crypt~
+an undying sentinel~
+An undying sentinel stands motionless, awaiting transgression.
+Preserved by ritual far beyond the normal span of undead, this sentinel
+has guarded its assigned position for so long that its form has partially
+merged with the stone around it. Tendrils of dark energy connect it to the
+wall. It appears inert but this is by design: it waits until you are within
+striking range to reveal that it is very much active.~
+167772257 512 -750 S
+160 1
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 100 9404 9405 0 0 0 0 0 0 0 
+L 30 50 0 0 0 0 0 0 0 
+#9413
+shadow spawn creature darkness~
+a shadow spawn~
+A shadow spawn coalesces from the ambient darkness.
+A flesh golem assembled from ritual components lumbers forward.
+~
+#9403
+shadow iron vambraces~
+@@dShadow-Iron@@N Vambraces~
+Shadow-iron vambraces lie here.~
+9 201326720 8390656 4353
+0 0 0 0 0 0 0 0 0 0
+14
+L
+150
+#9404
+shadow iron gauntlets~
+@@dShadow-Iron@@N Gauntlets~
+A pair of shadow-iron gauntlets lies here.~
+9 201326720 8392704 65537
+0 0 0 0 0 0 0 0 0 0
+14
+L
+150
+#9405
+shadow iron boots~
+@@dShadow-Iron@@N Boots~
+A pair of shadow-iron boots lies here.~
+9 201326720 10485760 536870913
+0 0 0 0 0 0 0 0 0 0
+14
+L
+150
+#9406
+shadow iron pauldrons~
+@@dShadow-Iron@@N Pauldrons~
+Shadow-iron pauldrons lie here.~
+9 201326720 8389120 4097
+0 0 0 0 0 0 0 0 0 0
+14
+L
+150
+#9407
+shadow iron buckler shield~
+@@NA @@dShadow-Iron@@N Buckler~
+A shadow-iron buckler lies here.~
+9 469762176 8421376 8388608
+0 0 0 0 0 0 0 0 0 0
+14
+L
+150
+#9408
+void blade longsword~
+@@NA Void@@d Blade@@N~
+A void blade lies here, absorbing the light around it.~
+5 134217856 8421376 0
+0 0 0 3 0 0 0 0 0 0
+8
+L
+150
+#9409
+bone scythe weapon~
+@@NA Bone @@dScythe@@N~
+A scythe carved from enormous bones lies here.~
+5 201326720 8421376 0
+0 0 0 1 0 0 0 0 0 0
+10
+L
+150
+#9410
+shadow weave cloak~
+@@NA @@dShadow-Weave@@N Cloak~
+A cloak that seems to absorb shadow lies here.~
+9 201326720 8454144 16777216
+0 0 0 0 0 0 0 0 0 0
+14
+L
+150
+#9411
+ring shadow bound~
+@@NA Ring of @@dShadow-Binding@@N~
+A dark ring etched with binding runes lies here.~
+8 201326720 8421376 0
+0 0 0 0 0 0 0 0 0 0
+14
+L
+150
+#9412
+amulet kel'shadra void~
+@@NAn @@dAmulet@@N of Kel'Shadra~
+An amulet bearing the crest of Kel'Shadra lies here.~
+8 201326720 8388736 1024
+0 0 0 0 0 0 0 0 0 0
+14
+L
+150
+#9413
+lich robes vestments~
+@@NLich @@dVestments@@N~
+Ancient lich vestments lie here, radiating cold energy.~
+9 201326720 8650752 33554433
+0 0 0 0 0 0 0 0 0 0
+3
+L
+150
+#9414
+shadow iron sword short~
+@@NA @@dShadow-Iron@@N Short Sword~
+A short shadow-iron sword lies here.~
+5 134217856 8421376 0
+0 0 0 3 0 0 0 0 0 0
+14
+L
+150
+#9415
+void touched earring~
+@@NA Void-Touched @@dEarring@@N~
+A void-touched earring lies here.~
+8 201326720 8388672 384
+0 0 0 0 0 0 0 0 0 0
+14
+L
+150
+#9416
+shadow iron wristguards~
+@@dShadow-Iron@@N Wristguards~
+Shadow-iron wristguards lie here.~
+9 201326720 8390656 49152
+0 0 0 0 0 0 0 0 0 0
+14
+L
+150
+#9417
+darkbone staff weapon~
+@@NA Darkbone @@dStaff@@N~
+A staff carved from darkbone lies here.~
+5 671088768 8421376 0
+0 0 0 6 0 0 0 0 0 0
+7
+L
+150
+#9418
+void touched halo~
+@@NA Void-Touched @@dHalo@@N~
+An inverted halo of shadow-iron floats here.~
+9 201326720 8388609 2
+0 0 0 0 0 0 0 0 0 0
+14
+L
+150
+#9419
+shadow iron dagger~
+@@NA @@dShadow-Iron@@N Dagger~
+A shadow-iron dagger lies here.~
+5 201326720 8421376 0
+0 0 0 11 0 0 0 0 0 0
+9
+#9420
+kelshadra crypt key old~
+an old crypt key~
+An old crypt key lies here.~
+18 268435456 8421376 0
+0 9425 0 0 0 0 0 0 0 0
+1
+#9421
+void pool key~
+a void pool key~
+A strange key that seems made of solidified shadow lies here.~
+18 268435456 8421376 0
+0 9426 0 0 0 0 0 0 0 0
+1
+#0
 #ROOMS
 #9400
 The Shattered Gate~
@@ -194,7 +579,6 @@ flagstones pressure plates~
 You notice that every third flagstone is slightly raised. Best to step
 carefully.~
 S
-#9406
 The Ossuary Alcove~
 A wide alcove branching east from the southern corridor. The walls here
 are entirely composed of human bones, arranged with grotesque artistry --
@@ -217,7 +601,6 @@ compartment recessed~
 The compartment is empty, but shaped to hold something roughly cylindrical --
 a key, perhaps, or a rod.~
 S
-#9407
 The Hall of Mirrors~
 The corridor opens into a wide hall lined with tall mirrors set in tarnished
 silver frames. The mirrors do not show accurate reflections -- instead, each
@@ -245,7 +628,6 @@ Four symbols mark the floor: a sword, a flame, a hand, and a void. Standing
 on each causes a different sensation: the sword vibrates, the flame warms,
 the hand feels grasped, the void feels like falling.~
 S
-#9408
 The Chamber of Whispers~
 A perfectly circular chamber where the acoustics are supernatural. Any sound
 made here is amplified and distorted, transformed into voices speaking in
@@ -276,7 +658,6 @@ writing burned walls~
 The writing is a record of every person who has entered this crypt. The
 most recent entry appears to have been made recently. It ends mid-word.~
 S
-#9409
 The Puzzle Antechamber~
 A square room with four alcoves, each containing a stone statue depicting
 one of the cardinal virtues corrupted: Courage shown as reckless slaughter,
@@ -308,7 +689,6 @@ inscription~
 'Only the one who understands corruption may pass' -- perhaps meaning you
 must embrace the corrupted interpretations of the virtues to advance.~
 S
-#9410
 The Gallery of the Fallen~
 A long gallery displaying portraits of those who founded the order of
 Kel'Shadra, each framed in bone. As you walk past, their painted eyes
@@ -335,7 +715,6 @@ floor boards gap~
 The gap in the floor is perhaps eight feet wide. The breathing from below
 is rhythmic and slow, like something very large is sleeping.~
 S
-#9411
 The Threshold of the Abyss~
 The grand entrance to the lower crypts -- a wide landing at the top of a
 massive staircase descending into absolute darkness. The architecture here
@@ -353,7 +732,6 @@ D5
 ~
 0 -1 9412
 S
-#9412
 The Antechamber of Darkness~
 The bottom of the great stair opens into an antechamber bathed in total
 darkness, save for a ring of green-flamed torches that burn waist high.
@@ -384,7 +762,6 @@ The green flames cast no warmth. They exist not to light the room but to
 mark the boundary beyond which the things that dwell here prefer not to go.
 They prefer. This does not mean they will not.~
 S
-#9413
 The Labyrinth Entrance~
 You stand at the entrance to the great labyrinth of Kel'Shadra. The walls
 of the maze rise twenty feet high, carved from volcanic stone worn smooth
@@ -402,7 +779,6 @@ D2
 ~
 0 -1 9412
 S
-#9414
 The Labyrinth - North Fork~
 The labyrinth branches here into three passages. The walls are marked with
 faint scratches left by previous explorers, though many of the marks appear
@@ -423,7 +799,6 @@ D3
 ~
 0 -1 9416
 S
-#9415
 The Labyrinth - Eastern Passage~
 A narrow passage that widens slightly as it curves south. The right-hand
 wall is lined with iron spikes, some of which bear scraps of clothing.
@@ -439,7 +814,6 @@ D3
 ~
 0 -1 9414
 S
-#9416
 The Labyrinth - Western Dead End~
 The western passage terminates in a wall that seems to have been built
 after the labyrinth was constructed -- the stonework is different, newer,
@@ -457,7 +831,6 @@ The wall is solid, but the scratching from the other side has been going
 on for a very long time, based on the depth of the grooves visible where
 the mortar meets the original stone.~
 S
-#9417
 The Labyrinth - The Crossroads~
 The dead center of the labyrinth -- a wider space where four passages meet.
 At the center of this intersection is a stone column bearing a compass rose
@@ -489,7 +862,6 @@ The compass directions that are wrong may be an instruction rather than an
 continues its slow rotation, always pointing the same direction despite
 seeming to spin.~
 S
-#9418
 The Labyrinth - The False Exit~
 A passage that seems to lead upward toward light -- but the light is false,
 a phosphorescent patch of mold arranged to look like daylight. Beyond it,
@@ -512,7 +884,6 @@ The skeleton's finger bones are worn smooth on the tips from long contact
 with the stone. Its expression, remarkably preserved by the dry air, is one
 of exhausted resignation.~
 S
-#9419
 The Labyrinth - The Dark Pool~
 The eastern passage opens into a small chamber containing a black pool whose
 surface is perfectly still and perfectly dark. The pool reflects nothing --
@@ -534,7 +905,6 @@ The pool is bottomless, as far as you can determine. Whatever exists in its
 depths makes no sound and offers no reflection. The vertigo it causes
 suggests that looking into it is looking into something that looks back.~
 S
-#9420
 The Labyrinth - The Trap Corridor~
 The western passage is lined with mechanisms that are unfortunately quite
 visible -- pressure plates in the floor, tripwires across the corridor, and
@@ -552,7 +922,6 @@ D3
 ~
 0 -1 9421
 S
-#9421
 The Labyrinth - The Sentinel Room~
 A chamber at the western end of the labyrinth, guarded by ancient iron
 constructs that now stand inert, their mechanisms long since failed. They
@@ -862,93 +1231,16 @@ The spirits communicate through sensation rather than sound. One impression
 a fundamental part of the ritual that binds the crypt together. Doing so
 might have consequences beyond freeing spirits.~
 S
-#0
-#MOBILES
-#9400
-grave crawler crypt~
-a grave crawler~
-A grave crawler scuttles through the shadows here.~
-This pale, eyeless creature moves on too many legs, its translucent skin
-revealing dark organs beneath. It was once a person. Now it seeks only to
-consume and infect.~
-167772225 512 -500 S
-150 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9400 9401 0 0 0 0 0 0 0 
-L 50 30 0 0 0 0 0 0 0 
-#9401
-shadow wraith phantom~
-a shadow wraith~
-A shadow wraith drifts through the darkness here.~
-This creature appears as a tattered silhouette with no distinct form, its edges
-fraying into darkness. Its presence causes an unnatural chill and a feeling of
-profound despair. It feeds on fear and memory.~
-167903297 524800 -750 S
-152 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9400 9401 0 0 0 0 0 0 0 
-L 50 30 0 0 0 0 0 0 0 
-#9402
-bone guardian skeleton~
-a bone guardian~
-A bone guardian stands watch with ancient vigilance.~
-Assembled from the bones of multiple warriors and bound together by dark
-sorcery, this construct carries two blades of shadow-iron and wears armor
-fashioned from its own ribs. Its skull bears an eternal grin of menace.
-It exists only to destroy the living.~
-167772257 512 -1000 S
-155 1
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9402 9403 0 0 0 0 0 0 0 
-L 30 50 0 0 0 0 0 0 0 
-#9403
-crypt horror abomination~
-a crypt horror~
-A crypt horror lurches forward, its form barely contained.~
-Whatever this creature was before the crypt claimed it, it is now a mass of
-necrotic flesh and fractured bone, barely holding together, driven by a rage
-that transcends death. Its wounds are too numerous to count, yet it does not
-fall. It simply endures and attacks.~
-167772257 512 -750 S
-155 0
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9402 9403 0 0 0 0 0 0 0 
-L 30 50 0 0 0 0 0 0 0 
-#9404
-dark cultist zealot priest~
-a dark cultist~
-A dark cultist regards you with fanatic eyes.~
-Gaunt and tattooed with ritual sigils, this individual was once a willing
-member of the order of Kel'Shadra. Centuries of the crypt's influence have
-not made them sane. They clutch a blade in one hand and a tome in the other,
-muttering a continuous prayer to something that does not love them.~
-167772257 512 -500 S
-155 2
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9404 9405 0 0 0 0 0 0 0 
-L 30 50 0 0 0 0 0 0 0 
-#9405
-maze runner lost soul~
-a maze runner~
-A maze runner scurries frantically through the passages.~
-Once a living person who entered the labyrinth seeking treasure or knowledge,
-this creature has been trapped here so long it has become part of the maze.
-It knows every passage by memory but can no longer comprehend escape. It
+#SPECIALS
+M 9407 spec_cast_bigtime
+M 9408 spec_cast_bigtime
+M 9410 spec_cast_bigtime
+M 9406 spec_breath_any
+M 9411 spec_breath_any
+M 9401 spec_cast_undead
+M 9413 spec_cast_undead
+S
+It knows every passage by memory but can no longer comprehend escape. It
 attacks anything it encounters out of mindless territorial aggression.~
 167772257 512 -250 S
 153 0
@@ -1067,16 +1359,7 @@ Preserved by ritual far beyond the normal span of undead, this sentinel
 has guarded its assigned position for so long that its form has partially
 merged with the stone around it. Tendrils of dark energy connect it to the
 wall. It appears inert but this is by design: it waits until you are within
-striking range to reveal that it is very much active.~
-167772257 512 -750 S
-160 1
-0 0 0 0
-! 0 0 0 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9404 9405 0 0 0 0 0 0 0 
-L 30 50 0 0 0 0 0 0 0 
-#9413
+#9413
 shadow spawn creature darkness~
 a shadow spawn~
 A shadow spawn coalesces from the ambient darkness.~
