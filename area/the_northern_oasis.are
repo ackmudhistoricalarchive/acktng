@@ -5929,82 +5929,101 @@ The mirage-cast quarter of the northern oasis opens around dry sluice channels s
 0 10
 D0
 A narrow ramp climbs toward another survey-marked square.
-~
-~
-0 -1 8871
-D1
-The caravan line continues through a bright seam of blown sand.
-~
-~
-0 -1 8892
-D3
-The marked lane curves back toward earlier watch-cairns.
-~
-~
-0 -1 8890
-E
-route line~
-Painted arrows and knot-marks imply the intended progression: west-to-east across a row, then south to the next line.~
-S
-#8892
-@@ySunplate Causeway@@N~
-The brass-marked quarter of the northern oasis opens around cistern ribs stitched with @@lbright blue@@N banners.@@N
-Wind drives @@yyellow@@N grit in low ribbons while @@bbrown@@N retaining walls keep the lane coherent despite branching footpaths.@@N
-From this square, heat ripples fold distant dunes into moving walls, and every marker suggests traders once moved in disciplined columns.@@N
-A line of carved stones suggests engineers once measured every span here.@@N
-~
-0 10
-D0
-A narrow ramp climbs toward another survey-marked square.
-~
-~
-0 -1 8872
-D1
-The caravan line continues through a bright seam of blown sand.
-~
-~
-0 -1 8893
-D3
-The marked lane curves back toward earlier watch-cairns.
-~
-~
-0 -1 8891
-E
-route line~
-Painted arrows and knot-marks imply the intended progression: west-to-east across a row, then south to the next line.~
-S
-#8893
-@@yMirage March@@N~
-The dawn-baked quarter of the northern oasis opens around reed windbreaks stitched with @@lbright blue@@N banners.@@N
-Wind drives @@yyellow@@N grit in low ribbons while @@bbrown@@N retaining walls keep the lane coherent despite branching footpaths.@@N
-From this square, the wind carries reed-chime clicks from unseen pools, and every marker suggests traders once moved in disciplined columns.@@N
-A snapped survey rod is wrapped in three faded cloth bands: blue, yellow, and brown.@@N
-~
-0 10
-D0
-A narrow ramp climbs toward another survey-marked square.
-~
-~
-0 -1 8873
-D1
-The caravan line continues through a bright seam of blown sand.
-~
-~
-0 -1 8894
-D3
-The marked lane curves back toward earlier watch-cairns.
-~
-~
-0 -1 8892
-E
-route line~
-Painted arrows and knot-marks imply the intended progression: west-to-east across a row, then south to the next line.~
-S
-#8894
-@@yGolden Dust Walk@@N~
-The dusk-cooled quarter of the northern oasis opens around sunken spillways stitched with @@lbright blue@@N banners.@@N
-Wind drives @@yyellow@@N grit in low ribbons while @@bbrown@@N retaining walls keep the lane coherent despite branching footpaths.@@N
-From this square, a flat @@yyellow@@N glare runs from ridge to ridge, and every marker suggests traders once moved in disciplined columns.@@N
+9 128 8388610 1
+9 128 8388612 1
+9 128 8388616 1
+9 128 8388624 1
+9 128 8388640 1
+9 128 8388672 1
+9 128 8388736 1
+9 128 8388864 1
+9 128 8389120 1
+9 128 8389632 1
+9 128 8390656 1
+9 128 8392704 1
+9 128 8396800 1
+9 128 8404992 1
+9 128 8421376 1
+9 128 8454144 1
+9 128 8519680 1
+9 128 8650752 1
+9 128 8912896 1
+9 128 9437184 1
+9 128 10485760 1
+9 128 12582912 1
+9 128 12582912 1
+9 128 8388610 1
+9 128 8388612 1
+9 128 8388616 1
+9 128 8388624 1
+9 128 8388640 1
+9 128 8388672 1
+9 128 8388736 1
+9 128 8388864 1
+9 128 8389120 1
+9 128 8389632 1
+9 128 8390656 1
+9 128 8392704 1
+9 128 8396800 1
+9 128 8404992 1
+9 128 8421376 1
+9 128 8454144 1
+9 128 8519680 1
+9 128 8650752 1
+9 128 8912896 1
+9 128 9437184 1
+9 128 10485760 1
+9 128 12582912 1
+9 128 12582912 1
+9 128 8388610 1
+9 128 8388612 1
+9 128 8388616 1
+9 128 8388624 1
+9 128 8388640 1
+9 128 8388672 1
+9 128 8388736 1
+9 128 8388864 1
+9 128 8389120 1
+9 128 8389632 1
+9 128 8390656 1
+9 128 8392704 1
+9 128 8396800 1
+9 128 8404992 1
+9 128 8421376 1
+9 128 8454144 1
+9 128 8519680 1
+9 128 8650752 1
+9 128 8912896 1
+9 128 9437184 1
+9 128 10485760 1
+9 128 12582912 1
+9 128 12582912 1
+9 128 8388610 1
+9 128 8388612 1
+9 128 8388616 1
+9 128 8388624 1
+9 128 8388640 1
+9 128 8388672 1
+9 128 8388736 1
+9 128 8388864 1
+9 128 8389120 1
+9 128 8389632 1
+9 128 8390656 1
+9 128 8392704 1
+9 128 8396800 1
+9 128 8404992 1
+9 128 8421376 1
+9 128 8454144 1
+9 128 8519680 1
+9 128 8650752 1
+9 128 8912896 1
+9 128 9437184 1
+9 128 10485760 1
+9 192 12582912 1
+9 192 12582912 1
+9 192 8388610 1
+9 192 8388612 1
+9 192 8388616 1
 Shallow trenches funnel drifting sand away from the main caravan path.@@N
 ~
 0 10
