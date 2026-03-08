@@ -302,6 +302,7 @@ static void parse_area_section(FILE *fp, char *line, int *line_number, const cha
         if (trimmed[0] == '*')
             continue;
 
+
         if (strchr("QKNILVXFUORWPTBSM", trimmed[0]) == NULL)
             fail_area_test(area_path, *line_number, "invalid #AREA directive '%c'", trimmed[0]);
     }
