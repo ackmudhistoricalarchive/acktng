@@ -1,0 +1,2521 @@
+#AREA
+@@yThe Arroyo@@N~
+Q 16
+K arroyo~
+L @@W{@@y55 75@@W}@@N~
+N 53
+I 55 75
+V 30685 30809
+X 0
+F 15
+U @@yA scorching wind howls through the canyon depths.@@N~
+O arroyo~
+R arroyo~
+W arroyo~
+#MOBILES
+#30685
+arroyo scorpion~
+an arroyo scorpion~
+A massive arroyo scorpion skitters here, claws raised.
+~
+This enormous desert scorpion is the size of a large dog, its chitinous shell
+baked to a dark amber by years in the canyon sun.
+~
+97 0 -200 S
+62 0
+0 0 5 6
+! 0 0 0 7 6 0 0
+| 0 0 0 0 0 0 512
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30686
+canyon serpent~
+a canyon serpent~
+A canyon serpent coils menacingly here, tongue flickering.
+~
+This thick-bodied serpent is well over ten feet long, its scales patterned in
+earthy reds and browns to match the canyon walls it haunts.
+~
+97 0 -100 S
+65 0
+0 0 6 7
+! 0 0 0 7 6 0 0
+| 32 64 0 0 0 32 64
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30687
+dusty hyena~
+a dusty hyena~
+A dusty hyena prowls here, laughing softly to itself.
+~
+This rangy hyena is coated in pale canyon dust, its hide mottled and mangy
+from years of harsh desert living. Its eyes are sharp and opportunistic.
+~
+97 0 -100 S
+60 0
+0 0 4 5
+! 0 0 0 7 6 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30688
+arroyo bandit~
+an arroyo bandit~
+An arroyo bandit lurks here, blade drawn.
+~
+This hardened desert outlaw has carved out a living preying on those foolish
+enough to enter the arroyo unprepared. Sun-darkened skin and scarred knuckles
+speak to years of brutal survival.
+~
+97 0 -300 S
+63 1
+0 0 7 7
+! 0 0 0 7 6 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30689
+bleached skeleton~
+a bleached skeleton~
+A bleached skeleton stalks here, bones clacking.
+~
+This walking skeleton has been exposed to the desert sun so long its bones are
+bone-white and crumbling at the edges, yet it moves with terrible purpose.
+~
+97 16384 -500 S
+67 0
+0 0 7 7
+! 0 0 0 7 2 0 0
+| 0 0 0 0 0 2 4
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30690
+sun scorched vulture~
+a sun-scorched vulture~
+A sun-scorched vulture circles here, watching with dead eyes.
+~
+This oversized carrion bird has been warped by exposure to the arroyo's harsh
+conditions into something more predator than scavenger. Its bald head is an
+angry red and its talons are longer than a man's fingers.
+~
+97 0 -200 S
+61 0
+0 0 5 5
+! 0 0 0 7 6 0 0
+| 16 64 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30691
+sand golem~
+a sand golem~
+A sand golem shambles here, trailing grit in its wake.
+~
+Animated by ancient desert magic, this construct of packed sand and gravel
+maintains a vaguely humanoid form held together by a crackling inner energy.
+Each footfall leaves a wet smear of compacted earth.
+~
+97 0 -100 S
+70 0
+0 -5 8 10
+! 0 0 0 7 6 0 0
+| 32 64 0 0 0 32 4
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30692
+arroyo coyote~
+an arroyo coyote~
+An arroyo coyote darts here, quick and vicious.
+~
+Leaner and more aggressive than its lowland cousins, this canyon coyote has
+learned to hunt in packs and harry prey until exhausted. Its yellowish eyes
+catch the light with unnerving intelligence.
+~
+97 0 -100 S
+64 0
+0 0 6 6
+! 0 0 0 7 6 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30693
+canyon troll~
+a canyon troll~
+A canyon troll squats here, knuckles dragging on stone.
+~
+Thick-limbed and brutish, this canyon troll is adapted to the desert in ways
+that distinguish it from its forest kin. Its hide is pale and leathery, and
+its small eyes are pinkish and light-sensitive, making it doubly dangerous in
+the deep canyon shade.
+~
+97 0 -400 S
+68 1
+0 0 9 9
+! 0 0 0 7 6 0 0
+| 2 4 0 0 0 2 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30694
+arroyo cultist~
+an arroyo cultist~
+An arroyo cultist stands here, murmuring dark invocations.
+~
+Draped in dusty robes decorated with carved bone and dried sinew, this
+cultist worships whatever dark force animates the arroyo's deeper horrors.
+The air around them shimmers faintly with barely-restrained power.
+~
+97 0 -500 S
+66 0
+0 0 6 5
+! 0 0 0 7 0 416 3
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30695
+dust wraith~
+a dust wraith~
+A dust wraith drifts here, trailing wisps of grey.
+~
+The restless dead of the arroyo sometimes coalesce into these drifting
+manifestations of sand and sorrow, half-corporeal shapes that moan in the
+canyon wind. To touch one is to feel both the chill of the grave and the
+scorching heat of the desert at once.
+~
+97 16384 -700 S
+69 0
+0 0 8 8
+! 0 0 0 7 2 0 0
+| 256 2 0 0 0 256 2
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30696
+sun scorched warrior~
+a sun-scorched warrior~
+A sun-scorched warrior stands here, blade gleaming.
+~
+Once perhaps a soldier or adventurer, this warrior has been too long in the
+arroyo. Their skin is cracked leather over iron, their eyes hollow with
+obsessive vigilance, and their blade never leaves their hand.
+~
+97 0 -300 S
+65 0
+0 0 7 8
+! 0 0 0 7 6 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30697
+Calizara stone viper~
+Calizara the Stone Viper~
+Calizara the Stone Viper rears here, enormous and terrible.
+~
+Calizara is a serpent of impossible size, her scales fused with canyon stone
+into a natural armor of geological hardness. Her head alone is the size of a
+wagon, and her venom has dissolved gouges into the chamber walls. Ancient and
+malevolent, she regards you as an insult.
+~
+67108883 0 -800 S
+80 2
+50 -20 15 20
+! 0 0 0 7 3076 512 8
+| 32 64 0 0 0 512 64
++ 0 5 150 0 0 10 10 10 5
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30698
+Kresh dust colossus~
+Kresh the Dust Colossus~
+Kresh the Dust Colossus fills this chamber with its bulk.
+~
+Kresh is a creature of compressed desert earth and ancient stone magic,
+standing forty feet tall and built like a moving mesa. Its face is a
+featureless expanse of smoothed sandstone, and its footsteps register as
+minor tremors throughout the arroyo. It has been here since before the
+canyon itself was carved.
+~
+67108883 0 -900 S
+80 0
+50 -20 15 20
+! 0 0 0 7 3076 4096 8
+| 48 4 0 0 0 48 4
++ 0 5 150 0 0 10 10 10 5
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#30699
+Zareth canyon wyrm~
+Zareth the Canyon Wyrm~
+Zareth the Canyon Wyrm raises its vast head to regard you.
+~
+Zareth is a serpentine wyrm of terrible age and power, its scales blackened
+by its own fire and its eyes like twin embers in the cavern darkness. It has
+carved its sanctum from solid bedrock by brute force and dragonfire over
+countless centuries, and it views the arroyo as its personal domain.
+~
+67108883 0 -900 S
+80 0
+50 -20 15 20
+! 0 0 0 7 3076 32 8
+| 128 64 0 0 0 128 64
++ 0 5 150 0 0 10 10 10 5
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#0
+#OBJECTS
+#30685
+scorpion stinger blade~
+a scorpion stinger blade~
+A curved blade fashioned from a scorpion's stinger lies here.~
+5 64 8421376 1
+0 0 0 2 0 0 0 0 0 0
+7
+A
+18 12
+A
+19 12
+L
+60
+#30686
+canyon steel longsword~
+a canyon steel longsword~
+A longsword of dark canyon-forged steel lies here.~
+5 64 8421376 1
+0 0 0 3 0 0 0 0 0 0
+8
+A
+18 14
+A
+19 14
+L
+65
+#30687
+sun bleached mace~
+a sun-bleached mace~
+A heavy mace of sun-bleached iron-wood lies here.~
+5 64 8421376 1
+0 0 0 7 0 0 0 0 0 0
+8
+A
+18 13
+A
+19 13
+L
+63
+#30688
+desert war axe~
+a desert war axe~
+A broad-headed war axe with a bone handle lies here.~
+5 64 8421376 1
+0 0 0 1 0 0 0 0 0 0
+9
+A
+18 15
+A
+19 15
+L
+67
+#30689
+bone spear~
+a bone spear~
+A spear tipped with sharpened bone lies here.~
+5 64 8421376 1
+0 0 0 11 0 0 0 0 0 0
+7
+A
+18 12
+A
+19 12
+L
+60
+#30690
+scorpion chitin breastplate~
+a scorpion chitin breastplate~
+A breastplate made from fused scorpion chitin lies here.~
+9 64 8650752 1
+0 0 0 0 0 0 0 0 0 0
+14
+A
+17 -60
+A
+13 50
+L
+60
+#30691
+dusty raider helm~
+a dusty raider helm~
+A battered raider's helm coated in canyon dust lies here.~
+9 64 8388616 1
+0 0 0 0 0 0 0 0 0 0
+11
+A
+17 -55
+A
+13 45
+L
+62
+#30692
+arroyo leather vest~
+an arroyo leather vest~
+A vest of cured canyon lizard-leather lies here.~
+9 64 8650752 1
+0 0 0 0 0 0 0 0 0 0
+12
+A
+17 -70
+A
+13 60
+L
+65
+#30693
+canyon stone bracers~
+canyon stone bracers~
+A pair of bracers reinforced with canyon stone plates lies here.~
+9 64 8389632 1
+0 0 0 0 0 0 0 0 0 0
+12
+A
+17 -65
+A
+13 55
+L
+64
+#30694
+sun dried boots~
+sun-dried boots~
+A pair of stiff, sun-dried hide boots lies here.~
+9 64 10485760 1
+0 0 0 0 0 0 0 0 0 0
+11
+A
+17 -55
+A
+13 45
+L
+63
+#30695
+bleached bone shield~
+a bleached bone shield~
+A large shield fashioned from bleached bone plates lies here.~
+9 64 8421376 1
+0 0 0 0 0 0 0 0 0 0
+12
+A
+17 -70
+A
+13 55
+L
+66
+#30696
+sand wrapped leggings~
+sand-wrapped leggings~
+Leggings of thick hide wrapped in coarse sand-cloth lie here.~
+9 64 9437184 1
+0 0 0 0 0 0 0 0 0 0
+12
+A
+17 -75
+A
+13 65
+L
+68
+#30697
+venom fang blade~
+the Venom Fang Blade~
+A massive blade carved from Calizara's shed fang lies here.~
+5 64 8421376 1
+0 0 0 2 0 0 0 0 0 0
+9
+A
+18 22
+A
+19 22
+L
+75
+#30698
+serpent scale mail~
+a suit of serpent scale mail~
+A hauberk of linked stone-hard serpent scales lies here.~
+9 64 8650752 1
+0 0 0 0 0 0 0 0 0 0
+14
+A
+17 -110
+A
+13 110
+A
+5 3
+L
+75
+#30699
+calizaras fang~
+Calizara's Fang~
+A hollow fang amulet dripping with dried venom lies here.~
+9 64 8388736 1
+0 0 0 0 0 0 0 0 0 0
+5
+A
+17 -80
+A
+13 90
+A
+1 2
+L
+75
+#30700
+colossus stone maul~
+the Colossus Stone Maul~
+An enormous maul carved from a single block of canyon stone lies here.~
+5 64 8421376 1
+0 0 0 8 0 0 0 0 0 0
+10
+A
+18 22
+A
+19 22
+L
+75
+#30701
+dust colossus pauldrons~
+dust colossus pauldrons~
+Massive pauldrons of compressed canyon earth and stone lie here.~
+9 64 8389120 1
+0 0 0 0 0 0 0 0 0 0
+14
+A
+17 -100
+A
+13 100
+A
+5 2
+L
+75
+#30702
+kreshs earthen ring~
+Kresh's Earthen Ring~
+A ring of solid compressed sandstone pulses with earth-magic here.~
+9 64 8396800 1
+0 0 0 0 0 0 0 0 0 0
+4
+A
+17 -70
+A
+13 80
+A
+3 2
+L
+75
+#30703
+canyon wyrm fang lance~
+the Canyon Wyrm Fang Lance~
+A lance-length tooth torn from Zareth's maw lies here.~
+5 64 8421376 1
+0 0 0 11 0 0 0 0 0 0
+10
+A
+18 22
+A
+19 22
+L
+75
+#30704
+wyrm scale robe~
+a wyrm scale robe~
+A robe woven from Zareth's shed scales lies here, still faintly warm.~
+9 64 8650752 1
+0 0 0 0 0 0 0 0 0 0
+3
+A
+17 -100
+A
+13 100
+A
+3 4
+L
+75
+#30705
+zareths horn crown~
+Zareth's Horn Crown~
+A crown fashioned from the tip of Zareth's broken horn lies here.~
+9 64 8388616 1
+0 0 0 0 0 0 0 0 0 0
+3
+A
+17 -90
+A
+13 95
+A
+3 3
+L
+75
+#0
+#ROOMS
+#30685
+Entrance to the Arroyo~
+You stand at the entrance to a vast desert canyon known as the Arroyo, crumbling sandstone walls rising on either side worn smooth by centuries of flash floods long since dried, and to the east the canyon stretches deep into the scorched badlands.
+~
+0 10
+D1
+~
+~
+0 -1 30686
+D3
+~
+~
+0 -1 3291
+S
+#30686
+The Canyon Mouth~
+The canyon mouth yawns wide here, its walls stained red and orange by mineral deposits, and a dry streambed winds along the floor choked with gravel and sun-bleached debris while the air smells faintly of dust and something far older.
+~
+0 10
+D0
+~
+~
+0 -1 30710
+D1
+~
+~
+0 -1 30687
+D3
+~
+~
+0 -1 30685
+S
+#30687
+Arroyo Canyon Floor~
+The floor of the arroyo is covered in fine reddish silt marked with animal tracks that crisscross in every direction, and the sandstone walls close in slightly casting narrow fingers of shadow across the baked earth.
+~
+0 10
+D1
+~
+~
+0 -1 30688
+D3
+~
+~
+0 -1 30686
+S
+#30688
+Dry Riverbed~
+What was once a roaring river is now a flat cracked riverbed of dried clay and scattered stones, the canyon walls bearing the scoured watermarks of ancient floods far above your head in silent testament to the arroyo's former fury.
+~
+0 10
+D0
+~
+~
+0 -1 30716
+D1
+~
+~
+0 -1 30689
+D3
+~
+~
+0 -1 30687
+S
+#30689
+Wide Canyon Passage~
+The canyon widens here into a broad passage littered with tumbled boulders and thorny scrub, and buzzards circle lazily overhead in the bleached sky watching with patient hungry eyes.
+~
+0 10
+D1
+~
+~
+0 -1 30690
+D3
+~
+~
+0 -1 30688
+S
+#30690
+Sunbaked Canyon Floor~
+The sun hammers down on this section of canyon floor with merciless intensity radiating heat up from the pale stone, and every exposed surface shimmers with heat haze while the air itself seems to bake in place.
+~
+0 10
+D0
+~
+~
+0 -1 30722
+D1
+~
+~
+0 -1 30691
+D3
+~
+~
+0 -1 30689
+S
+#30691
+Crumbling Sandstone Path~
+Sections of the canyon wall have sloughed away leaving piles of crumbled sandstone blocking portions of the path, and you pick your way through the rubble stepping over stones scorched hot to the touch.
+~
+0 10
+D1
+~
+~
+0 -1 30692
+D3
+~
+~
+0 -1 30690
+S
+#30692
+The Arroyo Narrows~
+The canyon squeezes inward here to a narrow passage barely wide enough for two abreast, the walls close and stifling with the stone deeply grooved by eons of rushing water now absent.
+~
+0 10
+D0
+~
+~
+0 -1 30728
+D1
+~
+~
+0 -1 30693
+D3
+~
+~
+0 -1 30691
+S
+#30693
+Shadowed Canyon Corridor~
+A long straight corridor of canyon stretches here, the high walls casting the floor into deep afternoon shadow, and the relative coolness is a relief though the silence feels heavy and watchful.
+~
+1 10
+D1
+~
+~
+0 -1 30694
+D3
+~
+~
+0 -1 30692
+S
+#30694
+Ancient Carved Walls~
+Strange geometric patterns have been carved into the sandstone walls at eye level with origins unknown, stretching in long horizontal bands interspersed with crude animal figures and spiraling glyphs worn nearly flat by time.
+~
+0 10
+D0
+~
+~
+0 -1 30734
+D1
+~
+~
+0 -1 30695
+D3
+~
+~
+0 -1 30693
+S
+#30695
+Bone-Strewn Passage~
+The canyon floor here is littered with bones bleached brilliant white by years of exposure belonging to animals large and small, all stripped bare and scattered carelessly as if by something that feeds without worry.
+~
+1 10
+D1
+~
+~
+0 -1 30696
+D3
+~
+~
+0 -1 30694
+S
+#30696
+Shattered Rock Path~
+A field of sharp shattered stone covers the floor as the remnants of a section of canyon wall that collapsed long ago, the jagged rocks now worn smooth making footing treacherous and slow.
+~
+0 10
+D2
+~
+~
+0 -1 30740
+D1
+~
+~
+0 -1 30697
+D3
+~
+~
+0 -1 30695
+S
+#30697
+The Great Arroyo Bend~
+The canyon curves sharply here in a wide bend, the outer wall scoured into a smooth concave surface by the old river's force, and the inner bend is choked with drifted sand and the skeletal remains of ancient driftwood.
+~
+0 10
+D1
+~
+~
+0 -1 30698
+D3
+~
+~
+0 -1 30696
+S
+#30698
+Weathered Sandstone Gully~
+A smaller gully opens off the main canyon here, its walls weathered into rounded organic shapes, and the stone is layered in shades of red orange and cream each stratum telling a chapter of geological time.
+~
+0 10
+D2
+~
+~
+0 -1 30746
+D1
+~
+~
+0 -1 30699
+D3
+~
+~
+0 -1 30697
+S
+#30699
+Dust-Choked Canyon~
+A thick haze of fine dust hangs in the air of this section stirred up by the canyon winds that funnel through the narrow walls, and every breath tastes of dry earth and minerals.
+~
+0 10
+D1
+~
+~
+0 -1 30700
+D3
+~
+~
+0 -1 30698
+S
+#30700
+Eroded Canyon Passage~
+The passage here is deeply eroded with the walls undercut at the base in great sweeping concavities, and walking beneath these overhangs feels precarious despite their obvious age and solidity.
+~
+0 10
+D2
+~
+~
+0 -1 30752
+D1
+~
+~
+0 -1 30701
+D3
+~
+~
+0 -1 30699
+S
+#30701
+The Stony Crossroads~
+Several natural passages converge here at a wide flat area strewn with flat slabs of stone, and tracks of many creatures lead in and out of the crossing in every direction.
+~
+0 10
+D1
+~
+~
+0 -1 30702
+D3
+~
+~
+0 -1 30700
+S
+#30702
+Windswept Canyon Floor~
+A persistent canyon wind pushes steadily through this passage scouring the floor clean of loose material, and the walls here are polished smooth and streaked with the ghost-colors of long-vanished moisture seeps.
+~
+0 10
+D0
+~
+~
+0 -1 30758
+D1
+~
+~
+0 -1 30703
+D3
+~
+~
+0 -1 30701
+S
+#30703
+The Arroyo Basin~
+The canyon floor dips down into a shallow basin here, the lowest point collecting an ancient residue of mineral salts left by evaporated water, and the white crust crunches underfoot.
+~
+0 10
+D1
+~
+~
+0 -1 30704
+D3
+~
+~
+0 -1 30702
+S
+#30704
+Sunken Riverbed~
+The main riverbed drops several feet below the surrounding canyon floor carving a channel through the solid rock, and the channel walls are deeply undercut and sculpted into smooth curving shapes.
+~
+0 10
+D2
+~
+~
+0 -1 30762
+D1
+~
+~
+0 -1 30705
+D3
+~
+~
+0 -1 30703
+S
+#30705
+Cracked Canyon Path~
+The stone floor here is fractured into large irregular slabs separated by deep cracks, some of which are wide enough to lose a foot in with their depths lost in shadow.
+~
+0 10
+D1
+~
+~
+0 -1 30706
+D3
+~
+~
+0 -1 30704
+S
+#30706
+The Western Gully~
+A side gully branches off here carved by some ancient tributary, and the main canyon continues on while the gully offers a different path through the eroded landscape.
+~
+0 10
+D0
+~
+~
+0 -1 30766
+D1
+~
+~
+0 -1 30707
+D3
+~
+~
+0 -1 30705
+S
+#30707
+Broken Stone Passage~
+A chaos of fallen stone blocks the passage as remnants of some ancient seismic event that shattered the canyon rim, the blocks worn smooth now so navigation requires careful route-finding.
+~
+0 10
+D1
+~
+~
+0 -1 30708
+D3
+~
+~
+0 -1 30706
+S
+#30708
+Sand-Drifted Canyon~
+Deep drifts of fine sand have accumulated against the western wall sculpted by the wind into smooth curves, and the sand is soft underfoot on that side while firm and packed on the windward side.
+~
+0 10
+D2
+~
+~
+0 -1 30770
+D1
+~
+~
+0 -1 30709
+D3
+~
+~
+0 -1 30707
+S
+#30709
+Edge of the Deep Arroyo~
+The canyon drops away here into a deeper more ancient system of channels carved far into the bedrock, and the air rising from below is noticeably cooler carrying the ghost-scent of long-gone water.
+~
+0 10
+D1
+~
+~
+0 -1 30774
+D3
+~
+~
+0 -1 30708
+S
+#30710
+Northern Canyon Branch~
+A natural branch of the main canyon leads away to the north, its walls striped with vivid bands of mineral color, and the floor is soft with windblown sand.
+~
+0 10
+D0
+~
+~
+0 -1 30711
+D2
+~
+~
+0 -1 30686
+S
+#30711
+Mineral-Stained Walls~
+The walls of this branch are vivid with oxidized mineral streaks creating natural murals of red yellow and green, and the rock itself seems to glow faintly in the harsh light.
+~
+0 10
+D0
+~
+~
+0 -1 30712
+D2
+~
+~
+0 -1 30710
+S
+#30712
+Cooler North Fork~
+This north-facing arm of the canyon receives less direct sun making it marginally cooler than the main channel, and hardy desert plants cling to shadowed crevices in the rock.
+~
+0 10
+D0
+~
+~
+0 -1 30713
+D2
+~
+~
+0 -1 30711
+S
+#30713
+Narrow North Passage~
+The north fork narrows here with the walls crowding in tight, and a thin strip of sky shows above bright as molten metal.
+~
+0 10
+D0
+~
+~
+0 -1 30714
+D2
+~
+~
+0 -1 30712
+S
+#30714
+Wind-Carved Chamber~
+The passage opens into a small natural chamber carved by wind and water, its ceiling domed and smooth, and strange echoes play tricks with sound here.
+~
+0 10
+D0
+~
+~
+0 -1 30715
+D2
+~
+~
+0 -1 30713
+S
+#30715
+Dead End Alcove~
+The north branch ends in a blind alcove with walls of solid rock, and claw marks scar the stone near the ground as evidence of some creature that uses this spot as a lair.
+~
+0 10
+D2
+~
+~
+0 -1 30714
+S
+#30716
+Northern Gully Entrance~
+A secondary gully branches northward from the dry riverbed, its floor littered with smooth water-polished stones from ancient floods.
+~
+0 10
+D0
+~
+~
+0 -1 30717
+D2
+~
+~
+0 -1 30688
+S
+#30717
+Polished Stone Path~
+The gully floor here is covered with beautiful water-polished stones of every size worn perfectly smooth and round over countless centuries.
+~
+0 10
+D0
+~
+~
+0 -1 30718
+D2
+~
+~
+0 -1 30716
+S
+#30718
+Hidden Canyon Arm~
+This arm of the canyon is hidden from the main channel by a jutting fin of rock, and the silence here is profound broken only by the distant cry of a desert bird.
+~
+1 10
+D0
+~
+~
+0 -1 30719
+D2
+~
+~
+0 -1 30717
+S
+#30719
+Tall Narrow Slot~
+The canyon narrows to a slot here with the walls so close you must turn sideways to pass, and the sky above is a thin ribbon of pale blue.
+~
+0 10
+D0
+~
+~
+0 -1 30720
+D2
+~
+~
+0 -1 30718
+S
+#30720
+The Slotted Chamber~
+The slot opens abruptly into a small chamber with the walls overhanging at the top to create a cool dim space, and the floor is clean-swept stone.
+~
+0 10
+D0
+~
+~
+0 -1 30721
+D2
+~
+~
+0 -1 30719
+S
+#30721
+North Fork Dead End~
+The north gully ends here blocked by a massive slab of fallen sandstone, and the slab is etched with old desert varnish its surface dark and glassy.
+~
+1 10
+D2
+~
+~
+0 -1 30720
+S
+#30722
+Sun-Bright North Branch~
+A bright north branch opens here with its south-facing walls blazing with reflected sunlight, and the heat in this corridor is especially punishing.
+~
+0 10
+D0
+~
+~
+0 -1 30723
+D2
+~
+~
+0 -1 30690
+S
+#30723
+Glittering Mineral Vein~
+A thick vein of crystalline mineral runs through the canyon wall here catching the light and scattering tiny bright sparks across the floor.
+~
+0 10
+D0
+~
+~
+0 -1 30724
+D2
+~
+~
+0 -1 30722
+S
+#30724
+Crumbling Overhang~
+A massive overhang of eroded sandstone looms overhead undermined at its base, and the rock groans faintly in the wind while dust trickles from cracks in its surface.
+~
+0 10
+D0
+~
+~
+0 -1 30725
+D2
+~
+~
+0 -1 30723
+S
+#30725
+Red Stone Passage~
+The stone here is a deep saturated red unlike the pale colors of the main canyon, and the color runs in sheets across the walls vivid as dried blood.
+~
+0 10
+D0
+~
+~
+0 -1 30726
+D2
+~
+~
+0 -1 30724
+S
+#30726
+Shaded Canyon Niche~
+A broad niche cut into the canyon wall provides welcome shade, and the cool air within smells of damp stone and old desert.
+~
+0 10
+D0
+~
+~
+0 -1 30727
+D2
+~
+~
+0 -1 30725
+S
+#30727
+Northern Branch Terminus~
+The branch ends at a solid wall of layered sandstone with the strata clearly visible in shades from cream to deep rust, and animal prints mark the sandy floor.
+~
+0 10
+D2
+~
+~
+0 -1 30726
+S
+#30728
+Rock-Fall North Branch~
+A rock fall partially blocks this northern branch at its entrance requiring you to scramble over unstable debris to proceed.
+~
+0 10
+D0
+~
+~
+0 -1 30729
+D2
+~
+~
+0 -1 30692
+S
+#30729
+Scramble Path~
+The path through the debris field requires hands and feet both as loose stones shift underfoot, and the far side is clear.
+~
+0 10
+D0
+~
+~
+0 -1 30730
+D2
+~
+~
+0 -1 30728
+S
+#30730
+Pitted Stone Corridor~
+The walls of this corridor are deeply pitted by erosion and honeycombed with small holes and cavities, and the pits are home to insects and small lizards that watch your passage.
+~
+0 10
+D0
+~
+~
+0 -1 30731
+D2
+~
+~
+0 -1 30729
+S
+#30731
+Windy Passage~
+A constant wind funnels through this passage from north to south strong enough to sting exposed skin with fine grit, and you lean into it to walk forward.
+~
+0 10
+D0
+~
+~
+0 -1 30732
+D2
+~
+~
+0 -1 30730
+S
+#30732
+Dark Stained Walls~
+The walls here are darkened with ancient desert varnish a glossy coating of mineral deposited by centuries of wind-borne particles, and the effect is eerie and beautiful.
+~
+1 10
+D0
+~
+~
+0 -1 30733
+D2
+~
+~
+0 -1 30731
+S
+#30733
+North Branch End~
+The north branch terminates here in a natural bowl of stone with the walls curving gently inward overhead, and the bowl is filled with fine silt undisturbed by wind.
+~
+0 10
+D2
+~
+~
+0 -1 30732
+S
+#30734
+Carved Glyph Branch~
+The glyphs from the main canyon wall continue into this branch becoming more complex and numerous, as if someone or something inscribed them at length here.
+~
+0 10
+D0
+~
+~
+0 -1 30735
+D2
+~
+~
+0 -1 30694
+S
+#30735
+Dense Glyph Corridor~
+The walls are covered floor to ceiling with inscribed patterns many overlapping as if added to over generations, and the meaning if any is lost to time.
+~
+0 10
+D0
+~
+~
+0 -1 30736
+D2
+~
+~
+0 -1 30734
+S
+#30736
+The Inscription Room~
+This broad area is the densest concentration of carvings with the stone barely visible beneath the layered inscriptions, and a faint residue of old pigment suggests they were once painted.
+~
+0 10
+D0
+~
+~
+0 -1 30737
+D2
+~
+~
+0 -1 30735
+S
+#30737
+Fading Glyphs~
+The carvings become sparser here with the last few scattered across large expanses of bare rock, and the final inscriptions are half-eroded barely legible.
+~
+0 10
+D0
+~
+~
+0 -1 30738
+D2
+~
+~
+0 -1 30736
+S
+#30738
+Silent End Passage~
+Beyond the last glyph the passage is bare smooth and silent, and the emptiness after the elaborate decoration feels intentional.
+~
+1 10
+D0
+~
+~
+0 -1 30739
+D2
+~
+~
+0 -1 30737
+S
+#30739
+Inscription Branch Terminus~
+The branch ends at a blank wall of fine-grained sandstone unmarked and smooth, and whatever message the glyphs conveyed ends here unresolved.
+~
+0 10
+D2
+~
+~
+0 -1 30738
+S
+#30740
+Southern Rock Chimney~
+The canyon turns south here into a deep chimney of rock with the walls rising sheer above, and a network of ledges marks old high-water lines on the stone.
+~
+0 10
+D2
+~
+~
+0 -1 30741
+D0
+~
+~
+0 -1 30696
+S
+#30741
+Layered Rock Descent~
+The floor drops in gentle steps of layered rock each stratum a different shade, and the natural stairs lead deeper south into shadow.
+~
+0 10
+D2
+~
+~
+0 -1 30742
+D0
+~
+~
+0 -1 30740
+S
+#30742
+Shadowed South Branch~
+The southern branch lies in perpetual shadow with the high walls blocking direct sun throughout the day, and the dimness is a relief after the blazing main canyon.
+~
+1 10
+D2
+~
+~
+0 -1 30743
+D0
+~
+~
+0 -1 30741
+S
+#30743
+Underground Spring Chamber~
+A ring of old mineral deposits marks where an ancient spring once flowed from the rock but is long dry, and the memory of water is written clearly in the stone.
+~
+0 10
+D2
+~
+~
+0 -1 30744
+D0
+~
+~
+0 -1 30742
+S
+#30744
+South Branch Narrows~
+The south branch squeezes tight here with the cool rock walls nearly touching, and water stains run vertically in long dark streaks from some ancient seep.
+~
+1 10
+D2
+~
+~
+0 -1 30745
+D0
+~
+~
+0 -1 30743
+S
+#30745
+South Branch Dead End~
+The southern branch ends abruptly at a solid wall with the rock seamless and unmarked, and a scattering of bones near the wall suggests something died here long ago.
+~
+1 10
+D0
+~
+~
+0 -1 30744
+S
+#30746
+The Venom Approach~
+The canyon takes on an ominous character here with the air faintly acrid, and strange tracks cross the floor too large to belong to any normal desert creature.
+~
+0 10
+D2
+~
+~
+0 -1 30747
+D0
+~
+~
+0 -1 30698
+S
+#30747
+Toxic Seep~
+A slow ooze of dark liquid stains the base of the western wall carrying a sharp chemical smell, and the stone around it is discolored and etched as if by acid.
+~
+0 10
+D2
+~
+~
+0 -1 30748
+D0
+~
+~
+0 -1 30746
+S
+#30748
+Scaled Bone Scatter~
+The floor here is littered with scales and shed skins from something massive that are stiff and translucent catching the light like fragments of broken glass.
+~
+0 10
+D2
+~
+~
+0 -1 30749
+D0
+~
+~
+0 -1 30747
+S
+#30749
+The Shedding Ground~
+An enormous coiled mass of shed skin lies against the wall dry and papery left by something huge and recent, and a low rumbling vibrates through the stone.
+~
+0 10
+D2
+~
+~
+0 -1 30750
+D0
+~
+~
+0 -1 30748
+S
+#30750
+Antechamber of the Viper~
+The passage opens into a broader antechamber with the walls streaked by venom spray that has etched patterns into the stone, and the air here is poisonous-smelling and thick.
+~
+1 10
+D2
+~
+~
+0 -1 30751
+D0
+~
+~
+0 -1 30749
+S
+#30751
+Lair of Calizara~
+A vast chamber carved by ancient water into a smooth domed space has its walls pocked with venom craters and its floor scarred by the passage of enormous coils, and this is the lair of Calizara the Stone Viper who does not welcome intruders.
+~
+4 11
+D0
+~
+~
+0 -1 30750
+S
+#30752
+Dusty South Passage~
+A southern passage leads away through increasingly thick dust with the walls shedding a fine grey powder that coats every surface.
+~
+0 10
+D2
+~
+~
+0 -1 30753
+D0
+~
+~
+0 -1 30700
+S
+#30753
+Thick Dust Corridor~
+The dust here is ankle-deep and undisturbed muffling footsteps completely, and it billows in clouds at each step reducing visibility to a few feet.
+~
+0 10
+D2
+~
+~
+0 -1 30754
+D0
+~
+~
+0 -1 30752
+S
+#30754
+Rumbling Ground~
+The ground trembles subtly underfoot in a low rhythmic vibration that seems to come from somewhere deep below, and loose dust shakes free from the walls with each tremor.
+~
+0 10
+D2
+~
+~
+0 -1 30755
+D0
+~
+~
+0 -1 30753
+S
+#30755
+The Carved Path~
+Ancient footprints have been worn into the stone floor here by centuries of heavy passage with the impressions large and deep, and whatever made them was massive.
+~
+0 10
+D2
+~
+~
+0 -1 30756
+D0
+~
+~
+0 -1 30754
+S
+#30756
+Stone Colossus Approach~
+The passage widens dramatically with the ceiling rising out of sight, and the scale of everything here is enormous as if designed for a far larger occupant.
+~
+0 10
+D2
+~
+~
+0 -1 30757
+D0
+~
+~
+0 -1 30755
+S
+#30757
+Chamber of Kresh~
+An immense natural amphitheater of stone has its floor ground flat by the restless movement of something enormous over many years, and boulders have been casually swept to the walls like gravel while Kresh the Dust Colossus claims this chamber as its domain.
+~
+4 11
+D0
+~
+~
+0 -1 30756
+S
+#30758
+Windblown North Corridor~
+A particularly wind-scoured corridor leads north with the walls polished to an almost glassy smoothness, and loose grit streams along the floor in a continuous low tide.
+~
+0 10
+D0
+~
+~
+0 -1 30759
+D2
+~
+~
+0 -1 30702
+S
+#30759
+Sandblast Passage~
+The wind accelerates through this narrowing driving sand particles at stinging velocity, and the rock walls show clear signs of ongoing erosion.
+~
+0 10
+D0
+~
+~
+0 -1 30760
+D2
+~
+~
+0 -1 30758
+S
+#30760
+Scoured Chamber~
+The wind dies here in a small scoured chamber with the floor swept perfectly clean, and the walls are pitted and rounded into organic-looking forms by the relentless erosion.
+~
+0 10
+D0
+~
+~
+0 -1 30761
+D2
+~
+~
+0 -1 30759
+S
+#30761
+Wind Trap Dead End~
+The passage ends where the wind-driven sand has built a large dune against the far wall that is fine and deep and shifts as you watch.
+~
+0 10
+D2
+~
+~
+0 -1 30760
+S
+#30762
+Sunken South Passage~
+A sunken passage leads south with the floor dropping below the level of the main canyon, and the walls here are undercut dramatically leaning inward overhead.
+~
+0 10
+D2
+~
+~
+0 -1 30763
+D0
+~
+~
+0 -1 30704
+S
+#30763
+Undercut Canyon~
+The undercut is severe here with the walls meeting almost overhead in a fragile arch of stone, and light filters in dimly giving the space a subterranean feel.
+~
+1 10
+D2
+~
+~
+0 -1 30764
+D0
+~
+~
+0 -1 30762
+S
+#30764
+Dark South Alcove~
+The passage becomes nearly cave-like with the rock overhead thick and blocking the sky, and it is significantly cooler with the air carrying a mineral dampness.
+~
+1 11
+D2
+~
+~
+0 -1 30765
+D0
+~
+~
+0 -1 30763
+S
+#30765
+Southern Sunken Dead End~
+The sunken passage ends at a low wall of solid rock below the level of the main canyon, and water has collected here in a shallow pan of stone brackish and stagnant.
+~
+1 11
+D0
+~
+~
+0 -1 30764
+S
+#30766
+Northern Plateau Approach~
+A passage leads north and upward with the canyon floor rising toward a rocky plateau, and the stone underfoot is firmer here and less eroded.
+~
+0 4
+D0
+~
+~
+0 -1 30767
+D2
+~
+~
+0 -1 30706
+S
+#30767
+The Rising Path~
+The path continues to climb offering an increasingly broad view back into the main canyon below, and the perspective is dizzying and magnificent.
+~
+0 4
+D0
+~
+~
+0 -1 30768
+D2
+~
+~
+0 -1 30766
+S
+#30768
+High Canyon Ledge~
+You emerge onto a natural ledge high above the main canyon floor with the wind stronger here and the view sweeping across the entire arroyo system.
+~
+0 4
+D0
+~
+~
+0 -1 30769
+D2
+~
+~
+0 -1 30767
+S
+#30769
+Plateau Lookout Dead End~
+The ledge ends at a natural overlook of rough stone from which the full extent of the arroyo is visible as a maze of channels and walls baking in the sun.
+~
+0 4
+D2
+~
+~
+0 -1 30768
+S
+#30770
+Southern Descent~
+The canyon wall drops away here into a sunken southern arm with the passage descending steeply on stairs of natural stone.
+~
+0 10
+D2
+~
+~
+0 -1 30771
+D0
+~
+~
+0 -1 30708
+S
+#30771
+Stairway Canyon~
+The natural stone stairs continue downward worn smooth by countless footsteps, and the descent is long with the air below noticeably cooler.
+~
+0 10
+D2
+~
+~
+0 -1 30772
+D0
+~
+~
+0 -1 30770
+S
+#30772
+Lower Canyon Arm~
+The lower passage is shaded and cool with the high walls blocking both direct sun and most of the wind, and small desert plants grow in the shade surprisingly green.
+~
+1 10
+D2
+~
+~
+0 -1 30773
+D0
+~
+~
+0 -1 30771
+S
+#30773
+Lower South Dead End~
+The lower arm ends in a cool shaded hollow with the walls curving inward to form a natural windbreak, a good campsite were the arroyo less dangerous.
+~
+1 10
+D0
+~
+~
+0 -1 30772
+S
+#30774
+Entrance to the Deep Arroyo~
+The deeper arroyo system begins here carved far below the main canyon level by an ancient and powerful watercourse, and the walls are older darker stone that predates even the main canyon.
+~
+0 10
+D1
+~
+~
+0 -1 30775
+D3
+~
+~
+0 -1 30709
+S
+#30775
+Deep Canyon Corridor~
+The deep arroyo channels deeper into the bedrock with the walls closing in on either side, and the scale is impressive with the stone formations ancient and undisturbed.
+~
+0 10
+D1
+~
+~
+0 -1 30776
+D3
+~
+~
+0 -1 30774
+S
+#30776
+Ancient Stone Channel~
+The ancient channel winds through layers of stone that predate the surface desert by millions of years, and the rock changes character here becoming harder and more crystalline.
+~
+0 10
+D1
+~
+~
+0 -1 30777
+D3
+~
+~
+0 -1 30775
+S
+#30777
+The Carved Depths~
+Even here at depth the strange glyphs appear on the walls carved into the harder stone with evident difficulty, and these are the oldest inscriptions in the arroyo.
+~
+0 11
+D1
+~
+~
+0 -1 30778
+D3
+~
+~
+0 -1 30776
+S
+#30778
+Deep Arroyo Junction~
+The deep channel widens at this junction where several smaller ancient channels converge, and the floor is clean-scoured stone with the walls smooth and worn.
+~
+0 11
+D0
+~
+~
+0 -1 30794
+D1
+~
+~
+0 -1 30779
+D3
+~
+~
+0 -1 30777
+S
+#30779
+Crystal-Veined Stone~
+Veins of quartz crystal run through the darker stone here catching any available light and multiplying it into scattered bright points across the walls and ceiling.
+~
+0 11
+D1
+~
+~
+0 -1 30780
+D3
+~
+~
+0 -1 30778
+S
+#30780
+The Dark Passage~
+The deep arroyo enters a passage where the walls narrow and the ceiling lowers creating a dark confining tunnel through the bedrock, and the sound of your footsteps is loud and close.
+~
+1 11
+D1
+~
+~
+0 -1 30781
+D3
+~
+~
+0 -1 30779
+S
+#30781
+Compressed Channel~
+The channel compresses here to its narrowest with the walls nearly touching, and old water marks show that this was once a choke-point for powerful flood surges.
+~
+1 11
+D1
+~
+~
+0 -1 30782
+D3
+~
+~
+0 -1 30780
+S
+#30782
+Lower Deep Junction~
+Another junction in the deep channel branches away to the south into darkness while the main channel continues east with the floor dropping slightly.
+~
+0 11
+D2
+~
+~
+0 -1 30798
+D1
+~
+~
+0 -1 30783
+D3
+~
+~
+0 -1 30781
+S
+#30783
+The Bedrock Path~
+The channel here cuts through pure bedrock with the stone undifferentiated and massive, and this is among the oldest exposed rock in the canyon system.
+~
+0 11
+D1
+~
+~
+0 -1 30784
+D3
+~
+~
+0 -1 30782
+S
+#30784
+Deep Eastern Approach~
+The deep channel continues east through increasingly ancient stone with the formations here spectacular in their age and scale untouched by anything but the ancient river.
+~
+0 11
+D1
+~
+~
+0 -1 30785
+D3
+~
+~
+0 -1 30783
+S
+#30785
+Fossil-Rich Walls~
+The walls here are studded with the fossils of ancient sea creatures a record of a time when this entire region lay beneath an ocean, and the stone teems with petrified life.
+~
+0 11
+D1
+~
+~
+0 -1 30786
+D3
+~
+~
+0 -1 30784
+S
+#30786
+The Fossil Gallery~
+An especially dense concentration of fossils covers the walls of this section creating a natural museum of prehistoric sea life in vivid stone relief.
+~
+0 11
+D1
+~
+~
+0 -1 30787
+D3
+~
+~
+0 -1 30785
+S
+#30787
+Deep Canyon Turn~
+The deep channel bends sharply here with the ancient watercourse forced around a massive intrusion of harder rock that stands like an island in the channel.
+~
+0 11
+D1
+~
+~
+0 -1 30788
+D3
+~
+~
+0 -1 30786
+S
+#30788
+Ancient Waterfall Chamber~
+The walls here are smooth and curved in the shape of an ancient waterfall plunge pool carved into the rock over eons by the force of falling water that is long dry.
+~
+0 11
+D1
+~
+~
+0 -1 30789
+D3
+~
+~
+0 -1 30787
+S
+#30789
+The Deep Arroyo Straightaway~
+A long straight section of deep channel stretches ahead with the walls perfectly parallel carved by the sustained force of ancient floods, and the view down its length is hypnotic.
+~
+0 11
+D1
+~
+~
+0 -1 30790
+D3
+~
+~
+0 -1 30788
+S
+#30790
+Approach to the Ancient Depths~
+The character of the deep arroyo changes here becoming more cave-like as the channel cuts deeper below the surface, and the air is still and heavy.
+~
+0 11
+D1
+~
+~
+0 -1 30791
+D3
+~
+~
+0 -1 30789
+S
+#30791
+Cave-Like Lower Channel~
+The channel has carved itself into the living rock in a series of smooth chambers each connected by lower passages, and the surfaces are water-polished reflecting the faintest light.
+~
+0 11
+D1
+~
+~
+0 -1 30792
+D3
+~
+~
+0 -1 30790
+S
+#30792
+The Subterranean Gallery~
+A gallery of connected chambers each carved to a different size and shape by the ancient river fills this space, and the acoustics are remarkable with every small sound magnified and repeated.
+~
+0 11
+D1
+~
+~
+0 -1 30793
+D3
+~
+~
+0 -1 30791
+S
+#30793
+The Deep Arroyo Hub~
+A major junction in the deep channel system where ancient watercourses converged from multiple directions shows the scoured evidence of massive flood events long past on its floor.
+~
+0 11
+D0
+~
+~
+0 -1 30802
+D3
+~
+~
+0 -1 30792
+S
+#30794
+Northern Deep Branch~
+A northern arm of the deep channel leads away through older darker stone with the walls smoother here worn by a more powerful current in some distant past.
+~
+0 11
+D0
+~
+~
+0 -1 30795
+D2
+~
+~
+0 -1 30778
+S
+#30795
+Dark Northern Channel~
+The northern channel is especially dark with the narrow opening above barely admitting light, and you proceed by feel as much as sight.
+~
+1 11
+D0
+~
+~
+0 -1 30796
+D2
+~
+~
+0 -1 30794
+S
+#30796
+Hidden Northern Chamber~
+The dark passage opens into a small hidden chamber with the rock walls curved and smooth, and something has lived here leaving behind scattered bones and debris.
+~
+1 11
+D0
+~
+~
+0 -1 30797
+D2
+~
+~
+0 -1 30795
+S
+#30797
+Northern Deep Terminus~
+The northern deep branch ends here with the channel wall solid and featureless, and the silence is absolute.
+~
+1 11
+D2
+~
+~
+0 -1 30796
+S
+#30798
+Southern Deep Descent~
+A southern branch of the deep channel drops steeply downward with the walls slick with mineral seepage that has left long crystalline deposits.
+~
+0 11
+D2
+~
+~
+0 -1 30799
+D0
+~
+~
+0 -1 30782
+S
+#30799
+Mineral Cascade Walls~
+The mineral seepage has created elaborate curtain-like formations on the walls glistening in any available light, and it is hauntingly beautiful.
+~
+0 11
+D2
+~
+~
+0 -1 30800
+D0
+~
+~
+0 -1 30798
+S
+#30800
+Crystal Deposit Chamber~
+A chamber where mineral-laden water has collected and evaporated repeatedly over millennia leaving thick crystal deposits on every surface creates an effect that is breathtaking.
+~
+0 11
+D2
+~
+~
+0 -1 30801
+D0
+~
+~
+0 -1 30799
+S
+#30801
+Southern Mineral Dead End~
+The southern branch ends at a wall completely encrusted in mineral crystals solid and impassable, and the crystals catch even the faintest light in brilliant flashes.
+~
+0 11
+D0
+~
+~
+0 -1 30800
+S
+#30802
+The Ancient Ascent~
+A passage leads north from the deep channel hub rising gradually through older rock, and the walls here are darker and smoother than anything above.
+~
+0 11
+D0
+~
+~
+0 -1 30803
+D2
+~
+~
+0 -1 30793
+S
+#30803
+Older Stone Corridor~
+The stone here is exceptionally old with the rock compressed and altered by deep time and pressure, and walking through it feels like walking through geological history.
+~
+0 11
+D0
+~
+~
+0 -1 30804
+D2
+~
+~
+0 -1 30802
+S
+#30804
+The Deepening Dark~
+The passage descends slightly here even as it proceeds north taking you deeper into the bedrock, and the temperature drops noticeably.
+~
+1 11
+D0
+~
+~
+0 -1 30805
+D2
+~
+~
+0 -1 30803
+S
+#30805
+The Long Approach~
+A long straight corridor of ancient stone stretches ahead with its walls bearing the marks of something enormous that has passed through here repeatedly over many years.
+~
+1 11
+D0
+~
+~
+0 -1 30806
+D2
+~
+~
+0 -1 30804
+S
+#30806
+Pre-Chamber Passage~
+The corridor opens slightly here with the walls bearing fresh gouges and scrapes at an impressive height, and something very large and active occupies the space ahead.
+~
+1 11
+D0
+~
+~
+0 -1 30807
+D2
+~
+~
+0 -1 30805
+S
+#30807
+The Ante-Chamber of Zareth~
+A broad ante-chamber shows clear signs of heavy habitation by something enormous with bones of various large creatures scattered widely and the walls bearing deep gouge-marks.
+~
+1 11
+D0
+~
+~
+0 -1 30808
+D2
+~
+~
+0 -1 30806
+S
+#30808
+The Scorched Threshold~
+The stone floor here is scorched black and baked by intense repeated heat, and the scorch marks radiate outward from the chamber beyond as if from a source of tremendous fire.
+~
+1 11
+D0
+~
+~
+0 -1 30809
+D2
+~
+~
+0 -1 30807
+S
+#30809
+The Canyon Wyrm's Sanctum~
+A vast natural cavern deep within the arroyo bedrock has its walls blackened and melted by centuries of wyrm-fire, and the floor is covered in scorched bones and molten stone where Zareth the Canyon Wyrm coils at the heart of this terrible chamber ancient and magnificent and lethal.
+~
+4 11
+D2
+~
+~
+0 -1 30808
+S
+#0
+#RESETS
+M 0 30685 3 30687 arroyo scorpion
+
+M 0 30685 2 30691 arroyo scorpion
+
+M 0 30685 2 30695 arroyo scorpion
+
+M 0 30685 2 30713 arroyo scorpion
+
+M 0 30685 2 30723 arroyo scorpion
+
+M 0 30685 2 30729 arroyo scorpion
+
+M 0 30685 2 30741 arroyo scorpion
+
+M 0 30685 2 30753 arroyo scorpion
+
+M 0 30686 3 30689 canyon serpent
+
+M 0 30686 2 30699 canyon serpent
+
+M 0 30686 2 30717 canyon serpent
+
+M 0 30686 2 30725 canyon serpent
+
+M 0 30686 2 30743 canyon serpent
+
+M 0 30686 2 30759 canyon serpent
+
+M 0 30686 2 30775 canyon serpent
+
+M 0 30687 3 30686 dusty hyena
+
+M 0 30687 2 30696 dusty hyena
+
+M 0 30687 2 30711 dusty hyena
+
+M 0 30687 2 30719 dusty hyena
+
+M 0 30687 2 30733 dusty hyena
+
+M 0 30687 2 30745 dusty hyena
+
+M 0 30688 3 30693 arroyo bandit
+
+E 0 30686 0 20 weapon
+
+M 0 30688 2 30697 arroyo bandit
+
+E 0 30686 0 20 weapon
+
+M 0 30688 2 30701 arroyo bandit
+
+E 0 30686 0 20 weapon
+
+M 0 30688 2 30721 arroyo bandit
+
+E 0 30686 0 20 weapon
+
+M 0 30688 2 30731 arroyo bandit
+
+E 0 30686 0 20 weapon
+
+M 0 30689 2 30703 bleached skeleton
+
+E 0 30689 0 20 weapon
+
+M 0 30689 2 30715 bleached skeleton
+
+E 0 30689 0 20 weapon
+
+M 0 30689 2 30727 bleached skeleton
+
+E 0 30689 0 20 weapon
+
+M 0 30689 2 30739 bleached skeleton
+
+E 0 30689 0 20 weapon
+
+M 0 30690 3 30688 sun-scorched vulture
+
+M 0 30690 2 30692 sun-scorched vulture
+
+M 0 30690 2 30712 sun-scorched vulture
+
+M 0 30690 2 30724 sun-scorched vulture
+
+M 0 30690 2 30742 sun-scorched vulture
+
+M 0 30690 2 30760 sun-scorched vulture
+
+M 0 30691 2 30705 sand golem
+
+E 0 30688 0 20 weapon
+
+M 0 30691 2 30707 sand golem
+
+E 0 30688 0 20 weapon
+
+M 0 30691 2 30735 sand golem
+
+E 0 30688 0 20 weapon
+
+M 0 30691 2 30779 sand golem
+
+E 0 30688 0 20 weapon
+
+M 0 30692 3 30690 arroyo coyote
+
+M 0 30692 2 30694 arroyo coyote
+
+M 0 30692 2 30718 arroyo coyote
+
+M 0 30692 2 30726 arroyo coyote
+
+M 0 30692 2 30744 arroyo coyote
+
+M 0 30692 2 30761 arroyo coyote
+
+M 0 30693 2 30700 canyon troll
+
+E 0 30687 0 20 weapon
+
+M 0 30693 2 30708 canyon troll
+
+E 0 30687 0 20 weapon
+
+M 0 30693 2 30736 canyon troll
+
+E 0 30687 0 20 weapon
+
+M 0 30693 2 30783 canyon troll
+
+E 0 30687 0 20 weapon
+
+M 0 30694 2 30702 arroyo cultist
+
+M 0 30694 2 30706 arroyo cultist
+
+M 0 30694 2 30737 arroyo cultist
+
+M 0 30694 2 30787 arroyo cultist
+
+M 0 30695 2 30709 dust wraith
+
+M 0 30695 2 30777 dust wraith
+
+M 0 30695 2 30781 dust wraith
+
+M 0 30695 2 30789 dust wraith
+
+M 0 30695 2 30795 dust wraith
+
+M 0 30695 2 30796 dust wraith
+
+M 0 30696 3 30698 sun-scorched warrior
+
+E 0 30685 0 20 weapon
+
+E 0 30691 0 4 helm
+
+E 0 30692 0 26 body
+
+M 0 30696 2 30704 sun-scorched warrior
+
+E 0 30685 0 20 weapon
+
+E 0 30691 0 4 helm
+
+E 0 30692 0 26 body
+
+M 0 30696 2 30730 sun-scorched warrior
+
+E 0 30685 0 20 weapon
+
+E 0 30691 0 4 helm
+
+E 0 30692 0 26 body
+
+M 0 30696 2 30785 sun-scorched warrior
+
+E 0 30685 0 20 weapon
+
+E 0 30691 0 4 helm
+
+E 0 30692 0 26 body
+
+M 0 30697 1 30751 Calizara the Stone Viper
+
+E 0 30697 0 20 weapon
+
+E 0 30698 0 26 body
+
+E 0 30699 0 9 neck
+
+M 0 30698 1 30757 Kresh the Dust Colossus
+
+E 0 30700 0 20 weapon
+
+E 0 30701 0 12 shoulders
+
+E 0 30702 0 17 ring
+
+M 0 30699 1 30809 Zareth the Canyon Wyrm
+
+E 0 30703 0 20 weapon
+
+E 0 30704 0 26 body
+
+E 0 30705 0 4 helm
+
+S
+#$
