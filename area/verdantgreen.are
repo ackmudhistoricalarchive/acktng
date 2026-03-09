@@ -1030,4 +1030,494 @@ D2
 ~
 0 -1 10050
 S
+#10050
+The Dense Underbrush~
+Vegetation grows so thickly here that it forms an almost impenetrable barrier. Vines, brambles,
+and low branches create a maze that requires constant vigilance to navigate. The underbrush is
+dark and damp, and the sound of unseen movement echoes from within.~
+0 3
+D0
+~
+~
+0 -1 10049
+D2
+~
+~
+0 -1 10051
+D1
+~
+~
+0 -1 10052
+S
+#10051
+A Lichen-Stained Path~
+The trees here are coated in thick layers of lichen that has turned them pale and grayish.
+The lichen-covered bark appears almost ghostly in the dim forest light. The path beneath your
+feet is cushioned with years of accumulated lichen and moss. The air smells ancient and cold.~
+0 3
+D0
+~
+~
+0 -1 10050
+D2
+~
+~
+0 -1 10053
+D1
+~
+~
+0 -1 10052
+S
+#10052
+Among Toppled Stones~
+Here, massive stones from the ruins above have tumbled down over time. They create a chaotic
+landscape that forces careful navigation. Some stones are enormous, others broken into fragments.
+The earth around them has been shaped by their presence, and new growth has claimed them.~
+0 3
+D3
+~
+~
+0 -1 10050
+D2
+~
+~
+0 -1 10054
+D0
+~
+~
+0 -1 10051
+S
+#10053
+The Ancient Boundary~
+A sense of threshold hangs heavy here. The forest subtly shifts - the ancient trees of Zone 2
+give way to something older, deeper, more primal. The trees here seem to lean inward, watching.
+Mist clings to the ground in ways it didn't above. You sense that you've crossed into deeper woods.~
+0 3
+D0
+~
+~
+0 -1 10051
+D2
+~
+~
+0 -1 10054
+D1
+~
+~
+0 -1 10055
+S
+#10054
+A Passage Through the Canopy Wall~
+An almost impenetrable wall of massive trees blocks further direct progression. However, a gap
+has been worn through over ages, allowing passage. The walls of living wood loom on either side,
+and you feel the weight of the forest pressing in. This passage marks the threshold to the Deepwood.~
+0 3
+D0
+~
+~
+0 -1 10052
+D3
+~
+~
+0 -1 10053
+D2
+~
+~
+0 -1 10055
+S
+#10055
+The Deepwood~
+This chamber-like space serves as the hub of the Deepwood zone. Trees of impossible age and girth
+rise around you. The @@Gcanopy@@N above is so dense that it's nearly night. Yet @@rglowing fungi@@N
+illuminate the space with an eerie light. The air itself seems to breathe, and you feel the forest's
+intelligence focused upon you.~
+0 3
+D0
+~
+~
+0 -1 10054
+D1
+~
+~
+0 -1 10056
+D2
+~
+~
+0 -1 10057
+D3
+~
+~
+0 -1 10059
+S
+#10056
+A Living Corridor~
+The trees here form perfect vertical walls on both sides, creating a corridor carved entirely from
+living wood. The walls are smooth and seem intentional - the forest has shaped itself into this form.
+You feel like you're walking through the veins of some enormous creature. The air is warm and humid.~
+0 3
+D3
+~
+~
+0 -1 10055
+D2
+~
+~
+0 -1 10060
+D1
+~
+~
+0 -1 10061
+S
+#10057
+The Breathing Grove~
+The trees here visibly move - not swaying in wind, but breathing with deliberate purpose. Their branches
+shift and sway in patterns that seem almost rhythmic, almost alive in ways that go beyond natural motion.
+The ground beneath pulses slightly, as if you stand on the chest of some sleeping giant.~
+0 3
+D0
+~
+~
+0 -1 10055
+D1
+~
+~
+0 -1 10060
+D3
+~
+~
+0 -1 10058
+D2
+~
+~
+0 -1 10066
+S
+#10058
+Among Watchful Boughs~
+Heavy branches overhead create a canopy so thick that absolute darkness dominates. Yet the branches themselves
+seem to glow faintly with an inner light. They lean in from all sides, creating the sensation of being watched
+by countless eyes. @@rGreen-tinged light@@N filters down in sparse beams.~
+1 3
+D1
+~
+~
+0 -1 10057
+D2
+~
+~
+0 -1 10063
+S
+#10059
+A Floor of Writhing Roots~
+The ground beneath your feet is alive with movement. Massive roots twist and shift, sometimes slowly crossing
+your path. The roots seem to have intention, deliberately moving as if the forest is trying to guide or test you.
+Your footing must be sure, for a misstep could be dangerous.~
+0 3
+D0
+~
+~
+0 -1 10055
+D1
+~
+~
+0 -1 10060
+D2
+~
+~
+0 -1 10064
+D3
+~
+~
+0 -1 10062
+S
+#10060
+The Amber Sap Pools~
+Massive pools of ancient sap cover the forest floor here, glowing with an @@ramberous light@@N. The sap
+is thick and slow-moving, and small creatures float preserved within it. The smell is overwhelming - sweet
+and ancient. The pools are warm to the touch, and steam rises from their surfaces.~
+0 3
+D0
+~
+~
+0 -1 10056
+D3
+~
+~
+0 -1 10057
+D2
+~
+~
+0 -1 10065
+D1
+~
+~
+0 -1 10061
+S
+#10061
+Beneath Intertwined Canopy~
+Multiple massive trees have grown around each other, their trunks intertwining in a complex pattern.
+The effect is beautiful and unsettling - the canopy above is completely obscured by the twisted growth.
+The space beneath is enclosed and womb-like. @@rGlowing spores@@N drift through the still air.~
+0 3
+D3
+~
+~
+0 -1 10056
+D0
+~
+~
+0 -1 10060
+D2
+~
+~
+0 -1 10065
+S
+#10062
+A Narrow Root Tunnel~
+A tunnel has formed beneath massive raised roots, creating an underground passage that descends below
+the forest floor. The passage is tall enough to walk through but narrow, barely wider than your shoulders.
+The air is cool and damp. This tunnel connects to the cave system deeper underground - the path north leads
+back toward the surface caves you came from.~
+1 3
+D0
+~
+~
+0 -1 9770
+D1
+~
+~
+0 -1 10059
+S
+#10063
+The Petrified Ring~
+A perfect circle of what were once living trees now stands as stone - somehow petrified, frozen in time.
+The transformation is ancient beyond measure. The petrified trunks are smooth and dark, marked with strange
+patterns. Standing within the ring, you feel a sense of great power and presence.~
+0 3
+D0
+~
+~
+0 -1 10058
+D2
+~
+~
+0 -1 10064
+D1
+~
+~
+0 -1 10059
+S
+#10064
+Among Thorned Sentinels~
+Massive trees covered entirely in thorns surround you. The thorns are not small - they're as long as daggers
+and wickedly sharp. The trees seem to stand guard, their thorns facing inward as well as outward. @@rGlowing
+thorns@@N mark safe passages between them.~
+0 3
+D0
+~
+~
+0 -1 10059
+D1
+~
+~
+0 -1 10063
+D2
+~
+~
+0 -1 10068
+D3
+~
+~
+0 -1 10072
+S
+#10065
+A Bioluminescent Grotto~
+A natural cavern opens within the forest itself, its walls glowing with bioluminescent organisms. The walls
+appear to be alive, writhing with phosphorescent light that illuminates the space in shifting colors. The air is
+thick with spores that sparkle as they drift. The grotto is beautiful and strange beyond measure.~
+1 3
+D0
+~
+~
+0 -1 10060
+D3
+~
+~
+0 -1 10061
+D2
+~
+~
+0 -1 10067
+S
+#10066
+The Weeping Hollow~
+A hollow where massive trees have created a natural bowl-shaped depression. From cracks in the bark above, sap
+drips constantly, creating pools and streams of the @@rambering liquid@@N. The hollow is warm and humid. The sap
+accumulates and flows slowly toward a central depression where it pools darkly.~
+0 3
+D0
+~
+~
+0 -1 10057
+D1
+~
+~
+0 -1 10065
+D2
+~
+~
+0 -1 10070
+D3
+~
+~
+0 -1 10068
+S
+#10067
+A Canopy Bridge~
+High above, living bridges have formed between the massive trunks of ancient trees. This particular bridge is
+at a dizzying height, but somehow the trees have created a path. Walking across it, the forest floor is distant
+below. The bridge sways slightly but seems safe. The view from here is both beautiful and terrifying.~
+0 3
+D0
+~
+~
+0 -1 10065
+D2
+~
+~
+0 -1 10070
+S
+#10068
+The Rotwood Stretch~
+Decay dominates this area. Trees here are dying or dead, their wood soft and rotting. Fungal growth covers
+everything - @@rred and green fungi@@N spreading across the decaying trunks. The ground is soft mulch. The air
+smells of rich decay and is thick with spores. Life emerges from death here in abundance.~
+0 3
+D0
+~
+~
+0 -1 10064
+D3
+~
+~
+0 -1 10066
+D2
+~
+~
+0 -1 10071
+D1
+~
+~
+0 -1 10069
+S
+#10069
+Among Bloated Toadstools~
+Enormous toadstools, some as tall as a man, dominate this area. They're grotesquely swollen and pulsate with
+an inner rhythm. Some have already begun to decay and spread spores. The ground is nearly invisible beneath a
+carpet of smaller fungal growths. The air is nearly unbreathable with spore clouds.~
+0 3
+D3
+~
+~
+0 -1 10068
+D2
+~
+~
+0 -1 10070
+S
+#10070
+A Clearing of Black Moss~
+A clearing covered entirely in black moss, so dark it appears almost to be shadow itself. The moss is thick and
+soft, and walking across it produces no sound. Small bioluminescent creatures move within the moss. The effect
+is deeply unsettling - like walking across the void itself.~
+0 3
+D0
+~
+~
+0 -1 10066
+D3
+~
+~
+0 -1 10067
+D1
+~
+~
+0 -1 10069
+D2
+~
+~
+0 -1 10071
+S
+#10071
+The Strangler Fig Passage~
+Enormous fig trees have wrapped around and strangled other trees here. The dead trees remain standing,
+consumed by the living figs. The result is a chaotic tangle of living and dead wood, with figs growing
+through every available space. The passage winds between them carefully.~
+0 3
+D0
+~
+~
+0 -1 10068
+D3
+~
+~
+0 -1 10070
+D2
+~
+~
+0 -1 10073
+S
+#10072
+Beneath a Web of Roots~
+A nearly impenetrable web of roots fills the space here, hanging from above and rising from below. The roots
+have created a cage-like structure that you must carefully navigate. The roots are as thick as your body in
+places. The darkness here is nearly total, with only scattered @@rgreen light@@N from fungi marking the way.~
+1 3
+D0
+~
+~
+0 -1 10064
+D1
+~
+~
+0 -1 10073
+S
+#10073
+The Verdant Maw~
+A massive chasm opens here, its walls lined with living vines and enormous fanged-looking root formations that
+resemble teeth. The opening is like the mouth of some colossal beast. Deep within, you hear the sound of movement.
+This chasm leads to the Rootmother's Sanctum - the lair of the first great guardian of the forest. A path winds
+downward into darkness.~
+0 3
+D0
+~
+~
+0 -1 10071
+D3
+~
+~
+0 -1 10072
+D5
+A descent into green-lit darkness~
+down into the maw~
+0 -1 10090
+S
+#10074
+A Path of Bone-White Bark~
+Trees here have shed their outer bark, leaving pale wood exposed. The effect is ghostly - like walking between
+white skeletal structures. The bark litters the ground like bones. The trees are dying slowly, their pale wood
+already home to boring insects and small fungi.~
+0 3
+D0
+~
+~
+0 -1 10066
+D3
+~
+~
+0 -1 10070
+D2
+~
+~
+0 -1 10075
+S
 #$
