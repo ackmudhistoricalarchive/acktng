@@ -1115,6 +1115,690 @@ the most dangerous creature in the forest.
 |4 128 2 0 0 0 0
 S
 #0
+#OBJECTS
+#10000
+a thornback claw~
+a sharp thornback claw~
+A wicked claw from a thornback briar beast, still dripping with acidic sap.
+~
+weapon slash 5 80 0 128 8388608
+A 1 3
+A 2 2
+S
+#10001
+a canopy lurker's fang~
+a canopy lurker's fang~
+A venomous fang from a canopy lurker, curved and sharp as a needle.
+~
+weapon pierce 5 82 0 128 8388608
+A 1 4
+A 2 2
+S
+#10002
+a treant bark shield~
+a treant bark shield~
+A shield carved from the bark of an ancient treant, hard as stone.
+~
+armor shield 6 83 0 128 8388608
+A 0 2
+A 4 1
+S
+#10003
+a sporecap cowl~
+a sporecap cowl~
+A hood woven from sporecap fibers, glowing faintly with bioluminescence.
+~
+armor head 1 80 0 128 8388608
+A 1 2
+S
+#10004
+a wolf-hide mantle~
+a wolf-hide mantle~
+A cloak made from the fur of a deepwood wolf, warm and protective.
+~
+armor shoulders 6 81 0 128 8388608
+A 2 2
+A 3 1
+S
+#10005
+a vine-woven tunic~
+a vine-woven tunic~
+A tight-fitting tunic woven from living vines, surprisingly durable.
+~
+armor body 11 84 0 128 8388608
+A 0 2
+A 4 2
+S
+#10006
+a moss golem's fist~
+a moss golem's fist~
+A hardened fist weapon coated in moss and stone.
+~
+weapon fist 6 85 0 128 8388608
+A 1 3
+A 2 2
+S
+#10007
+a blighted branch wand~
+a blighted branch wand~
+A wand carved from blighted wood, radiating necrotic energy.
+~
+weapon wand 1 82 0 128 8388608
+A 1 2
+S
+#10008
+a thornfang pelt~
+a thornfang pelt~
+A sleek pelt from a thornfang stalker, still warm to the touch.
+~
+armor about 6 83 0 128 8388608
+A 2 3
+S
+#10009
+a web-silk sash~
+a web-silk sash~
+A delicate sash woven from spider silk, surprisingly tough.
+~
+armor waist 1 80 0 128 8388608
+A 1 2
+S
+#10010
+a petrified bark bracer~
+a petrified bark bracer~
+A bracer carved from petrified wood, hard as steel.
+~
+armor wrist 11 85 0 128 8388608
+A 0 1
+A 4 1
+S
+#10011
+a fungal tendril whip~
+a fungal tendril whip~
+A whip made from animated fungal tendrils, dripping with spores.
+~
+weapon whip 1 84 0 128 8388608
+A 1 2
+S
+#10012
+a heartwood splint~
+a heartwood splint~
+Leg armor carved from heartwood, light but incredibly strong.
+~
+armor legs 11 85 0 128 8388608
+A 0 2
+A 4 1
+S
+#10013
+a rotwood club~
+a rotwood club~
+A club carved from decaying wood, surprisingly well-balanced.
+~
+weapon pound 6 81 0 128 8388608
+A 1 2
+A 2 1
+S
+#10014
+a sporecrown circlet~
+a sporecrown circlet~
+A circlet made from fungal matter, pulsing with faint light.
+~
+armor head 1 82 0 128 8388608
+A 1 1
+S
+#10015
+a thornfang tooth necklace~
+a thornfang tooth necklace~
+A necklace strung with the teeth of a thornfang stalker.
+~
+armor neck 6 83 0 128 8388608
+A 2 2
+S
+#10016
+a root tendril armband~
+a root tendril armband~
+Arm armor woven from living root tendrils.
+~
+armor arms 11 80 0 128 8388608
+A 0 1
+A 4 1
+S
+#10017
+a canopy weaver's silk gloves~
+a canopy weaver's silk gloves~
+Gloves woven from the silk of a canopy weaver, soft yet durable.
+~
+armor hands 1 84 0 128 8388608
+A 1 1
+S
+#10018
+a verdant wraith's shroud~
+a verdant wraith's shroud~
+A cloak made from the essence of a verdant wraith, barely visible.
+~
+armor about 1 85 0 128 8388608
+A 1 2
+S
+#10019
+a deepwood wolf's ear~
+a deepwood wolf's ear~
+A trophy ear from a deepwood wolf, still fresh.
+~
+treasure 0 80 0 128 8388608
+S
+#10020
+a shadow fox pelt cloak~
+a shadow fox pelt cloak~
+A sleek cloak made from the pelt of a creeping shadow fox.
+~
+armor about 6 81 0 128 8388608
+A 2 1
+S
+#10021
+a tanglewood fang blade~
+a tanglewood fang blade~
+A blade carved from the fang of a tanglewood serpent.
+~
+weapon stab 6 83 0 128 8388608
+A 1 2
+S
+#10022
+a tick-chitin armguard~
+a tick-chitin armguard~
+An armguard made from hardened chitin plates.
+~
+armor wrist 11 80 0 128 8388608
+A 0 1
+A 4 1
+S
+#10023
+a verdant hulk's knuckle~
+a verdant hulk's knuckle~
+A massive knuckle weapon from a verdant hulk.
+~
+weapon fist 11 85 0 128 8388608
+A 1 2
+A 2 1
+S
+#10024
+a rotting stag antler~
+a rotting stag antler~
+An antler from a rotting stag, surprisingly sharp despite decay.
+~
+weapon stab 6 82 0 128 8388608
+A 1 2
+S
+#10025
+a thorn wasp wing mantle~
+a thorn wasp wing mantle~
+Shoulder armor made from the iridescent wings of thorn wasps.
+~
+armor shoulders 1 81 0 128 8388608
+A 1 1
+S
+#10026
+a barkskin wolf pelt~
+a barkskin wolf pelt~
+A cloak made from the bark-hardened hide of a barkskin wolf.
+~
+armor about 6 84 0 128 8388608
+A 2 2
+S
+#10027
+a centipede fang earring~
+a centipede fang earring~
+An earring carved from the fang of a deepwood centipede.
+~
+armor ear 1 82 0 128 8388608
+A 1 1
+S
+#10028
+a bog troll's hide belt~
+a bog troll's hide belt~
+A belt made from the moss-covered hide of a bog troll.
+~
+armor waist 11 85 0 128 8388608
+A 0 1
+A 4 1
+S
+#10029
+a broodmother's spore sac~
+a broodmother's spore sac~
+A held item made from a fungal broodmother's reproductive sac.
+~
+armor hold 1 85 0 128 8388608
+A 1 1
+S
+#10030
+a moss elemental's core~
+a moss elemental's core~
+A trophy core from an ancient moss elemental.
+~
+treasure 0 84 0 128 8388608
+S
+#10031
+a twisted ent branch~
+a twisted ent branch~
+A gnarled club carved from a twisted ent's branch.
+~
+weapon pound 6 84 0 128 8388608
+A 1 2
+A 2 1
+S
+#10032
+a thornveil assassin's cowl~
+a thornveil assassin's cowl~
+A hood woven from the thornveil of a deadly assassin.
+~
+armor head 1 85 0 128 8388608
+A 1 2
+S
+#10033
+a gloomwing dust pouch~
+a gloomwing dust pouch~
+A pouch containing the toxic dust from a gloomwing moth.
+~
+armor hold 1 80 0 128 8388608
+A 1 1
+S
+#10034
+a brambleback shell plate~
+a brambleback shell plate~
+Body armor made from the shell of a brambleback tortoise.
+~
+armor body 11 85 0 128 8388608
+A 0 2
+A 4 2
+S
+#10035
+a bramble-thorn dagger~
+a bramble-thorn dagger~
+A dagger formed from the thorns of a grasping bramble.
+~
+weapon stab 6 81 0 128 8388608
+A 1 1
+A 2 1
+S
+#10036
+a beetle-shell pauldron~
+a beetle-shell pauldron~
+Shoulder armor carved from the carapace of a mosswort beetle.
+~
+armor shoulders 11 80 0 128 8388608
+A 0 1
+A 4 1
+S
+#10037
+a deepwood bear paw~
+a deepwood bear paw~
+A massive claw weapon from a deepwood bear.
+~
+weapon fist 6 83 0 128 8388608
+A 1 3
+A 2 2
+S
+#10038
+a shade-touched ring~
+a shade-touched ring~
+A finger ring touched by the essence of a whispering shade.
+~
+armor finger 1 82 0 128 8388608
+A 1 1
+S
+#10039
+a bark-skinned armguard~
+a bark-skinned armguard~
+Wrist armor with bark-like plating from a bark-skinned ogre.
+~
+armor wrist 11 84 0 128 8388608
+A 0 2
+A 4 1
+S
+#10040
+a crown of twisted antlers~
+a crown of twisted antlers~
+A headpiece made from the twisted antlers of a thorn-crowned stag.
+~
+armor horns 6 83 0 128 8388608
+A 2 2
+S
+#10041
+a mycelium-threaded robe~
+a mycelium-threaded robe~
+A robe woven with living mycelial threads.
+~
+armor body 1 82 0 128 8388608
+A 1 2
+S
+#10042
+a boar-tusk earring~
+a boar-tusk earring~
+An earring crafted from the tusk of a spore-maddened boar.
+~
+armor ear 6 80 0 128 8388608
+A 2 1
+S
+#10043
+an elder vine lash~
+an elder vine lash~
+A whip made from the vines of an elder vine serpent.
+~
+weapon whip 1 85 0 128 8388608
+A 1 3
+S
+#10044
+a deadfall bark vest~
+a deadfall bark vest~
+Body armor made from the petrified bark of a living deadfall.
+~
+armor body 11 84 0 128 8388608
+A 0 1
+A 4 2
+S
+#10045
+a shaman's gnarled staff~
+a shaman's gnarled staff~
+A two-handed staff carved from wood, wielded by a deepwood shaman.
+~
+weapon two-handed 1 85 0 128 8388608
+A 1 2
+A 2 1
+S
+#10046
+rootwoven greaves~
+rootwoven greaves~
+Leg armor woven from the roots of a rootwoven horror.
+~
+armor legs 6 85 0 128 8388608
+A 2 2
+S
+#10047
+a blightspore mask~
+a blightspore mask~
+A mask made from the hardened spore-coating of a blightspore walker.
+~
+armor face 1 81 0 128 8388608
+A 1 1
+S
+#10048
+a thornfang whelp's collar~
+a thornfang whelp's collar~
+A collar taken from a thornfang whelp, inscribed with runes.
+~
+armor neck 6 80 0 128 8388608
+A 2 1
+S
+#10049
+a rootbound gauntlet~
+a rootbound gauntlet~
+Gloves made from the hardened roots of a rootbound guardian.
+~
+armor hands 11 84 0 128 8388608
+A 0 1
+A 4 1
+S
+#10050
+a sap-crusted hauberk~
+a sap-crusted hauberk~
+Body armor hardened by ancient tree sap.
+~
+armor body 11 85 0 128 8388608
+A 0 2
+A 4 2
+S
+#10051
+a strangler vine belt~
+a strangler vine belt~
+A belt woven from the vines of a canopy strangler.
+~
+armor waist 6 82 0 128 8388608
+A 2 1
+S
+#10052
+a withered dryad's circlet~
+a withered dryad's circlet~
+A circlet bearing the essence of a withered dryad.
+~
+armor head 1 84 0 128 8388608
+A 1 2
+S
+#10053
+a mosswort queen's mandible~
+a mosswort queen's mandible~
+A weapon carved from the mandible of a mosswort queen.
+~
+weapon slash 6 83 0 128 8388608
+A 1 2
+A 2 1
+S
+#10054
+a hollow lurker's hide boots~
+a hollow lurker's hide boots~
+Foot armor made from the hide of a hollow tree lurker.
+~
+armor feet 6 81 0 128 8388608
+A 2 1
+S
+#10055
+a stalker's vine garrote~
+a stalker's vine garrote~
+A crushing weapon made from the vines of a verdant stalker.
+~
+weapon crush 1 80 0 128 8388608
+A 1 2
+S
+#10056
+a beetle-shell buckler~
+a beetle-shell buckler~
+A buckler shield made from the shell of a mosswort beetle.
+~
+armor buckler 11 83 0 128 8388608
+A 0 1
+A 4 1
+S
+#10057
+an ogre-hewn great club~
+an ogre-hewn great club~
+A massive two-handed club carved by a bark-skinned ogre.
+~
+weapon two-handed 6 85 0 128 8388608
+A 1 3
+A 2 2
+S
+#10058
+a sap-hardened ring~
+a sap-hardened ring~
+A finger ring hardened by ancient tree sap.
+~
+armor finger 11 84 0 128 8388608
+A 0 1
+A 4 1
+S
+#10059
+a bear-claw amulet~
+a bear-claw amulet~
+An amulet made from the claws of a deepwood bear.
+~
+armor neck 6 82 0 128 8388608
+A 2 2
+S
+#10060
+the Rootmother's living staff~
+the Rootmother's living staff~
+A two-handed staff of living wood, pulsing with growth magic.
+~
+weapon two-handed 1 90 0 134217984 8388608
+A 1 5
+A 2 3
+S
+#10061
+a crown of living thorns~
+a crown of living thorns~
+A magnificent crown woven from living thorns, radiating growth.
+~
+armor head 1 90 0 134217984 8388608
+A 1 3
+S
+#10062
+the Rootmother's heartwood buckler~
+the Rootmother's heartwood buckler~
+A buckler shield carved from the heartwood of the Rootmother.
+~
+armor buckler 11 90 0 134217984 8388608
+A 0 2
+A 4 3
+S
+#10063
+greaves of ancient bark~
+greaves of ancient bark~
+Leg armor carved from bark as old as the forest itself.
+~
+armor legs 11 90 0 134217984 8388608
+A 0 2
+A 4 3
+S
+#10064
+a rootweave tunic~
+a rootweave tunic~
+Body armor woven from the roots of the Rootmother.
+~
+armor body 6 90 0 134217984 8388608
+A 2 3
+S
+#10065
+the Rootmother's seed~
+the Rootmother's seed~
+A held orb-like seed pulsing with life force.
+~
+armor hold 1 90 0 134217984 8388608
+A 1 2
+S
+#10066
+living bark vambraces~
+living bark vambraces~
+Wrist armor made from living bark that shifts and repairs itself.
+~
+armor wrist 11 90 0 134217984 8388608
+A 0 2
+A 4 3
+S
+#10067
+a blade of blighted wood~
+a blade of blighted wood~
+A weapon carved from blighted wood, radiating decay.
+~
+weapon hold 6 90 0 134217984 8388608
+A 1 4
+A 2 3
+S
+#10068
+a sporecrown helm~
+a sporecrown helm~
+A helmet made from fungal matter, crowned with spores.
+~
+armor head 11 90 0 134217984 8388608
+A 0 2
+A 4 3
+S
+#10069
+a cloak of rotting leaves~
+a cloak of rotting leaves~
+A cloak made from constantly decaying leaves.
+~
+armor about 1 90 0 134217984 8388608
+A 1 3
+S
+#10070
+blightwood gauntlets~
+blightwood gauntlets~
+Gloves made from blightwood, spreading decay to all they touch.
+~
+armor hands 6 90 0 134217984 8388608
+A 2 3
+S
+#10071
+the Blightwood Ancient's fungal shield~
+the Blightwood Ancient's fungal shield~
+A shield made from hardened fungal growth, incredibly durable.
+~
+armor hold 11 90 0 134217984 8388608
+A 0 2
+A 4 3
+S
+#10072
+a blightwood ring of decay~
+a blightwood ring of decay~
+A ring that spreads decay and corruption.
+~
+armor finger 1 90 0 134217984 8388608
+A 1 3
+S
+#10073
+a sporewoven sash~
+a sporewoven sash~
+A sash woven from spores and decay, wrapped around the body.
+~
+armor waist 6 90 0 134217984 8388608
+A 2 3
+S
+#10074
+Thornfang Alpha's great claw~
+Thornfang Alpha's great claw~
+A massive two-handed claw weapon of the apex predator.
+~
+weapon two-handed 6 90 0 134217984 8388608
+A 1 5
+A 2 4
+S
+#10075
+a collar of alpha fangs~
+a collar of alpha fangs~
+A collar made from the fangs of the apex predator.
+~
+armor neck 6 90 0 134217984 8388608
+A 2 3
+S
+#10076
+a pelt of the apex predator~
+a pelt of the apex predator~
+Body armor made from the hide of Thornfang Alpha.
+~
+armor body 11 90 0 134217984 8388608
+A 0 3
+A 4 3
+S
+#10077
+the predator's eye pendant~
+the predator's eye pendant~
+A pendant containing the glowing eye of the apex predator.
+~
+armor neck 1 90 0 134217984 8388608
+A 1 2
+S
+#10078
+thornfang hide boots~
+thornfang hide boots~
+Foot armor made from the hide of Thornfang Alpha.
+~
+armor feet 6 90 0 134217984 8388608
+A 2 3
+S
+#10079
+the predator's maw wand~
+the predator's maw wand~
+A wand shaped like the maw of a predator.
+~
+weapon wand 1 90 0 134217984 8388608
+A 1 3
+S
+#10080
+thornfang alpha's shoulder hide~
+thornfang alpha's shoulder hide~
+Shoulder armor made from the hide of the apex predator.
+~
+armor shoulders 11 90 0 134217984 8388608
+A 0 3
+A 4 3
+S
 #ROOMS
 #10000
 Entrance to the Verdant Depths~
