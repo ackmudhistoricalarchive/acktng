@@ -2200,6 +2200,10 @@ You are in an area of very dense woodland, full of withered, stunted trees.
 
 ~
 0 3
+D1
+A passage deeper into living growth~
+deeper~
+0 -1 10000
 D3
 Woodland.
 
@@ -3975,6 +3979,10 @@ Another Cave.
 ~
 ~
 0 -1 9764
+D2
+An underground passage descending deeper~
+deeper~
+0 -1 10062
 S
 #0
 #MOBILES
