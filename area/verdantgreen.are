@@ -25,6 +25,9 @@ is evident in the calculating glint of its eyes. It moves with lethal grace.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10001
 a thornback briar beast~
@@ -42,6 +45,9 @@ plant and animal nature. Acidic sap drips from its thorn-covered hide.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10002
 a canopy lurker~
@@ -58,6 +64,9 @@ from its wickedly sharp fangs, and its eyes glow with predatory intelligence.
 0 0 0 0
 ! 0 0 0 0 7 0 0
 |2 128 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10003
 an ancient treant~
@@ -75,6 +84,9 @@ cover its ancient wood, and a faint aura of age surrounds it.
 0 0 0 0
 ! 0 0 0 0 7 0 0
 |34 128 0 0 0 32 128
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10004
 a sporecap shambler~
@@ -91,6 +103,9 @@ is a mass of fungal matter held together by some perverted animating force.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |512 128 0 0 0 32 128
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10005
 a deepwood wolf~
@@ -108,6 +123,9 @@ are sharp enough to rend stone, and its bite can tear through armor.
 0 0 0 0
 ! 0 0 0 0 7 0 0
 |2 128 0 0 0 2 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10006
 a vine strangler~
@@ -125,6 +143,9 @@ and sharp thorns line every surface. A sap-like ichor drips from its appendages.
 0 0 0 0
 ! 0 0 0 0 7 46339 0
 |34 128 0 0 0 512 128
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10007
 a moss-covered golem~
@@ -142,6 +163,9 @@ seems to strengthen rather than weaken the underlying stone.
 0 0 0 0
 ! 0 0 0 0 7 46339 32
 |34 128 0 0 0 34 34
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10008
 a blighted dryad~
@@ -160,6 +184,9 @@ nature bent to destructive purpose.
 0 0 0 0
 ! 0 0 0 0 7 46339 6144
 |4 128 0 0 4096 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10009
 a thornfang stalker~
@@ -176,6 +203,9 @@ shoulders and back, and its fangs glow with a faint luminescence.
 0 0 0 0
 ! 0 0 0 0 7 46343 0
 |2 128 0 0 0 2 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10010
 a rootweaver spider~
@@ -193,6 +223,9 @@ Its fangs drip with a clear venom that steams as it falls.
 0 0 0 0
 ! 0 0 0 0 7 46339 0
 |34 128 0 0 0 512 128
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10011
 a petrified sentinel~
@@ -210,6 +243,9 @@ revealing a faint glow from within. It stands eight feet tall.
 0 0 0 0
 ! 0 0 0 0 15 571495 32
 |34 128 0 0 0 34 34
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10012
 a fungal abomination~
@@ -227,6 +263,9 @@ Spore clouds surround it in a perpetual haze, and its movements are grotesquely 
 0 0 0 0
 ! 0 0 0 0 7 46343 0
 |512 128 0 0 0 512 128
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10013
 a heartwood guardian~
@@ -244,6 +283,9 @@ humanoid but clearly not human, standing nearly nine feet tall. Power radiates f
 0 0 0 0
 ! 0 0 0 0 15 571503 16
 |34 128 0 0 0 34 128
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10014
 a rotwood shambler~
@@ -260,6 +302,9 @@ spreads decay like a plague. It moves with jerky, purposeless motions.
 0 0 0 0
 ! 0 0 0 0 7 46339 0
 |512 128 0 0 0 32 128
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10015
 a sporecrown drone~
@@ -276,6 +321,9 @@ sickly light. Spores fall from it constantly, and it moves with unsettling quick
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |512 128 0 0 0 32 128
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10016
 a thornfang packmate~
@@ -292,6 +340,9 @@ sharp spines along its back and shoulders. Its claws are wickedly curved.
 0 0 0 0
 ! 0 0 0 0 7 46343 0
 |2 128 0 0 0 2 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10017
 a root tendril mass~
@@ -308,6 +359,9 @@ intelligence, coordinating attacks from multiple angles simultaneously.
 0 0 0 0
 ! 0 0 0 0 7 46339 0
 |34 128 0 0 0 512 128
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10018
 a canopy weaver~
@@ -324,6 +378,9 @@ silk and shimmer with eerie light. Intelligence gleams in its multiple eyes.
 0 0 0 0
 ! 0 0 0 0 15 571495 0
 |34 128 0 0 0 512 128
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10019
 a verdant wraith~
@@ -340,6 +397,9 @@ touching the ground, and its presence drains warmth from the air.
 0 0 0 0
 ! 0 0 0 0 15 571503 8192
 |4 128 0 0 8192 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10020
 a creeping shadow fox~
@@ -356,6 +416,9 @@ and its eyes burn with a faint violet light.
 0 0 0 0
 ! 0 0 0 0 1 0 0
 |2 128 0 0 0 2 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10021
 a tanglewood serpent~
@@ -372,6 +435,9 @@ fangs, and its body is thick and powerful.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |2 128 0 0 0 512 128
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10022
 a fungal tick swarm~
@@ -388,6 +454,9 @@ They emit a chittering sound and seem to share a single consciousness.
 0 0 0 0
 ! 0 0 0 0 1 0 0
 |512 128 0 0 0 512 128
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10023
 a grasping bramble~
@@ -404,6 +473,9 @@ from where the vines tangle together.
 0 0 0 0
 ! 0 0 0 0 1 0 0
 |34 128 0 0 0 512 128
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10024
 a hollow tree lurker~
@@ -420,6 +492,9 @@ near-total darkness, glowing faintly red.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |2 128 0 0 0 2 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10025
 a mosswort beetle~
@@ -437,6 +512,9 @@ are powerful and designed for traversing through dense undergrowth. It feeds on 
 0 0 0 0
 ! 0 0 0 0 2 0 0
 |10 128 0 0 512 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10026
 a deepwood bear~
@@ -454,6 +532,9 @@ an otherworldly heat. Its roar would echo for miles above ground.
 0 0 0 0
 ! 0 0 0 0 4 0 0
 |4 128 2 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10027
 a sap-blooded horror~
@@ -471,6 +552,9 @@ swirl hypnotically. It moves with an unnatural fluidity, leaving trails of caust
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |512 128 0 0 0 0 64
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10028
 a whispering shade~
@@ -488,6 +572,9 @@ visible, burn with an eerie blue light of malevolent intelligence.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |128 0 0 0 2 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10029
 a bark-skinned ogre~
@@ -505,6 +592,9 @@ logs. It reeks of mulch and decay, with eyes glowing green with predatory awaren
 0 0 0 0
 ! 0 0 0 0 4 0 0
 |4 128 4 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10030
 a thorn-crowned stag~
@@ -522,6 +612,9 @@ but living wood, covered in razor-sharp thorns. Its hide ripples with unnatural 
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |4 128 0 0 512 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10031
 a mycelium crawler~
@@ -539,6 +632,9 @@ constantly pour from its form in sickening clouds. Its bite would inject deadly 
 0 0 0 0
 ! 0 0 0 0 2 0 0
 |512 128 0 0 0 0 64
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10032
 a spore-maddened boar~
@@ -557,6 +653,9 @@ unpredictable.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |4 128 0 0 512 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10033
 an elder vine serpent~
@@ -575,6 +674,9 @@ intelligence born of centuries.
 0 0 0 0
 ! 1 0 0 0 4 0 0
 |34 128 0 0 2 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10034
 a living deadfall~
@@ -593,6 +695,9 @@ than speed.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10035
 a deepwood shaman~
@@ -611,6 +716,9 @@ with terrible purpose.
 0 0 0 0
 ! 1 0 0 0 4 0 0
 |128 0 0 0 2 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10036
 a rootwoven horror~
@@ -629,6 +737,9 @@ inexorable strength that can crush stone.
 0 0 0 0
 ! 1 0 0 0 5 0 0
 |34 128 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10037
 a blightspore walker~
@@ -647,6 +758,9 @@ and disease.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |512 128 0 0 0 0 64
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10038
 a thornfang whelp~
@@ -664,6 +778,9 @@ are curved like scythes. Its eyes burn with predatory intelligence far beyond it
 0 0 0 0
 ! 0 0 0 0 2 0 0
 |4 128 2 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10039
 a rootbound guardian~
@@ -682,6 +799,9 @@ soil. Its strength is immense and inexorable.
 0 0 0 0
 ! 0 0 0 0 4 0 0
 |34 128 32 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10040
 a canopy strangler~
@@ -699,6 +819,9 @@ crushing force. Its movements are graceful and deadly, each motion economical an
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10041
 a withered dryad~
@@ -717,6 +840,9 @@ a cemetery. It commands powerful decay magic.
 0 0 0 0
 ! 1 0 0 0 4 0 0
 |128 0 0 0 512 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10042
 a mosswort queen~
@@ -735,6 +861,9 @@ all smaller creatures.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |10 128 0 0 512 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10043
 a verdant hulk~
@@ -753,6 +882,9 @@ so enormous, but no less deadly.
 0 0 0 0
 ! 1 0 0 0 5 0 0
 |34 128 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10044
 a rotting stag~
@@ -771,6 +903,9 @@ antlers are tipped with crystallized poison.
 0 0 0 0
 ! 0 0 0 0 2 0 0
 |512 128 0 0 0 0 64
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10045
 a thorn wasp swarm~
@@ -789,6 +924,9 @@ lethal; the swarm is a plague.
 0 0 0 0
 ! 0 0 0 0 1 0 0
 |10 128 0 0 512 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10046
 a barkskin wolf~
@@ -807,6 +945,9 @@ through stone.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |4 128 2 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10047
 a deepwood centipede~
@@ -825,6 +966,9 @@ bite injects a poison that paralyzes prey.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |10 128 0 0 512 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10048
 a bog troll~
@@ -843,6 +987,9 @@ is immense, capable of bending iron.
 0 0 0 0
 ! 0 0 0 0 4 0 0
 |4 128 4 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10049
 a fungal broodmother~
@@ -861,6 +1008,9 @@ a potential vector for infection. Its movements are slow but crushing.
 0 0 0 0
 ! 1 0 0 0 4 0 0
 |512 128 0 0 0 0 64
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10050
 an ancient moss elemental~
@@ -879,6 +1029,9 @@ grinding stone to dust. Its presence brings the smell of rich, fertile earth.
 0 0 0 0
 ! 0 0 0 0 4 0 0
 |10 128 10 0 2 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10051
 a twisted ent~
@@ -897,6 +1050,9 @@ and its power is manifest in the way the forest bends to its will.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10052
 a thornveil assassin~
@@ -915,6 +1071,9 @@ calculating, belonging to a mind evolved purely for efficient murder.
 0 0 0 0
 ! 1 0 0 0 5 0 0
 |34 128 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10053
 a gloomwing moth~
@@ -933,6 +1092,9 @@ is a lethal predator.
 0 0 0 0
 ! 0 0 0 0 2 0 0
 |10 128 0 0 512 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10054
 a sap ooze~
@@ -951,6 +1113,9 @@ solid form but immense will.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |512 128 0 0 0 0 64
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10055
 a feral grove keeper~
@@ -969,6 +1134,9 @@ growth and decay with equal facility.
 0 0 0 0
 ! 1 0 0 0 4 0 0
 |34 128 0 0 2 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10056
 a corpseflower lurker~
@@ -987,6 +1155,9 @@ It is perfectly adapted as a scavenger and active predator.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 0 0 512 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10057
 a brambleback tortoise~
@@ -1005,6 +1176,9 @@ nearly impenetrable fortress.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 10 0 2 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10058
 a sporeveil phantom~
@@ -1023,6 +1197,9 @@ utterly alien.
 0 0 0 0
 ! 0 0 0 0 4 0 0
 |128 0 0 0 512 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10059
 a thornroot drake~
@@ -1041,6 +1218,9 @@ intelligence born of primal hunger and survival instinct.
 0 0 0 0
 ! 1 0 0 0 5 0 0
 |4 128 2 0 512 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10060
 a deepwood prowler~
@@ -1059,6 +1239,9 @@ ease.
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |4 128 2 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10061
 the Rootmother~
@@ -1077,6 +1260,9 @@ around her, drawing power and sustenance. Her presence causes the forest itself 
 0 0 0 0
 ! 1 0 0 0 5 0 0
 |34 128 32 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10062
 the Blightwood Ancient~
@@ -1095,6 +1281,9 @@ is poison and plague.
 0 0 0 0
 ! 1 0 0 0 5 0 0
 |512 128 0 0 0 0 64
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #10063
 Thornfang Alpha~
@@ -1113,6 +1302,9 @@ the most dangerous creature in the forest.
 0 0 0 0
 ! 1 0 0 0 6 0 0
 |4 128 2 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
 S
 #0
 #OBJECTS
