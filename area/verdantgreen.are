@@ -21,7 +21,7 @@ the forest around it. Sharp claws extend from powerful limbs, and its intelligen
 is evident in the calculating glint of its eyes. It moves with lethal grace.
 ~
 97 0 0 S
-80 0
+80 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 0 0 0 0 0
@@ -38,7 +38,7 @@ armor. The thorns seem to grow from its very flesh, and its movement suggests bo
 plant and animal nature. Acidic sap drips from its thorn-covered hide.
 ~
 97 0 0 S
-82 0
+82 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 0 0 0 0 0
@@ -54,7 +54,7 @@ powerful, covered in tough scales that shimmer with an iridescent sheen. Venom d
 from its wickedly sharp fangs, and its eyes glow with predatory intelligence.
 ~
 97 0 0 S
-84 0
+84 1
 0 0 0 0
 ! 0 0 0 0 7 0 0
 |2 128 0 0 0 0 0
@@ -71,7 +71,7 @@ any normal tree, and its limbs can move with surprising dexterity. Moss and lich
 cover its ancient wood, and a faint aura of age surrounds it.
 ~
 97 0 0 S
-86 0
+86 1
 0 0 0 0
 ! 0 0 0 0 7 0 0
 |34 128 0 0 0 32 128
@@ -87,7 +87,7 @@ by a massive mushroom cap that releases choking clouds of spores. The rest of it
 is a mass of fungal matter held together by some perverted animating force.
 ~
 97 0 0 S
-83 0
+83 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |512 128 0 0 0 32 128
@@ -104,7 +104,7 @@ is easily twice the size of a normal wolf, with fur that seems to absorb light. 
 are sharp enough to rend stone, and its bite can tear through armor.
 ~
 97 0 0 S
-85 0
+85 1
 0 0 0 0
 ! 0 0 0 0 7 0 0
 |2 128 0 0 0 2 0
@@ -121,7 +121,7 @@ as your torso, make up its entire body. The vines move with unsettling coordinat
 and sharp thorns line every surface. A sap-like ichor drips from its appendages.
 ~
 97 0 0 S
-87 0
+87 1
 0 0 0 0
 ! 0 0 0 0 7 46339 0
 |34 128 0 0 0 512 128
@@ -138,7 +138,7 @@ living plants. Its form is vaguely humanoid, standing nearly ten feet tall. The 
 seems to strengthen rather than weaken the underlying stone.
 ~
 97 0 0 S
-88 0
+88 1
 0 0 0 0
 ! 0 0 0 0 7 46339 32
 |34 128 0 0 0 34 34
@@ -156,7 +156,7 @@ her touch withers everything. She gestures with graceful movements, weaving spel
 nature bent to destructive purpose.
 ~
 97 0 0 S
-85 0
+85 1
 0 0 0 0
 ! 0 0 0 0 7 46339 6144
 |4 128 0 0 4096 0 0
@@ -172,7 +172,7 @@ Its musculature is perfect, every movement economical and deadly. Thorns grow fr
 shoulders and back, and its fangs glow with a faint luminescence.
 ~
 97 0 0 S
-90 0
+90 1
 0 0 0 0
 ! 0 0 0 0 7 46343 0
 |2 128 0 0 0 2 0
@@ -189,7 +189,7 @@ legs are root-like and powerful, and it weaves webs from living vines instead of
 Its fangs drip with a clear venom that steams as it falls.
 ~
 97 0 0 S
-88 0
+88 1
 0 0 0 0
 ! 0 0 0 0 7 46339 0
 |34 128 0 0 0 512 128
@@ -206,7 +206,7 @@ body is perfectly tree-shaped but composed of hard granite. Cracks run through i
 revealing a faint glow from within. It stands eight feet tall.
 ~
 33554529 0 0 S
-92 0
+92 1
 0 0 0 0
 ! 0 0 0 0 15 571495 32
 |34 128 0 0 0 34 34
@@ -223,7 +223,7 @@ body is a mass of bulbous, pulsating fungal growths, each one weeping a dark ich
 Spore clouds surround it in a perpetual haze, and its movements are grotesquely organic.
 ~
 97 0 0 S
-90 0
+90 1
 0 0 0 0
 ! 0 0 0 0 7 46343 0
 |512 128 0 0 0 512 128
@@ -240,7 +240,7 @@ is composed of heartwood, the densest and strongest part of ancient trees. Its f
 humanoid but clearly not human, standing nearly nine feet tall. Power radiates from it.
 ~
 33554529 0 0 S
-93 0
+93 1
 0 0 0 0
 ! 0 0 0 0 15 571503 16
 |34 128 0 0 0 34 128
@@ -256,7 +256,7 @@ held together by rot and fungal growth. Spores leak from every crevice, and its 
 spreads decay like a plague. It moves with jerky, purposeless motions.
 ~
 97 0 0 S
-86 0
+86 1
 0 0 0 0
 ! 0 0 0 0 7 46339 0
 |512 128 0 0 0 32 128
@@ -272,7 +272,7 @@ form is mushroom-like, crowned with a corona of bioluminescent pods that pulse w
 sickly light. Spores fall from it constantly, and it moves with unsettling quickness.
 ~
 97 0 0 S
-84 0
+84 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |512 128 0 0 0 32 128
@@ -288,7 +288,7 @@ on its hind legs. Its form combines feline and reptilian characteristics, covere
 sharp spines along its back and shoulders. Its claws are wickedly curved.
 ~
 97 0 0 S
-89 0
+89 1
 0 0 0 0
 ! 0 0 0 0 7 46343 0
 |2 128 0 0 0 2 0
@@ -304,7 +304,7 @@ are as thick as your torso and move with hypnotic grace. They seem to have a col
 intelligence, coordinating attacks from multiple angles simultaneously.
 ~
 97 0 0 S
-87 0
+87 1
 0 0 0 0
 ! 0 0 0 0 7 46339 0
 |34 128 0 0 0 512 128
@@ -320,7 +320,7 @@ ten feet across, with legs that span twice that distance. Its webs are woven fro
 silk and shimmer with eerie light. Intelligence gleams in its multiple eyes.
 ~
 33554529 0 0 S
-91 0
+91 1
 0 0 0 0
 ! 0 0 0 0 15 571495 0
 |34 128 0 0 0 512 128
@@ -336,7 +336,7 @@ humanoid but constantly shifting, composed of mist and spectral energy. It moves
 touching the ground, and its presence drains warmth from the air.
 ~
 33554529 0 0 S
-95 0
+95 1
 0 0 0 0
 ! 0 0 0 0 15 571503 8192
 |4 128 0 0 8192 0 0
@@ -352,7 +352,7 @@ Its form is lean and powerful, built for speed and stealth. Its fur is darker th
 and its eyes burn with a faint violet light.
 ~
 97 0 0 S
-81 0
+81 1
 0 0 0 0
 ! 0 0 0 0 1 0 0
 |2 128 0 0 0 2 0
@@ -368,7 +368,7 @@ brown and green, matching the surrounding vegetation perfectly. Venom drips from
 fangs, and its body is thick and powerful.
 ~
 97 0 0 S
-83 0
+83 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |2 128 0 0 0 512 128
@@ -384,7 +384,7 @@ entity. The individual ticks are visible as dark, bulbous forms that move in uni
 They emit a chittering sound and seem to share a single consciousness.
 ~
 97 0 0 S
-80 0
+80 1
 0 0 0 0
 ! 0 0 0 0 1 0 0
 |512 128 0 0 0 512 128
@@ -400,7 +400,7 @@ are wicked and deep, and the brambles move with surprising coordination. Acidic 
 from where the vines tangle together.
 ~
 97 0 0 S
-81 0
+81 1
 0 0 0 0
 ! 0 0 0 0 1 0 0
 |34 128 0 0 0 512 128
@@ -416,7 +416,7 @@ movement through tight spaces, with powerful claws for gripping. Its eyes are ad
 near-total darkness, glowing faintly red.
 ~
 97 0 0 S
-83 0
+83 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |2 128 0 0 0 2 0
@@ -433,7 +433,7 @@ exoskeleton covered in creeping moss that acts as camouflage and additional defe
 are powerful and designed for traversing through dense undergrowth. It feeds on decaying matter.
 ~
 97 0 0 S
-80 0
+80 1
 0 0 0 0
 ! 0 0 0 0 2 0 0
 |10 128 0 0 512 0 0
@@ -450,7 +450,7 @@ is a bundle of muscle and savage power, with claws like sickles. The air around 
 an otherworldly heat. Its roar would echo for miles above ground.
 ~
 97 0 0 S
-88 0
+88 1
 0 0 0 0
 ! 0 0 0 0 4 0 0
 |4 128 2 0 0 0 0
@@ -467,7 +467,7 @@ fluid contained only by its own surface tension. Within it, pieces of wood and o
 swirl hypnotically. It moves with an unnatural fluidity, leaving trails of caustic sap behind.
 ~
 97 0 0 S
-90 0
+90 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |512 128 0 0 0 0 64
@@ -484,7 +484,7 @@ the trees, appearing and disappearing. The temperature drops in its presence. It
 visible, burn with an eerie blue light of malevolent intelligence.
 ~
 97 0 0 S
-86 0
+86 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |128 0 0 0 2 0 0
@@ -501,7 +501,7 @@ plates, providing natural armor. Its muscles are corded and powerful, capable of
 logs. It reeks of mulch and decay, with eyes glowing green with predatory awareness.
 ~
 97 0 0 S
-89 0
+89 1
 0 0 0 0
 ! 0 0 0 0 4 0 0
 |4 128 4 0 0 0 0
@@ -518,7 +518,7 @@ horror. Its body is covered in patches of moss and fungal growth. Its antlers ar
 but living wood, covered in razor-sharp thorns. Its hide ripples with unnatural movement.
 ~
 97 0 0 S
-84 0
+84 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |4 128 0 0 512 0 0
@@ -535,7 +535,7 @@ Its segmented body is covered in a network of mycelial threads that act as senso
 constantly pour from its form in sickening clouds. Its bite would inject deadly fungal toxins.
 ~
 97 0 0 S
-82 0
+82 1
 0 0 0 0
 ! 0 0 0 0 2 0 0
 |512 128 0 0 0 0 64
@@ -553,7 +553,7 @@ and filth. Every snort releases a cloud of poisonous spores. Its movements are f
 unpredictable.
 ~
 97 0 0 S
-85 0
+85 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |4 128 0 0 512 0 0
@@ -571,7 +571,7 @@ touches, vines entangle and choke the earth. Its appetite is voracious and it hu
 intelligence born of centuries.
 ~
 97 0 0 S
-91 0
+91 1
 0 0 0 0
 ! 1 0 0 0 4 0 0
 |34 128 0 0 2 0 0
@@ -589,7 +589,7 @@ sharp enough to tear flesh. It moves with an inexorable, grinding pace that is m
 than speed.
 ~
 97 0 0 S
-87 0
+87 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 0 0 0 0 0
@@ -607,7 +607,7 @@ dexterity, and its form shifts between solid and ephemeral. It wields the forest
 with terrible purpose.
 ~
 97 0 0 S
-93 0
+93 1
 0 0 0 0
 ! 1 0 0 0 4 0 0
 |128 0 0 0 2 0 0
@@ -625,7 +625,7 @@ ground, they burrow deep, pulling moisture and life from the earth. It moves wit
 inexorable strength that can crush stone.
 ~
 97 0 0 S
-94 0
+94 1
 0 0 0 0
 ! 1 0 0 0 5 0 0
 |34 128 0 0 0 0 0
@@ -643,7 +643,7 @@ matter. Spore clouds constantly pour from its form in thick, poisonous plumes. I
 and disease.
 ~
 97 0 0 S
-86 0
+86 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |512 128 0 0 0 0 64
@@ -660,7 +660,7 @@ body is lean and muscular, built entirely for hunting. Barbed fangs line its maw
 are curved like scythes. Its eyes burn with predatory intelligence far beyond its years.
 ~
 97 0 0 S
-82 0
+82 1
 0 0 0 0
 ! 0 0 0 0 2 0 0
 |4 128 2 0 0 0 0
@@ -678,7 +678,7 @@ sinuous grace. It roots itself in the earth when standing guard, drawing power d
 soil. Its strength is immense and inexorable.
 ~
 97 0 0 S
-90 0
+90 1
 0 0 0 0
 ! 0 0 0 0 4 0 0
 |34 128 32 0 0 0 0
@@ -695,7 +695,7 @@ vines wrapped around a core of animated wood. It drops silently from above and s
 crushing force. Its movements are graceful and deadly, each motion economical and precise.
 ~
 97 0 0 S
-88 0
+88 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 0 0 0 0 0
@@ -713,7 +713,7 @@ and crumbling bark. It moves with a supernatural fluidity, its voice a whisper l
 a cemetery. It commands powerful decay magic.
 ~
 97 0 0 S
-91 0
+91 1
 0 0 0 0
 ! 1 0 0 0 4 0 0
 |128 0 0 0 512 0 0
@@ -731,7 +731,7 @@ beauty. She moves with deliberate, purposeful steps. Her presence commands respe
 all smaller creatures.
 ~
 97 0 0 S
-85 0
+85 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |10 128 0 0 512 0 0
@@ -749,7 +749,7 @@ and tendrils writhe across its surface. Its movements are surprisingly graceful 
 so enormous, but no less deadly.
 ~
 97 0 0 S
-92 0
+92 1
 0 0 0 0
 ! 1 0 0 0 5 0 0
 |34 128 0 0 0 0 0
@@ -767,7 +767,7 @@ an otherworldly appearance. Despite its decay, it moves with frightening speed a
 antlers are tipped with crystallized poison.
 ~
 97 0 0 S
-83 0
+83 1
 0 0 0 0
 ! 0 0 0 0 2 0 0
 |512 128 0 0 0 0 64
@@ -785,7 +785,7 @@ stingers drip with venom, and their wings make a sound like a thousand tiny blad
 lethal; the swarm is a plague.
 ~
 97 0 0 S
-81 0
+81 1
 0 0 0 0
 ! 0 0 0 0 1 0 0
 |10 128 0 0 512 0 0
@@ -803,7 +803,7 @@ protection while maintaining mobility. Its teeth are sharp as obsidian, and its 
 through stone.
 ~
 97 0 0 S
-87 0
+87 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |4 128 2 0 0 0 0
@@ -821,7 +821,7 @@ legs move with hypnotic coordination. Venom drips from its fangs and coats each 
 bite injects a poison that paralyzes prey.
 ~
 97 0 0 S
-84 0
+84 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |10 128 0 0 512 0 0
@@ -839,7 +839,7 @@ massive bulk. Algae drips from its hide, and the smell of stagnant water precede
 is immense, capable of bending iron.
 ~
 97 0 0 S
-89 0
+89 1
 0 0 0 0
 ! 0 0 0 0 4 0 0
 |4 128 4 0 0 0 0
@@ -857,7 +857,7 @@ exposed and drip with caustic fungal matter. Spore clouds pour from it constantl
 a potential vector for infection. Its movements are slow but crushing.
 ~
 97 0 0 S
-93 0
+93 1
 0 0 0 0
 ! 1 0 0 0 4 0 0
 |512 128 0 0 0 0 64
@@ -875,7 +875,7 @@ Where it walks, new growth springs forth. Its movements are slow but inexorable,
 grinding stone to dust. Its presence brings the smell of rich, fertile earth.
 ~
 97 0 0 S
-90 0
+90 1
 0 0 0 0
 ! 0 0 0 0 4 0 0
 |10 128 10 0 2 0 0
@@ -893,7 +893,7 @@ that splits and reforms, roots that drag along the ground. It moves with an unna
 and its power is manifest in the way the forest bends to its will.
 ~
 97 0 0 S
-88 0
+88 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 0 0 0 0 0
@@ -911,7 +911,7 @@ sound, its form blending seamlessly with the surrounding vegetation. Its eyes ar
 calculating, belonging to a mind evolved purely for efficient murder.
 ~
 97 0 0 S
-94 0
+94 1
 0 0 0 0
 ! 1 0 0 0 5 0 0
 |34 128 0 0 0 0 0
@@ -929,7 +929,7 @@ is covered in fine hairs that deliver additional toxins through contact. Despite
 is a lethal predator.
 ~
 97 0 0 S
-82 0
+82 1
 0 0 0 0
 ! 0 0 0 0 2 0 0
 |10 128 0 0 512 0 0
@@ -947,7 +947,7 @@ disturbing intelligence. Where it touches the ground, the earth begins to smoke 
 solid form but immense will.
 ~
 97 0 0 S
-85 0
+85 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |512 128 0 0 0 0 64
@@ -965,7 +965,7 @@ movements are fluid and dangerous. It wields the forest's power with terrible pu
 growth and decay with equal facility.
 ~
 97 0 0 S
-91 0
+91 1
 0 0 0 0
 ! 1 0 0 0 4 0 0
 |34 128 0 0 2 0 0
@@ -983,7 +983,7 @@ The smell that emanates from it is sickening - a mixture of old blood, decay, an
 It is perfectly adapted as a scavenger and active predator.
 ~
 97 0 0 S
-86 0
+86 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 0 0 512 0 0
@@ -1001,7 +1001,7 @@ slow but unstoppable. When threatened, it can retract entirely into its armored 
 nearly impenetrable fortress.
 ~
 97 0 0 S
-88 0
+88 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |34 128 10 0 2 0 0
@@ -1019,7 +1019,7 @@ and its presence causes a sickening vertigo in those who observe it. Its origin 
 utterly alien.
 ~
 97 0 0 S
-90 0
+90 1
 0 0 0 0
 ! 0 0 0 0 4 0 0
 |128 0 0 0 512 0 0
@@ -1037,7 +1037,7 @@ alien. Its wings beat with a sound like breaking wood. Its eyes burn with ancien
 intelligence born of primal hunger and survival instinct.
 ~
 97 0 0 S
-95 0
+95 1
 0 0 0 0
 ! 1 0 0 0 5 0 0
 |4 128 2 0 512 0 0
@@ -1055,7 +1055,7 @@ that shift with the light. Its claws are capable of rending steel, and its bite 
 ease.
 ~
 97 0 0 S
-84 0
+84 1
 0 0 0 0
 ! 0 0 0 0 3 0 0
 |4 128 2 0 0 0 0
