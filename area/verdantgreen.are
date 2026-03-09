@@ -497,4 +497,537 @@ D2
 ~
 0 -1 10027
 S
+#10025
+A Grove of Sentinel Oaks~
+Ancient oak trees stand like sentinels guarding this grove. Each trunk is perfectly straight
+and impossibly tall, rising far above the surrounding canopy. Their lower branches are spaced
+with mathematical precision, as if the trees deliberately maintain their arrangement.~
+0 3
+D0
+~
+~
+0 -1 10022
+D2
+~
+~
+0 -1 10031
+D1
+~
+~
+0 -1 10026
+D3
+~
+~
+0 -1 10032
+S
+#10026
+Beneath a Hollow Giant~
+A massive tree dominates this space - so ancient and so large that it's now completely hollow.
+You walk within its cavernous interior, the walls of living wood rising thirty feet above your head.
+Strange fungi glow softly in the darkness within. The wood smells of ages.~
+1 3
+D3
+~
+~
+0 -1 10025
+D2
+~
+~
+0 -1 10030
+S
+#10027
+A Carpet of Dead Leaves~
+The forest floor here is entirely carpeted with the accumulated leaves of centuries. Each
+step produces a soft crunching sound. Beneath the leaves, you can feel the earth is thick and
+rich. Decomposition has turned the leaves into a complex layer of compost and growing things.~
+0 3
+D0
+~
+~
+0 -1 10024
+D1
+~
+~
+0 -1 10028
+D2
+~
+~
+0 -1 10032
+D3
+~
+~
+0 -1 10031
+S
+#10028
+The Emerald Glade~
+A glade of remarkable beauty opens before you. The @@Gfoliage@@N is vibrant and living here,
+less ancient and dying than the rest of the forest. @@Rglowing moss@@N creates a soft illumination.
+A circle of ancient stones, now overgrown with vines, sits at the glade's center.~
+0 3
+D3
+~
+~
+0 -1 10027
+D2
+~
+~
+0 -1 10033
+D0
+~
+~
+0 -1 10029
+S
+#10029
+A Vine-Choked Passage~
+Thick vines have claimed this passage, hanging from above and creeping along the ground.
+You must push through the dense vegetation to progress. The vines are cool and damp, and they
+part reluctantly as you move through them. Strange berries hang from some of the vines.~
+0 3
+D2
+~
+~
+0 -1 10028
+D1
+~
+~
+0 -1 10030
+D3
+~
+~
+0 -1 10031
+S
+#10030
+Among Luminous Fungi~
+This area is a showcase of bioluminescent fungi. Giant mushrooms the size of trees glow with
+soft @@rgreen and blue@@N light. The ground beneath is spongy and alive with smaller fungi. The air
+is thick with spores that sparkle in the fungal light. Your breath becomes visible in the cool mist.~
+1 3
+D0
+~
+~
+0 -1 10026
+D3
+~
+~
+0 -1 10029
+D2
+~
+~
+0 -1 10035
+S
+#10031
+A Sheltered Dell~
+A natural amphitheater of earth and stone creates a sheltered hollow. The surrounding trees
+lean inward, creating a sense of enclosed safety. The ground is soft moss. A small spring bubbles
+quietly in one corner, creating a small pool.~
+0 3
+D0
+~
+~
+0 -1 10025
+D1
+~
+~
+0 -1 10027
+D2
+~
+~
+0 -1 10034
+D3
+~
+~
+0 -1 10029
+S
+#10032
+The Heartwood Trail~
+This path winds through the heart of the forest, ancient and well-traveled. The name comes
+from the fact that it follows the grain and pattern of the forest itself, as if the trees
+themselves guide the way. The path is smooth and worn by countless passages.~
+0 3
+D0
+~
+~
+0 -1 10025
+D1
+~
+~
+0 -1 10027
+D2
+~
+~
+0 -1 10036
+D3
+~
+~
+0 -1 10037
+S
+#10033
+Beside a Trickling Stream~
+A small stream runs through this area, its water crystal clear. The sound of it trickling over
+smooth stones is soothing. Ferns grow thickly along the stream bank, their fronds brushing the
+water's surface. The forest here is noticeably more alive and vibrant.~
+0 3
+D0
+~
+~
+0 -1 10028
+D3
+~
+~
+0 -1 10031
+D2
+~
+~
+0 -1 10034
+D1
+~
+~
+0 -1 10035
+S
+#10034
+A Fern-Covered Slope~
+A gentle slope covered entirely in ferns of every conceivable size and shape. The green is
+almost blindingly bright in the soft forest light. Walking across the ferns is quiet and soft,
+and the ground beneath is slightly spongy.~
+0 3
+D0
+~
+~
+0 -1 10031
+D1
+~
+~
+0 -1 10033
+D2
+~
+~
+0 -1 10040
+D3
+~
+~
+0 -1 10038
+S
+#10035
+The Twisted Arch~
+A natural arch formed by two ancient trees whose trunks have grown around each other, now
+creating a remarkable spiral pattern. The arch is large enough to walk under easily, and it
+serves as a major landmark. The wood of the arch is smooth and pale with age.~
+0 3
+D0
+~
+~
+0 -1 10030
+D3
+~
+~
+0 -1 10033
+D2
+~
+~
+0 -1 10041
+S
+#10036
+A Clearing of Stumps~
+An ancient logging site, long reclaimed by the forest. Massive tree stumps dot the ground,
+each now home to new growth. Younger trees have grown up from and around the old stumps.
+The forest has transformed this scar into a unique landscape of integration and rebirth.~
+0 3
+D0
+~
+~
+0 -1 10032
+D1
+~
+~
+0 -1 10040
+D2
+~
+~
+0 -1 10042
+D3
+~
+~
+0 -1 10039
+S
+#10037
+Among Creeping Ivy~
+Ivy climbs every available surface here, creating walls of living green. The ivy hangs in
+curtains from the canopy and covers the lower tree trunks completely. The forest beneath is
+almost hidden by layers of vegetation. Paths through it are marked only by the disturbance of
+animals passing through regularly.~
+0 3
+D0
+~
+~
+0 -1 10032
+D2
+~
+~
+0 -1 10039
+D1
+~
+~
+0 -1 10041
+S
+#10038
+The Briar Labyrinth Edge~
+The edge of a massive tangle of briars marks a natural boundary in the forest. The briars are
+wickedly sharp and form an almost impenetrable barrier. However, paths exist through the tangle,
+winding between the thorns with careful guidance. @@Rglowing thorns@@N mark the safe passages.~
+0 3
+D0
+~
+~
+0 -1 10034
+D1
+~
+~
+0 -1 10035
+D2
+~
+~
+0 -1 10040
+D3
+~
+~
+0 -1 10039
+S
+#10039
+A Gloomy Thicket~
+The dense undergrowth here creates a thicket so dark and impenetrable that it feels like
+perpetual twilight. The trees are twisted and gnarled, their branches creating a maze above.
+Strange sounds echo through the darkness, and the air feels oppressive and heavy.~
+1 3
+D0
+~
+~
+0 -1 10036
+D1
+~
+~
+0 -1 10038
+D2
+~
+~
+0 -1 10041
+D3
+~
+~
+0 -1 10037
+S
+#10040
+Beneath the Great Willow~
+An enormous weeping willow dominates this area, its trunk wider than any tree you've seen.
+Its branches create a curtain of hanging growth that nearly touches the ground. Standing
+beneath it feels like standing in a natural cathedral dedicated to a single ancient being.~
+0 3
+D0
+~
+~
+0 -1 10034
+D3
+~
+~
+0 -1 10038
+D2
+~
+~
+0 -1 10041
+D1
+~
+~
+0 -1 10036
+S
+#10041
+A Path of Stepping Stones~
+The ground here is boggy and soft. Ancient stones have been placed to create a path across
+the marsh. Each stone is worn smooth by countless footfalls. Between the stones, dark water
+reflects dim light from above. This path has been maintained for ages.~
+0 3
+D0
+~
+~
+0 -1 10035
+D3
+~
+~
+0 -1 10039
+D1
+~
+~
+0 -1 10040
+D2
+~
+~
+0 -1 10043
+S
+#10042
+The Overgrown Ruins~
+Massive stone structures jut through the forest floor here, completely overgrown with moss,
+lichens, and hanging vines. These are clearly the remains of some ancient civilization, now
+reclaimed utterly by the forest. The stones are weather-worn and covered in decades of accumulation.~
+0 3
+D0
+~
+~
+0 -1 10036
+D1
+~
+~
+0 -1 10043
+D2
+~
+~
+0 -1 10045
+D3
+~
+~
+0 -1 10044
+S
+#10043
+Among Crumbling Walls~
+Here, ancient stone walls still stand, though they're crumbling and partially hidden by the forest.
+The walls form what were once structures - buildings, perhaps, or fortifications. The stones are
+cold to the touch and marked with the slow destruction of centuries of weather and root growth.~
+0 3
+D3
+~
+~
+0 -1 10041
+D0
+~
+~
+0 -1 10042
+D2
+~
+~
+0 -1 10046
+D1
+~
+~
+0 -1 10045
+S
+#10044
+A Ruined Courtyard~
+This area was clearly once a courtyard or plaza of some ancient settlement. The ground is paved
+with stones, though they're now broken and scattered. Weeds and moss cover everything. At the
+center, the foundation of what was once a well or fountain remains, now a dark pool.~
+0 3
+D1
+~
+~
+0 -1 10042
+D2
+~
+~
+0 -1 10048
+D3
+~
+~
+0 -1 10046
+S
+#10045
+The Broken Tower Base~
+The massive base of what was once a tower still stands here, a circular platform of stone
+with the twisted remnants of the tower's supporting columns. The destruction appears ancient,
+weathered by countless years of exposure. The stones are enormous, suggesting this tower
+was once a significant structure.~
+0 3
+D0
+~
+~
+0 -1 10042
+D3
+~
+~
+0 -1 10043
+D2
+~
+~
+0 -1 10047
+D1
+~
+~
+0 -1 10046
+S
+#10046
+A Root-Split Foundation~
+The foundation of a building has been split apart by massive tree roots growing beneath it.
+The roots have lifted and fractured the stone in dramatic fashion, creating a visual testament
+to the slow but inexorable power of nature. The roots are now fully integrated into the landscape.~
+0 3
+D0
+~
+~
+0 -1 10043
+D1
+~
+~
+0 -1 10044
+D3
+~
+~
+0 -1 10045
+D2
+~
+~
+0 -1 10048
+S
+#10047
+Beside a Moss-Covered Well~
+An ancient well remains here, its stone walls still intact though covered with thick moss and
+dripping with moisture. The well descends into darkness far below. The water within is black
+and still. Small creatures have made homes in the crevices of the well stones.~
+0 3
+D0
+~
+~
+0 -1 10045
+D1
+~
+~
+0 -1 10046
+D2
+~
+~
+0 -1 10049
+S
+#10048
+The Sunken Garden~
+What was once a cultivated garden has sunk into the forest. The remains of planted beds are
+still visible, though they're now wild and overgrown. Strange plants grow here that don't seem
+native to the forest - perhaps seeds planted by long-dead gardeners still germinate.~
+0 3
+D0
+~
+~
+0 -1 10044
+D3
+~
+~
+0 -1 10046
+D2
+~
+~
+0 -1 10049
+S
+#10049
+A Colonnade of Oaks~
+Ancient oak trees stand in regular spacing, as if deliberately planted to form a colonnade.
+These trees are enormous and still thriving. They form a natural corridor whose geometry suggests
+intelligent design from ages past. Walking between them feels like treading through a monument.~
+0 3
+D0
+~
+~
+0 -1 10047
+D3
+~
+~
+0 -1 10048
+D2
+~
+~
+0 -1 10050
+S
 #$
