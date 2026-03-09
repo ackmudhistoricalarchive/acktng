@@ -1520,4 +1520,471 @@ D2
 ~
 0 -1 10075
 S
+#10075
+The Fungal Cathedral~
+An enormous underground chamber has been created by massive tree trunks that arch overhead like the ribs of
+some colossal beast. The chamber is dominated by gigantic fungi - mushrooms the size of buildings, their caps
+glowing with @@rmulticolored light@@N. The air is thick with spores that make breathing difficult.~
+0 3
+D0
+~
+~
+0 -1 10074
+D1
+~
+~
+0 -1 10076
+D3
+~
+~
+0 -1 10079
+S
+#10076
+Among Pulsing Vines~
+Massive vines that are clearly alive with sap pulse visibly with rhythm. Each pulse sends the vines moving in
+coordinated waves. The effect is hypnotic and unsettling - the forest's heartbeat made visible. Walking among
+them feels like walking through the circulatory system of a living entity.~
+0 3
+D3
+~
+~
+0 -1 10075
+D2
+~
+~
+0 -1 10077
+D0
+~
+~
+0 -1 10071
+S
+#10077
+A Grove of Dead Saplings~
+Young trees, somehow all dead at the same time, stand here in their skeletal forms. Their branches are bare
+and white, creating a forest of bones. What killed them all at once remains a mystery - perhaps the forest
+itself chose to sacrifice them for some purpose.~
+0 3
+D0
+~
+~
+0 -1 10076
+D3
+~
+~
+0 -1 10078
+D2
+~
+~
+0 -1 10080
+S
+#10078
+The Decaying Threshold~
+A threshold of active decay stands here. The ground is covered in a layer of fresh decay - soft mulch still
+warm with decomposition. Trees here are falling, returning to the earth. The smell is overwhelming. This area
+marks the boundary between life and death within the forest itself. Darkness leads downward.~
+0 3
+D1
+~
+~
+0 -1 10077
+D2
+~
+~
+0 -1 10081
+D0
+~
+~
+0 -1 10068
+D5
+A descent into rotting darkness~
+down into decay~
+0 -1 10102
+S
+#10079
+Beside a River of Sap~
+A river of liquid sap flows here, its banks lined with crystallized amber. The sap glows faintly with an
+inner light. Walking beside it, you can feel the heat radiating from the flowing liquid. The river flows
+downward into darkness, disappearing into the depths of the forest.~
+0 3
+D0
+~
+~
+0 -1 10075
+D1
+~
+~
+0 -1 10080
+D2
+~
+~
+0 -1 10081
+S
+#10080
+A Carnivorous Garden~
+Plants here are clearly carnivorous - enormous venus-flytrap-like flowers with mouths large enough to swallow
+a man. They move with predatory grace, snapping at movement. The garden is beautiful and terrifying. Some of
+the plants bear the remains of creatures they've consumed.~
+0 3
+D0
+~
+~
+0 -1 10077
+D3
+~
+~
+0 -1 10079
+D2
+~
+~
+0 -1 10084
+S
+#10081
+The Predator's Trail~
+A trail marked by claw marks, broken branches, and scattered bones. Large predators have worn this path through
+the forest, hunting for prey. The trail is clear and well-traveled. Following it, you feel the presence of
+hunters watching from the shadows. This trail leads toward the Hunter's Blind - the lair of the apex predator.~
+0 3
+D0
+~
+~
+0 -1 10078
+D3
+~
+~
+0 -1 10079
+D1
+~
+~
+0 -1 10084
+D2
+~
+~
+0 -1 10083
+S
+#10082
+Among Skeletal Branches~
+Branches here have become skeletal and bare - denuded of bark and leaves. They form chaotic patterns overhead,
+creating a maze of white wood. The darkness beneath is nearly absolute, lit only by scattered @@rglowing fungi@@N.
+The atmosphere is oppressive and threatening.~
+1 3
+D2
+~
+~
+0 -1 10083
+D1
+~
+~
+0 -1 10085
+S
+#10083
+The Hunter's Blind~
+A natural blind has formed in the forest - a place from which a predator could observe and hunt. The area
+overlooks the Predator's Trail, and the scent of prey hangs thick in the air. This blind leads deeper into a
+hidden den - the lair of Thornfang Alpha, the apex predator of the forest.~
+0 3
+D0
+~
+~
+0 -1 10081
+D3
+~
+~
+0 -1 10084
+D4
+~
+~
+0 -1 10082
+D5
+A descent into predatory darkness~
+down into the den~
+0 -1 10113
+S
+#10084
+A Hollow of Whispering Leaves~
+A hollow where countless leaves drift and swirl despite no wind. They whisper against each other, creating an
+eerie susurration that seems almost like speech. The effect is hypnotic and disorienting. Larger creatures
+have passed through here recently - the ground shows their tracks.~
+0 3
+D0
+~
+~
+0 -1 10080
+D3
+~
+~
+0 -1 10081
+D2
+~
+~
+0 -1 10085
+S
+#10085
+The Twisted Crossroads~
+Four paths meet here at a crossroads that seems to shift and twist. The trees here form a natural junction,
+and it feels like a major hub of travel through the Deepwood. The center is marked by a twisted tree growing
+in a spiral pattern - a natural signpost.~
+0 3
+D0
+~
+~
+0 -1 10082
+D1
+~
+~
+0 -1 10084
+D3
+~
+~
+0 -1 10088
+D2
+~
+~
+0 -1 10086
+S
+#10086
+Beneath the Reaching Canopy~
+The canopy here reaches down like grasping fingers, its lowest branches only feet above the ground. Walking
+beneath it requires occasional ducking and maneuvering. The effect is claustrophobic - the forest presses
+inward from all sides. Yet somehow you can see sky above, impossibly far away.~
+0 3
+D0
+~
+~
+0 -1 10085
+D2
+~
+~
+0 -1 10087
+S
+#10087
+A Sinkhole of Mulch~
+The ground drops away here into a massive sinkhole filled with years of accumulated mulch and decomposition.
+The smell is overwhelming - rich and dark. The sinkhole is gradual, sloping downward. The mulch is warm and
+damp, still actively decomposing. Walking through it is like treading through the forest's digestive system.~
+0 3
+D0
+~
+~
+0 -1 10086
+D3
+~
+~
+0 -1 10088
+S
+#10088
+The Groaning Path~
+The path here makes groaning sounds as you walk - the wood of fallen trees shifting and settling. The sound
+is eerie and constant. The path is safe enough, but the sounds create a sense of danger. It feels like the
+forest is expressing pain or discontent.~
+0 3
+D0
+~
+~
+0 -1 10085
+D1
+~
+~
+0 -1 10087
+D2
+~
+~
+0 -1 10089
+S
+#10089
+A Wall of Living Wood~
+A massive wall of living, intertwined wood rises before you, appearing solid and impassable. However, careful
+observation reveals that the wood is alive and moveable. The forest has created this barrier deliberately, as
+if marking the end of the explorable Deepwood. Beyond it, you sense the final mysteries of the forest.~
+0 3
+D0
+~
+~
+0 -1 10088
+S
+#10090
+The Rootmother's Approach~
+The ground here is entirely covered in massive roots, some as thick as tree trunks. They form natural steps
+leading deeper. The air is warm and humid, thick with the scent of living growth. You sense that you approach
+something ancient and powerful. The roots pulse with slow, rhythmic movement - the heartbeat of the forest.~
+0 3
+D0
+~
+~
+0 -1 10073
+D2
+~
+~
+0 -1 10091
+D1
+~
+~
+0 -1 10093
+S
+#10091
+Among Prehensile Roots~
+The roots here are actively moving - reaching and grasping as if they possess independent will. They curl
+toward you with obvious intent, though not aggressively. The roots are thicker than before, clearly close to
+the source of this phenomenon. The ground is spongy and gives beneath your feet.~
+0 3
+D0
+~
+~
+0 -1 10090
+D2
+~
+~
+0 -1 10095
+D1
+~
+~
+0 -1 10093
+S
+#10092
+A Tunnel of Living Wood~
+A tunnel formed from arching roots creates a passage deeper. The wood here is warm to the touch and seems to
+pulse with life. The tunnel is just wide enough to walk through without ducking. Inside, the darkness is
+profound, lit only by scattered bioluminescence. You feel surrounded by living wood.~
+1 3
+D2
+~
+~
+0 -1 10093
+D3
+~
+~
+0 -1 10094
+S
+#10093
+The Root Nexus~
+A massive central point where countless roots converge and intertwine. This is clearly a nexus of power - the
+roots here pulse with visible energy. Standing here, you feel the heartbeat of the forest more strongly than
+anywhere else. The nexus throbs with life force.~
+0 3
+D3
+~
+~
+0 -1 10090
+D0
+~
+~
+0 -1 10091
+D2
+~
+~
+0 -1 10095
+D4
+~
+~
+0 -1 10092
+S
+#10094
+Beneath the Mother Tree~
+A clearing beneath an impossibly massive tree trunk. This tree is so old and so large that its trunk is wider
+than a building. The roots descend into darkness below. The space beneath the canopy is warm and safe, like
+being in the presence of something maternal. The very wood seems to cradle you.~
+0 3
+D0
+~
+~
+0 -1 10092
+D1
+~
+~
+0 -1 10093
+D2
+~
+~
+0 -1 10097
+D3
+~
+~
+0 -1 10096
+S
+#10095
+A Chamber of Coiled Roots~
+A chamber formed entirely from coiled roots that have spiraled around each other. The effect is like being inside
+a womb of wood. The roots are smooth from age and almost warm. The chamber feels like a sanctuary - a place of
+absolute safety and life. You sense immense power sleeping here.~
+0 3
+D0
+~
+~
+0 -1 10091
+D3
+~
+~
+0 -1 10094
+D2
+~
+~
+0 -1 10099
+S
+#10096
+The Flowering Heart~
+At the center of the Rootmother's domain, beautiful flowers bloom - rare flowers of impossible colors. They
+glow softly with bioluminescence. The flowers appear to be feeding on the sap that flows through the roots.
+The sight is beautiful and awe-inspiring - the ultimate expression of life and growth.~
+0 3
+D1
+~
+~
+0 -1 10094
+D2
+~
+~
+0 -1 10097
+D0
+~
+~
+0 -1 10098
+S
+#10097
+Among Creeping Tendrils~
+Smaller tendrils cover the ground here, creeping across the earth like living vines. They move with purpose,
+reaching toward you without hostility. The tendrils are cool and damp. Standing here, you feel the presence of
+the Rootmother - not as a threat, but as awareness.~
+0 3
+D0
+~
+~
+0 -1 10094
+D3
+~
+~
+0 -1 10096
+D2
+~
+~
+0 -1 10100
+S
+#10098
+The Nourishing Dark~
+A chamber of deep darkness where the ground is soft and rich with nutrients. Here, the Rootmother feeds her
+creations. The darkness is complete except for scattered @@rglowing bacteria@@N. The air is thick and nourishing,
+full of life-giving scents. Standing here, you understand why the forest is alive.~
+1 3
+D1
+~
+~
+0 -1 10096
+D2
+~
+~
+0 -1 10100
+S
+#10099
+A Bower of Ancient Growth~
+A natural bower formed by ancient roots and growth. Vines hang like curtains, creating a space that feels safe
+and sheltered. The bower is illuminated by scattered @@rglowing moss@@N. This place radiates age and peace. You
+sense that this is near the innermost sanctuary of the Rootmother.~
+0 3
+D0
+~
+~
+0 -1 10095
+D3
+~
+~
+0 -1 10100
+S
 #$
