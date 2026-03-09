@@ -4367,4 +4367,19 @@ G 10078 10063
 G 10079 10063
 G 10080 10063
 S
-#$
+#SPECIALS
+S 10008 spec_cast_mage blighted dryad caster
+S 10019 spec_cast_mage verdant wraith caster
+S 10031 spec_poison mycelium crawler venom
+S 10035 spec_cast_mage deepwood shaman caster
+S 10037 spec_poison blightspore walker toxin
+S 10010 spec_poison rootweaver spider venom
+S 10012 spec_poison fungal abomination toxin
+S 10041 spec_cast_mage withered dryad caster
+S 10047 spec_poison deepwood centipede venom
+S 10053 spec_poison gloomwing moth toxin
+S 10055 spec_cast_mage feral grove keeper caster
+S 10056 spec_poison corpseflower lurker pollen
+S 10061 spec_cast_cleric rootmother healer
+S 10062 spec_cast_mage blightwood ancient decay
+S$
