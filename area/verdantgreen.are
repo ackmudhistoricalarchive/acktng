@@ -9,6 +9,860 @@ V 10000 10124
 F 15
 U @@gthe ancient trees creak and groan as the forest shifts around you@@N~
 T Teleport is allowed
+#MOBILES
+#10000
+a verdant stalker~
+a verdant stalker~
+A verdant stalker prowls through the undergrowth, its camouflaged form barely
+visible among the foliage. Its predatory gaze tracks your movement with clear intent.
+~
+This creature is a masterwork of natural deception, its coloring shifting to match
+the forest around it. Sharp claws extend from powerful limbs, and its intelligence
+is evident in the calculating glint of its eyes. It moves with lethal grace.
+~
+97 0 0 S
+80 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|34 128 0 0 0 0 0
+S
+#10001
+a thornback briar beast~
+a thornback briar beast~
+A thornback briar beast shambles toward you, its entire body covered in wickedly
+sharp thorns. Vines writhe around its frame, pulling the creature forward with
+unnatural strength.
+~
+This creature is a walking mass of thorns and briars, each one sharp enough to pierce
+armor. The thorns seem to grow from its very flesh, and its movement suggests both
+plant and animal nature. Acidic sap drips from its thorn-covered hide.
+~
+97 0 0 S
+82 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|34 128 0 0 0 0 0
+S
+#10002
+a canopy lurker~
+a canopy lurker~
+A canopy lurker drops from the foliage above, its serpentine form uncoiling in mid-air.
+Sharp fangs glint as it hisses, and its scaled body glistens with venom.
+~
+This creature is perfectly adapted for ambush hunting from above. Its body is sleek and
+powerful, covered in tough scales that shimmer with an iridescent sheen. Venom drips
+from its wickedly sharp fangs, and its eyes glow with predatory intelligence.
+~
+97 0 0 S
+84 0
+0 0 0 0
+! 0 0 0 0 7 0 0
+|2 128 0 0 0 0 0
+S
+#10003
+an ancient treant~
+an ancient treant~
+An ancient treant towers before you, its massive wooden form carved by centuries of
+existence. Branches form its limbs, and its face is a weathered tangle of bark and
+hollow knots that serve as eyes.
+~
+This creature is a tree given life and mobility. Its trunk-like body is thicker than
+any normal tree, and its limbs can move with surprising dexterity. Moss and lichen
+cover its ancient wood, and a faint aura of age surrounds it.
+~
+97 0 0 S
+86 0
+0 0 0 0
+! 0 0 0 0 7 0 0
+|34 128 0 0 0 32 128
+S
+#10004
+a sporecap shambler~
+a sporecap shambler~
+A sporecap shambler lurches toward you, its massive fungal cap dripping with toxic spores.
+The humanoid form beneath is barely distinguishable from the fungal growth itself.
+~
+This creature is a fusion of fungal and humanoid elements. Its upper body is dominated
+by a massive mushroom cap that releases choking clouds of spores. The rest of its form
+is a mass of fungal matter held together by some perverted animating force.
+~
+97 0 0 S
+83 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|512 128 0 0 0 32 128
+S
+#10005
+a deepwood wolf~
+a deepwood wolf~
+A deepwood wolf stalks through the shadows, its body massive and rippling with muscle.
+Its fur is dark as midnight, and its eyes glow with an eerie intelligence. It growls,
+revealing fangs the size of daggers.
+~
+This creature is a wolf corrupted and enlarged by the forest's unnatural power. Its body
+is easily twice the size of a normal wolf, with fur that seems to absorb light. Its claws
+are sharp enough to rend stone, and its bite can tear through armor.
+~
+97 0 0 S
+85 0
+0 0 0 0
+! 0 0 0 0 7 0 0
+|2 128 0 0 0 2 0
+S
+#10006
+a vine strangler~
+a vine strangler~
+A vine strangler writhes before you, an animated mass of thick, muscular vines. The
+vines twist and coil with hypnotic grace, occasionally revealing thorns that glint in
+the dim light.
+~
+This creature is pure predatory plant given mobility. Thick vines, some as big around
+as your torso, make up its entire body. The vines move with unsettling coordination,
+and sharp thorns line every surface. A sap-like ichor drips from its appendages.
+~
+97 0 0 S
+87 0
+0 0 0 0
+! 0 0 0 0 7 46339 0
+|34 128 0 0 0 512 128
+S
+#10007
+a moss-covered golem~
+a moss-covered golem~
+A moss-covered golem trudges forward, its stone form completely obscured beneath a thick
+layer of living moss and lichen. Despite its ancient slowness, it moves with purposeful
+power.
+~
+This creature is a golem of enchanted stone, now overgrown with centuries of moss and
+living plants. Its form is vaguely humanoid, standing nearly ten feet tall. The moss
+seems to strengthen rather than weaken the underlying stone.
+~
+97 0 0 S
+88 0
+0 0 0 0
+! 0 0 0 0 7 46339 32
+|34 128 0 0 0 34 34
+S
+#10008
+a blighted dryad~
+a blighted dryad~
+A blighted dryad drifts before you, her form translucent and corrupted. What was once
+a beautiful forest spirit now radiates malevolence. Shadows cling to her like a shroud,
+and her eyes burn with unnatural power.
+~
+This creature was once a guardian spirit of the forest, but corruption has twisted her
+into a mockery of her former self. Her form flickers between solid and ethereal, and
+her touch withers everything. She gestures with graceful movements, weaving spells of
+nature bent to destructive purpose.
+~
+97 0 0 S
+85 0
+0 0 0 0
+! 0 0 0 0 7 46339 6144
+|4 128 0 0 4096 0 0
+S
+#10009
+a thornfang stalker~
+a thornfang stalker~
+A thornfang stalker slinks through the undergrowth, its feline form rippling with lethal
+grace. Thorns protrude from its shoulders and spine, and its fangs drip with venom.
+~
+This creature is a fearsome predator, combining feline beauty with thornback brutality.
+Its musculature is perfect, every movement economical and deadly. Thorns grow from its
+shoulders and back, and its fangs glow with a faint luminescence.
+~
+97 0 0 S
+90 0
+0 0 0 0
+! 0 0 0 0 7 46343 0
+|2 128 0 0 0 2 0
+S
+#10010
+a rootweaver spider~
+a rootweaver spider~
+A rootweaver spider of enormous size hangs from the canopy, its body a fusion of arachnid
+and plant. Its legs are thick, root-like appendages, and webs of living vine stretch
+between the trees.
+~
+This creature is a spider of unnatural proportions, its body easily six feet across. Its
+legs are root-like and powerful, and it weaves webs from living vines instead of silk.
+Its fangs drip with a clear venom that steams as it falls.
+~
+97 0 0 S
+88 0
+0 0 0 0
+! 0 0 0 0 7 46339 0
+|34 128 0 0 0 512 128
+S
+#10011
+a petrified sentinel~
+a petrified sentinel~
+A petrified sentinel stands motionless, a tree transformed into living stone by ancient
+magic. Despite its stony appearance, it moves with purposeful grace, and its stone fists
+can smash through anything.
+~
+This creature is a tree transformed into animated stone through petrification magic. Its
+body is perfectly tree-shaped but composed of hard granite. Cracks run through its form,
+revealing a faint glow from within. It stands eight feet tall.
+~
+33554529 0 0 S
+92 0
+0 0 0 0
+! 0 0 0 0 15 571495 32
+|34 128 0 0 0 34 34
+S
+#10012
+a fungal abomination~
+a fungal abomination~
+A fungal abomination dominates the space before you, a massive amalgamation of
+mushroom and flesh. Its body pulses with sickening rhythm, and clouds of toxic spores
+surround it.
+~
+This creature is a fusion of fungal matter and animal biology gone horribly wrong. Its
+body is a mass of bulbous, pulsating fungal growths, each one weeping a dark ichor.
+Spore clouds surround it in a perpetual haze, and its movements are grotesquely organic.
+~
+97 0 0 S
+90 0
+0 0 0 0
+! 0 0 0 0 7 46343 0
+|512 128 0 0 0 512 128
+S
+#10013
+a heartwood guardian~
+a heartwood guardian~
+A heartwood guardian stands before you, a humanoid figure of living wood and iron will.
+Its form radiates ancient power, and its eyes are deep wells of endless wisdom turned
+to absolute malice.
+~
+This creature is a guardian spirit given physical form to defend the deepwood. Its body
+is composed of heartwood, the densest and strongest part of ancient trees. Its form is
+humanoid but clearly not human, standing nearly nine feet tall. Power radiates from it.
+~
+33554529 0 0 S
+93 0
+0 0 0 0
+! 0 0 0 0 15 571503 16
+|34 128 0 0 0 34 128
+S
+#10014
+a rotwood shambler~
+a rotwood shambler~
+A rotwood shambler lurches toward you, its body a mass of decaying wood and fungus. It
+leaves a trail of spores and soft mulch, and the stench of decay precedes it.
+~
+This creature is a tree in advanced decay animated by fungal infection. Its form is barely
+held together by rot and fungal growth. Spores leak from every crevice, and its touch
+spreads decay like a plague. It moves with jerky, purposeless motions.
+~
+97 0 0 S
+86 0
+0 0 0 0
+! 0 0 0 0 7 46339 0
+|512 128 0 0 0 32 128
+S
+#10015
+a sporecrown drone~
+a sporecrown drone~
+A sporecrown drone hovers before you, its small fungal form crowned with a circle of
+bioluminescent spore pods. It emits a high-pitched chittering that makes your teeth ache.
+~
+This creature is a small but dangerous fungal entity, standing barely four feet tall. Its
+form is mushroom-like, crowned with a corona of bioluminescent pods that pulse with
+sickly light. Spores fall from it constantly, and it moves with unsettling quickness.
+~
+97 0 0 S
+84 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|512 128 0 0 0 32 128
+S
+#10016
+a thornfang packmate~
+a thornfang packmate~
+A thornfang packmate growls at your approach, its predatory form clearly the work of
+unnatural evolution. It is sleek, powerful, and utterly without mercy.
+~
+This creature is a member of a pack of engineered predators, standing seven feet tall
+on its hind legs. Its form combines feline and reptilian characteristics, covered with
+sharp spines along its back and shoulders. Its claws are wickedly curved.
+~
+97 0 0 S
+89 0
+0 0 0 0
+! 0 0 0 0 7 46343 0
+|2 128 0 0 0 2 0
+S
+#10017
+a root tendril mass~
+a root tendril mass~
+A root tendril mass writhes before you, a confusing entanglement of thick, ancient roots
+given malevolent purpose. The roots move independently, searching for prey.
+~
+This creature is composed entirely of the largest roots from the deepest trees. The roots
+are as thick as your torso and move with hypnotic grace. They seem to have a collective
+intelligence, coordinating attacks from multiple angles simultaneously.
+~
+97 0 0 S
+87 0
+0 0 0 0
+! 0 0 0 0 7 46339 0
+|34 128 0 0 0 512 128
+S
+#10018
+a canopy weaver~
+a canopy weaver~
+A canopy weaver hangs from the high branches, its massive form a fusion of spider and
+predator. Its enormous webs shimmer with trapped prey and bioluminescence.
+~
+This creature is a giant spider corrupted and empowered by the forest. Its body is easily
+ten feet across, with legs that span twice that distance. Its webs are woven from living
+silk and shimmer with eerie light. Intelligence gleams in its multiple eyes.
+~
+33554529 0 0 S
+91 0
+0 0 0 0
+! 0 0 0 0 15 571495 0
+|34 128 0 0 0 512 128
+S
+#10019
+a verdant wraith~
+a verdant wraith~
+A verdant wraith materializes before you, a ghostly figure formed from pure forest essence.
+Its form flickers between solid and ethereal, and it radiates an aura of ancient power.
+~
+This creature is the spirit of the forest given predatory form. Its shape is vaguely
+humanoid but constantly shifting, composed of mist and spectral energy. It moves without
+touching the ground, and its presence drains warmth from the air.
+~
+33554529 0 0 S
+95 0
+0 0 0 0
+! 0 0 0 0 15 571503 8192
+|4 128 0 0 8192 0 0
+S
+#10020
+a creeping shadow fox~
+a creeping shadow fox~
+A creeping shadow fox slinks through the undergrowth, its dark fur barely visible against
+the shadows. Its eyes glow with feral intelligence, and its movements are impossibly silent.
+~
+This creature is a fox touched by shadow magic, making it blend seamlessly with darkness.
+Its form is lean and powerful, built for speed and stealth. Its fur is darker than black,
+and its eyes burn with a faint violet light.
+~
+97 0 0 S
+81 0
+0 0 0 0
+! 0 0 0 0 1 0 0
+|2 128 0 0 0 2 0
+S
+#10021
+a tanglewood serpent~
+a tanglewood serpent~
+A tanglewood serpent coils among the undergrowth, its scaled body the color of bark and
+leaf. It is almost invisible until it moves, striking with predatory precision.
+~
+This creature is a serpent perfectly camouflaged by the forest. Its scales are mottled
+brown and green, matching the surrounding vegetation perfectly. Venom drips from its
+fangs, and its body is thick and powerful.
+~
+97 0 0 S
+83 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|2 128 0 0 0 512 128
+S
+#10022
+a fungal tick swarm~
+a fungal tick swarm~
+A fungal tick swarm surrounds you, a seething mass of infected parasites. Each one is
+the size of a human fist, and they move in disturbing coordination.
+~
+This creature is actually a collective of enormous fungal parasites acting as a single
+entity. The individual ticks are visible as dark, bulbous forms that move in unison.
+They emit a chittering sound and seem to share a single consciousness.
+~
+97 0 0 S
+80 0
+0 0 0 0
+! 0 0 0 0 1 0 0
+|512 128 0 0 0 512 128
+S
+#10023
+a grasping bramble~
+a grasping bramble~
+A grasping bramble reaches toward you with animated desperation, its thorn-covered vines
+seeking to entangle and trap anything within reach.
+~
+This creature is a mass of animated briars and thorns given malevolent purpose. The thorns
+are wicked and deep, and the brambles move with surprising coordination. Acidic sap drips
+from where the vines tangle together.
+~
+97 0 0 S
+81 0
+0 0 0 0
+! 0 0 0 0 1 0 0
+|34 128 0 0 0 512 128
+S
+#10024
+a hollow tree lurker~
+a hollow tree lurker~
+A hollow tree lurker emerges from a massive dead tree, its form perfectly suited to
+predation from within wooden structures. Its claws are enormous, designed for gripping bark.
+~
+This creature lives within the hollow interiors of dead trees. Its body is streamlined for
+movement through tight spaces, with powerful claws for gripping. Its eyes are adapted for
+near-total darkness, glowing faintly red.
+~
+97 0 0 S
+83 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|2 128 0 0 0 2 0
+S
+#10025
+a mosswort beetle~
+a mosswort beetle~
+A giant armored beetle clicks its mandibles as it scuttles forward. Its carapace is covered
+in a thick moss-like growth, making it appear more plant than insect. Antennae twitch,
+testing the air for threats.
+~
+This creature is a masterwork of nature's armor. Its segmented body is protected by a hardened
+exoskeleton covered in creeping moss that acts as camouflage and additional defense. Its legs
+are powerful and designed for traversing through dense undergrowth. It feeds on decaying matter.
+~
+97 0 0 S
+80 0
+0 0 0 0
+! 0 0 0 0 2 0 0
+|10 128 0 0 512 0 0
+S
+#10026
+a deepwood bear~
+a deepwood bear~
+A massive bear prowls through the forest, its body corrupted by the ancient forest's influence.
+Its fur ripples with unnatural movement, and its eyes glow with feral intelligence. It is massive
+and powerful beyond normal bear kind.
+~
+This creature is a bear swollen to twice its natural size by the forest's corruption. Its body
+is a bundle of muscle and savage power, with claws like sickles. The air around it shimmers with
+an otherworldly heat. Its roar would echo for miles above ground.
+~
+97 0 0 S
+88 0
+0 0 0 0
+! 0 0 0 0 4 0 0
+|4 128 2 0 0 0 0
+S
+#10027
+a sap-blooded horror~
+a sap-blooded horror~
+An amorphous mass oozes forward, vaguely humanoid in shape. It drips with thick, amber sap
+that burns where it touches the ground. The creature appears to be semi-liquid, its body
+constantly shifting and reforming as it moves.
+~
+This creature is animated tree sap given terrible life. Its body is a flowing mass of amber
+fluid contained only by its own surface tension. Within it, pieces of wood and organic matter
+swirl hypnotically. It moves with an unnatural fluidity, leaving trails of caustic sap behind.
+~
+97 0 0 S
+90 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|512 128 0 0 0 0 64
+S
+#10028
+a whispering shade~
+a whispering shade~
+A shadow coalesces before you, barely visible in the forest gloom. It whispers incomprehensible
+things in a voice like wind through dead leaves. Its form is humanoid but insubstantial, as if
+half-phased from this world.
+~
+This creature is a shadow given form and hunger. It moves with an unnatural fluidity between
+the trees, appearing and disappearing. The temperature drops in its presence. Its eyes, when
+visible, burn with an eerie blue light of malevolent intelligence.
+~
+97 0 0 S
+86 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|128 0 0 0 2 0 0
+S
+#10029
+a bark-skinned ogre~
+a bark-skinned ogre~
+A massive ogre of the forest strides through the undergrowth with terrible purpose. Its skin
+is covered in thick bark-like plating that serves as armor. It towers above most creatures,
+a creature of raw forest power and hunger.
+~
+This creature is an ogre transformed by the forest itself. Its skin has hardened to bark-like
+plates, providing natural armor. Its muscles are corded and powerful, capable of moving ancient
+logs. It reeks of mulch and decay, with eyes glowing green with predatory awareness.
+~
+97 0 0 S
+89 0
+0 0 0 0
+! 0 0 0 0 4 0 0
+|4 128 4 0 0 0 0
+S
+#10030
+a thorn-crowned stag~
+a thorn-crowned stag~
+A magnificent stag stands before you, corrupted by the forest's influence. Its antlers have
+grown into twisted, thorn-covered branches. Its eyes burn with unnatural intelligence and hunger.
+Where once was a noble creature, now stands a twisted predator.
+~
+This creature was once a great stag, noble and proud. Now it has been warped into a predatory
+horror. Its body is covered in patches of moss and fungal growth. Its antlers are no longer bone
+but living wood, covered in razor-sharp thorns. Its hide ripples with unnatural movement.
+~
+97 0 0 S
+84 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|4 128 0 0 512 0 0
+S
+#10031
+a mycelium crawler~
+a mycelium crawler~
+A strange creature that appears to be half fungal growth, half animal, burrows through the soft
+earth. Mycelial threads trail behind it like a living shadow. The smell of mold and decay hangs
+thick around it, choking and poisonous.
+~
+This creature is an underground fungal burrower perfectly adapted for life beneath the forest floor.
+Its segmented body is covered in a network of mycelial threads that act as sensory organs. Spores
+constantly pour from its form in sickening clouds. Its bite would inject deadly fungal toxins.
+~
+97 0 0 S
+82 0
+0 0 0 0
+! 0 0 0 0 2 0 0
+|512 128 0 0 0 0 64
+S
+#10032
+a spore-maddened boar~
+a spore-maddened boar~
+A massive wild boar charges through the forest, driven mad by fungal infection. Spore clouds
+billow from its tusks and snout with every breath. Its eyes are glazed and wild, its movements
+erratic and savage.
+~
+This creature is a great boar driven to madness by fungal spore infection. Its hide is covered
+in patches of fungal growth that glow faintly in the darkness. Its tusks are crusted with spores
+and filth. Every snort releases a cloud of poisonous spores. Its movements are frenzied and
+unpredictable.
+~
+97 0 0 S
+85 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|4 128 0 0 512 0 0
+S
+#10033
+an elder vine serpent~
+an elder vine serpent~
+A massive serpent made entirely of animated vines coils before you, its form rippling and
+shifting. It hisses with a sound like dry grass, and its vine-body uncoils to strike with
+deadly precision. This is an ancient predator of the deepwood.
+~
+This creature is a giant snake-like mass of living vines, as thick as a tree trunk and ancient
+beyond measure. Its movements are hypnotic and graceful despite its massive size. Where it
+touches, vines entangle and choke the earth. Its appetite is voracious and it hunts with
+intelligence born of centuries.
+~
+97 0 0 S
+91 0
+0 0 0 0
+! 1 0 0 0 4 0 0
+|34 128 0 0 2 0 0
+S
+#10034
+a living deadfall~
+a living deadfall~
+An animated pile of fallen logs and branches moves with terrible purpose before you. Splinters
+creak and shift as the construct shambles forward. What appears to be chaos is actually
+coordinated movement of something vast and hungry.
+~
+This creature is an animated mass of deadwood given life and hunger by the forest's will. Logs
+and branches have fused together into a vaguely humanoid form, with splinters forming edges
+sharp enough to tear flesh. It moves with an inexorable, grinding pace that is more terrifying
+than speed.
+~
+97 0 0 S
+87 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|34 128 0 0 0 0 0
+S
+#10035
+a deepwood shaman~
+a deepwood shaman~
+A figure cloaked in forest growth stands before you, its form a hybrid of human and plant.
+Its eyes glow with unnatural power, and spectral energy coalesces around its hands. This
+corrupted guardian of the forest radiates ancient malevolence.
+~
+This creature was once a human shaman, but has been corrupted and transformed by the forest's
+will. Its body is overgrown with moss, vines, and fungal matter. Its limbs move with an unnatural
+dexterity, and its form shifts between solid and ephemeral. It wields the forest's ancient magic
+with terrible purpose.
+~
+97 0 0 S
+93 0
+0 0 0 0
+! 1 0 0 0 4 0 0
+|128 0 0 0 2 0 0
+S
+#10036
+a rootwoven horror~
+a rootwoven horror~
+A massive construct composed entirely of woven tree roots looms before you. It is easily the size
+of a small building, with appendages that writhe like serpents. The air around it thrums with
+ancient vegetative power, and roots constantly drive into the earth seeking sustenance.
+~
+This creature is a masterwork of the forest's will - a massive tangle of roots woven together
+with terrible purpose. Its form is vaguely humanoid but utterly alien. Where roots touch the
+ground, they burrow deep, pulling moisture and life from the earth. It moves with deliberate,
+inexorable strength that can crush stone.
+~
+97 0 0 S
+94 0
+0 0 0 0
+! 1 0 0 0 5 0 0
+|34 128 0 0 0 0 0
+S
+#10037
+a blightspore walker~
+a blightspore walker~
+A shambling figure moves through the forest, its body almost entirely decomposed but still mobile.
+Clouds of choking spores billow from every orifice. This is death animated, a walking plague of
+fungal infection and decay.
+~
+This creature is a corpse animated by fungal infection, a zombie-like horror covered in a thick
+coating of blight spores. Its flesh hangs from its bones in strips, replaced by networks of fungal
+matter. Spore clouds constantly pour from its form in thick, poisonous plumes. It reeks of death
+and disease.
+~
+97 0 0 S
+86 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|512 128 0 0 0 0 64
+S
+#10038
+a thornfang whelp~
+a thornfang whelp~
+A young predator beast snarls before you, its form a miniature version of the apex hunters.
+Despite its relative youth, it is already a formidable killer. Its fangs are barbed and
+dripping with venom. It moves with a hunter's grace.
+~
+This creature is a young thornfang predator, still growing into its terrifying potential. Its
+body is lean and muscular, built entirely for hunting. Barbed fangs line its maw, and its claws
+are curved like scythes. Its eyes burn with predatory intelligence far beyond its years.
+~
+97 0 0 S
+82 0
+0 0 0 0
+! 0 0 0 0 2 0 0
+|4 128 2 0 0 0 0
+S
+#10039
+a rootbound guardian~
+a rootbound guardian~
+A humanoid figure bound in living roots stands sentinel before you. Its form is barely visible
+beneath the network of thick, coiling roots that serve as both body and restraint. It radiates
+an aura of ancient purpose and protective power.
+~
+This creature is a living root sentinel, a guardian formed entirely from coalesced tree roots bound
+together by the forest's ancient will. Its form shifts and writhes constantly, roots moving with
+sinuous grace. It roots itself in the earth when standing guard, drawing power directly from the
+soil. Its strength is immense and inexorable.
+~
+97 0 0 S
+90 0
+0 0 0 0
+! 0 0 0 0 4 0 0
+|34 128 32 0 0 0 0
+S
+#10040
+a canopy strangler~
+a canopy strangler~
+A vine creature that drops from the canopy above, its entire body composed of thick, muscular
+vines. It moves with terrible speed and grace, strangling its prey with methodical efficiency.
+The smell of crushed vegetation follows its passage.
+~
+This creature is a predatory vine mass that hunts from the canopy. Its body is composed of thick
+vines wrapped around a core of animated wood. It drops silently from above and strangles prey with
+crushing force. Its movements are graceful and deadly, each motion economical and precise.
+~
+97 0 0 S
+88 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|34 128 0 0 0 0 0
+S
+#10041
+a withered dryad~
+a withered dryad~
+A ghostly figure of a once-beautiful forest spirit stands before you, now ancient and decaying.
+Its form flickers between ethereal and solid. Withered leaves and crumbling bark cover its body.
+Its eyes burn with the malice born of eons of decay and corruption.
+~
+This creature was once a noble forest spirit, but has been corrupted and aged by the forest's
+darkness. Its form is androgynous and unearthly, wrapped in tattered garments of withered leaves
+and crumbling bark. It moves with a supernatural fluidity, its voice a whisper like wind through
+a cemetery. It commands powerful decay magic.
+~
+97 0 0 S
+91 0
+0 0 0 0
+! 1 0 0 0 4 0 0
+|128 0 0 0 512 0 0
+S
+#10042
+a mosswort queen~
+a mosswort queen~
+A massive beetle, larger and more regal than its lesser kin, clicks its mandibles impressively.
+Its carapace is an intricate pattern of moss and chitin, beautiful yet terrifying. It is clearly
+the matriarch of its kind, radiating dominance.
+~
+This creature is a giant beetle matriarch, twice the size of her lesser sisters. Her carapace
+is an intricate mosaic of moss-covered chitin plates, creating a natural pattern of breathtaking
+beauty. She moves with deliberate, purposeful steps. Her presence commands respect and fear from
+all smaller creatures.
+~
+97 0 0 S
+85 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|10 128 0 0 512 0 0
+S
+#10043
+a verdant hulk~
+a verdant hulk~
+A massive, vaguely humanoid amalgamation of plant matter and bestial form towers before you.
+It is difficult to discern where plant ends and animal begins. The creature radiates raw,
+primal power and hunger.
+~
+This creature is a massive plant-beast hybrid, easily fifteen feet tall. Its body is a fusion
+of animalistic muscle and vegetative matter, with elements of both seamlessly integrated. Roots
+and tendrils writhe across its surface. Its movements are surprisingly graceful for something
+so enormous, but no less deadly.
+~
+97 0 0 S
+92 0
+0 0 0 0
+! 1 0 0 0 5 0 0
+|34 128 0 0 0 0 0
+S
+#10044
+a rotting stag~
+a rotting stag~
+The skeletal form of a once-noble stag shambles forward, its bones barely held together by
+threads of fungal matter and tattered flesh. Yet it still radiates hunger and predatory intent.
+This is a mockery of life, undeath given form.
+~
+This creature is an undead deer wreathed in fungus and decay. Its body is a study in corruption,
+with bones showing through rotting flesh. Fungal growth covers most of its surface, giving it
+an otherworldly appearance. Despite its decay, it moves with frightening speed and purpose. Its
+antlers are tipped with crystallized poison.
+~
+97 0 0 S
+83 0
+0 0 0 0
+! 0 0 0 0 2 0 0
+|512 128 0 0 0 0 64
+S
+#10045
+a thorn wasp swarm~
+a thorn wasp swarm~
+A deadly cloud of stinging wasps, each the size of a human hand, fills the air with their
+angry buzzing. Their thorax is covered in thorn-like barbs. They move with coordinated purpose,
+a single predatory intelligence controlling the swarm.
+~
+This creature is a swarm of giant wasps covered in thorn-like barbs along their bodies. They move
+as a single coordinated unit despite their numbers, responding to a single predatory will. Their
+stingers drip with venom, and their wings make a sound like a thousand tiny blades. Each wasp is
+lethal; the swarm is a plague.
+~
+97 0 0 S
+81 0
+0 0 0 0
+! 0 0 0 0 1 0 0
+|10 128 0 0 512 0 0
+S
+#10046
+a barkskin wolf~
+a barkskin wolf~
+A large wolf stalks through the forest, its fur hardened into bark-like plating. Where a
+normal wolf is graceful, this creature is armored. Its eyes glow with feral intelligence.
+It is death wrapped in wood and hunger.
+~
+This creature is a wolf with bark-hardened hide that serves as natural armor. Its body is lean
+and muscular, built for speed and endurance. Thick bark plates overlay its fur, providing
+protection while maintaining mobility. Its teeth are sharp as obsidian, and its claws can tear
+through stone.
+~
+97 0 0 S
+87 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|4 128 2 0 0 0 0
+S
+#10047
+a deepwood centipede~
+a deepwood centipede~
+A giant centipede crawls through the undergrowth, its segments the size of large dogs. Venom
+drips from its numerous fangs, and each leg ends in a sharp point capable of piercing armor.
+It is an ancient predator of the deep forest.
+~
+This creature is a giant venomous centipede perfectly adapted for life in the deepwood. Its
+segments are armored in thick chitin plates that shimmer with an iridescent sheen. Its numerous
+legs move with hypnotic coordination. Venom drips from its fangs and coats each segment. Its
+bite injects a poison that paralyzes prey.
+~
+97 0 0 S
+84 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|10 128 0 0 512 0 0
+S
+#10048
+a bog troll~
+a bog troll~
+A massive troll covered entirely in moss and bog growth lumbers toward you. Its skin is more
+swamp than flesh, and its movements are deceptively quick. It reeks of stagnant water and decay.
+Despite its bulk, it is a predatory hunter.
+~
+This creature is a troll transformed by life in the deepwood bogs. Its body is covered in thick
+moss that acts as camouflage and armor. Its movements are fluid and deceptively fast despite its
+massive bulk. Algae drips from its hide, and the smell of stagnant water precedes it. Its strength
+is immense, capable of bending iron.
+~
+97 0 0 S
+89 0
+0 0 0 0
+! 0 0 0 0 4 0 0
+|4 128 4 0 0 0 0
+S
+#10049
+a fungal broodmother~
+a fungal broodmother~
+A massive fungal creature towers before you, its form a grotesque mushroom given terrible life.
+Its cap is the size of a small building, pulsing with bioluminescent light. Spore clouds
+constantly pour from its gills in sickening plumes. This is the matriarch of fungal horrors.
+~
+This creature is a giant fungal matriarch, a living mushroom the size of a small house. Its cap
+is covered in a network of glowing veins that pulse with bio-luminescent light. Its gills are
+exposed and drip with caustic fungal matter. Spore clouds pour from it constantly, each spore
+a potential vector for infection. Its movements are slow but crushing.
+~
+97 0 0 S
+93 0
+0 0 0 0
+! 1 0 0 0 4 0 0
+|512 128 0 0 0 0 64
+S
+#0
 #ROOMS
 #10000
 Entrance to the Verdant Depths~
