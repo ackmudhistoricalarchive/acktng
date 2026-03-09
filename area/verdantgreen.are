@@ -862,6 +862,258 @@ a potential vector for infection. Its movements are slow but crushing.
 ! 1 0 0 0 4 0 0
 |512 128 0 0 0 0 64
 S
+#10050
+an ancient moss elemental~
+an ancient moss elemental~
+A towering elemental composed entirely of living moss and earth stands before you. Its form
+shifts and writhes with constant movement. It radiates an aura of primal natural power that
+thrums with ancient strength.
+~
+This creature is an elemental of moss and soil given life and purpose by the forest. Its body
+is a animate mass of moss, lichen, and earth, constantly dripping moisture and releasing spores.
+Where it walks, new growth springs forth. Its movements are slow but inexorable, capable of
+grinding stone to dust. Its presence brings the smell of rich, fertile earth.
+~
+97 0 0 S
+90 0
+0 0 0 0
+! 0 0 0 0 4 0 0
+|10 128 10 0 2 0 0
+S
+#10051
+a twisted ent~
+a twisted ent~
+A tree given terrible life shambles forward, its wood warped and corrupted by the forest's
+darkness. It is humanoid in shape but utterly alien in appearance. Branches writhe where arms
+should be, and knots that might be eyes watch with hungry intelligence.
+~
+This creature is a tree creature - an ent - corrupted by the forest's deepening darkness. Its
+form is a twisted parody of the noble tree-shepherds. Branches instead of limbs, bark-skin
+that splits and reforms, roots that drag along the ground. It moves with an unnatural grace,
+and its power is manifest in the way the forest bends to its will.
+~
+97 0 0 S
+88 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|34 128 0 0 0 0 0
+S
+#10052
+a thornveil assassin~
+a thornveil assassin~
+A sleek, deadly form emerges from the shadows - a creature that is part plant, part predator.
+Its entire body is covered in a veil of razor-sharp thorns. It moves with the grace of an
+assassin, each movement economical and lethal.
+~
+This creature is a stealthy plant-like predator perfectly adapted for silent killing. Its body
+is wrapped entirely in a veil of living thorns that can be shed and regrown. It moves without
+sound, its form blending seamlessly with the surrounding vegetation. Its eyes are cold and
+calculating, belonging to a mind evolved purely for efficient murder.
+~
+97 0 0 S
+94 0
+0 0 0 0
+! 1 0 0 0 5 0 0
+|34 128 0 0 0 0 0
+S
+#10053
+a gloomwing moth~
+a gloomwing moth~
+A giant moth the size of a human drifts through the forest darkness. Its wings are velvety
+black with patterns that seem to shift and confuse the eye. A fine dust trails from its wings
+- beautiful and deadly. Its compound eyes watch with alien intelligence.
+~
+This creature is a giant moth with toxic wing dust. Its wings span easily as wide as a human is
+tall. The dust that trails from them is a hallucinogenic toxin that clouds the mind. Its body
+is covered in fine hairs that deliver additional toxins through contact. Despite its beauty, it
+is a lethal predator.
+~
+97 0 0 S
+82 0
+0 0 0 0
+! 0 0 0 0 2 0 0
+|10 128 0 0 512 0 0
+S
+#10054
+a sap ooze~
+a sap ooze~
+An animated blob of caustic tree sap oozes forward, its form constantly shifting. It moves with
+a liquid grace, leaving trails of smoking, burning sap behind. Within it, wood chips and bark
+swirl hypnotically. It pulses with an alien appetite.
+~
+This creature is an animated mass of ancient tree sap given life and hunger. Its body is a semi-liquid
+blob, golden and translucent. Within it, debris and organic matter swirl in patterns that suggest a
+disturbing intelligence. Where it touches the ground, the earth begins to smoke and char. It has no
+solid form but immense will.
+~
+97 0 0 S
+85 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|512 128 0 0 0 0 64
+S
+#10055
+a feral grove keeper~
+a feral grove keeper~
+A humanoid figure stands sentinel among the trees, its form a fusion of human and forest. Its
+eyes burn with an eerie green light, and power radiates from its frame. This guardian of the
+deepwood has been corrupted into a savage predator.
+~
+This creature is a nature guardian corrupted by the forest's darkness. Its form is approximately
+human, but vines and roots grow through its body. Its skin is covered in bark plating, and its
+movements are fluid and dangerous. It wields the forest's power with terrible purpose, commanding
+growth and decay with equal facility.
+~
+97 0 0 S
+91 0
+0 0 0 0
+! 1 0 0 0 4 0 0
+|34 128 0 0 2 0 0
+S
+#10056
+a corpseflower lurker~
+a corpseflower lurker~
+A carnivorous plant looms before you, its flower-head the size of a human torso. It smells of
+decay and carrion, a sweet stench that speaks of countless meals. Its petals are lined with
+digestive acid, and its vines writhe with predatory hunger.
+~
+This creature is a carnivorous plant that feeds on the dead. Its massive flower-head is lined
+with petal-teeth dripping with digestive acids. Vines hang from its form, ready to snare prey.
+The smell that emanates from it is sickening - a mixture of old blood, decay, and rich earth.
+It is perfectly adapted as a scavenger and active predator.
+~
+97 0 0 S
+86 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|34 128 0 0 512 0 0
+S
+#10057
+a brambleback tortoise~
+a brambleback tortoise~
+A massive tortoise the size of a small building crawls through the forest, its shell covered
+entirely in thorns and brambles. Its movements are slow but ponderous. Despite its size, it is
+a predatory hunter, not merely a scavenger.
+~
+This creature is a huge tortoise with a thorn-covered shell that has become natural armor and weapon.
+Its shell is an intricate lattice of thorns and brambles, creating a defensive maze. Its movements are
+slow but unstoppable. When threatened, it can retract entirely into its armored shell, becoming a
+nearly impenetrable fortress.
+~
+97 0 0 S
+88 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|34 128 10 0 2 0 0
+S
+#10058
+a sporeveil phantom~
+a sporeveil phantom~
+A ghostly shape coalesces within the spore clouds, barely visible yet absolutely present. It
+drifts through the air with an otherworldly grace, its form constantly shifting. Its eyes, when
+visible, burn with an eerie blue malice.
+~
+This creature is a ghostly entity formed from the spore clouds of the deepwood. It exists partially
+phased from reality, visible only as a shadow within the spores. It moves with supernatural grace,
+and its presence causes a sickening vertigo in those who observe it. Its origin and purpose are
+utterly alien.
+~
+97 0 0 S
+90 0
+0 0 0 0
+! 0 0 0 0 4 0 0
+|128 0 0 0 512 0 0
+S
+#10059
+a thornroot drake~
+a thornroot drake~
+A dragon-like creature composed primarily of wood and thorns prowls before you. Despite its
+plant-based nature, it moves with the deadly grace of an apex predator. Its wings are made of
+interwoven thorns, its breath reeking of spores and rot.
+~
+This creature is a dragon-like plant beast, a fusion of draconic predator and verdant horror.
+Its body is a masterwork of nature's cruelty - parts wood, parts thorn, parts something altogether
+alien. Its wings beat with a sound like breaking wood. Its eyes burn with ancient, hungry
+intelligence born of primal hunger and survival instinct.
+~
+97 0 0 S
+95 0
+0 0 0 0
+! 1 0 0 0 5 0 0
+|4 128 2 0 512 0 0
+S
+#10060
+a deepwood prowler~
+a deepwood prowler~
+A large feline predator stalks through the undergrowth, its form rippling with predatory grace.
+Its eyes glow with the intelligence of a master hunter. Its fur shimmers with an iridescent sheen,
+and its claws are visible even when retracted.
+~
+This creature is a large feline predator perfectly adapted to the deepwood. Its body is lean and
+muscular, coiled power waiting to explode into motion. Its coat shimmers with camouflage patterns
+that shift with the light. Its claws are capable of rending steel, and its bite can sever bone with
+ease.
+~
+97 0 0 S
+84 0
+0 0 0 0
+! 0 0 0 0 3 0 0
+|4 128 2 0 0 0 0
+S
+#10061
+the Rootmother~
+the Rootmother~
+A massive tree-like entity towers before you, easily forty feet tall. Its form is simultaneously
+plant and animal, with a vaguely humanoid shape carved from living wood. Roots writhe like serpents
+around its lower body. Its eyes glow with an ancient, maternal intelligence that is utterly inhuman.
+~
+The Rootmother is an ancient entity, older than civilization. She is a fusion of all growing things,
+a goddess of growth and fertility corrupted into something hungry and predatory. Her form is a marvel
+of natural engineering - simultaneously beautiful and terrible. Roots constantly reach into the earth
+around her, drawing power and sustenance. Her presence causes the forest itself to respond.
+~
+97 67108864 0 S
+100 0
+0 0 0 0
+! 1 0 0 0 5 0 0
+|34 128 32 0 0 0 0
+S
+#10062
+the Blightwood Ancient~
+the Blightwood Ancient~
+A colossal, decaying treant looms before you, its form a masterwork of slow dissolution. Bark
+peels from its wooden body in long strips. Fungal growth covers most of its surface. Its eyes
+burn with the malice of something ancient and dying, yet still full of terrible power.
+~
+The Blightwood Ancient is an elder treant corrupted by centuries of decay. Its form is a study in
+slow corruption - bark splitting to reveal rotting wood beneath. Fungal networks spread across its
+body. A miasma of decay surrounds it. Despite its appearance, it radiates immense power. Its magic
+is poison and plague.
+~
+97 67108864 0 S
+100 0
+0 0 0 0
+! 1 0 0 0 5 0 0
+|512 128 0 0 0 0 64
+S
+#10063
+Thornfang Alpha~
+Thornfang Alpha~
+An apex predator stands before you - a massive beast that combines the features of feline,
+serpent, and something wholly alien. Its fur ripples with predatory power. Fangs like daggers
+line its maw. Its eyes burn with the cold intelligence of something built purely for hunting.
+~
+Thornfang Alpha is the apex predator of the Deepwood - the perfect hunter. Its body is a masterwork
+of predatory evolution, combining speed, power, and lethal efficiency. Its fangs can pierce stone.
+Its claws can tear through ancient wood. Its mind is focused solely on hunting and survival. It is
+the most dangerous creature in the forest.
+~
+97 67108864 0 S
+100 0
+0 0 0 0
+! 1 0 0 0 6 0 0
+|4 128 2 0 0 0 0
+S
 #0
 #ROOMS
 #10000
