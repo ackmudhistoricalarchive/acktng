@@ -9,4 +9,492 @@ V 10000 10124
 F 15
 U @@gthe ancient trees creak and groan as the forest shifts around you@@N~
 T Teleport is allowed
+#ROOMS
+#10000
+Entrance to the Verdant Depths~
+The towering trees here reach impossibly high, their trunks wider than ancient towers.
+Bioluminescent fungi cast a ghostly @@rgreen@@N light through the thick canopy overhead.
+The air is heavy with moisture and spore-laden mist. Behind you, the forest of confusion
+stretches back toward the surface world. Ahead, the path descends ever deeper into the
+shadowed woodland, where the very trees seem to watch your progress.~
+0 3
+D3
+A path back through the encroaching green growth~
+back~
+0 -1 9695
+D1
+A dark trail deeper into the depths~
+deeper into the depths~
+0 -1 10001
+S
+#10001
+A Darkening Trail~
+The canopy above grows so thick that only scattered beams of @@rglowing moss@@N illuminate
+the path. The shadows between the ancient oaks seem almost sentient, writhing with each
+gust of wind that carries spores from deeper within the forest.~
+1 3
+D0
+~
+~
+0 -1 10000
+D1
+A trail through the darkness~
+eastward~
+0 -1 10002
+D3
+A path winding through the undergrowth~
+westward~
+0 -1 10003
+S
+#10002
+Beneath Towering Oaks~
+Massive oak trees, some clearly more than a thousand years old, rise on all sides. Their
+bark is thick and gnarled, covered in patches of soft moss that gives everything a green
+hue. The roots have broken through the forest floor, creating natural steps and obstacles.~
+0 3
+D3
+~
+~
+0 -1 10001
+D2
+A path leading south~
+southward~
+0 -1 10004
+D4
+Climbing higher into the canopy~
+upward into the branches~
+0 -1 10005
+S
+#10003
+A Moss-Covered Clearing~
+A small clearing has formed where a massive tree fell long ago. Its rotting trunk is now
+a garden of fungal growth and @@rglowing toadstools@@N. The clearing allows some light to
+penetrate from above, creating a rare moment of relative brightness in this deep place.~
+0 3
+D1
+~
+~
+0 -1 10001
+D2
+~
+~
+0 -1 10006
+D3
+A narrow pass between gnarled roots~
+deeper west~
+0 -1 10007
+S
+#10004
+Among Gnarled Roots~
+The ground here is a chaotic tangle of massive roots, some as thick as your torso, others
+sharp and dangerous. They twist upward and downward in dizzying patterns. The darkness
+is nearly complete save for @@rglowing moss@@N marking the safest path.~
+1 3
+D0
+~
+~
+0 -1 10002
+D1
+~
+~
+0 -1 10005
+D2
+A path deeper into the root maze~
+southward~
+0 -1 10008
+S
+#10005
+A Fungal Hollow~
+This hollow is dominated by clusters of enormous, bioluminescent mushrooms. They pulse
+with an @@rethereal green light@@N that casts dancing shadows across the curved walls. The
+air smells of rich earth and decay. The gills of the largest fungi drip with phosphorescent
+spore-filled liquid.~
+0 3
+D3
+~
+~
+0 -1 10004
+D2
+~
+~
+0 -1 10008
+D5
+A descent into a deeper fungi-filled chamber~
+downward~
+0 -1 10009
+S
+#10006
+The Spore Thicket~
+Dense clouds of @@gspores@@N drift through the air, making it difficult to see more than a
+few feet ahead. The sound of your breathing is amplified within the mist. Strange clicking
+and chittering sounds echo from unseen creatures moving through the undergrowth.~
+0 3
+D0
+~
+~
+0 -1 10003
+D3
+A path through the murk~
+westward~
+0 -1 10010
+D2
+A descent through spore clouds~
+southward~
+0 -1 10011
+S
+#10007
+A Rotting Log Bridge~
+A massive ancient log, half-decayed and covered in moss, spans a ravine far below. The
+drop is hidden in darkness, but the sound of running water echoes from the depths. The
+log is slippery with moisture and fungi. One misstep could be fatal.~
+0 3
+D1
+~
+~
+0 -1 10003
+D3
+A winding path away from the chasm~
+westward~
+0 -1 10008
+S
+#10008
+Beneath a Canopy of Vines~
+Thick, living vines hang from the canopy above like serpents. Some are as thick as your
+arm and covered in thorns. The vines create a natural maze that obscures the sky. Every
+surface is covered in creeping ivy and @@glichen@@N.~
+0 3
+D0
+~
+~
+0 -1 10004
+D1
+~
+~
+0 -1 10005
+D3
+~
+~
+0 -1 10007
+D4
+Climbing through the vines toward the canopy~
+upward~
+0 -1 10010
+S
+#10009
+A Sunken Trail~
+The forest floor here has begun to sink, and you walk in a depression almost like a trench.
+The walls of earth on either side are covered in @@gancient lichen@@N and dripping with moisture.
+The air is cooler here, and strange pale plants grow in the shadows.~
+1 3
+D0
+~
+~
+0 -1 10005
+D2
+~
+~
+0 -1 10012
+S
+#10010
+The Whispering Ferns~
+Enormous ferns surround you on all sides, some taller than a man. Their fronds whisper and
+rustle with every breeze, creating an eerie soundscape. The ground beneath is carpeted with
+soft fronds and decomposing plant matter. The air is thick and humid.~
+0 3
+D0
+~
+~
+0 -1 10006
+D1
+~
+~
+0 -1 10008
+D2
+~
+~
+0 -1 10013
+S
+#10011
+A Thicket of Thorns~
+Vicious thorns cover every plant here. They range from needle-sized to as long as daggers.
+The twisted branches form an almost impenetrable barrier. Only a narrow path, marked by
+@@rglowing fungi@@N, remains clear enough to pass.~
+0 3
+D0
+~
+~
+0 -1 10006
+D3
+~
+~
+0 -1 10012
+D2
+A careful descent through thorn-guarded growth~
+southward~
+0 -1 10014
+S
+#10012
+Beside a Stagnant Pool~
+A dark pool of water sits here, its surface covered in algae and fallen leaves. The water
+smells of decay and mineral richness. Pale things move beneath the surface - likely fish
+or amphibians that have never seen sunlight.~
+0 3
+D0
+~
+~
+0 -1 10009
+D1
+~
+~
+0 -1 10010
+D3
+~
+~
+0 -1 10011
+D2
+~
+~
+0 -1 10015
+S
+#10013
+A Tangle of Briars~
+Briars form a nearly impenetrable tangle here, covering the ground and climbing up trees to
+great heights. The only way through is along a carefully carved trail. The edges of the path
+are marked with @@rglowing thorns@@N that provide just enough light to navigate.~
+0 3
+D0
+~
+~
+0 -1 10010
+D3
+~
+~
+0 -1 10012
+D2
+A carefully marked path deeper into the bramble~
+southward~
+0 -1 10016
+S
+#10014
+The Old Growth Border~
+Here, the trees grow noticeably older and larger than those above. The bark is ancient,
+rough, and marked with the scars of centuries. The canopy is so thick that it's almost
+twilight here. You sense that you've crossed some threshold deeper into the forest.~
+0 3
+D0
+~
+~
+0 -1 10011
+D1
+A path deeper into the ancient growth~
+eastward~
+0 -1 10017
+D2
+~
+~
+0 -1 10018
+S
+#10015
+A Narrow Game Trail~
+This path is barely wide enough for a single person. Animal tracks mark the soft earth -
+some clearly from creatures you don't recognize. The undergrowth presses in close on both
+sides, and you feel the constant brush of leaves against your skin.~
+0 3
+D0
+~
+~
+0 -1 10012
+D1
+A broader path~
+eastward~
+0 -1 10016
+S
+#10016
+Among Fallen Trunks~
+Massive fallen tree trunks, in various states of decay, are scattered across the ground
+like a giant's toys. Some are fresh and solid, others are mostly decomposed into soft mulch.
+The remains of the fallen forest has created a chaotic landscape that redirects the path.~
+0 3
+D3
+~
+~
+0 -1 10015
+D1
+~
+~
+0 -1 10013
+D2
+A path between logs~
+southward~
+0 -1 10019
+S
+#10017
+A Damp Hollow~
+Moisture hangs thick in the air of this hollow. Water drips from above, running down rocks
+covered in thick moss. Mushrooms of all sizes crowd the ground and lower portions of the
+surrounding trees. It's cold here, and the ground is soft and muddy.~
+1 3
+D3
+~
+~
+0 -1 10014
+D2
+~
+~
+0 -1 10018
+S
+#10018
+Beneath Dripping Boughs~
+Constant moisture drips from the heavy boughs overhead. The ground is marshy, and every step
+creates the squelch of water being pushed from the earth. @@gFungi and lichen@@N cover everything.
+The air tastes of minerals and ancient decay.~
+0 3
+D0
+~
+~
+0 -1 10014
+D1
+~
+~
+0 -1 10017
+D2
+A path deeper into shadow~
+southward~
+0 -1 10019
+D3
+A marshy path~
+westward~
+0 -1 10020
+S
+#10019
+The Edge of the Old Growth~
+The trees here have grown larger still, their trunks reaching perhaps two hundred feet into
+the canopy. A sense of great age permeates this place. The forest seems almost alive, aware,
+watching. Ahead, the forest becomes noticeably different - deeper, more primordial.~
+0 3
+D0
+~
+~
+0 -1 10016
+D1
+~
+~
+0 -1 10018
+D2
+A passage into the deep woods~
+deeper~
+0 -1 10021
+D3
+~
+~
+0 -1 10020
+S
+#10020
+The Old Growth~
+This massive chamber of ancient trees serves as a central hub for the deep forest. Trees
+of incredible girth rise from the ground like the pillars of some primeval cathedral. The
+@@Gcanopy@@N above is lost to darkness, but distant @@rglowing moss@@N creates an ambient light.~
+0 3
+D0
+~
+~
+0 -1 10018
+D1
+~
+~
+0 -1 10019
+D2
+A path deeper into the woods~
+deeper south~
+0 -1 10022
+D3
+A narrow trail~
+westward~
+0 -1 10021
+S
+#10021
+A Cathedral of Trees~
+Massive ancient trees form a natural cathedral of staggering proportions. Each trunk is wider
+than a tower. The @@Gfoliage@@N above is so dense it appears solid, and light filters down in
+scattered beams. The ground is cushioned with centuries of fallen leaves. This place evokes
+deep reverence and ancient majesty.~
+0 3
+D0
+~
+~
+0 -1 10019
+D1
+~
+~
+0 -1 10020
+D2
+~
+~
+0 -1 10023
+D3
+A path descending deeper~
+deeper west~
+0 -1 10024
+S
+#10022
+Among Ancient Trunks~
+Ancient tree trunks crowd closely together, their bark rough and thick with age. The spaces
+between them are shadowed and mysterious. Roots snake across the ground, creating natural
+steps and obstacles. The air is cool and still.~
+0 3
+D0
+~
+~
+0 -1 10020
+D2
+~
+~
+0 -1 10025
+D3
+~
+~
+0 -1 10023
+S
+#10023
+A Root-Woven Path~
+The path here is literally woven from living roots that have grown and intertwined to form
+a natural causeway. The roots are smooth from countless footfalls - or perhaps from the
+movement of creatures that dwell here. On either side, the earth drops away into shadow.~
+0 3
+D0
+~
+~
+0 -1 10021
+D1
+~
+~
+0 -1 10022
+D2
+~
+~
+0 -1 10026
+D3
+~
+~
+0 -1 10024
+S
+#10024
+The Verdant Corridor~
+A natural corridor runs through the forest here, bordered on both sides by massive trees that
+create a tunnel-like passage. The @@Ggreen foliage@@N is incredibly dense, and the air is filled
+with the scent of growing things and decay. This feels like the main artery of the forest itself.~
+0 3
+D0
+~
+~
+0 -1 10021
+D1
+~
+~
+0 -1 10023
+D2
+~
+~
+0 -1 10027
+S
 #$
