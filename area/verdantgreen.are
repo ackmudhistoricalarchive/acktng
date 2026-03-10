@@ -58,8 +58,8 @@ D2
 The trail sinks further southward into the press of great oaks.
 ~
 ~
-0 -1 10002
-S
+D3
+The gloomy trail continues westward through the darkening wood.
 #10002
 Beneath Towering Oaks~
 Three ancient oaks of unfathomable girth dominate this stretch of forest, their trunks wider than a house, their bark furrowed deep as canyons and crusted with @@rpale green lichens@@N.
@@ -210,7 +210,7 @@ S
 #10009
 A Sunken Trail~
 The path descends into a hollow where the water table stands close enough to the surface that the trail becomes a series of stepping-stones set across black, mirror-still water.
-The trees here have adapted to the wet, their roots forming stilt-structures above the flood line, and the @@gshadows@@N are almost total, broken only by the @@rbioluminescent gleam@@N of submerged fungi breathing slow light up through the murk.
+D1
 To the east, a woven curtain of vines closes off the passage, its densely interlaced tendrils damp with condensation and faintly luminous where the bioluminescent glow catches their wet surfaces.
 ~
 1 3
