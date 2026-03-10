@@ -38,7 +38,7 @@ D0
 ~
 ~
 0 -1 30325
-D1
+D3
 ~
 ~
 0 -1 30327
@@ -428,7 +428,7 @@ D0
 D2
 ~
 ~
-0 -1 30352
+D1
 S
 #30352
 Onyx Aisle~
@@ -619,7 +619,7 @@ D0
 D2
 ~
 ~
-0 -1 30365
+D5
 S
 #30365
 Smokewreathed Atrium~
@@ -812,7 +812,7 @@ D2
 ~
 0 -1 30378
 S
-#30378
+D4
 Thorned Cells~
 @@acold cerulean candles@@N crawl over hanging mashrabiyas, and latticed shadows paint @@aazure@@N script across the walls. The chamber smells of amber smoke and salt, while faint ululations drift through hidden vents.
 
