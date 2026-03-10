@@ -16,197 +16,232 @@ W all~
 #22500
 @@bThe Cracked Wastes Gate@@N~
 @@bSun-split earth stretches in every direction beneath a merciless sky. Ruins rise faintly to the north, rolling dunes beckon east and west, and a canyon cuts into the rock to the south. This is the edge of the Scorched Wastes, where the desert begins in earnest.@@N
-~
-32 10
-D0
+ Heat shimmer blurs the distance.
 ~
 ~
-0 0 22501
-D1
+0 -1 22501
+0 -1 22510
 ~
 ~
-0 0 22510
-D2
+0 -1 22515
+0 -1 22523
 ~
 ~
-0 0 22515
-D3
+0 -1 8507
+ Wind-driven grit rasps against stone. Silence hangs heavy between each gust.
 ~
 ~
-0 0 22523
-D5
+~
+0 -1 22502
+0 -1 22500
+ Heat shimmer blurs the distance.
 ~
 ~
-0 0 8507
+0 -1 22503
+0 -1 22506
+~
+~
+0 -1 22501
 S
-#22501
-@@bBone-Bleached Road@@N~
-@@bThe remains of an ancient paved road stretch north and south, most of its stones long since swallowed by sand. Scattered bones of pack animals and travelers lie half-buried along the verge.@@N
-~
-32 10
-D0
+ Wind-driven grit rasps against stone.
+~
+0 -1 22504
+0 -1 22502
 ~
 ~
-0 0 22502
-D2
+0 -1 22505
+0 -1 22503
+ Silence hangs heavy between each gust.
 ~
 ~
-0 0 22500
-S
-#22502
-@@bTemple Road Fork@@N~
-@@bThe old road splits here. A crumbling stone marker, its inscription worn away, points north toward the ruins and east toward something half-buried in the dunes. The heat is immense.@@N
-~
-32 10
-D0
+0 -1 22504
+ Heat shimmer blurs the distance.
 ~
 ~
-0 0 22503
-D1
+~
+0 -1 22507
+0 -1 22502
+ Wind-driven grit rasps against stone.
+~
+0 -1 22508
+0 -1 22506
+ Silence hangs heavy between each gust.
 ~
 ~
-0 0 22506
-D2
+0 -1 22509
+0 -1 22507
+ Heat shimmer blurs the distance.
 ~
 ~
-0 0 22501
-S
-#22503
-@@bOuter Temple Grounds@@N~
-@@bBroken columns and shattered paving stones mark the outer edge of an ancient temple complex. Fine sand fills every crevice. The main structure looms to the north, dark and foreboding.@@N
-~
-32 10
-D0
+0 -1 22508
+ Wind-driven grit rasps against stone.
 ~
 ~
-0 0 22504
-D2
+~
+0 -1 22511
+0 -1 22500
+ Silence hangs heavy between each gust.
 ~
 ~
-0 0 22502
-S
-#22504
-@@bHall of Fallen Priests@@N~
-@@bThe interior of the outer temple hall is dim and stifling. Hieroglyphs cover every wall, many depicting scenes of judgment and death. The air reeks of incense long since turned to dust. An inner sanctum lies beyond.@@N
-~
+0 -1 22512
+0 -1 22510
+ Heat shimmer blurs the distance.
+~
+0 -1 22513
+0 -1 22511
+ Wind-driven grit rasps against stone.
+~
+~
+0 -1 22512
+0 -1 22514
+~
+~
+0 -1 22513
+~
+~
+~
+0 -1 22500
+0 -1 22516
+ Silence hangs heavy between each gust.
+~
+0 -1 22515
+0 -1 22520
+0 -1 22517
+ Heat shimmer blurs the distance. Wind-driven grit rasps against stone.
+~
 8 11
 D0
 ~
 ~
-0 0 22505
+0 -1 22516
 D2
 ~
 ~
-0 0 22503
+0 -1 22518
 S
-#22505
-@@yPharaoh's Sanctum@@N~
-@@yGolden light filters through cracked stone ceilings, illuminating a massive sarcophagus at the chamber's center. The walls are inscribed with warding curses. An oppressive supernatural dread fills this space.@@N
-~
-12 11
-D2
+~
+0 -1 22517
+0 -1 22519
+ Silence hangs heavy between each gust.
 ~
 ~
-0 0 22504
-S
-#22506
-@@bEastern Ruins Wing@@N~
-@@bCollapsed walls and half-buried columns spread across the sand here. Fragments of painted pottery and corroded bronze fittings hint at the civilization that once thrived in this place. Deeper ruins lie to the east.@@N
-~
-32 10
-D1
+0 -1 22518
+ Heat shimmer blurs the distance.
 ~
 ~
-0 0 22507
+~
+0 -1 22521
+0 -1 22516
+~
+0 -1 22522
+0 -1 22520
+~
+~
+0 -1 22521
+~
+~
+~
+0 -1 22500
 D3
 ~
 ~
-0 0 22502
+0 -1 22524
 S
-#22507
-@@bSunken Colonnade@@N~
-@@bA row of towering pillars lines a sunken corridor, their bases lost in drifting sand. The columns cast long shadows at dawn and dusk but offer little shelter at midday. The passage continues east through a low arch.@@N
-~
-8 11
-D1
+~
+0 -1 22523
+0 -1 22528
+0 -1 22525
+ Wind-driven grit rasps against stone.
+~
+0 -1 22524
+0 -1 22526
+ Silence hangs heavy between each gust.
 ~
 ~
-0 0 22508
+0 -1 22525
 D3
 ~
 ~
-0 0 22506
+0 -1 22527
 S
-#22508
-@@bKhepri's Burrow Entrance@@N~
-@@bThe floor here has collapsed inward, revealing a deep shaft bored through the stone by something enormous. The walls of the shaft are polished smooth by the passage of a massive chitinous body. A low chittering resonates from the dark tunnel to the north.@@N
-~
-8 11
-D0
+ Heat shimmer blurs the distance.
+~
+0 -1 22526
+ Wind-driven grit rasps against stone.
+~
+0 -1 22524
+~
+0 -1 22529
 ~
 ~
-0 0 22509
-D3
+~
+0 -1 22528
 ~
 ~
-0 0 22507
-S
-#22509
-@@yKhepri's Chamber@@N~
-@@yThe chamber below the burrow is vast, floored with a deep layer of shed beetle carapaces. Iridescent shells cover the walls. The air thrums with the presence of something ancient and enormous coiled at the center of the room.@@N
-~
-12 11
-D2
 ~
 ~
-0 0 22508
-S
-#22510
-@@bThe Serpent Dunes@@N~
-@@bRolling sand dunes stretch to the east, their rippled surfaces betraying the hidden movement of things beneath. The tracks of large serpents crisscross the sand. The air shimmers with heat mirages.@@N
-~
-32 10
-D1
 ~
 ~
-0 0 22511
-D3
 ~
 ~
-0 0 22500
-S
-#22511
-@@bViper's Basin@@N~
-@@bA shallow depression in the dunes collects windblown debris and the cast-off skins of desert serpents. The basin narrows into a rocky channel to the east. Something moves beneath the sand ahead.@@N
-~
-32 10
-D1
 ~
 ~
-0 0 22512
-D3
 ~
 ~
-0 0 22510
-S
-#22512
-@@bWithered Oasis@@N~
-@@bThe dried husk of what was once an oasis remains here, a ring of dead palms standing over a cracked and empty basin. The bones of animals that died waiting for water still litter the ground. A passage leads south.@@N
-~
-32 10
-D2
 ~
 ~
-0 0 22513
-D3
 ~
 ~
-0 0 22511
-S
-#22513
-@@bDry Riverbed@@N~
-@@bAn ancient riverbed runs through here, bone-dry and cracked. Bleached driftwood and the hulks of long-dead river creatures suggest this was once a lively waterway. The terrain grows rougher to the south.@@N
-~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
+~
 32 10
 D0
 ~
