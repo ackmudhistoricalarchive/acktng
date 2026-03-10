@@ -1,0 +1,16 @@
+level 0
+keywords junk
+---
+Syntax: junk <item>
+
+Junk permanently destroys one item from your inventory.
+
+In-code behavior:
+- Junk only searches your carried inventory (not room contents).
+- You must supply an item name; otherwise you get a prompt.
+- If found, the item is extracted immediately and cannot be recovered.
+- Junk gives no gold, no favor, and no alignment effect.
+- If the item is not in your inventory, junk fails with an error message.
+
+Use junk to quickly clear worthless inventory clutter.
+Use sacrifice when you want gold/alignment effects from room objects/corpses.

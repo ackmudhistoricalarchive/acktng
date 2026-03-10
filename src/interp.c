@@ -111,9 +111,6 @@ const struct cmd_type cmd_table[] = {
      C_TYPE_OBJECT, C_SHOW_ALWAYS},
     {"wizhelp", do_wizhelp, POS_DEAD, L_HER, LOG_NORMAL,
      C_TYPE_INFO, C_SHOW_ALWAYS},
-    {"loot", do_loot, POS_STANDING, 20, LOG_ALWAYS,
-     C_TYPE_OBJECT, C_SHOW_ALWAYS},
-
     /*
      * Informational commands.
      */

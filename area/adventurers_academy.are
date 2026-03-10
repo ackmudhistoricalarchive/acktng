@@ -1,0 +1,491 @@
+#AREA
+@@lA@@dd@@ev@@Wenturer's Academy@@N~
+Q 16
+K adventurersacademy~
+L { @@G1 10@@N}~
+N 188
+I 1 10
+V 23000 23049
+X 0
+F 1
+U @@WA brass @@eschoolbell@@W echoes through the academy halls.@@N~
+O codex~
+R aliaser spade isis~
+W aliaser spade isis~
+M No bad room spells allowed.
+#ROOMS
+#23000
+Academy Gate~
+@@NMarble archways frame the entrance to Adventurer's Academy, and every wall bears painted arrows for nervous first-day students. A carved plaque reminds you that @@chelp@@N is always available, and that patient practice beats rushing ahead. Type @@clook@@N to read carefully, then go @@rNORTH@@N to begin with the help lesson.@@N~
+12 11
+D0
+~
+~
+0 -1 23001
+D2
+~
+~
+0 -1 3717
+S
+#23001
+Lesson 0: Using Help~
+@@NThis quiet briefing room is lined with index shelves and subject boards so new players can discover commands on demand. Use @@chelp <topic>@@N whenever you forget syntax, and try @@chelp movement@@N, @@chelp config@@N, @@chelp junk@@N, or @@chelp sacrifice@@N right now. Once you are comfortable with the help system, continue @@rNORTH@@N.@@N~
+12 11
+D0
+~
+~
+0 -1 23014
+D2
+~
+~
+0 -1 23000
+S
+#23014
+Lesson 0.5: Prompts and Combat Readiness~
+@@NThis chamber is covered in sample prompt strings so you can always see your vital stats before danger finds you. Turn prompts on with @@cconfig +prompt@@N, then use @@cprompt all@@N to display health, mana, and movement every round. A good prompt helps you decide when to @@crest@@N, @@cflee@@N, or press an attack. Continue @@rNORTH@@N to movement drills.@@N~
+12 11
+D0
+~
+~
+0 -1 23002
+D2
+~
+~
+0 -1 23001
+S
+#23002
+Lesson I: Movement and Awareness~
+@@NThis long corridor uses floor runes to mark @@cnorth@@N, @@csouth@@N, @@ceast@@N, @@cwest@@N, @@cup@@N, and @@cdown@@N so you can practice movement words until they feel natural. Use @@cexits@@N in every new room to avoid wrong turns, and remember that hidden exits may not appear. Continue @@rNORTH@@N when ready.@@N~
+12 11
+D0
+~
+~
+0 -1 23003
+D2
+~
+~
+0 -1 23001
+S
+#23003
+Lesson II: Communication~
+@@NVoices echo softly from crystal tubes here, demonstrating the communication tools you will use with other players. Use @@csay@@N for local room speech, @@ctell <player> <msg>@@N for private messages, and @@cnewbie@@N or @@cquestion@@N to ask for guidance without embarrassment. Continue @@rNORTH@@N for your next lesson.@@N~
+12 11
+D0
+~
+~
+0 -1 23004
+D2
+~
+~
+0 -1 23002
+S
+#23004
+Lesson III: Configuration and Prompt~
+@@NA chalkboard in this classroom lists common quality-of-life settings and why they matter in combat. Run @@cconfig@@N to inspect your toggles, then try @@cconfig +prompt@@N, @@cconfig +autoexit@@N, and @@cconfig +color@@N so important information is always visible and readable. Finish by using @@cprompt all@@N and proceed @@rNORTH@@N.@@N~
+12 11
+D0
+~
+~
+0 -1 23005
+D2
+~
+~
+0 -1 23003
+S
+#23005
+Lesson IV: Inventory Basics~
+@@NTraining crates are stacked around this storeroom to teach item handling before you reach dangerous zones. Pick up the satchel with @@cget satchel@@N, then place items inside it using @@cput <item> satchel@@N to keep your inventory organized. Check your carried gear with @@cinventory@@N or @@cinv@@N, inspect satchel contents with @@clook in satchel@@N, and retrieve items using @@cget <item> satchel@@N. Continue @@rNORTH@@N once you are ready.@@N~
+12 11
+D0
+~
+~
+0 -1 23006
+D2
+~
+~
+0 -1 23004
+S
+#23006
+Lesson V: Equipment and Containers~
+@@NRacks of beginner armor stand here so you can learn to equip quickly under pressure. Use @@cwear goggles@@N, @@cremove goggles@@N, and @@cput goggles satchel@@N, then retrieve them using @@cget goggles satchel@@N. You can repeat this cycle with the other practice items before heading @@rNORTH@@N.@@N~
+12 11
+D0
+~
+~
+0 -1 23007
+D2
+~
+~
+0 -1 23005
+S
+#23007
+Lesson VI: Starter Gear Armory~
+@@NWeapon pegs and armor hooks fill this armory with level 1 equipment for new graduates. Try @@cwear all@@N after collecting pieces, and use @@cequipment@@N to confirm each slot you filled. If two items fit one slot, @@cremove@@N and choose what suits your style before going @@rNORTH@@N.@@N~
+12 11
+D0
+~
+~
+0 -1 23008
+D2
+~
+~
+0 -1 23006
+S
+#23008
+Lesson VII: Combat Preparation~
+@@NThis tactical hall teaches survival before live fights begin. Use @@ccon <mob>@@N to judge risk, watch @@cscore@@N to track your condition, and @@crest@@N between battles to recover. Enter the cleanup lesson to the @@rNORTH@@N, then the combat wing beyond that.@@N~
+12 11
+D0
+~
+~
+0 -1 23009
+D2
+~
+~
+0 -1 23007
+S
+#23009
+Lesson VIII: Cleanup Commands~
+@@NVeteran adventurers keep bags clean and rooms clear after battle. Use @@cjunk <item>@@N to permanently destroy worthless inventory junk, and use @@csacrifice <item>@@N on room objects or corpses when you want sacrifice rewards. Practice with the cracked token on the floor, then continue @@rNORTH@@N to the first kill trial.@@N~
+12 11
+D0
+~
+~
+0 -1 23010
+D2
+~
+~
+0 -1 23008
+S
+#23010
+Combat Trial One: Sparring Gallery~
+@@NWooden barriers and straw targets turn this room into a safe first blooding ground. Defeat the academy sprite scouts here, gather their training gear, and keep using @@ccon@@N before each pull. Advance @@rNORTH@@N after clearing the gallery.@@N~
+12 11
+D0
+~
+~
+0 -1 23011
+D2
+~
+~
+0 -1 23009
+S
+#23011
+Combat Trial Two: Vermin Run~
+@@NBroken crates and grain sacks attract aggressive cellar rats that swarm careless students. Focus one target at a time, use your new armor, and rest if your health drops too far. Go @@rNORTH@@N once the path is secure.@@N~
+12 11
+D0
+~
+~
+0 -1 23012
+D2
+~
+~
+0 -1 23010
+S
+#23012
+Combat Trial Three: Shade Chamber~
+@@NCold torchlight and drifting ash mark the final combat exam chamber. The academy shade captain waits here with your certificate and expects you to use everything you learned. Defeat it, collect your prize, and proceed @@rNORTH@@N to graduate.@@N~
+12 11
+D0
+~
+~
+0 -1 23013
+D2
+~
+~
+0 -1 23011
+S
+#23013
+Graduation Hall~
+@@NBanners of past classes hang above a polished dais where your training concludes. Use @@crecall@@N to depart for the wider world, or walk @@rSOUTH@@N to review any lesson and gather more beginner gear. Congratulations, and good luck out there.@@N~
+16396 11
+D2
+~
+~
+0 -1 23012
+D4
+~
+~
+0 -1 3717
+S
+#0
+#MOBILES
+#23000
+sprite scout academy~
+@@cAn academy sprite scout@@N~
+An academy sprite scout circles the room, testing your reactions.
+~
+The sprite looks quick but lightly trained.
+~
+67 0 0 S
+1 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#23001
+rat cellar training~
+@@rA snarling cellar rat@@N~
+A snarling cellar rat darts between the broken crates.
+~
+The rat looks vicious, but fragile.
+~
+33554435 0 0 S
+1 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#23002
+shade captain academy~
+@@NA restless academy shade captain@@N~
+A restless academy shade captain hovers here, guarding the final reward.
+~
+The captain radiates danger beyond the earlier drills.
+~
+3 0 0 S
+2 0
+0 0 0 0
+! 0 0 0 7 0 0 0
+| 0 0 0 0 0 0 0
++ 0 0 0 0 0 0 0 0 0
+l 0 0 0 0 0 0 0 0 0 0
+L 0 0 0 0 0 0 0 0 0
+#0
+#OBJECTS
+#23000
+satchel training bag~
+a training satchel~
+A sturdy training satchel has been left here for students.
+~
+15 0 8388608 1
+20 0 0 0 0 0 0 0 0 0
+4
+L
+1
+#23001
+goggles apprentice~
+apprentice goggles~
+A pair of apprentice goggles rests here.
+~
+9 134217728 8388624 1
+10 0 0 0 0 0 0 0 0 0
+4
+A
+13 10
+A
+17 -10
+A
+18 2
+A
+19 2
+L
+1
+#23002
+sword wooden practice~
+a wooden practice sword~
+A wooden practice sword lies here.
+~
+5 134217728 8421376 1
+0 3 4 3 0 0 0 0 0 0
+4
+A
+18 5
+A
+19 5
+L
+1
+#23003
+certificate graduation~
+a graduation certificate~
+A signed graduation certificate is waiting to be claimed.
+~
+1 64 8421376 1
+0 0 -1 0 0 0 0 0 0 0
+4
+A
+4 1
+A
+5 1
+L
+1
+#23004
+token cracked practice~
+a cracked practice token~
+A cracked practice token has been dropped here for disposal drills.
+~
+1 0 8388608 1
+0 0 -1 0 0 0 0 0 0 0
+4
+L
+1
+#23005
+cap cloth academy~
+a cloth academy cap~
+A cloth academy cap has been folded on a bench.
+~
+9 134217728 8388616 1
+9 0 0 0 0 0 0 0 0 0
+4
+A
+17 -10
+A
+18 1
+A
+19 1
+L
+1
+#23006
+tunic quilted academy~
+a quilted academy tunic~
+A quilted academy tunic hangs from a peg.
+~
+9 134217728 8650752 1
+9 0 0 0 0 0 0 0 0 0
+4
+A
+17 -10
+A
+18 2
+A
+19 2
+L
+1
+#23007
+bracers leather academy~
+leather academy bracers~
+A pair of leather academy bracers rests beside the rack.
+~
+9 134217728 8389632 1
+10 0 0 0 0 0 0 0 0 0
+4
+A
+17 -10
+A
+18 2
+A
+19 2
+L
+1
+#23008
+gloves stitched academy~
+stitched academy gloves~
+A set of stitched academy gloves lies here.
+~
+9 134217728 8392704 1
+10 0 0 0 0 0 0 0 0 0
+4
+A
+17 -10
+A
+18 2
+A
+19 2
+L
+1
+#23009
+boots trainee~
+trainee boots~
+A pair of worn trainee boots sits near the wall.
+~
+9 134217728 9437184 1
+10 0 0 0 0 0 0 0 0 0
+4
+A
+17 -10
+A
+18 2
+A
+19 2
+L
+1
+#23010
+belt knotted academy~
+a knotted academy belt~
+A knotted academy belt has been left here.
+~
+9 134217728 8519680 1
+9 0 0 0 0 0 0 0 0 0
+4
+A
+17 -10
+A
+18 1
+A
+19 1
+L
+1
+#23011
+cloak short academy~
+a short academy cloak~
+A short academy cloak flutters in a weak draft.
+~
+9 134217728 8454144 1
+9 0 0 0 0 0 0 0 0 0
+4
+A
+17 -10
+A
+18 1
+A
+19 1
+L
+1
+#23012
+buckler wooden~
+a wooden buckler~
+A wooden buckler leans against a post.
+~
+9 134217728 8421376 1
+10 0 0 0 0 0 0 0 0 0
+4
+A
+17 -10
+A
+18 2
+A
+19 2
+L
+1
+#23013
+ring copper academy~
+a copper academy ring~
+A copper academy ring glints from the floorboards.
+~
+8 134217728 8390656 1
+2 0 0 0 0 0 0 0 0 0
+4
+A
+18 1
+A
+19 1
+L
+1
+#0
+#RESETS
+O 0 23000 0 23005 (null)
+O 0 23001 0 23006 (null)
+O 0 23004 0 23009 (null)
+O 0 23005 0 23007 (null)
+O 0 23006 0 23007 (null)
+O 0 23007 0 23007 (null)
+O 0 23008 0 23007 (null)
+O 0 23009 0 23007 (null)
+O 0 23010 0 23007 (null)
+O 0 23011 0 23007 (null)
+O 0 23012 0 23007 (null)
+O 0 23013 0 23007 (null)
+M 0 23000 2 23010 (null)
+G 0 23002 0 (null)
+G 0 23012 0 (null)
+M 0 23001 3 23011 (null)
+G 0 23008 0 (null)
+M 0 23002 1 23012 (null)
+G 0 23003 0 (null)
+S
+#$

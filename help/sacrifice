@@ -1,0 +1,47 @@
+level 0
+keywords sacrifice sac judge autosac
+---
+Syntax: sacrifice <item>
+        sacrifice <item> <god>
+        sacrifice <item> judge
+
+Sacrifice destroys an object in your current room and gives a reward.
+
+Configured gods/alignment roles:
+- @@aFreyja@@N is the good god.
+- @@eOderus@@N is the evil god.
+- @@lZenithar@@N is the neutral god.
+- @@NCyberlich@@N is the default sacrifice god when no alignment god is named.
+
+Core mechanics:
+- The target must be in the room.
+- The target is rejected if it has the NOSAC flag.
+- Retrieval-quest objects cannot be sacrificed.
+- Most items must be takeable; NPC corpses are allowed even if not takeable.
+- Gold reward is normally 1 coin.
+- NPC corpse reward is max(1, corpse_level / 5) gold.
+
+God/alignment targeting:
+- If no god is named, the default sacrifice god pays gold only.
+- You can target a god name to also shift alignment based on item level.
+- Valid god arguments are the configured good/evil/neutral god names.
+- For neutral sacrifices, direction is auto-chosen by your current alignment
+  (> 200 pushes evil, < -200 pushes good, otherwise no direction change).
+- Alignment change is modified by anti-good / anti-evil / anti-neutral item flags.
+- Light, portal, beacon, and food items reduce alignment shift to 10%.
+- Final alignment is clamped to [-1000, 1000].
+
+Judge payments:
+- "sacrifice <item> judge" pays down your sentence/fine instead of alignment play.
+- You must currently have an outstanding sentence.
+- Item must be acceptable to the judge (level window checks apply).
+- Clan equipment cannot be used to pay fines.
+- Payment amount uses item value with high-level reductions.
+
+Autosac:
+- If CONFIG_AUTOSAC is enabled, killing an NPC automatically attempts
+  "sacrifice corpse" after autoloot/look processing.
+
+Notes:
+- "sacrifice <yourname>" is a flavor action; it does not kill you.
+- On success, the object is extracted (permanently removed).

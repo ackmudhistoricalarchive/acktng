@@ -1,12 +1,32 @@
-level 20
-keywords loot
+level 0
+keywords loot drops loottable item_loot
 ---
-Syntax: loot <corpse>
+Syntax: help loot
 
-Attempts to steal one random item from a player corpse.
+This help describes mob loot-table drops (not a player command).
 
-Notes:
-- You must be level 20+ to use this command.
-- You can only loot player corpses (not NPC corpses or other objects).
-- The corpse must be lootable for your clan/PK status.
-- Loot can fail, and items flagged NOLOOT cannot be taken.
+How loot-table drops work:
+- A mobile can define loot slots in its area data.
+- Each slot points to an object vnum and a weighted chance value.
+- On NPC death, the game may roll one or more drops from that table.
+
+Drop-count roll (loot_amount):
+- loot_amount is percent-based in 100-point chunks.
+- 50  = 50% chance for one drop.
+- 100 = exactly one drop.
+- 150 = one guaranteed drop + 50% chance for a second.
+- 300 = exactly three drops.
+
+Slot selection:
+- The game rolls against cumulative slot weights (loot_chance values).
+- Slot weights should sum to 100 or less.
+- A chosen slot creates that object and places it on the mob corpse.
+
+Builder notes:
+- Loot objects should have the ITEM_LOOT flag.
+- Invalid/missing loot configuration can result in no drop.
+- This system is configured by builders per-mob; players do not toggle it.
+
+Related commands for players:
+- Use @@cget@@N and @@clook in corpse@@N to retrieve dropped items.
+- Use @@csacrifice@@N or @@cjunk@@N to clean up unwanted items.
