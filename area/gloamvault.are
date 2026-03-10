@@ -16,255 +16,324 @@ W all~
 #30100
 Riven Gate~
 The shattered threshold groans under drifting ash, and broken portcullis teeth jut from the stone like black fangs. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. Only a southern route appears open from here, pulling adventurers farther inside.
-~
-12 11
+
+~
+~
+
+~
 D1
 ~
 ~
-0 -1 30105
+
+~
 D2
 ~
 ~
-0 -1 30101
-D4
+
+~
+
 ~
 ~
-0 0 3005
+~
+
+~
 S
-#30101
-Riven Gate~
-Wind leaks through fractured masonry, carrying distant bells and the smell of wet iron from deeper in the vault. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. A passage returns north toward earlier chambers while another continues south into darker halls.
-~
+Wind leaks through fractured masonry, carrying distant bells and the smell of wet iron from deeper in the vault. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. A passage returns north toward earlier chambers while another continues south into darker halls. A ashen scar scores the masonry here.
+
+~
+Defaced ward-runes crawl across the arch in silver scars, marking where the outer seal was violently broken. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. A passage returns north toward earlier chambers while another continues south into darker halls. A bleak scar scores the masonry here.
+
+~
+~
+Collapsed watch alcoves and toppled saints suggest this was once a defensive choke point before the cult reclaimed it. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. A passage returns north toward earlier chambers while another continues south into darker halls. A crooked scar scores the masonry here.
+
+~
+~
+~
+Torch brackets stand cold and empty, but ghostlight still clings to the floor in thin violet smears. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. A passage returns north toward earlier chambers while another continues south into darker halls. A hollow scar scores the masonry here.
+
+~
+~
+~
+
+~
+D2
+~
+~
+
+~
+S
+
+~
+
+~
+
+~
+A long nave-like corridor runs beneath pointed arches, its floor worn by generations of ceremonial footfalls. The route now feels ceremonial rather than defensive, drawing trespassers deeper by design. A passage returns north toward earlier chambers while another continues south into darker halls. A sunken scar scores the masonry here.
+
+~
 8 11
 D0
 ~
 ~
-0 -1 30100
-D1
+Torn banners depicting Kel'Shadra's crescent sigil sway in stale air, as if unseen choristers still pass in line. The route now feels ceremonial rather than defensive, drawing trespassers deeper by design. A passage returns north toward earlier chambers while another continues south into darker halls. A thorned scar scores the masonry here.
+
 ~
 ~
-0 -1 30106
-D2
+~
+Brass censers hang from chainwork ribs overhead, each packed with old resin and blackened prayer ash. The route now feels ceremonial rather than defensive, drawing trespassers deeper by design. A passage returns north toward earlier chambers while another continues south into darker halls. A hushed scar scores the masonry here.
+
+~
+~
+~
+The walls are carved with liturgical reliefs that shift from solemn devotion near the gate to open fanaticism deeper in. The route now feels ceremonial rather than defensive, drawing trespassers deeper by design. A passage returns north toward earlier chambers while another continues south into darker halls. A sable scar scores the masonry here.
+
+~
+Muted drumbeats seem to echo from nowhere, giving each step the rhythm of a funeral procession. The route now feels ceremonial rather than defensive, drawing trespassers deeper by design. A passage returns north toward earlier chambers while another continues south into darker halls. A weathered scar scores the masonry here.
+
+~
+
+~
+
+~
+~
+
+~
+D0
 ~
 ~
 0 -1 30102
+
+~
+~
+~
+
+~
+D2
+~
+~
+Tiered balconies overlook narrow smoke channels, and guttering braziers stain the vault with oily violet haze. Smoke-thick corridors knot together here, obscuring sightlines as the dungeon descends. A passage returns north toward earlier chambers while another continues south into darker halls. A smoldering scar scores the masonry here.
+
+~
+Rows of bronze incense bowls sit on waist-high plinths, each engraved with names scratched out and replaced. Smoke-thick corridors knot together here, obscuring sightlines as the dungeon descends. A passage returns north toward earlier chambers while another continues south into darker halls. A salted scar scores the masonry here.
+
+~
+Condensed soot glitters along the ribs of the ceiling like dark frost, disturbed by every movement. Smoke-thick corridors knot together here, obscuring sightlines as the dungeon descends. A passage returns north toward earlier chambers while another continues south into darker halls. A pitted scar scores the masonry here.
+
+~
+~
+Cracked mirrors mounted between alcoves reflect only candle halos and not the chamber itself. Smoke-thick corridors knot together here, obscuring sightlines as the dungeon descends. A passage returns north toward earlier chambers while another continues south into darker halls. A rifted scar scores the masonry here.
+
+~
+~
+~
+A bitter blend of myrrh, blood-resin, and grave mold hangs so thickly that breathing feels like swallowing incense. Smoke-thick corridors knot together here, obscuring sightlines as the dungeon descends. A passage returns north toward earlier chambers while another continues south into darker halls. A gilded scar scores the masonry here.
+
+~
+~
+~
+
+~
+D2
+~
+~
+
+~
 S
-#30102
-Riven Gate~
-Defaced ward-runes crawl across the arch in silver scars, marking where the outer seal was violently broken. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. A passage returns north toward earlier chambers while another continues south into darker halls.
-~
+
+~
+
+~
+
+~
+Sarcophagi are stacked in choir-stall rows, their lids drilled with speaking vents for unending ritual chants. The atmosphere shifts from public rite to intimate necromancy as tomb-chapels multiply. A passage returns north toward earlier chambers while another continues south into darker halls. A haggard scar scores the masonry here.
+
+~
 8 11
 D0
 ~
 ~
-0 -1 30101
-D1
+Bone chimes hang from the rafters and answer the slightest draft with thin, off-key harmonies. The atmosphere shifts from public rite to intimate necromancy as tomb-chapels multiply. A passage returns north toward earlier chambers while another continues south into darker halls. A sepulchral scar scores the masonry here.
+
 ~
 ~
-0 -1 30122
-D2
+~
+Each pillar bears a line of hymn script cut into marrow-white inlay, then crossed out by later heresies. The atmosphere shifts from public rite to intimate necromancy as tomb-chapels multiply. A passage returns north toward earlier chambers while another continues south into darker halls. A ragged scar scores the masonry here.
+
 ~
 ~
-0 -1 30103
-S
-#30103
-Riven Gate~
-Collapsed watch alcoves and toppled saints suggest this was once a defensive choke point before the cult reclaimed it. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. A passage returns north toward earlier chambers while another continues south into darker halls.
-~
-8 11
+~
+Rotting hymnals lie chained to lecterns beside open tomb niches where attendants once kept vigil. The atmosphere shifts from public rite to intimate necromancy as tomb-chapels multiply. A passage returns north toward earlier chambers while another continues south into darker halls. A sorrowed scar scores the masonry here.
+
+~
+~
+~
+Faint antiphonal whispers trade from one side of the crypt to the other, never revealing a living source. The atmosphere shifts from public rite to intimate necromancy as tomb-chapels multiply. A passage returns north toward earlier chambers while another continues south into darker halls. A lorn scar scores the masonry here.
+
+~
+
+~
+
+~
+
+~
+
+~
+~
+
+~
 D0
 ~
 ~
-0 -1 30102
-D1
+Stone desks crowd the chamber, their surfaces dusted in powdered charcoal from burned doctrinal pages. This wing records and refines doctrine, a midpoint between worship and war. A passage returns north toward earlier chambers while another continues south into darker halls. A mottled scar scores the masonry here.
+
 ~
 ~
-0 -1 30108
-D2
+~
+Shelves of lead-bound folios lean at dangerous angles, held together by wax seals and rusted clasps. This wing records and refines doctrine, a midpoint between worship and war. A passage returns north toward earlier chambers while another continues south into darker halls. A quarried scar scores the masonry here.
+
 ~
 ~
-0 -1 30104
-S
-#30104
-Riven Gate~
-Torch brackets stand cold and empty, but ghostlight still clings to the floor in thin violet smears. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. A passage returns north toward earlier chambers while another continues south into darker halls.
-~
-8 11
+~
+Copying frames, quills, and drying racks remain in place as though the scribes rose only moments ago. This wing records and refines doctrine, a midpoint between worship and war. A passage returns north toward earlier chambers while another continues south into darker halls. A broken scar scores the masonry here.
+
+~
+~
+~
+Glass inkwells are clouded with old reagents, and half-finished sigils still mark drafting slates. This wing records and refines doctrine, a midpoint between worship and war. A passage returns north toward earlier chambers while another continues south into darker halls. A charred scar scores the masonry here.
+
+~
+Every sound is muffled by hanging parchment strips coated in soot-black lacquer. This wing records and refines doctrine, a midpoint between worship and war. A passage returns north toward earlier chambers while another continues south into darker halls. A drifting scar scores the masonry here.
+
+~
+
+~
+
+~
+~
+
+~
 D0
 ~
 ~
-0 -1 30103
-D1
+
+~
+
 ~
 ~
-0 -1 30114
+~
+Funerary plinths display battered helms and ritual weapons, each tagged with an oath etched into iron. Devotion gives way to militarized faith in these reliquary barracks and armories. A passage returns north toward earlier chambers while another continues south into darker halls. A faded scar scores the masonry here.
+
+~
+~
+~
+Narrow armor stands line the walls where reliquary knights once armed before descending into the inner tombs. Devotion gives way to militarized faith in these reliquary barracks and armories. A passage returns north toward earlier chambers while another continues south into darker halls. A dreaded scar scores the masonry here.
+
+~
+Chain curtains divide the space into martial chapels, clinking softly whenever the air shifts. Devotion gives way to militarized faith in these reliquary barracks and armories. A passage returns north toward earlier chambers while another continues south into darker halls. A forlorn scar scores the masonry here.
+
+~
+Shield-racks are bolted to basalt columns, most stripped bare except for a few cracked tower shields. Devotion gives way to militarized faith in these reliquary barracks and armories. A passage returns north toward earlier chambers while another continues south into darker halls. A scarred scar scores the masonry here.
+
+~
+~
+Austere drill circles are inscribed in the floor, measuring paces for disciplined spear forms. Devotion gives way to militarized faith in these reliquary barracks and armories. A passage returns north toward earlier chambers while another continues south into darker halls. A stained scar scores the masonry here.
+
+~
+~
+~
+
+~
 D2
 ~
 ~
-0 -1 30105
-S
-#30105
-Riven Gate~
-The shattered threshold groans under drifting ash, and broken portcullis teeth jut from the stone like black fangs. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. A passage returns north toward earlier chambers while another continues south into darker halls.
-~
-8 11
-D0
+
 ~
-~
-0 -1 30104
-D1
-~
-~
-0 -1 30115
-D2
-~
-~
-0 -1 30106
 D3
 ~
 ~
-0 -1 30100
+
+~
 S
-#30106
-Riven Gate~
-Wind leaks through fractured masonry, carrying distant bells and the smell of wet iron from deeper in the vault. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. A passage returns north toward earlier chambers while another continues south into darker halls.
-~
-8 11
+
+~
+
+~
+Arcaded walkways frame shallow channels cut for sacrificial runoff, now crusted into dark glassy rivulets. Ritual bloodworks dominate this section, signaling proximity to high clergy sancta. A passage returns north toward earlier chambers while another continues south into darker halls. A veiled scar scores the masonry here.
+
+~
+~
+Niches hold saint-effigies daubed with fresh-looking crimson despite the age of the stone. Ritual bloodworks dominate this section, signaling proximity to high clergy sancta. A passage returns north toward earlier chambers while another continues south into darker halls. A shivered scar scores the masonry here.
+
+~
+~
+~
+Prayer wheels of bone and copper turn intermittently on their own, clicking through forbidden invocations. Ritual bloodworks dominate this section, signaling proximity to high clergy sancta. A passage returns north toward earlier chambers while another continues south into darker halls. A sundered scar scores the masonry here.
+
+~
+~
+~
+The cloister walls bloom with iron-red mineral streaks that resemble old handprints and dripping seals. Ritual bloodworks dominate this section, signaling proximity to high clergy sancta. A passage returns north toward earlier chambers while another continues south into darker halls. A graven scar scores the masonry here.
+
+~
+~
+~
+A warm metallic scent rises from grates between flagstones where deeper cisterns still churn. Ritual bloodworks dominate this section, signaling proximity to high clergy sancta. A passage returns north toward earlier chambers while another continues south into darker halls. A shattered scar scores the masonry here.
+
+~
+
+~
+
+~
+
+~
+
+~
+~
+
+~
 D0
 ~
 ~
-0 -1 30105
-D1
 ~
 ~
-0 -1 30126
-D2
 ~
 ~
-0 -1 30107
-D3
 ~
 ~
-0 -1 30101
-S
-#30107
-Riven Gate~
-Defaced ward-runes crawl across the arch in silver scars, marking where the outer seal was violently broken. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. A passage returns north toward earlier chambers while another continues south into darker halls.
-~
-8 11
-D0
 ~
 ~
-0 -1 30106
-D1
 ~
 ~
-0 -1 30112
-D2
 ~
 ~
-0 -1 30108
-S
-#30108
-Riven Gate~
-Collapsed watch alcoves and toppled saints suggest this was once a defensive choke point before the cult reclaimed it. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. A passage returns north toward earlier chambers while another continues south into darker halls.
-~
-8 11
-D0
 ~
 ~
-0 -1 30107
-D2
 ~
 ~
-0 -1 30109
-D3
 ~
 ~
-0 -1 30103
-S
-#30109
-Riven Gate~
-Torch brackets stand cold and empty, but ghostlight still clings to the floor in thin violet smears. The breach behind you still leaks cold air, while the cult's interior passages drag you onward. A passage returns north toward earlier chambers while another continues south into darker halls.
-~
-8 11
-D0
 ~
 ~
-0 -1 30108
-D1
 ~
 ~
-0 -1 30119
-D2
 ~
 ~
-0 -1 30110
-S
-#30110
-Processional Halls~
-A long nave-like corridor runs beneath pointed arches, its floor worn by generations of ceremonial footfalls. The route now feels ceremonial rather than defensive, drawing trespassers deeper by design. A passage returns north toward earlier chambers while another continues south into darker halls.
-~
-8 11
-D0
 ~
 ~
-0 -1 30109
-D1
 ~
 ~
-0 -1 30130
-D2
 ~
 ~
-0 -1 30111
-S
-#30111
-Processional Halls~
-Torn banners depicting Kel'Shadra's crescent sigil sway in stale air, as if unseen choristers still pass in line. The route now feels ceremonial rather than defensive, drawing trespassers deeper by design. A passage returns north toward earlier chambers while another continues south into darker halls.
-~
-8 11
-D0
 ~
 ~
-0 -1 30110
-D1
 ~
 ~
-0 -1 30116
-D2
 ~
 ~
-0 -1 30112
-S
-#30112
-Processional Halls~
-Brass censers hang from chainwork ribs overhead, each packed with old resin and blackened prayer ash. The route now feels ceremonial rather than defensive, drawing trespassers deeper by design. A passage returns north toward earlier chambers while another continues south into darker halls.
-~
-8 11
-D0
 ~
 ~
-0 -1 30111
-D2
 ~
-~
-0 -1 30113
-D3
-~
-~
-0 -1 30107
-S
-#30113
-Processional Halls~
-The walls are carved with liturgical reliefs that shift from solemn devotion near the gate to open fanaticism deeper in. The route now feels ceremonial rather than defensive, drawing trespassers deeper by design. A passage returns north toward earlier chambers while another continues south into darker halls.
-~
-8 11
-D0
-~
-~
-0 -1 30112
-D1
 ~
 ~
 0 -1 30123
