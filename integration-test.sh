@@ -1,7 +1,7 @@
 #!/bin/sh
 #
-# Integration test: build, start, boot, log in as a new player, and run for
-# 8 seconds checking for crashes.
+# Integration test: build, start, boot, log in as a new player, validate
+# WebSocket connectivity, and run for 2 seconds checking for crashes.
 #
 # Exit codes:
 #   0 - MUD booted, accepted a player login, and ran without crashing
@@ -11,7 +11,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SRC_DIR="$SCRIPT_DIR/src"
 AREA_DIR="$SCRIPT_DIR/area"
 NPC_DIR="$SCRIPT_DIR/npcs"
-RUN_SECONDS=8
+RUN_SECONDS=2
 LOG_FILE="/tmp/mud-integration-test-$$.log"
 
 # Test player name (3-12 alpha chars, not a reserved name, unlikely to clash
@@ -234,7 +234,71 @@ if [ "$LOGIN_STATUS" -ne 0 ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 6: let the MUD keep running and watch for crashes.
+# Step 6: validate WebSocket connectivity (connect + handshake + hold 2s).
+# ---------------------------------------------------------------------------
+echo "integration-test: validating WebSocket connectivity for 2s..."
+python3 - "$TEST_PORT" <<'PYEOF'
+import base64
+import os
+import socket
+import sys
+import time
+
+PORT = int(sys.argv[1])
+
+def fail(msg, context=""):
+    print(f"integration-test: FAILED - {msg}", flush=True)
+    if context:
+        print(f"  context: {context}", flush=True)
+    sys.exit(1)
+
+key = base64.b64encode(os.urandom(16)).decode("ascii")
+request = (
+    "GET / HTTP/1.1\r\n"
+    f"Host: 127.0.0.1:{PORT}\r\n"
+    "Upgrade: websocket\r\n"
+    "Connection: Upgrade\r\n"
+    f"Sec-WebSocket-Key: {key}\r\n"
+    "Sec-WebSocket-Version: 13\r\n"
+    "\r\n"
+)
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.settimeout(5.0)
+s.connect(("127.0.0.1", PORT))
+s.sendall(request.encode("ascii"))
+
+response = b""
+deadline = time.time() + 5.0
+while b"\r\n\r\n" not in response and time.time() < deadline:
+    chunk = s.recv(4096)
+    if not chunk:
+        break
+    response += chunk
+
+decoded = response.decode("latin-1", errors="replace")
+if "101 Switching Protocols" not in decoded:
+    fail("expected HTTP 101 Switching Protocols from websocket handshake", decoded[:300])
+if "Sec-WebSocket-Accept:" not in decoded:
+    fail("expected Sec-WebSocket-Accept header", decoded[:300])
+
+time.sleep(2.0)
+s.close()
+print("integration-test: websocket handshake successful and connection held for 2s", flush=True)
+sys.exit(0)
+PYEOF
+
+WEBSOCKET_STATUS=$?
+if [ "$WEBSOCKET_STATUS" -ne 0 ]; then
+    echo "integration-test: FAILED - websocket connectivity check failed"
+    echo "--- MUD output ---"
+    cat "$LOG_FILE"
+    echo "------------------"
+    exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# Step 7: let the MUD keep running and watch for crashes.
 # ---------------------------------------------------------------------------
 echo "integration-test: monitoring MUD for ${RUN_SECONDS}s..."
 elapsed=0

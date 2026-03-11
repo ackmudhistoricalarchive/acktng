@@ -228,6 +228,55 @@ bool shortfight_should_suppress_watched_autoattack(int observer_is_npc, int obse
    return !observer_is_npc && observer_has_shortfight && !observer_is_fighting;
 }
 
+bool validate_websocket_handshake_request(const char *request,
+                                         char *key_out,
+                                         size_t key_out_size,
+                                         size_t *header_len_out)
+{
+   const char *end_headers;
+   const char *key_line;
+   const char *key_start;
+   size_t key_len;
+
+   if (request == NULL)
+      return FALSE;
+
+   if (strncmp(request, "GET ", 4) != 0)
+      return FALSE;
+
+   end_headers = strstr(request, "\r\n\r\n");
+   if (end_headers == NULL)
+      return FALSE;
+
+   if (header_len_out != NULL)
+      *header_len_out = (size_t)((end_headers + 4) - request);
+
+   if (strstr(request, "Upgrade: websocket") == NULL && strstr(request, "upgrade: websocket") == NULL)
+      return FALSE;
+
+   key_line = strstr(request, "Sec-WebSocket-Key:");
+   if (key_line == NULL)
+      return FALSE;
+
+   key_start = key_line + strlen("Sec-WebSocket-Key:");
+   while (*key_start == ' ' || *key_start == '\t')
+      key_start++;
+
+   key_len = strcspn(key_start, "\r\n");
+   if (key_len == 0)
+      return FALSE;
+
+   if (key_out != NULL && key_out_size > 0)
+   {
+      if (key_len >= key_out_size)
+         return FALSE;
+      memcpy(key_out, key_start, key_len);
+      key_out[key_len] = '\0';
+   }
+
+   return TRUE;
+}
+
 #ifdef UNIT_TEST_COMM
 bool should_show_default_prompt_hp(CHAR_DATA *ch) { return prompt_should_show_hp(ch); }
 bool should_show_default_prompt_mana(CHAR_DATA *ch) { return prompt_should_show_mana(ch); }
@@ -518,12 +567,9 @@ void queue_login_greeting(DESCRIPTOR_DATA *d)
 
 bool handle_websocket_handshake(DESCRIPTOR_DATA *d)
 {
-   char *end_headers;
-   char *key_line;
-   char *key_start;
    char key[256], challenge[512], accept_key[64], response[512];
    unsigned char digest[20];
-   size_t key_len;
+   size_t header_len;
 
    if (d == NULL || d->websocket_handshake_complete || d->inbuf_len <= 0)
       return TRUE;
@@ -536,27 +582,11 @@ bool handle_websocket_handshake(DESCRIPTOR_DATA *d)
       return TRUE;
    }
 
-   end_headers = strstr(d->inbuf, "\r\n\r\n");
-   if (end_headers == NULL)
+   if (strstr(d->inbuf, "\r\n\r\n") == NULL)
       return TRUE;
 
-   if (strstr(d->inbuf, "Upgrade: websocket") == NULL && strstr(d->inbuf, "upgrade: websocket") == NULL)
+   if (!validate_websocket_handshake_request(d->inbuf, key, sizeof(key), &header_len))
       return FALSE;
-
-   key_line = strstr(d->inbuf, "Sec-WebSocket-Key:");
-   if (key_line == NULL)
-      return FALSE;
-
-   key_start = key_line + strlen("Sec-WebSocket-Key:");
-   while (*key_start == ' ' || *key_start == '\t')
-      key_start++;
-
-   key_len = strcspn(key_start, "\r\n");
-   if (key_len == 0 || key_len >= sizeof(key))
-      return FALSE;
-
-   memcpy(key, key_start, key_len);
-   key[key_len] = '\0';
 
    snprintf(challenge, sizeof(challenge), "%s%s", key, websocket_guid);
    sha1_digest((const unsigned char *)challenge, strlen(challenge), digest);
@@ -575,8 +605,8 @@ bool handle_websocket_handshake(DESCRIPTOR_DATA *d)
    d->websocket_active = TRUE;
    d->websocket_handshake_complete = TRUE;
 
-   d->inbuf_len -= (int)((end_headers + 4) - d->inbuf);
-   memmove(d->inbuf, end_headers + 4, d->inbuf_len);
+   d->inbuf_len -= (int)header_len;
+   memmove(d->inbuf, d->inbuf + header_len, d->inbuf_len);
    d->inbuf[d->inbuf_len] = '\0';
 
    queue_login_greeting(d);
