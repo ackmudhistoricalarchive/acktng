@@ -314,7 +314,7 @@ def _build_home_page() -> str:
 def _build_mud_client_page() -> str:
     world_options = "".join(
         (
-            f"<option value='{world['id']}' data-host='{world['host']}' data-port='{world['port']}'>{world['name']} ({world['host']}:{world['port']})</option>"
+            f"<option value='{world['id']}' data-host='{world['host']}' data-port='{world['port']}' data-ws='ws://{world['host']}:{world['port']}/'>{world['name']} ({world['host']}:{world['port']})</option>"
         )
         for world in WORLD_TARGETS
     )
@@ -340,38 +340,56 @@ def _build_mud_client_page() -> str:
   const connectBtn = document.getElementById('connect-btn');
   const endpointInput = document.getElementById('ws-endpoint');
   const disconnectBtn = document.getElementById('disconnect-btn');
+  const commandInput = document.getElementById('mud-command');
   const sendBtn = document.getElementById('send-btn');
   const output = document.getElementById('mud-output');
+  let socket = null;
+
+  const ANSI_COLORS = {{
+    30: '#222222', 31: '#ff5f56', 32: '#27c93f', 33: '#ffbd2e',
+    34: '#61afef', 35: '#c678dd', 36: '#56b6c2', 37: '#d7dae0',
+    90: '#7f848e', 91: '#ff7b72', 92: '#3fb950', 93: '#e3b341',
+    94: '#79c0ff', 95: '#d2a8ff', 96: '#a5f3fc', 97: '#f0f6fc'
+  }};
 
   const escapeHtml = (value) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
   const ansiToHtml = (text) => {{
-    const chunks = text.split(/(\[[0-9;]*m)/g);
-    let styles = [];
+    const chunks = text.split(/(\x1b\[[0-9;]*m)/g);
+    let styles = {{ fg: '', bg: '', bold: false, underline: false }};
     let html = '';
-    const styleText = () => styles.length ? ` style="${{styles.join(';')}}"` : '';
+    const styleText = () => {{
+      const entries = [];
+      if (styles.fg) entries.push(`color:${{styles.fg}}`);
+      if (styles.bg) entries.push(`background:${{styles.bg}}`);
+      if (styles.bold) entries.push('font-weight:700');
+      if (styles.underline) entries.push('text-decoration:underline');
+      return entries.length ? ` style="${{entries.join(';')}}"` : '';
+    }};
 
     for (const chunk of chunks) {{
-      const match = chunk.match(/^\[([0-9;]*)m$/);
+      const match = chunk.match(/^\x1b\[([0-9;]*)m$/);
       if (!match) {{
         if (chunk.length) html += `<span${{styleText()}}>${{escapeHtml(chunk)}}</span>`;
         continue;
       }}
       const codes = match[1] ? match[1].split(';').map(Number) : [0];
       for (const code of codes) {{
-        if (code === 0) styles = [];
-        else if (code === 1) styles = styles.filter((x) => !x.startsWith('font-weight:')).concat('font-weight:700');
-        else if (code === 4) styles = styles.filter((x) => !x.startsWith('text-decoration:')).concat('text-decoration:underline');
-        else if (code === 39) styles = styles.filter((x) => !x.startsWith('color:'));
-        else if (code === 49) styles = styles.filter((x) => !x.startsWith('background:'));
-        else if (ANSI_COLORS[code]) styles = styles.filter((x) => !x.startsWith('color:')).concat(`color:${{ANSI_COLORS[code]}}`);
-        else if (ANSI_COLORS[code - 10]) styles = styles.filter((x) => !x.startsWith('background:')).concat(`background:${{ANSI_COLORS[code - 10]}}`);
+        if (code === 0) styles = {{ fg: '', bg: '', bold: false, underline: false }};
+        else if (code === 1) styles.bold = true;
+        else if (code === 22) styles.bold = false;
+        else if (code === 4) styles.underline = true;
+        else if (code === 24) styles.underline = false;
+        else if (code === 39) styles.fg = '';
+        else if (code === 49) styles.bg = '';
+        else if (ANSI_COLORS[code]) styles.fg = ANSI_COLORS[code];
+        else if (ANSI_COLORS[code - 10]) styles.bg = ANSI_COLORS[code - 10];
       }}
     }}
     return html;
   }};
 
   const appendOutput = (text) => {{
-    output.insertAdjacentHTML('beforeend', `<span>${{escapeHtml(text)}}</span>`);
+    output.insertAdjacentHTML('beforeend', ansiToHtml(text));
     output.scrollTop = output.scrollHeight;
   }};
 
@@ -391,7 +409,7 @@ def _build_mud_client_page() -> str:
       return;
     }}
 
-    const wsUrl = selectedWorld().dataset.ws || '';
+    const wsUrl = (endpointInput.value || '').trim() || selectedWorld().dataset.ws || '';
     if (!wsUrl) {{
       appendOutput('[Error] Selected world has no WebSocket endpoint.\\n');
       return;
