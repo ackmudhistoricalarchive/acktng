@@ -106,10 +106,10 @@ if [ "$boot_wait" -ge 30 ]; then
     exit 1
 fi
 
-echo "integration-test: MUD is up, logging in as new player '${TEST_PLAYER}'..."
+echo "integration-test: MUD is up, validating websocket login flow for '${TEST_PLAYER}'..."
 
 # ---------------------------------------------------------------------------
-# Step 5: walk the new-player login flow (happy path).
+# Step 5: WebSocket handshake + walk the new-player login flow (happy path).
 #   greeting0 ends with "What is your name?"
 #   CON_CONFIRM_NEW_NAME  -> "Did I get that right, <name> (Y/N)?"
 #   CON_GET_NEW_PASSWORD  -> "Give me a password for <name>:"
@@ -123,6 +123,8 @@ echo "integration-test: MUD is up, logging in as new player '${TEST_PLAYER}'..."
 #   CON_PLAYING           -> server sends "Welcome to ACK!TNG" + room look
 # ---------------------------------------------------------------------------
 python3 - "$TEST_PORT" "$TEST_PLAYER" "$TEST_PASSWORD" <<'PYEOF'
+import base64
+import os
 import socket
 import sys
 import time
@@ -131,128 +133,140 @@ PORT     = int(sys.argv[1])
 PLAYER   = sys.argv[2]
 PASSWORD = sys.argv[3]
 
-def recv_until(s, marker, timeout=10.0):
-    """Read bytes until *marker* appears or *timeout* elapses."""
-    s.settimeout(0.25)
-    data = b""
-    deadline = time.time() + timeout
-    while time.time() < deadline:
-        try:
-            chunk = s.recv(4096)
-            if not chunk:
-                break
-            data += chunk
-            if marker.encode('latin-1') in data:
-                return data.decode('latin-1', errors='replace')
-        except socket.timeout:
-            pass
-    return data.decode('latin-1', errors='replace')
-
-def send(s, msg):
-    s.sendall((msg + '\r\n').encode('latin-1'))
-
 def fail(msg, context=""):
     print(f"integration-test: FAILED - {msg}", flush=True)
     if context:
         print(f"  received: {repr(context[-300:])}", flush=True)
     sys.exit(1)
 
+class WSClient:
+    def __init__(self, sock):
+        self.s = sock
+        self.pending = bytearray()
+
+    def recv_exact(self, n, timeout=5.0):
+        deadline = time.time() + timeout
+        while len(self.pending) < n:
+            remaining = deadline - time.time()
+            if remaining <= 0:
+                break
+            self.s.settimeout(min(0.25, remaining))
+            try:
+                chunk = self.s.recv(4096)
+            except socket.timeout:
+                continue
+            if not chunk:
+                break
+            self.pending.extend(chunk)
+        if len(self.pending) < n:
+            raise RuntimeError("socket closed before expected bytes")
+        data = bytes(self.pending[:n])
+        del self.pending[:n]
+        return data
+
+    def recv_http_headers(self, timeout=5.0):
+        deadline = time.time() + timeout
+        marker = b"\r\n\r\n"
+        while marker not in self.pending:
+            remaining = deadline - time.time()
+            if remaining <= 0:
+                break
+            self.s.settimeout(min(0.25, remaining))
+            try:
+                chunk = self.s.recv(4096)
+            except socket.timeout:
+                continue
+            if not chunk:
+                break
+            self.pending.extend(chunk)
+        idx = self.pending.find(marker)
+        if idx == -1:
+            return ""
+        end = idx + len(marker)
+        headers = bytes(self.pending[:end])
+        del self.pending[:end]
+        return headers.decode('latin-1', errors='replace')
+
+    def send_text(self, msg):
+        payload = msg.encode('latin-1')
+        mask = os.urandom(4)
+        frame = bytearray()
+        frame.append(0x81)
+        length = len(payload)
+        if length < 126:
+            frame.append(0x80 | length)
+        elif length <= 0xFFFF:
+            frame.append(0x80 | 126)
+            frame.extend(length.to_bytes(2, 'big'))
+        else:
+            raise RuntimeError("payload too large")
+        frame.extend(mask)
+        frame.extend(bytes(payload[i] ^ mask[i % 4] for i in range(length)))
+        self.s.sendall(frame)
+
+    def send_pong(self, payload=b""):
+        mask = os.urandom(4)
+        frame = bytearray()
+        frame.append(0x8A)
+        length = len(payload)
+        if length < 126:
+            frame.append(0x80 | length)
+        elif length <= 0xFFFF:
+            frame.append(0x80 | 126)
+            frame.extend(length.to_bytes(2, 'big'))
+        else:
+            raise RuntimeError("pong payload too large")
+        frame.extend(mask)
+        frame.extend(bytes(payload[i] ^ mask[i % 4] for i in range(length)))
+        self.s.sendall(frame)
+
+    def read_text_frame(self, timeout=5.0):
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            try:
+                b0, b1 = self.recv_exact(2, timeout=deadline - time.time())
+            except Exception:
+                return ""
+
+            opcode = b0 & 0x0F
+            masked = (b1 & 0x80) != 0
+            length = b1 & 0x7F
+            if length == 126:
+                length = int.from_bytes(self.recv_exact(2, timeout=deadline - time.time()), 'big')
+            elif length == 127:
+                length = int.from_bytes(self.recv_exact(8, timeout=deadline - time.time()), 'big')
+
+            mask = self.recv_exact(4, timeout=deadline - time.time()) if masked else b""
+            payload = self.recv_exact(length, timeout=deadline - time.time()) if length > 0 else b""
+            if masked:
+                payload = bytes(payload[i] ^ mask[i % 4] for i in range(length))
+
+            if opcode == 0x8:
+                return ""
+            if opcode == 0x9:
+                self.send_pong(payload)
+                continue
+            if opcode in (0x1, 0x0, 0x2):
+                return payload.decode('latin-1', errors='replace')
+        return ""
+
+    def recv_until(self, marker, timeout=10.0):
+        marker_lower = marker.lower()
+        data = ""
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            chunk = self.read_text_frame(timeout=min(0.5, deadline - time.time()))
+            if chunk:
+                data += chunk
+                if marker_lower in data.lower():
+                    return data
+        return data
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect(('127.0.0.1', PORT))
+ws = WSClient(s)
 
-# Wait for the greeting to finish; greeting0 ends with "What is your name?"
-data = recv_until(s, 'name', timeout=10.0)
-if 'name' not in data.lower():
-    fail("expected name prompt in greeting", data)
-
-# --- Send player name -------------------------------------------------------
-send(s, PLAYER)
-data = recv_until(s, 'Y/N', timeout=5.0)
-if 'Y/N' not in data:
-    fail("expected name confirmation (Y/N)", data)
-
-# --- Confirm name -----------------------------------------------------------
-send(s, 'Y')
-data = recv_until(s, 'assword', timeout=5.0)
-if 'assword' not in data:
-    fail("expected password prompt", data)
-
-# --- Set password -----------------------------------------------------------
-send(s, PASSWORD)
-data = recv_until(s, 'etype', timeout=5.0)
-if 'etype' not in data:
-    fail("expected retype-password prompt", data)
-
-# --- Confirm password -------------------------------------------------------
-send(s, PASSWORD)
-data = recv_until(s, 'elect', timeout=5.0)   # "Select" in the menu
-if 'elect' not in data.lower():
-    fail("expected character-creation menu", data)
-
-# --- Pick sex (option 1) → M ------------------------------------------------
-send(s, '1')
-data = recv_until(s, 'ex', timeout=5.0)      # "sex"/"Sex"
-send(s, 'M')
-data = recv_until(s, 'elect', timeout=5.0)
-
-# --- Pick race (option 2) → Human (3-letter code "Hmn") --------------------
-send(s, '2')
-data = recv_until(s, 'ace', timeout=5.0)     # "race"/"Race"
-send(s, 'Hmn')
-data = recv_until(s, 'elect', timeout=5.0)
-
-# --- Pick class order (option 3) → four classes by abbreviation -------------
-send(s, '3')
-data = recv_until(s, 'lass', timeout=5.0)    # "class"/"Class"
-send(s, 'War Mag Cle Thi')
-data = recv_until(s, 'elect', timeout=5.0)
-
-# --- Enter game (option 4) --------------------------------------------------
-send(s, '4')
-# Server sends MOTD / newun help text then waits in CON_READ_MOTD
-data = recv_until(s, '\n', timeout=5.0)
-
-# --- Pass the MOTD ----------------------------------------------------------
-send(s, '')
-data = recv_until(s, 'Welcome', timeout=10.0)
-if 'Welcome' not in data:
-    fail("expected 'Welcome' message after entering game", data)
-
-print(f"integration-test: login successful - '{PLAYER}' reached playing state",
-      flush=True)
-s.close()
-sys.exit(0)
-PYEOF
-
-LOGIN_STATUS=$?
-if [ "$LOGIN_STATUS" -ne 0 ]; then
-    echo "integration-test: FAILED - login sequence did not complete"
-    echo "--- MUD output ---"
-    cat "$LOG_FILE"
-    echo "------------------"
-    exit 1
-fi
-
-# ---------------------------------------------------------------------------
-# Step 6: validate WebSocket connectivity (connect + handshake + hold 2s).
-# ---------------------------------------------------------------------------
-echo "integration-test: validating WebSocket connectivity for 2s..."
-python3 - "$TEST_PORT" <<'PYEOF'
-import base64
-import os
-import socket
-import sys
-import time
-
-PORT = int(sys.argv[1])
-
-def fail(msg, context=""):
-    print(f"integration-test: FAILED - {msg}", flush=True)
-    if context:
-        print(f"  context: {context}", flush=True)
-    sys.exit(1)
-
-key = base64.b64encode(os.urandom(16)).decode("ascii")
+key = base64.b64encode(os.urandom(16)).decode('ascii')
 request = (
     "GET / HTTP/1.1\r\n"
     f"Host: 127.0.0.1:{PORT}\r\n"
@@ -262,35 +276,72 @@ request = (
     "Sec-WebSocket-Version: 13\r\n"
     "\r\n"
 )
+s.sendall(request.encode('ascii'))
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.settimeout(5.0)
-s.connect(("127.0.0.1", PORT))
-s.sendall(request.encode("ascii"))
+headers = ws.recv_http_headers(timeout=5.0)
+if '101 Switching Protocols' not in headers or 'Sec-WebSocket-Accept:' not in headers:
+    fail("expected successful websocket handshake", headers)
 
-response = b""
-deadline = time.time() + 5.0
-while b"\r\n\r\n" not in response and time.time() < deadline:
-    chunk = s.recv(4096)
-    if not chunk:
-        break
-    response += chunk
+def send(msg):
+    ws.send_text(msg + '\n')
 
-decoded = response.decode("latin-1", errors="replace")
-if "101 Switching Protocols" not in decoded:
-    fail("expected HTTP 101 Switching Protocols from websocket handshake", decoded[:300])
-if "Sec-WebSocket-Accept:" not in decoded:
-    fail("expected Sec-WebSocket-Accept header", decoded[:300])
+# Wait for the greeting to finish; greeting0 ends with "What is your name?"
+data = ws.recv_until('name', timeout=10.0)
+if 'name' not in data.lower():
+    fail("expected name prompt in greeting", data)
+
+send(PLAYER)
+data = ws.recv_until('y/n', timeout=5.0)
+if 'y/n' not in data.lower():
+    fail("expected name confirmation (Y/N)", data)
+
+send('Y')
+data = ws.recv_until('assword', timeout=5.0)
+if 'assword' not in data:
+    fail("expected password prompt", data)
+
+send(PASSWORD)
+data = ws.recv_until('etype', timeout=5.0)
+if 'etype' not in data:
+    fail("expected retype-password prompt", data)
+
+send(PASSWORD)
+data = ws.recv_until('elect', timeout=5.0)
+if 'elect' not in data.lower():
+    fail("expected character-creation menu", data)
+
+send('1')
+_ = ws.recv_until('ex', timeout=5.0)
+send('M')
+_ = ws.recv_until('elect', timeout=5.0)
+
+send('2')
+_ = ws.recv_until('ace', timeout=5.0)
+send('Hmn')
+_ = ws.recv_until('elect', timeout=5.0)
+
+send('3')
+_ = ws.recv_until('lass', timeout=5.0)
+send('War Mag Cle Thi')
+_ = ws.recv_until('elect', timeout=5.0)
+
+send('4')
+_ = ws.recv_until('\n', timeout=5.0)
+
+send('')
+data = ws.recv_until('welcome', timeout=10.0)
+if 'welcome' not in data.lower():
+    fail("expected 'Welcome' message after entering game", data)
 
 time.sleep(2.0)
+print(f"integration-test: websocket login successful - '{PLAYER}' reached playing state and stayed connected for 2s", flush=True)
 s.close()
-print("integration-test: websocket handshake successful and connection held for 2s", flush=True)
 sys.exit(0)
 PYEOF
 
-WEBSOCKET_STATUS=$?
-if [ "$WEBSOCKET_STATUS" -ne 0 ]; then
-    echo "integration-test: FAILED - websocket connectivity check failed"
+LOGIN_STATUS=$?
+if [ "$LOGIN_STATUS" -ne 0 ]; then
+    echo "integration-test: FAILED - websocket login sequence did not complete"
     echo "--- MUD output ---"
     cat "$LOG_FILE"
     echo "------------------"
@@ -298,7 +349,7 @@ if [ "$WEBSOCKET_STATUS" -ne 0 ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 7: let the MUD keep running and watch for crashes.
+# Step 6: let the MUD keep running and watch for crashes.
 # ---------------------------------------------------------------------------
 echo "integration-test: monitoring MUD for ${RUN_SECONDS}s..."
 elapsed=0
