@@ -39,6 +39,7 @@ Each proposition file has this structure:
   - `1` = kill **any one** listed target vnum.
   - `2` = acquire a target object vnum.
   - `3` = kill-count objective against a single target vnum (`kill_needed` required).
+  - `4` = cartography objective: explore every room in one target area (`target_vnum[0] = area_num`, static-only).
 - `num_targets`: number of valid entries expected from the target vnum line.
 - `kill_needed`: required kill count (used by type `3`; `0` for non-count objectives).
 - `min_level`, `max_level`: pseudo-level gating for acceptance.
