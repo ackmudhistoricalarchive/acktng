@@ -17,6 +17,11 @@
 #define PROP_TYPE_KILL_VARIETY  1   /* Kill 3-5 different mob types      */
 #define PROP_TYPE_COLLECT_ITEMS 2   /* Collect 2-4 items of right level  */
 #define PROP_TYPE_KILL_COUNT    3   /* Kill 5-15 of one mob type         */
+#define PROP_TYPE_CARTOGRAPHY   4   /* Explore every room in one area    */
+
+/* Cartography tracks rooms by vnum bitset (0..65535). */
+#define PROP_CART_ROOM_MAX_VNUM      65535
+#define PROP_CART_ROOM_BITSET_BYTES  ((PROP_CART_ROOM_MAX_VNUM + 8) / 8)
 
 /* Maximum number of distinct targets (largest type uses 5 slots) */
 #define PROP_MAX_TARGETS        5
@@ -34,6 +39,7 @@ void proposition_status      args((CHAR_DATA *ch));
 void proposition_complete    args((CHAR_DATA *ch, CHAR_DATA *postman));
 void proposition_kill_notify args((CHAR_DATA *ch, CHAR_DATA *victim));
 void proposition_obj_notify  args((CHAR_DATA *ch, OBJ_DATA  *obj));
+void proposition_room_notify args((CHAR_DATA *ch, ROOM_INDEX_DATA *room));
 void proposition_cancel      args((CHAR_DATA *ch, int slot));
 void clear_proposition       args((CHAR_DATA *ch));
 void proposition_load_static_templates args((void));

@@ -724,6 +724,8 @@ struct proposition_data
    int prop_reward_qp;                        /* static qp reward override    */
    int prop_reward_item_vnum;                 /* static item reward vnum      */
    int prop_reward_item_count;                /* static item reward quantity  */
+   int prop_cart_area_num;                    /* type 4: area_num to map      */
+   unsigned char prop_cart_room_seen[PROP_CART_ROOM_BITSET_BYTES];
 };
 
 struct pc_data

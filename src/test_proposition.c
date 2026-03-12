@@ -7,9 +7,12 @@
 #include "globals.h"
 
 time_t current_time;
+AREA_DATA *first_area;
+AREA_DATA *last_area;
 
 void proposition_obj_notify(CHAR_DATA *ch, OBJ_DATA *obj);
 void proposition_kill_notify(CHAR_DATA *ch, CHAR_DATA *victim);
+void proposition_room_notify(CHAR_DATA *ch, ROOM_INDEX_DATA *room);
 void clear_proposition(CHAR_DATA *ch);
 void proposition_cancel(CHAR_DATA *ch, int slot);
 void proposition_load_static_templates(void);
@@ -328,6 +331,60 @@ static void test_loads_static_propositions_with_messages_from_files(void)
     assert(max_level == 39);
 }
 
+static void test_cartography_progress_counts_unique_rooms_in_target_area(void)
+{
+    PC_DATA pc;
+    CHAR_DATA ch = make_char(&pc);
+    AREA_DATA area;
+    ROOM_INDEX_DATA room_a;
+    ROOM_INDEX_DATA room_b;
+    ROOM_INDEX_DATA room_other;
+    BUILD_DATA_LIST node_a;
+    BUILD_DATA_LIST node_b;
+
+    memset(&area, 0, sizeof(area));
+    memset(&room_a, 0, sizeof(room_a));
+    memset(&room_b, 0, sizeof(room_b));
+    memset(&room_other, 0, sizeof(room_other));
+    memset(&node_a, 0, sizeof(node_a));
+    memset(&node_b, 0, sizeof(node_b));
+
+    area.area_num = 77;
+    area.name = "Test Area";
+    node_a.data = &room_a;
+    node_b.data = &room_b;
+    node_a.next = &node_b;
+    area.first_area_room = &node_a;
+    area.last_area_room = &node_b;
+    first_area = &area;
+
+    room_a.vnum = 100;
+    room_b.vnum = 101;
+    room_other.vnum = 202;
+    room_a.area = &area;
+    room_b.area = &area;
+    room_other.area = NULL;
+
+    ch.pcdata->propositions[0].prop_type = PROP_TYPE_CARTOGRAPHY;
+    ch.pcdata->propositions[0].prop_cart_area_num = 77;
+    ch.pcdata->propositions[0].prop_kill_needed = 2;
+    ch.pcdata->propositions[0].prop_kill_count = 0;
+
+    reset_counters();
+    proposition_room_notify(&ch, &room_a);
+    proposition_room_notify(&ch, &room_a);
+    proposition_room_notify(&ch, &room_other);
+
+    assert(ch.pcdata->propositions[0].prop_kill_count == 1);
+    assert(ch.pcdata->propositions[0].prop_completed == FALSE);
+    assert(save_calls == 1);
+
+    proposition_room_notify(&ch, &room_b);
+    assert(ch.pcdata->propositions[0].prop_kill_count == 2);
+    assert(ch.pcdata->propositions[0].prop_completed == TRUE);
+    assert(save_calls == 2);
+}
+
 int main(void)
 {
     test_extracts_and_saves_when_target_matches();
@@ -340,6 +397,7 @@ int main(void)
     test_cancel_dynamic_sets_cooldown_and_clears_slot();
     test_cancel_static_does_not_set_cooldown();
     test_loads_static_propositions_with_messages_from_files();
+    test_cartography_progress_counts_unique_rooms_in_target_area();
 
     puts("test_proposition: all tests passed");
     return 0;

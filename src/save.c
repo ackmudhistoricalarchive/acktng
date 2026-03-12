@@ -429,6 +429,18 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp)
             fprintf(fp, "PropRewardItem%d %d %d\n", i,
                     prop->prop_reward_item_vnum,
                     prop->prop_reward_item_count);
+            fprintf(fp, "PropCartArea%d %d\n", i, prop->prop_cart_area_num);
+            if (prop->prop_type == PROP_TYPE_CARTOGRAPHY)
+            {
+               int rvnum;
+               for (rvnum = 0; rvnum <= PROP_CART_ROOM_MAX_VNUM; rvnum++)
+               {
+                  int byte = rvnum / 8;
+                  int bit = rvnum % 8;
+                  if ((prop->prop_cart_room_seen[byte] & (1u << bit)) != 0)
+                     fprintf(fp, "PropCartVisit%d %d\n", i, rvnum);
+               }
+            }
          }
          fprintf(fp, "PropStaticDoneCap %d\n", PROP_MAX_STATIC_PROPOSITIONS);
          for (i = 0; i < PROP_MAX_STATIC_PROPOSITIONS; i++)
@@ -1404,6 +1416,24 @@ void fread_char(CHAR_DATA *ch, FILE *fp)
             {
                ch->pcdata->propositions[prop_i].prop_reward_item_vnum = fread_number(fp);
                ch->pcdata->propositions[prop_i].prop_reward_item_count = fread_number(fp);
+               fMatch = TRUE;
+               break;
+            }
+            if (sscanf(word, "PropCartArea%d", &prop_i) == 1 && prop_i >= 0 && prop_i < PROP_MAX_PROPOSITIONS)
+            {
+               ch->pcdata->propositions[prop_i].prop_cart_area_num = fread_number(fp);
+               fMatch = TRUE;
+               break;
+            }
+            if (sscanf(word, "PropCartVisit%d", &prop_i) == 1 && prop_i >= 0 && prop_i < PROP_MAX_PROPOSITIONS)
+            {
+               int rvnum = fread_number(fp);
+               if (rvnum >= 0 && rvnum <= PROP_CART_ROOM_MAX_VNUM)
+               {
+                  int byte = rvnum / 8;
+                  int bit = rvnum % 8;
+                  ch->pcdata->propositions[prop_i].prop_cart_room_seen[byte] |= (1u << bit);
+               }
                fMatch = TRUE;
                break;
             }

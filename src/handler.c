@@ -1750,6 +1750,8 @@ void char_to_room(CHAR_DATA *ch, ROOM_INDEX_DATA *pRoomIndex)
       }
    }
 
+   proposition_room_notify(ch, ch->in_room);
+
    return;
 }
 

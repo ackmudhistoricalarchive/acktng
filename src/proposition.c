@@ -265,6 +265,58 @@ int proposition_unit_static_max_level(int static_id)
 
 static bool static_prop_prerequisite_met(CHAR_DATA *ch, const STATIC_PROP_TEMPLATE *tpl);
 
+static AREA_DATA *find_area_by_num(int area_num)
+{
+    AREA_DATA *area;
+
+    for (area = first_area; area != NULL; area = area->next)
+        if (area->area_num == area_num)
+            return area;
+
+    return NULL;
+}
+
+static int area_room_count(AREA_DATA *area)
+{
+    BUILD_DATA_LIST *node;
+    int count = 0;
+
+    if (area == NULL)
+        return 0;
+
+    for (node = area->first_area_room; node != NULL; node = node->next)
+        if (node->data != NULL)
+            count++;
+
+    return count;
+}
+
+static bool prop_cart_room_seen(PROPOSITION_DATA *prop, int room_vnum)
+{
+    int byte;
+    int bit;
+
+    if (room_vnum < 0 || room_vnum > PROP_CART_ROOM_MAX_VNUM)
+        return TRUE;
+
+    byte = room_vnum / 8;
+    bit = room_vnum % 8;
+    return (prop->prop_cart_room_seen[byte] & (1u << bit)) != 0;
+}
+
+static void prop_cart_set_room_seen(PROPOSITION_DATA *prop, int room_vnum)
+{
+    int byte;
+    int bit;
+
+    if (room_vnum < 0 || room_vnum > PROP_CART_ROOM_MAX_VNUM)
+        return;
+
+    byte = room_vnum / 8;
+    bit = room_vnum % 8;
+    prop->prop_cart_room_seen[byte] |= (1u << bit);
+}
+
 static PROPOSITION_DATA *get_prop_slot(CHAR_DATA *ch, int slot)
 {
     if (IS_NPC(ch) || ch->pcdata == NULL)
@@ -441,6 +493,8 @@ static void clear_proposition_slot(CHAR_DATA *ch, int slot)
     prop->prop_reward_qp = 0;
     prop->prop_reward_item_vnum = 0;
     prop->prop_reward_item_count = 0;
+    prop->prop_cart_area_num = 0;
+    memset(prop->prop_cart_room_seen, 0, sizeof(prop->prop_cart_room_seen));
 
     for (i = 0; i < PROP_MAX_TARGETS; i++)
     {
@@ -606,6 +660,35 @@ static void proposition_accept_static(CHAR_DATA *ch, CHAR_DATA *postman, int lis
     prop->prop_reward_qp = tpl->reward_qp;
     prop->prop_reward_item_vnum = tpl->reward_item_vnum;
     prop->prop_reward_item_count = tpl->reward_item_count;
+
+    if (tpl->type == PROP_TYPE_CARTOGRAPHY)
+    {
+        AREA_DATA *area;
+        int total_rooms;
+
+        if (tpl->num_targets < 1)
+        {
+            send_to_char("That static proposition is misconfigured (missing area target).\n\r", ch);
+            clear_proposition_slot(ch, slot);
+            return;
+        }
+
+        area = find_area_by_num(tpl->target_vnum[0]);
+        total_rooms = area_room_count(area);
+        if (area == NULL || total_rooms <= 0)
+        {
+            send_to_char("That static proposition is misconfigured (invalid or empty area target).\n\r", ch);
+            clear_proposition_slot(ch, slot);
+            return;
+        }
+
+        prop->prop_num_targets = 1;
+        prop->prop_target_vnum[0] = tpl->target_vnum[0];
+        prop->prop_target_done[0] = FALSE;
+        prop->prop_cart_area_num = tpl->target_vnum[0];
+        prop->prop_kill_needed = total_rooms;
+        prop->prop_kill_count = 0;
+    }
 
     for (i = 0; i < tpl->num_targets; i++)
     {
@@ -897,10 +980,63 @@ void proposition_status(CHAR_DATA *ch)
             send_to_char(buf, ch);
             break;
         }
+
+        case PROP_TYPE_CARTOGRAPHY:
+        {
+            AREA_DATA *area = find_area_by_num(prop->prop_cart_area_num);
+            sprintf(buf, "@@WTask:@@N Explore every room in area %s@@N.\n\r",
+                    area != NULL ? area->name : "(unknown)");
+            send_to_char(buf, ch);
+            sprintf(buf, "  Progress: @@Y%d@@N / @@Y%d@@N rooms explored\n\r",
+                    prop->prop_kill_count,
+                    prop->prop_kill_needed);
+            send_to_char(buf, ch);
+            break;
+        }
         }
 
         show_reward_preview(ch, prop);
         send_to_char("\n\r", ch);
+    }
+}
+
+void proposition_room_notify(CHAR_DATA *ch, ROOM_INDEX_DATA *room)
+{
+    int slot;
+
+    if (IS_NPC(ch) || ch->pcdata == NULL || room == NULL || room->area == NULL)
+        return;
+
+    for (slot = 0; slot < PROP_MAX_PROPOSITIONS; slot++)
+    {
+        PROPOSITION_DATA *prop = &ch->pcdata->propositions[slot];
+
+        if (prop->prop_type != PROP_TYPE_CARTOGRAPHY || prop->prop_completed)
+            continue;
+        if (prop->prop_cart_area_num != room->area->area_num)
+            continue;
+        if (prop_cart_room_seen(prop, room->vnum))
+            continue;
+
+        prop_cart_set_room_seen(prop, room->vnum);
+        prop->prop_kill_count++;
+
+        if (prop->prop_kill_count >= prop->prop_kill_needed)
+        {
+            prop->prop_completed = TRUE;
+            send_to_char("\n\r@@G*** Proposition complete! Visit any postman to claim your reward. ***@@N\n\r\n\r", ch);
+        }
+        else
+        {
+            char buf[MAX_STRING_LENGTH];
+            sprintf(buf, "@@GProposition slot %d progress:@@N explored %d/%d rooms.\n\r",
+                    slot + 1,
+                    prop->prop_kill_count,
+                    prop->prop_kill_needed);
+            send_to_char(buf, ch);
+        }
+
+        do_save(ch, "");
     }
 }
 
