@@ -329,6 +329,8 @@ void move_char(CHAR_DATA *ch, int door)
    }
    char_from_room(ch);
    char_to_room(ch, to_room);
+   if (!IS_NPC(ch))
+      quest_room_notify(ch, ch->in_room);
    /*
     * if ( ( !IS_AFFECTED(ch, AFF_SNEAK) && !item_has_apply( ch, ITEM_APPLY_SNEAK ) )
     * && ( IS_NPC(ch) || !IS_SET(ch->act, PLR_WIZINVIS) ) )

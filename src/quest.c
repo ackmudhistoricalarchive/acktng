@@ -371,6 +371,7 @@ int quest_unit_canonical_postmaster_vnum(int vnum)
 
 static bool static_quest_prerequisite_met(CHAR_DATA *ch, const STATIC_PROP_TEMPLATE *tpl);
 static bool static_reward_item_is_valid(const STATIC_PROP_TEMPLATE *tpl);
+static bool quest_cartography_record_room_visit(CHAR_DATA *ch, QUEST_DATA *prop, ROOM_INDEX_DATA *room, int slot);
 
 static QUEST_DATA *get_prop_slot(CHAR_DATA *ch, int slot)
 {
@@ -558,6 +559,68 @@ static bool check_all_done(QUEST_DATA *prop)
     return TRUE;
 }
 
+static int count_area_rooms(AREA_DATA *area)
+{
+    BUILD_DATA_LIST *node;
+    int count = 0;
+
+    if (area == NULL)
+        return 0;
+
+    for (node = area->first_area_room; node != NULL; node = node->next)
+    {
+        ROOM_INDEX_DATA *room = (ROOM_INDEX_DATA *)node->data;
+
+        if (room == NULL || room->area != area)
+            continue;
+
+        count++;
+    }
+
+    return count;
+}
+
+static bool quest_cartography_record_room_visit(CHAR_DATA *ch, QUEST_DATA *prop, ROOM_INDEX_DATA *room, int slot)
+{
+    int i;
+    char buf[MAX_STRING_LENGTH];
+
+    if (ch == NULL || prop == NULL || room == NULL)
+        return FALSE;
+    if (prop->quest_type != QUEST_TYPE_CARTOGRAPHY || prop->quest_completed)
+        return FALSE;
+    if (prop->quest_cartography_area_vnum <= 0 || room->area == NULL)
+        return FALSE;
+    if (room->area->area_num != prop->quest_cartography_area_vnum)
+        return FALSE;
+
+    for (i = 0; i < prop->quest_cartography_room_count; i++)
+        if (prop->quest_cartography_room_vnum[i] == room->vnum)
+            return FALSE;
+
+    if (prop->quest_cartography_room_count < QUEST_MAX_CARTOGRAPHY_ROOMS)
+        prop->quest_cartography_room_vnum[prop->quest_cartography_room_count++] = room->vnum;
+
+    if (prop->quest_cartography_seen_rooms < prop->quest_cartography_total_rooms)
+        prop->quest_cartography_seen_rooms++;
+
+    sprintf(buf, "@@GQuest slot %d progress:@@N explored room %d/%d in this area.\n\r",
+            slot + 1,
+            prop->quest_cartography_seen_rooms,
+            prop->quest_cartography_total_rooms);
+    send_to_char(buf, ch);
+
+    if (prop->quest_cartography_total_rooms > 0 &&
+        prop->quest_cartography_seen_rooms >= prop->quest_cartography_total_rooms)
+    {
+        prop->quest_completed = TRUE;
+        send_to_char("\n\r@@G*** Quest complete! Visit any postman to claim your reward. ***@@N\n\r\n\r", ch);
+    }
+
+    do_save(ch, "");
+    return TRUE;
+}
+
 static void clear_quest_slot(CHAR_DATA *ch, int slot)
 {
     int i;
@@ -577,12 +640,19 @@ static void clear_quest_slot(CHAR_DATA *ch, int slot)
     prop->quest_reward_item_vnum = 0;
     prop->quest_reward_item_count = 0;
     prop->quest_static_offerer_vnum = 0;
+    prop->quest_cartography_total_rooms = 0;
+    prop->quest_cartography_seen_rooms = 0;
+    prop->quest_cartography_area_vnum = 0;
+    prop->quest_cartography_room_count = 0;
 
     for (i = 0; i < QUEST_MAX_TARGETS; i++)
     {
         prop->quest_target_vnum[i] = 0;
         prop->quest_target_done[i] = FALSE;
     }
+
+    for (i = 0; i < QUEST_MAX_CARTOGRAPHY_ROOMS; i++)
+        prop->quest_cartography_room_vnum[i] = 0;
 }
 
 void clear_quest(CHAR_DATA *ch)
@@ -787,6 +857,25 @@ static void quest_accept_static(CHAR_DATA *ch, int list_number)
 
     clear_quest_slot(ch, slot);
     prop = &ch->pcdata->quests[slot];
+
+    if (tpl->type == QUEST_TYPE_CARTOGRAPHY)
+    {
+        ROOM_INDEX_DATA *anchor_room;
+
+        if (tpl->num_targets < 1)
+        {
+            send_to_char("That cartography quest is misconfigured (missing area anchor room).\n\r", ch);
+            return;
+        }
+
+        anchor_room = get_room_index(tpl->target_vnum[0]);
+        if (anchor_room == NULL || anchor_room->area == NULL)
+        {
+            send_to_char("That cartography quest is misconfigured (invalid area anchor room).\n\r", ch);
+            return;
+        }
+    }
+
     prop->quest_type = tpl->type;
     prop->quest_static_offerer_vnum = canonical_postmaster_vnum(tpl->offerer_vnum);
     prop->quest_num_targets = tpl->num_targets;
@@ -801,6 +890,27 @@ static void quest_accept_static(CHAR_DATA *ch, int list_number)
     {
         prop->quest_target_vnum[i] = tpl->target_vnum[i];
         prop->quest_target_done[i] = FALSE;
+    }
+
+    if (tpl->type == QUEST_TYPE_CARTOGRAPHY)
+    {
+        ROOM_INDEX_DATA *anchor_room = get_room_index(tpl->target_vnum[0]);
+        AREA_DATA *area = anchor_room != NULL ? anchor_room->area : NULL;
+
+        prop->quest_num_targets = 0;
+        prop->quest_cartography_area_vnum = area != NULL ? area->area_num : 0;
+        prop->quest_cartography_total_rooms = count_area_rooms(area);
+        prop->quest_cartography_seen_rooms = 0;
+        prop->quest_cartography_room_count = 0;
+
+        if (prop->quest_cartography_total_rooms <= 0)
+        {
+            clear_quest_slot(ch, slot);
+            send_to_char("That cartography quest cannot be accepted right now (empty area).\n\r", ch);
+            return;
+        }
+
+        quest_cartography_record_room_visit(ch, prop, ch->in_room, slot);
     }
 
     sprintf(buf, "@@GYou accepted static quest [%d] in slot %d:@@N %s\n\r",
@@ -1087,6 +1197,14 @@ void quest_status(CHAR_DATA *ch)
             send_to_char(buf, ch);
             break;
         }
+
+        case QUEST_TYPE_CARTOGRAPHY:
+            send_to_char("@@WTask:@@N Explore every room in the designated area.\n\r", ch);
+            sprintf(buf, "  Progress: @@Y%d@@N / @@Y%d@@N rooms explored\n\r",
+                    prop->quest_cartography_seen_rooms,
+                    prop->quest_cartography_total_rooms);
+            send_to_char(buf, ch);
+            break;
         }
 
         show_reward_preview(ch, prop);
@@ -1296,6 +1414,25 @@ void quest_obj_notify(CHAR_DATA *ch, OBJ_DATA *obj)
                 return;
             }
         }
+    }
+}
+
+
+void quest_room_notify(CHAR_DATA *ch, ROOM_INDEX_DATA *room)
+{
+    int slot;
+
+    if (IS_NPC(ch) || ch->pcdata == NULL || room == NULL)
+        return;
+
+    for (slot = 0; slot < QUEST_MAX_QUESTS; slot++)
+    {
+        QUEST_DATA *prop = &ch->pcdata->quests[slot];
+
+        if (prop->quest_type != QUEST_TYPE_CARTOGRAPHY || prop->quest_completed)
+            continue;
+
+        quest_cartography_record_room_visit(ch, prop, room, slot);
     }
 }
 

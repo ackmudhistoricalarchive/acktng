@@ -428,6 +428,12 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp)
                     prop->quest_reward_item_vnum,
                     prop->quest_reward_item_count);
             fprintf(fp, "PropStaticOfferer%d %d\n", i, prop->quest_static_offerer_vnum);
+            fprintf(fp, "PropCartArea%d %d\n", i, prop->quest_cartography_area_vnum);
+            fprintf(fp, "PropCartTotal%d %d\n", i, prop->quest_cartography_total_rooms);
+            fprintf(fp, "PropCartSeen%d %d\n", i, prop->quest_cartography_seen_rooms);
+            fprintf(fp, "PropCartCount%d %d\n", i, prop->quest_cartography_room_count);
+            for (k = 0; k < prop->quest_cartography_room_count && k < QUEST_MAX_CARTOGRAPHY_ROOMS; k++)
+               fprintf(fp, "PropCartRoom%d %d\n", i, prop->quest_cartography_room_vnum[k]);
          }
          fprintf(fp, "PropStaticDoneCap %d\n", QUEST_MAX_STATIC_QUESTS);
          for (i = 0; i < QUEST_MAX_STATIC_QUESTS; i++)
@@ -1357,6 +1363,49 @@ void fread_char(CHAR_DATA *ch, FILE *fp)
             if (sscanf(word, "PropStaticOfferer%d", &quest_i) == 1 && quest_i >= 0 && quest_i < QUEST_MAX_QUESTS)
             {
                ch->pcdata->quests[quest_i].quest_static_offerer_vnum = fread_number(fp);
+               fMatch = TRUE;
+               break;
+            }
+            if (sscanf(word, "PropCartArea%d", &quest_i) == 1 && quest_i >= 0 && quest_i < QUEST_MAX_QUESTS)
+            {
+               ch->pcdata->quests[quest_i].quest_cartography_area_vnum = fread_number(fp);
+               fMatch = TRUE;
+               break;
+            }
+            if (sscanf(word, "PropCartTotal%d", &quest_i) == 1 && quest_i >= 0 && quest_i < QUEST_MAX_QUESTS)
+            {
+               ch->pcdata->quests[quest_i].quest_cartography_total_rooms = fread_number(fp);
+               fMatch = TRUE;
+               break;
+            }
+            if (sscanf(word, "PropCartSeen%d", &quest_i) == 1 && quest_i >= 0 && quest_i < QUEST_MAX_QUESTS)
+            {
+               ch->pcdata->quests[quest_i].quest_cartography_seen_rooms = fread_number(fp);
+               fMatch = TRUE;
+               break;
+            }
+            if (sscanf(word, "PropCartCount%d", &quest_i) == 1 && quest_i >= 0 && quest_i < QUEST_MAX_QUESTS)
+            {
+               int loaded_count = fread_number(fp);
+               if (loaded_count < 0)
+                  loaded_count = 0;
+               if (loaded_count > QUEST_MAX_CARTOGRAPHY_ROOMS)
+                  loaded_count = QUEST_MAX_CARTOGRAPHY_ROOMS;
+               ch->pcdata->quests[quest_i].quest_cartography_room_count = loaded_count;
+               fMatch = TRUE;
+               break;
+            }
+            if (sscanf(word, "PropCartRoom%d", &quest_i) == 1 && quest_i >= 0 && quest_i < QUEST_MAX_QUESTS)
+            {
+               QUEST_DATA *prop = &ch->pcdata->quests[quest_i];
+               int room_vnum = fread_number(fp);
+               int slot = 0;
+               while (slot < prop->quest_cartography_room_count &&
+                      slot < QUEST_MAX_CARTOGRAPHY_ROOMS &&
+                      prop->quest_cartography_room_vnum[slot] != 0)
+                  slot++;
+               if (slot < prop->quest_cartography_room_count && slot < QUEST_MAX_CARTOGRAPHY_ROOMS)
+                  prop->quest_cartography_room_vnum[slot] = room_vnum;
                fMatch = TRUE;
                break;
             }

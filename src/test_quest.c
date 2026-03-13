@@ -10,6 +10,7 @@ time_t current_time;
 
 void quest_obj_notify(CHAR_DATA *ch, OBJ_DATA *obj);
 void quest_kill_notify(CHAR_DATA *ch, CHAR_DATA *victim);
+void quest_room_notify(CHAR_DATA *ch, ROOM_INDEX_DATA *room);
 void clear_quest(CHAR_DATA *ch);
 void quest_cancel(CHAR_DATA *ch, int slot);
 void quest_load_static_templates(void);
@@ -241,6 +242,43 @@ static void test_kill_notify_ignores_non_matching_target(void)
     assert(save_calls == 0);
 }
 
+
+
+static void test_cartography_progress_requires_new_room_in_target_area(void)
+{
+    PC_DATA pc;
+    AREA_DATA area;
+    ROOM_INDEX_DATA room_one;
+    ROOM_INDEX_DATA room_two;
+    CHAR_DATA ch = make_char(&pc);
+
+    memset(&area, 0, sizeof(area));
+    memset(&room_one, 0, sizeof(room_one));
+    memset(&room_two, 0, sizeof(room_two));
+
+    area.area_num = 77;
+    room_one.vnum = 7701;
+    room_one.area = &area;
+    room_two.vnum = 7702;
+    room_two.area = &area;
+
+    ch.pcdata->quests[0].quest_type = QUEST_TYPE_CARTOGRAPHY;
+    ch.pcdata->quests[0].quest_cartography_area_vnum = 77;
+    ch.pcdata->quests[0].quest_cartography_total_rooms = 2;
+    ch.pcdata->quests[0].quest_cartography_seen_rooms = 0;
+    ch.pcdata->quests[0].quest_cartography_room_count = 0;
+
+    reset_counters();
+    quest_room_notify(&ch, &room_one);
+    quest_room_notify(&ch, &room_one);
+    quest_room_notify(&ch, &room_two);
+
+    assert(ch.pcdata->quests[0].quest_cartography_seen_rooms == 2);
+    assert(ch.pcdata->quests[0].quest_cartography_room_count == 2);
+    assert(ch.pcdata->quests[0].quest_completed == TRUE);
+    assert(save_calls == 2);
+}
+
 static void test_clear_quest_resets_all_slots(void)
 {
     PC_DATA pc;
@@ -254,6 +292,8 @@ static void test_clear_quest_resets_all_slots(void)
     ch.pcdata->quests[1].quest_target_vnum[0] = 88;
     ch.pcdata->quests[2].quest_type = QUEST_TYPE_KILL_VARIETY;
     ch.pcdata->quests[2].quest_target_done[0] = TRUE;
+    ch.pcdata->quests[2].quest_cartography_room_count = 1;
+    ch.pcdata->quests[2].quest_cartography_room_vnum[0] = 9999;
 
     clear_quest(&ch);
 
@@ -264,6 +304,7 @@ static void test_clear_quest_resets_all_slots(void)
         assert(ch.pcdata->quests[i].quest_completed == FALSE);
         assert(ch.pcdata->quests[i].quest_static_id == -1);
         assert(ch.pcdata->quests[i].quest_reward_item_vnum == 0);
+        assert(ch.pcdata->quests[i].quest_cartography_room_count == 0);
     }
 }
 
@@ -367,6 +408,7 @@ int main(void)
     test_collect_progress_works_for_nonzero_slot();
     test_kill_progress_works_for_nonzero_slot();
     test_kill_notify_ignores_non_matching_target();
+    test_cartography_progress_requires_new_room_in_target_area();
     test_clear_quest_resets_all_slots();
     test_cancel_dynamic_sets_cooldown_and_clears_slot();
     test_cancel_static_does_not_set_cooldown();

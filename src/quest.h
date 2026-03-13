@@ -17,9 +17,11 @@
 #define QUEST_TYPE_KILL_VARIETY  1   /* Kill several different mob types */
 #define QUEST_TYPE_COLLECT_ITEMS 2   /* Collect several target items */
 #define QUEST_TYPE_KILL_COUNT    3   /* Kill N of one mob type */
+#define QUEST_TYPE_CARTOGRAPHY   4   /* Explore every room in one area */
 
 /* Maximum number of distinct targets (largest type uses 5 slots) */
 #define QUEST_MAX_TARGETS        5
+#define QUEST_MAX_CARTOGRAPHY_ROOMS 512
 
 /* Maximum simultaneous quests on a player */
 #define QUEST_MAX_QUESTS         3
@@ -31,6 +33,7 @@ void quest_status         args((CHAR_DATA *ch));
 void quest_complete       args((CHAR_DATA *ch, CHAR_DATA *postman));
 void quest_kill_notify    args((CHAR_DATA *ch, CHAR_DATA *victim));
 void quest_obj_notify     args((CHAR_DATA *ch, OBJ_DATA *obj));
+void quest_room_notify    args((CHAR_DATA *ch, ROOM_INDEX_DATA *room));
 void quest_cancel         args((CHAR_DATA *ch, int slot));
 void clear_quest          args((CHAR_DATA *ch));
 void quest_load_static_templates args((void));
