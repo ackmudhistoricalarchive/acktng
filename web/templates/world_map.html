@@ -1,0 +1,250 @@
+<h1>World Map</h1>
+<p>Geographic overview of the ACK!TNG world: cities, wilderness regions, desert
+corridor, forest zones, and dungeon complexes. Scroll to zoom, drag to pan.
+Use the buttons or keyboard <kbd>+</kbd>&nbsp;/&nbsp;<kbd>−</kbd> to adjust zoom.</p>
+
+<style>
+.map-section{margin:1.4rem 0 2rem;}
+.map-section h2{margin:0 0 .5rem;font-size:1.05rem;color:#a8c8ff;}
+.map-section p.map-desc{margin:0 0 .6rem;font-size:.88rem;color:var(--muted);}
+.map-viewer{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#03060c;touch-action:none;user-select:none;}
+.map-viewer.large{height:560px;}
+.map-viewer.medium{height:480px;}
+.map-viewer.small{height:auto;max-height:220px;}
+.map-canvas{width:100%;height:100%;position:relative;overflow:hidden;cursor:grab;}
+.map-canvas.grabbing{cursor:grabbing;}
+.map-canvas img{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform;image-rendering:crisp-edges;max-width:none;}
+.map-viewer.small .map-canvas{overflow:auto;cursor:default;}
+.map-viewer.small .map-canvas img{position:static;transform:none!important;max-width:100%;}
+.map-controls{display:flex;align-items:center;gap:.45rem;padding:.45rem .6rem;background:rgba(5,8,15,.85);border-bottom:1px solid var(--line);backdrop-filter:blur(4px);}
+.map-controls button{background:rgba(121,183,255,.15);border:1px solid var(--line);color:var(--text);padding:.3rem .65rem;border-radius:8px;cursor:pointer;font-size:.85rem;font-weight:600;line-height:1;}
+.map-controls button:hover{background:rgba(121,183,255,.28);}
+.zoom-label{color:var(--muted);font-size:.8rem;margin-left:.2rem;min-width:3.5rem;}
+.map-hint{color:var(--muted);font-size:.78rem;margin-left:auto;}
+</style>
+
+<!-- ── Overview Map ─────────────────────────────────────────────────────── -->
+<div class="map-section">
+  <h2>World Overview</h2>
+  <p class="map-desc">All surface zones from Kowloon in the north to Mafdet on the coast,
+  centred on Midgaard. Western forests, eastern desert corridor, and the oasis-pyramid spine.</p>
+  <div class="map-viewer large" id="viewer-overview">
+    <div class="map-controls">
+      <button onclick="viewers.overview.zoomIn()">＋</button>
+      <button onclick="viewers.overview.zoomOut()">－</button>
+      <button onclick="viewers.overview.fit()">Fit</button>
+      <button onclick="viewers.overview.reset()">1:1</button>
+      <span class="zoom-label" id="zlabel-overview">—</span>
+      <span class="map-hint">scroll · drag · pinch</span>
+    </div>
+    <div class="map-canvas" id="canvas-overview"
+         tabindex="0"
+         aria-label="World overview map — scroll to zoom, drag to pan">
+      <img src="/img/world_map_overview.png"
+           alt="World overview map"
+           draggable="false"
+           onload="viewers.overview.fit()">
+    </div>
+  </div>
+</div>
+
+<!-- ── Oasis-Pyramid Corridor ─────────────────────────────────────────── -->
+<div class="map-section">
+  <h2>Oasis-Pyramid Corridor</h2>
+  <p class="map-desc">The civilizational spine running south from the Eastern Desert through the three
+  oases and three pyramids to Scorching Sands, Saltglass Reach, and the maritime port of Mafdet.</p>
+  <div class="map-viewer medium" id="viewer-corridor">
+    <div class="map-controls">
+      <button onclick="viewers.corridor.zoomIn()">＋</button>
+      <button onclick="viewers.corridor.zoomOut()">－</button>
+      <button onclick="viewers.corridor.fit()">Fit</button>
+      <button onclick="viewers.corridor.reset()">1:1</button>
+      <span class="zoom-label" id="zlabel-corridor">—</span>
+      <span class="map-hint">scroll · drag · pinch</span>
+    </div>
+    <div class="map-canvas" id="canvas-corridor"
+         tabindex="0"
+         aria-label="Oasis-pyramid corridor map">
+      <img src="/img/world_map_corridor.png"
+           alt="Oasis-pyramid corridor map"
+           draggable="false"
+           onload="viewers.corridor.fit()">
+    </div>
+  </div>
+</div>
+
+<!-- ── Five-City Network ──────────────────────────────────────────────── -->
+<div class="map-section">
+  <h2>Five-City Network</h2>
+  <p class="map-desc">The co-dependent chain linking Kiess, Midgaard, Kowloon, Rakuen, and Mafdet.
+  The chain only functions when all five are present.</p>
+  <div class="map-viewer small" id="viewer-five-cities">
+    <div class="map-canvas" id="canvas-five-cities">
+      <img src="/img/world_map_five_cities.png"
+           alt="Five-city network diagram"
+           draggable="false">
+    </div>
+  </div>
+</div>
+
+<!-- ── Desert-to-Sea Route ───────────────────────────────────────────── -->
+<div class="map-section">
+  <h2>Desert-to-Sea Route</h2>
+  <p class="map-desc">The southern corridor from the Great Pyramid through Scorching Sands and
+  Saltglass Reach to the maritime terminus at Mafdet.</p>
+  <div class="map-viewer small" id="viewer-desert-route">
+    <div class="map-canvas" id="canvas-desert-route">
+      <img src="/img/world_map_desert_route.png"
+           alt="Desert to sea route diagram"
+           draggable="false">
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const ZOOM_MIN = 0.2, ZOOM_MAX = 6, ZOOM_STEP = 1.18;
+
+  function MapViewer(canvasId, labelId) {
+    const canvas = document.getElementById(canvasId);
+    const img    = canvas.querySelector('img');
+    const label  = labelId ? document.getElementById(labelId) : null;
+
+    let scale = 1, ox = 0, oy = 0;
+    let drag  = false, lx = 0, ly = 0;
+    let pinchDist0 = null, pinchScale0 = 1, pinchOx0 = 0, pinchOy0 = 0;
+
+    /* ── rendering ── */
+    function apply() {
+      img.style.transform = `translate(${ox}px,${oy}px) scale(${scale})`;
+      if (label) label.textContent = Math.round(scale * 100) + '%';
+    }
+
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+    /* ── public API ── */
+    function zoomAt(cx, cy, factor) {
+      const ns = clamp(scale * factor, ZOOM_MIN, ZOOM_MAX);
+      const r  = ns / scale;
+      ox = cx - r * (cx - ox);
+      oy = cy - r * (cy - oy);
+      scale = ns;
+      apply();
+    }
+
+    function fit() {
+      if (!img.naturalWidth) return;   // image not loaded yet
+      const rw = canvas.clientWidth  / img.naturalWidth;
+      const rh = canvas.clientHeight / img.naturalHeight;
+      scale = clamp(Math.min(rw, rh), ZOOM_MIN, ZOOM_MAX);
+      ox = (canvas.clientWidth  - img.naturalWidth  * scale) / 2;
+      oy = (canvas.clientHeight - img.naturalHeight * scale) / 2;
+      apply();
+    }
+
+    function reset() { scale = 1; ox = 0; oy = 0; apply(); }
+    function zoomIn()  { zoomAt(canvas.clientWidth/2, canvas.clientHeight/2, ZOOM_STEP); }
+    function zoomOut() { zoomAt(canvas.clientWidth/2, canvas.clientHeight/2, 1/ZOOM_STEP); }
+
+    /* ── mouse wheel ── */
+    canvas.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      zoomAt(e.clientX - rect.left, e.clientY - rect.top,
+             e.deltaY < 0 ? ZOOM_STEP : 1 / ZOOM_STEP);
+    }, { passive: false });
+
+    /* ── mouse drag ── */
+    canvas.addEventListener('mousedown', function (e) {
+      if (e.button !== 0) return;
+      drag = true; lx = e.clientX; ly = e.clientY;
+      canvas.classList.add('grabbing');
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', function (e) {
+      if (!drag) return;
+      ox += e.clientX - lx; oy += e.clientY - ly;
+      lx = e.clientX; ly = e.clientY;
+      apply();
+    });
+    window.addEventListener('mouseup', function () {
+      drag = false;
+      canvas.classList.remove('grabbing');
+    });
+
+    /* ── double-click to fit ── */
+    canvas.addEventListener('dblclick', fit);
+
+    /* ── touch ── */
+    function touchDist(t) {
+      const dx = t[0].clientX - t[1].clientX;
+      const dy = t[0].clientY - t[1].clientY;
+      return Math.hypot(dx, dy);
+    }
+    function touchMid(t, rect) {
+      return {
+        x: ((t[0].clientX + t[1].clientX) / 2) - rect.left,
+        y: ((t[0].clientY + t[1].clientY) / 2) - rect.top,
+      };
+    }
+
+    canvas.addEventListener('touchstart', function (e) {
+      if (e.touches.length === 1) {
+        drag = true;
+        lx = e.touches[0].clientX; ly = e.touches[0].clientY;
+      } else if (e.touches.length === 2) {
+        drag = false;
+        pinchDist0  = touchDist(e.touches);
+        pinchScale0 = scale;
+        const rect  = canvas.getBoundingClientRect();
+        const mid   = touchMid(e.touches, rect);
+        pinchOx0    = ox - mid.x;
+        pinchOy0    = oy - mid.y;
+      }
+      e.preventDefault();
+    }, { passive: false });
+
+    canvas.addEventListener('touchmove', function (e) {
+      e.preventDefault();
+      if (e.touches.length === 1 && drag) {
+        ox += e.touches[0].clientX - lx;
+        oy += e.touches[0].clientY - ly;
+        lx  = e.touches[0].clientX; ly = e.touches[0].clientY;
+        apply();
+      } else if (e.touches.length === 2 && pinchDist0 !== null) {
+        const d    = touchDist(e.touches);
+        const ns   = clamp(pinchScale0 * (d / pinchDist0), ZOOM_MIN, ZOOM_MAX);
+        const rect = canvas.getBoundingClientRect();
+        const mid  = touchMid(e.touches, rect);
+        scale = ns;
+        ox    = mid.x + pinchOx0 * (ns / pinchScale0);
+        oy    = mid.y + pinchOy0 * (ns / pinchScale0);
+        apply();
+      }
+    }, { passive: false });
+
+    canvas.addEventListener('touchend', function (e) {
+      if (e.touches.length < 2) pinchDist0 = null;
+      if (e.touches.length === 0) drag = false;
+    });
+
+    /* ── keyboard ── */
+    canvas.addEventListener('keydown', function (e) {
+      if (e.key === '+' || e.key === '=') { zoomIn();  e.preventDefault(); }
+      if (e.key === '-' || e.key === '_') { zoomOut(); e.preventDefault(); }
+      if (e.key === '0')                  { fit();     e.preventDefault(); }
+    });
+
+    return { fit, reset, zoomIn, zoomOut };
+  }
+
+  /* Instantiate viewers for the two interactive panels. Small panels use
+     plain scroll/overflow and don't need a JS viewer. */
+  window.viewers = {
+    overview: MapViewer('canvas-overview', 'zlabel-overview'),
+    corridor: MapViewer('canvas-corridor', 'zlabel-corridor'),
+  };
+}());
+</script>

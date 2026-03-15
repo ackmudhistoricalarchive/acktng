@@ -69,6 +69,10 @@ class WhoRequestHandler(BaseHTTPRequestHandler):
             self._send_html(_build_mud_client_page(), title="ACKMUD Web Client")
             return
 
+        if route in ("/map", "/map/"):
+            self._send_html(_build_world_map_page(), title="World Map — ACK!TNG")
+            return
+
         if route in ("/help", "/help/"):
             self._send_html(_build_topic_index_page("Help Topics", "helps", HELP_DIR, help_query), title="Help Topics")
             return
@@ -211,6 +215,10 @@ def _build_topic_index_page(title: str, route_base: str, base_dir: Path, query: 
 
 def _build_home_page() -> str:
     return _load_template("home.html")
+
+
+def _build_world_map_page() -> str:
+    return _load_template("world_map.html")
 
 
 def _build_mud_client_page() -> str:
