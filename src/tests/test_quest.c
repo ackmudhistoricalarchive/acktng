@@ -20,6 +20,7 @@ const char *quest_unit_static_accept_message(int static_id);
 const char *quest_unit_static_completion_message(int static_id);
 int quest_unit_static_max_level(int static_id);
 int quest_unit_canonical_postmaster_vnum(int vnum);
+int quest_unit_reward_spawn_level(CHAR_DATA *ch, int max_level);
 
 char *_str_dup(const char *str, const char *func)
 {
@@ -397,6 +398,41 @@ static void test_loads_umbra_heartspire_static_chain(void)
    assert(strstr(quest_unit_static_accept_message(44), "Abbot Noctivar") != NULL);
 }
 
+static void test_reward_spawn_level_uses_player_level_when_below_max(void)
+{
+   PC_DATA pc;
+   CHAR_DATA ch = make_char(&pc);
+   ch.level = 50;
+   assert(quest_unit_reward_spawn_level(&ch, 100) == 50);
+}
+
+static void test_reward_spawn_level_caps_at_quest_max_level(void)
+{
+   PC_DATA pc;
+   CHAR_DATA ch = make_char(&pc);
+   ch.level = 150;
+   assert(quest_unit_reward_spawn_level(&ch, 100) == 100);
+}
+
+static void test_reward_spawn_level_uses_player_level_when_no_max(void)
+{
+   PC_DATA pc;
+   CHAR_DATA ch = make_char(&pc);
+   ch.level = 80;
+   assert(quest_unit_reward_spawn_level(&ch, 0) == 80);
+}
+
+static void test_reward_spawn_level_ignores_pseudo_level(void)
+{
+   PC_DATA pc;
+   CHAR_DATA ch = make_char(&pc);
+   ch.level = 50;
+   /* Simulate a remort character: class_level[CLASS_SOR] = 200 would push
+    * pseudo-level above 100, but reward should still use ch->level = 50 */
+   ch.class_level[CLASS_SOR] = 200;
+   assert(quest_unit_reward_spawn_level(&ch, 100) == 50);
+}
+
 static void test_postmaster_aliases_map_to_active_city_vnums(void)
 {
    assert(quest_unit_canonical_postmaster_vnum(3340) == 3340);
@@ -422,6 +458,10 @@ int main(void)
    test_loads_static_quests_with_messages_from_files();
    test_loads_umbra_heartspire_static_chain();
    test_postmaster_aliases_map_to_active_city_vnums();
+   test_reward_spawn_level_uses_player_level_when_below_max();
+   test_reward_spawn_level_caps_at_quest_max_level();
+   test_reward_spawn_level_uses_player_level_when_no_max();
+   test_reward_spawn_level_ignores_pseudo_level();
 
    puts("test_quest: all tests passed");
    return 0;

@@ -380,6 +380,8 @@ static CHAR_DATA *find_npc_by_canonical_vnum(CHAR_DATA *ch, int vnum)
    return NULL;
 }
 
+static int reward_spawn_level(CHAR_DATA *ch, int max_level);
+
 #ifdef UNIT_TEST_QUEST
 int quest_unit_static_count(void)
 {
@@ -413,6 +415,11 @@ int quest_unit_static_max_level(int static_id)
 int quest_unit_canonical_postmaster_vnum(int vnum)
 {
    return canonical_postmaster_vnum(vnum);
+}
+
+int quest_unit_reward_spawn_level(CHAR_DATA *ch, int max_level)
+{
+   return reward_spawn_level(ch, max_level);
 }
 #endif
 
@@ -685,6 +692,14 @@ static bool static_reward_item_is_valid(const STATIC_PROP_TEMPLATE *tpl)
    return TRUE;
 }
 
+static int reward_spawn_level(CHAR_DATA *ch, int max_level)
+{
+   int spawn_level = ch->level;
+   if (max_level > 0 && spawn_level > max_level)
+      spawn_level = max_level;
+   return UMAX(1, spawn_level);
+}
+
 static OBJ_DATA *create_static_reward_object(CHAR_DATA *ch, const STATIC_PROP_TEMPLATE *tpl)
 {
    OBJ_DATA *reward;
@@ -693,10 +708,7 @@ static OBJ_DATA *create_static_reward_object(CHAR_DATA *ch, const STATIC_PROP_TE
    if (ch == NULL || !static_reward_item_is_valid(tpl))
       return NULL;
 
-   spawn_level = get_psuedo_level(ch);
-   if (tpl->max_level > 0 && spawn_level > tpl->max_level)
-      spawn_level = tpl->max_level;
-   spawn_level = UMAX(1, spawn_level);
+   spawn_level = reward_spawn_level(ch, tpl->max_level);
 
    reward = create_object(get_obj_index(OBJ_VNUM_MUSHROOM), 0);
    if (reward == NULL)
