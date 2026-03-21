@@ -58,7 +58,16 @@ class WhoRequestHandler(BaseHTTPRequestHandler):
             return
 
         if route in ("/",):
-            self._send_html(_build_home_page(), title="ACKMUD Historical Archive")
+            # When accessed via aha.ackmud.com, redirect to the archive sub-section.
+            host = self.headers.get("Host", "")
+            if host.startswith("aha."):
+                self._redirect_to("/aha/")
+                return
+            self._send_html(_build_home_page(), title="AHA: World of Lore")
+            return
+
+        if route in ("/aha", "/aha/"):
+            self._send_html(_build_aha_page(), title="ACKmud Historical Archive")
             return
 
         if route.startswith("/img/"):
@@ -72,19 +81,19 @@ class WhoRequestHandler(BaseHTTPRequestHandler):
             return
 
         if route in ("/players", "/players/", "/who", "/who/"):
-            self._send_html(self._build_players_page(), title="ACKMUD Player List")
+            self._send_html(self._build_players_page(), title="AHA: Who's Online")
             return
 
         if route in ("/mud", "/mud/"):
-            self._send_html(_build_mud_client_page(), title="ACKMUD Web Client")
+            self._send_html(_build_mud_client_page(), title="AHA: MUD Client")
             return
 
         if route in ("/map", "/map/", "/world-map", "/world-map/"):
-            self._send_html(_build_world_map_page(), title="World Map")
+            self._send_html(_build_world_map_page(), title="AHA: World Map")
             return
 
         if route in ("/stories", "/stories/"):
-            self._send_html(_build_stories_page(), title="Tales from the Age of Monuments")
+            self._send_html(_build_stories_page(), title="AHA: Tales from the Age of Monuments")
             return
 
         if route in ("/help", "/help/", "/helps", "/helps/"):
@@ -223,7 +232,7 @@ class WhoRequestHandler(BaseHTTPRequestHandler):
         who_html = _read_file_if_present(WHO_HTML_FILE)
         who_count = _read_file_if_present(WHO_COUNT_FILE)
 
-        content = ["<h1>ACKMUD Player Activity</h1>", "<p class='muted'>Live snapshot from in-game WHO output.</p>"]
+        content = ["<h1>AHA: Who's Online</h1>", "<p class='muted'>Live snapshot from in-game WHO output.</p>"]
         if who_count is not None:
             content.append(who_count)
         else:
@@ -353,6 +362,10 @@ def _build_reference_page(active_tab: str, query: str = "") -> str:
 
 def _build_home_page() -> str:
     return _load_template("home.html")
+
+
+def _build_aha_page() -> str:
+    return _load_template("aha.html")
 
 
 def _build_world_map_page() -> str:
