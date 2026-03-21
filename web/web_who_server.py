@@ -67,7 +67,7 @@ class WhoRequestHandler(BaseHTTPRequestHandler):
             return
 
         if route in ("/aha", "/aha/"):
-            self._send_html(_build_aha_page(), title="ACKmud Historical Archive")
+            self._send_html(_build_aha_page(), title="ACKmud Historical Archive", show_github=True)
             return
 
         if route.startswith("/img/"):
@@ -188,8 +188,8 @@ class WhoRequestHandler(BaseHTTPRequestHandler):
         )
         self._send_html(body, title=f"{page_name}: {topic_path.name}")
 
-    def _send_html(self, body: str, title: str) -> None:
-        page = _build_full_page(title=title, body=body)
+    def _send_html(self, body: str, title: str, *, show_github: bool = False) -> None:
+        page = _build_full_page(title=title, body=body, show_github=show_github)
         body_bytes = page.encode("utf-8")
         self.send_response(200)
         self.send_header("Content-Type", "text/html; charset=utf-8")
@@ -431,12 +431,17 @@ def _read_cached_topic(path: Path) -> str:
         return content
 
 
-def _build_full_page(title: str, body: str) -> str:
+_GITHUB_NAV_LINK = "<a href='https://github.com/ackmudhistoricalarchive' target='_blank' rel='noopener noreferrer'>Github</a>\n"
+
+
+def _build_full_page(title: str, body: str, *, show_github: bool = False) -> str:
     template = _load_template("base.html")
+    extra_nav = _GITHUB_NAV_LINK if show_github else ""
     return (
         template.replace("__TITLE__", escape(title))
         .replace("__BODY__", body)
         .replace("__SITE_LOGO_SRC__", _site_logo_src())
+        .replace("__EXTRA_NAV__", extra_nav)
     )
 
 
