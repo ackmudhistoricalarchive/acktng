@@ -36,6 +36,9 @@ void db_load_clans(void);
 void db_load_rulers(void);
 void db_load_brands(void);
 void db_load_sysdata(void);
+void db_load_boards(void);
+void db_load_room_marks(void);
+void db_load_corpses(void);
 
 #endif /* HAVE_LIBPQ */
 

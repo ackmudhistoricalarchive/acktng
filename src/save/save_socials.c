@@ -38,12 +38,15 @@
 #include "globals.h"
 
 #define SOCIAL_FILE DATA_DIR "socials.txt" /* or whatever fits you */
-                                           /*
-                                            * #define CONST_SOCIAL
-                                            */
-                                           /*
-                                            * remove this in Step 2
-                                            */
+#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+#include "db/db_worker.h"
+#endif
+/*
+ * #define CONST_SOCIAL
+ */
+/*
+ * remove this in Step 2
+ */
 
 int maxSocial; /* max number of socials */
 
@@ -147,6 +150,9 @@ void save_social_table()
       fclose(fp);
       fp = NULL;
    }
+#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+   db_worker_save_socials(social_table, maxSocial);
+#endif
 }
 
 /* Find a social based on name */

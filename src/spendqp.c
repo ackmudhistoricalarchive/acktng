@@ -36,6 +36,9 @@
 
 #include "globals.h"
 #include "tables.h"
+#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+#include "db/db_worker.h"
+#endif
 
 void spendqp_copy_text(char *dest, size_t dest_size, const char *src)
 {
@@ -125,6 +128,9 @@ void save_brands()
       fclose(fp);
       fp = NULL;
    }
+#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+   db_worker_save_brands(first_brand);
+#endif
 }
 
 void load_brands(void)

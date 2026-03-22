@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #include "config.h"
 
@@ -156,9 +157,16 @@ static int validate_directory(const char *directory, void (*validator)(const cha
       if (name[len - 1] == '~')
          continue;
 
+      snprintf(path, sizeof(path), "%s%s", directory, name);
+
+      {
+         struct stat st;
+         if (stat(path, &st) == 0 && !S_ISREG(st.st_mode))
+            continue;
+      }
+
       assert(has_invalid_filename_chars(name) == 0);
 
-      snprintf(path, sizeof(path), "%s%s", directory, name);
       validator(path);
       files_seen++;
    }

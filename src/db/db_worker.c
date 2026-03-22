@@ -172,46 +172,589 @@ static void handle_read_player(DB_REQUEST *req)
    post_result(req->d, NULL, 0);
 }
 
-/* Stub handlers for write-only types (expand per-phase). */
-static int handle_write_clans(DB_REQUEST *req)
+/* -----------------------------------------------------------------------
+ * Serialisation helpers (for game-thread-side wrappers below)
+ *
+ * Format: fields delimited by \x1f (US), records by \x1e (RS).
+ * Buffer is a plain heap string terminated by NUL.
+ * ----------------------------------------------------------------------- */
+
+#define SER_FS '\x1f' /* field separator  */
+#define SER_RS '\x1e' /* record separator */
+
+typedef struct
 {
-   (void)req;
-   return 1; /* TODO */
+   char *buf;
+   size_t len;
+   size_t cap;
+} SBuf;
+
+static void sbuf_init(SBuf *s)
+{
+   s->buf = NULL;
+   s->len = 0;
+   s->cap = 0;
 }
+
+static void sbuf_grow(SBuf *s, size_t need)
+{
+   if (s->len + need + 1 <= s->cap)
+      return;
+   s->cap = (s->cap + need + 256) * 2;
+   s->buf = realloc(s->buf, s->cap);
+}
+
+static void sbuf_putc(SBuf *s, char c)
+{
+   sbuf_grow(s, 1);
+   s->buf[s->len++] = c;
+   s->buf[s->len] = '\0';
+}
+
+static void sbuf_puts(SBuf *s, const char *str)
+{
+   size_t n = strlen(str ? str : "");
+   sbuf_grow(s, n);
+   memcpy(s->buf + s->len, str ? str : "", n);
+   s->len += n;
+   s->buf[s->len] = '\0';
+}
+
+static void sbuf_puti(SBuf *s, long v)
+{
+   char tmp[32];
+   snprintf(tmp, sizeof(tmp), "%ld", v);
+   sbuf_puts(s, tmp);
+}
+
+/* Mark end of current record. */
+static void sbuf_rs(SBuf *s)
+{
+   sbuf_putc(s, SER_RS);
+}
+/* Field separator within a record. */
+static void sbuf_fs(SBuf *s)
+{
+   sbuf_putc(s, SER_FS);
+}
+
+/* -----------------------------------------------------------------------
+ * Deserialisation helpers (worker-thread side)
+ * ----------------------------------------------------------------------- */
+
+/* Advance *p past the current record, returning start of next or NULL. */
+static const char *rec_next(const char *p)
+{
+   while (*p && *p != SER_RS)
+      p++;
+   return (*p == SER_RS) ? p + 1 : NULL;
+}
+
+/* Copy field starting at *p into out[out_sz], advance *p to next field or
+ * end of record.  Returns 1 if more fields remain. */
+static int rec_field(const char **p, char *out, size_t out_sz)
+{
+   const char *start = *p;
+   const char *end = start;
+   size_t n;
+
+   while (*end && *end != SER_FS && *end != SER_RS)
+      end++;
+
+   n = (size_t)(end - start);
+   if (n >= out_sz)
+      n = out_sz - 1;
+   memcpy(out, start, n);
+   out[n] = '\0';
+
+   if (*end == SER_FS)
+   {
+      *p = end + 1;
+      return 1;
+   }
+   *p = end; /* stop at RS or NUL */
+   return 0;
+}
+
+/* -----------------------------------------------------------------------
+ * Write handler implementations
+ * ----------------------------------------------------------------------- */
+
+/* DB_WRITE_BANS — TRUNCATE + INSERT all bans.
+ * Each record: ban_type \x1f address \x1f banned_by */
 static int handle_write_bans(DB_REQUEST *req)
 {
-   (void)req;
-   return 1; /* TODO */
+   const char *p = (const char *)req->buf;
+   int ok = 1;
+
+   if (!ensure_connected())
+      return 0;
+
+   PQclear(PQexec(worker_conn, "BEGIN"));
+   PQclear(PQexec(worker_conn, "DELETE FROM bans"));
+
+   while (p && *p && *p != '\0')
+   {
+      char ban_type_s[8], address[256], banned_by[256];
+      const char *params[3];
+
+      rec_field(&p, ban_type_s, sizeof(ban_type_s));
+      rec_field(&p, address, sizeof(address));
+      rec_field(&p, banned_by, sizeof(banned_by));
+
+      params[0] = ban_type_s;
+      params[1] = address;
+      params[2] = banned_by;
+      if (!worker_exec("INSERT INTO bans (ban_type, address, banned_by) "
+                       "VALUES ($1,$2,$3)",
+                       3, params))
+         ok = 0;
+
+      p = rec_next(p);
+   }
+
+   PQclear(PQexec(worker_conn, ok ? "COMMIT" : "ROLLBACK"));
+   return ok;
 }
+
+/* DB_WRITE_SOCIALS — replace all socials.
+ * Each record: name \x1f char_no_arg \x1f others_no_arg \x1f char_found \x1f
+ *              others_found \x1f vict_found \x1f char_auto \x1f others_auto */
 static int handle_write_socials(DB_REQUEST *req)
 {
-   (void)req;
-   return 1; /* TODO */
+   const char *p = (const char *)req->buf;
+   int ok = 1;
+
+   if (!ensure_connected())
+      return 0;
+
+   PQclear(PQexec(worker_conn, "BEGIN"));
+   PQclear(PQexec(worker_conn, "DELETE FROM socials"));
+
+   while (p && *p && *p != '\0')
+   {
+      char name[128], cna[512], ona[512], cf[512], of_[512], vf[512], ca[512], oa[512];
+      const char *params[8];
+
+      rec_field(&p, name, sizeof(name));
+      if (!name[0])
+         break;
+      rec_field(&p, cna, sizeof(cna));
+      rec_field(&p, ona, sizeof(ona));
+      rec_field(&p, cf, sizeof(cf));
+      rec_field(&p, of_, sizeof(of_));
+      rec_field(&p, vf, sizeof(vf));
+      rec_field(&p, ca, sizeof(ca));
+      rec_field(&p, oa, sizeof(oa));
+
+      params[0] = name;
+      params[1] = cna;
+      params[2] = ona;
+      params[3] = cf;
+      params[4] = of_;
+      params[5] = vf;
+      params[6] = ca;
+      params[7] = oa;
+      if (!worker_exec("INSERT INTO socials "
+                       "(name,char_no_arg,others_no_arg,char_found,others_found,"
+                       "vict_found,char_auto,others_auto) "
+                       "VALUES ($1,$2,$3,$4,$5,$6,$7,$8) "
+                       "ON CONFLICT (name) DO UPDATE SET "
+                       "char_no_arg=EXCLUDED.char_no_arg,"
+                       "others_no_arg=EXCLUDED.others_no_arg,"
+                       "char_found=EXCLUDED.char_found,"
+                       "others_found=EXCLUDED.others_found,"
+                       "vict_found=EXCLUDED.vict_found,"
+                       "char_auto=EXCLUDED.char_auto,"
+                       "others_auto=EXCLUDED.others_auto",
+                       8, params))
+         ok = 0;
+
+      p = rec_next(p);
+   }
+
+   PQclear(PQexec(worker_conn, ok ? "COMMIT" : "ROLLBACK"));
+   return ok;
 }
+
+/* DB_WRITE_CLANS — update diplomacy + treasury.
+ * Each record: clan_id \x1f treasury \x1f dip_0 \x1f dip_1 \x1f ... */
+static int handle_write_clans(DB_REQUEST *req)
+{
+   const char *p = (const char *)req->buf;
+   int ok = 1;
+
+   if (!ensure_connected())
+      return 0;
+
+   PQclear(PQexec(worker_conn, "BEGIN"));
+
+   while (p && *p && *p != '\0')
+   {
+      char clan_id_s[8], treasury_s[32], gold_s[32];
+      char war_matrix[256];
+      int i;
+      const char *params[4];
+      char dip[MAX_CLAN][16];
+
+      rec_field(&p, clan_id_s, sizeof(clan_id_s));
+      if (!clan_id_s[0])
+         break;
+      rec_field(&p, treasury_s, sizeof(treasury_s));
+      rec_field(&p, gold_s, sizeof(gold_s));
+
+      /* Read per-clan diplomacy values */
+      war_matrix[0] = '\0';
+      {
+         char tmp[32];
+         char arr[256];
+         arr[0] = '\0';
+         for (i = 0; i < MAX_CLAN; i++)
+         {
+            if (*p && *p != SER_RS)
+               rec_field(&p, dip[i], sizeof(dip[i]));
+            else
+               strncpy(dip[i], "0", sizeof(dip[i]));
+            snprintf(tmp, sizeof(tmp), "%s%s", (i == 0 ? "" : ","), dip[i]);
+            strncat(arr, tmp, sizeof(arr) - strlen(arr) - 1);
+         }
+         snprintf(war_matrix, sizeof(war_matrix), "{%s}", arr);
+      }
+
+      params[0] = clan_id_s;
+      params[1] = treasury_s;
+      params[2] = gold_s;
+      params[3] = war_matrix;
+      if (!worker_exec("INSERT INTO clans (id, gold, member_count, war_matrix) "
+                       "VALUES ($1,$3,0,$4) "
+                       "ON CONFLICT (id) DO UPDATE SET "
+                       "gold=EXCLUDED.gold, war_matrix=EXCLUDED.war_matrix",
+                       4, params))
+         ok = 0;
+
+      p = rec_next(p);
+   }
+
+   PQclear(PQexec(worker_conn, ok ? "COMMIT" : "ROLLBACK"));
+   return ok;
+}
+
+/* DB_WRITE_SYSDATA — update the single sysdata row.
+ * Record: w_lock \x1f shownumbers */
+static int handle_write_sysdata(DB_REQUEST *req)
+{
+   const char *p = (const char *)req->buf;
+   char wl[4], sn[4];
+   const char *params[2];
+
+   if (!ensure_connected())
+      return 0;
+
+   rec_field(&p, wl, sizeof(wl));
+   rec_field(&p, sn, sizeof(sn));
+
+   params[0] = wl;
+   params[1] = sn;
+   return worker_exec("UPDATE sysdata SET bln_val_0=$1::boolean, bln_val_1=$2::boolean "
+                      "WHERE id=1",
+                      2, params);
+}
+
+/* DB_WRITE_RULERS — replace all rulers.
+ * Each record: name */
+static int handle_write_rulers(DB_REQUEST *req)
+{
+   const char *p = (const char *)req->buf;
+   int ok = 1;
+
+   if (!ensure_connected())
+      return 0;
+
+   PQclear(PQexec(worker_conn, "BEGIN"));
+   PQclear(PQexec(worker_conn, "DELETE FROM rulers"));
+
+   while (p && *p && *p != '\0')
+   {
+      char name[128];
+      const char *params[1];
+
+      rec_field(&p, name, sizeof(name));
+      if (!name[0])
+         break;
+
+      params[0] = name;
+      if (!worker_exec("INSERT INTO rulers (name) VALUES ($1) "
+                       "ON CONFLICT (name) DO NOTHING",
+                       1, params))
+         ok = 0;
+
+      p = rec_next(p);
+   }
+
+   PQclear(PQexec(worker_conn, ok ? "COMMIT" : "ROLLBACK"));
+   return ok;
+}
+
+/* DB_WRITE_BRANDS — replace all brands.
+ * Each record: branded_by \x1f item_name \x1f brand_date \x1f description */
+static int handle_write_brands(DB_REQUEST *req)
+{
+   const char *p = (const char *)req->buf;
+   int ok = 1;
+
+   if (!ensure_connected())
+      return 0;
+
+   PQclear(PQexec(worker_conn, "BEGIN"));
+   PQclear(PQexec(worker_conn, "DELETE FROM brands"));
+
+   while (p && *p && *p != '\0')
+   {
+      char branded_by[128], item_name[512], brand_date[64], description[512];
+      const char *params[4];
+
+      rec_field(&p, branded_by, sizeof(branded_by));
+      if (!branded_by[0])
+         break;
+      rec_field(&p, item_name, sizeof(item_name));
+      rec_field(&p, brand_date, sizeof(brand_date));
+      rec_field(&p, description, sizeof(description));
+
+      params[0] = branded_by;
+      params[1] = item_name;
+      params[2] = brand_date;
+      params[3] = description;
+      if (!worker_exec("INSERT INTO brands (branded_by, item_name, brand_date, description) "
+                       "VALUES ($1,$2,$3,$4)",
+                       4, params))
+         ok = 0;
+
+      p = rec_next(p);
+   }
+
+   PQclear(PQexec(worker_conn, ok ? "COMMIT" : "ROLLBACK"));
+   return ok;
+}
+
+/* DB_WRITE_ROOM_MARKS — replace all room marks.
+ * Each record: room_vnum \x1f mark_text */
+static int handle_write_room_marks(DB_REQUEST *req)
+{
+   const char *p = (const char *)req->buf;
+   int ok = 1;
+
+   if (!ensure_connected())
+      return 0;
+
+   PQclear(PQexec(worker_conn, "BEGIN"));
+   PQclear(PQexec(worker_conn, "DELETE FROM room_marks"));
+
+   while (p && *p && *p != '\0')
+   {
+      char room_vnum_s[16], mark_text[1024];
+      const char *params[2];
+
+      rec_field(&p, room_vnum_s, sizeof(room_vnum_s));
+      if (!room_vnum_s[0])
+         break;
+      rec_field(&p, mark_text, sizeof(mark_text));
+
+      params[0] = room_vnum_s;
+      params[1] = mark_text;
+      if (!worker_exec("INSERT INTO room_marks (room_vnum, mark_text) VALUES ($1,$2)", 2, params))
+         ok = 0;
+
+      p = rec_next(p);
+   }
+
+   PQclear(PQexec(worker_conn, ok ? "COMMIT" : "ROLLBACK"));
+   return ok;
+}
+
+/* DB_WRITE_CORPSES — not yet fully implemented (schema populated by import only). */
 static int handle_write_corpses(DB_REQUEST *req)
 {
    (void)req;
-   return 1; /* TODO */
+   return 1;
 }
-static int handle_write_sysdata(DB_REQUEST *req)
+
+/* -----------------------------------------------------------------------
+ * Public serialisation wrappers (called from game thread)
+ * ----------------------------------------------------------------------- */
+
+void db_worker_save_bans(BAN_DATA *first_ban_arg)
 {
-   (void)req;
-   return 1; /* TODO */
+   BAN_DATA *b;
+   SBuf s;
+   sbuf_init(&s);
+
+   for (b = first_ban_arg; b; b = b->next)
+   {
+      sbuf_puti(&s, b->newbie ? 1 : 0);
+      sbuf_fs(&s);
+      sbuf_puts(&s, b->name ? b->name : "");
+      sbuf_fs(&s);
+      sbuf_puts(&s, b->banned_by ? b->banned_by : "");
+      sbuf_rs(&s);
+   }
+
+   if (s.buf)
+   {
+      db_worker_enqueue_write(DB_WRITE_BANS, s.buf, s.len, NULL);
+      free(s.buf);
+   }
 }
-static int handle_write_rulers(DB_REQUEST *req)
+
+void db_worker_save_socials(struct social_type *table, int count)
 {
-   (void)req;
-   return 1; /* TODO */
+   int i;
+   SBuf s;
+   sbuf_init(&s);
+
+   for (i = 0; i < count; i++)
+   {
+      if (!table[i].name || !table[i].name[0])
+         continue;
+      sbuf_puts(&s, table[i].name);
+      sbuf_fs(&s);
+      sbuf_puts(&s, table[i].char_no_arg ? table[i].char_no_arg : "");
+      sbuf_fs(&s);
+      sbuf_puts(&s, table[i].others_no_arg ? table[i].others_no_arg : "");
+      sbuf_fs(&s);
+      sbuf_puts(&s, table[i].char_found ? table[i].char_found : "");
+      sbuf_fs(&s);
+      sbuf_puts(&s, table[i].others_found ? table[i].others_found : "");
+      sbuf_fs(&s);
+      sbuf_puts(&s, table[i].vict_found ? table[i].vict_found : "");
+      sbuf_fs(&s);
+      sbuf_puts(&s, table[i].char_auto ? table[i].char_auto : "");
+      sbuf_fs(&s);
+      sbuf_puts(&s, table[i].others_auto ? table[i].others_auto : "");
+      sbuf_rs(&s);
+   }
+
+   if (s.buf)
+   {
+      db_worker_enqueue_write(DB_WRITE_SOCIALS, s.buf, s.len, NULL);
+      free(s.buf);
+   }
 }
-static int handle_write_brands(DB_REQUEST *req)
+
+void db_worker_save_clans(const sh_int diplomacy[][MAX_CLAN], const long int *treasury, int nclan)
 {
-   (void)req;
-   return 1; /* TODO */
+   int i, j;
+   SBuf s;
+   sbuf_init(&s);
+
+   for (i = 1; i < nclan; i++)
+   {
+      sbuf_puti(&s, i);
+      sbuf_fs(&s);
+      sbuf_puti(&s, treasury[i]);
+      sbuf_fs(&s);
+      sbuf_puti(&s, 0); /* gold — kept in clans table; not tracked per-game-cycle */
+      for (j = 0; j < nclan; j++)
+      {
+         sbuf_fs(&s);
+         sbuf_puti(&s, (long)diplomacy[i][j]);
+      }
+      sbuf_rs(&s);
+   }
+
+   if (s.buf)
+   {
+      db_worker_enqueue_write(DB_WRITE_CLANS, s.buf, s.len, NULL);
+      free(s.buf);
+   }
 }
-static int handle_write_room_marks(DB_REQUEST *req)
+
+void db_worker_save_sysdata(int w_lock, int shownumbers)
 {
-   (void)req;
-   return 1; /* TODO */
+   SBuf s;
+   sbuf_init(&s);
+   sbuf_puts(&s, w_lock ? "true" : "false");
+   sbuf_fs(&s);
+   sbuf_puts(&s, shownumbers ? "true" : "false");
+   sbuf_rs(&s);
+
+   if (s.buf)
+   {
+      db_worker_enqueue_write(DB_WRITE_SYSDATA, s.buf, s.len, NULL);
+      free(s.buf);
+   }
+}
+
+void db_worker_save_rulers(RULER_LIST *first_ruler_arg)
+{
+   RULER_LIST *rl;
+   SBuf s;
+   sbuf_init(&s);
+
+   for (rl = first_ruler_arg; rl; rl = rl->next)
+   {
+      if (!rl->this_one || !rl->this_one->name || !rl->this_one->name[0])
+         continue;
+      sbuf_puts(&s, rl->this_one->name);
+      sbuf_rs(&s);
+   }
+
+   if (s.buf)
+   {
+      db_worker_enqueue_write(DB_WRITE_RULERS, s.buf, s.len, NULL);
+      free(s.buf);
+   }
+}
+
+void db_worker_save_brands(DL_LIST *first_brand_arg)
+{
+   DL_LIST *dl;
+   SBuf s;
+   sbuf_init(&s);
+
+   for (dl = first_brand_arg; dl; dl = dl->next)
+   {
+      BRAND_DATA *b = (BRAND_DATA *)dl->this_one;
+      if (!b)
+         continue;
+      sbuf_puts(&s, b->branded_by ? b->branded_by : "");
+      sbuf_fs(&s);
+      sbuf_puts(&s, b->branded ? b->branded : "");
+      sbuf_fs(&s);
+      sbuf_puts(&s, b->dt_stamp ? b->dt_stamp : "");
+      sbuf_fs(&s);
+      sbuf_puts(&s, b->message ? b->message : "");
+      sbuf_rs(&s);
+   }
+
+   if (s.buf)
+   {
+      db_worker_enqueue_write(DB_WRITE_BRANDS, s.buf, s.len, NULL);
+      free(s.buf);
+   }
+}
+
+void db_worker_save_room_marks(MARK_LIST_MEMBER *first_mark_arg)
+{
+   MARK_LIST_MEMBER *ml;
+   SBuf s;
+   sbuf_init(&s);
+
+   for (ml = first_mark_arg; ml; ml = ml->next)
+   {
+      MARK_DATA *m = ml->mark;
+      if (!m)
+         continue;
+      sbuf_puti(&s, (long)m->room_vnum);
+      sbuf_fs(&s);
+      sbuf_puts(&s, m->message ? m->message : "");
+      sbuf_rs(&s);
+   }
+
+   if (s.buf)
+   {
+      db_worker_enqueue_write(DB_WRITE_ROOM_MARKS, s.buf, s.len, NULL);
+      free(s.buf);
+   }
 }
 
 static int dispatch(DB_REQUEST *req)

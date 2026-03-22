@@ -1006,4 +1006,247 @@ void db_load_sysdata(void)
    PQclear(res);
 }
 
+void db_load_boards(void)
+{
+   PGresult *bres;
+   int r, nb;
+
+   log_f("DB: loading boards.");
+   bres = xq("SELECT id, vnum, expiry_days, min_read_lev, min_write_lev, clan "
+             "FROM boards ORDER BY vnum");
+   if (!bres)
+      return;
+
+   nb = PQntuples(bres);
+   for (r = 0; r < nb; r++)
+   {
+      int board_db_id = atoi(PQgetvalue(bres, r, 0));
+      int vnum = atoi(PQgetvalue(bres, r, 1));
+      int expiry_days = atoi(PQgetvalue(bres, r, 2));
+      int min_read_lev = atoi(PQgetvalue(bres, r, 3));
+      int min_write_lev = atoi(PQgetvalue(bres, r, 4));
+      int clan = atoi(PQgetvalue(bres, r, 5));
+      BOARD_DATA *board;
+      PGresult *mres;
+      int m, nm;
+      char id_str[32];
+
+      /* Skip if already loaded (lazy load may have pre-populated). */
+      {
+         BOARD_DATA *b;
+         int found = 0;
+         for (b = first_board; b; b = b->next)
+            if (b->vnum == vnum)
+            {
+               found = 1;
+               break;
+            }
+         if (found)
+            continue;
+      }
+
+      GET_FREE(board, board_free);
+      board->vnum = vnum;
+      board->expiry_time = expiry_days;
+      board->min_read_lev = min_read_lev;
+      board->min_write_lev = min_write_lev;
+      board->clan = clan;
+      board->first_message = NULL;
+      board->last_message = NULL;
+      LINK(board, first_board, last_board, next, prev);
+
+      /* Load messages for this board. */
+      snprintf(id_str, sizeof(id_str), "%d", board_db_id);
+      {
+         const char *v[1];
+         v[0] = id_str;
+         mres = xqp("SELECT posted_at, author, title, body "
+                    "FROM board_messages WHERE board_id=$1 ORDER BY seq",
+                    1, v);
+      }
+      if (!mres)
+         continue;
+
+      nm = PQntuples(mres);
+      for (m = 0; m < nm; m++)
+      {
+         MESSAGE_DATA *msg;
+         GET_FREE(msg, message_free);
+         msg->datetime = (time_t)atol(PQgetvalue(mres, m, 0));
+         msg->author = str_dup(PQgetvalue(mres, m, 1));
+         msg->title = str_dup(PQgetvalue(mres, m, 2));
+         msg->message = str_dup(PQgetvalue(mres, m, 3));
+         msg->board = board;
+         LINK(msg, board->first_message, board->last_message, next, prev);
+      }
+      PQclear(mres);
+   }
+   PQclear(bres);
+}
+
+void db_load_room_marks(void)
+{
+   PGresult *res;
+   int r, n;
+   extern bool booting_up;
+
+   log_f("DB: loading room marks.");
+   /* The schema stores room_vnum and mark_text only; author/duration/type
+    * default to empty/0 for marks loaded from the database. */
+   res = xq("SELECT room_vnum, mark_text FROM room_marks ORDER BY id");
+   if (!res)
+      return;
+
+   n = PQntuples(res);
+   booting_up = TRUE;
+   for (r = 0; r < n; r++)
+   {
+      int room_vnum = atoi(PQgetvalue(res, r, 0));
+      const char *mark_text = PQgetvalue(res, r, 1);
+      MARK_DATA *mark;
+
+      GET_FREE(mark, mark_free);
+      mark->room_vnum = room_vnum;
+      mark->message = str_dup(mark_text);
+      mark->author = str_dup("");
+      mark->duration = 0;
+      mark->type = 0;
+      mark_to_room(room_vnum, mark);
+   }
+   booting_up = FALSE;
+   PQclear(res);
+}
+
+/* Load a single corpse row and its children (recursive via parent_id). */
+static void load_one_corpse(int db_id, OBJ_DATA *parent_obj, int iNest)
+{
+   PGresult *res;
+   int r, n;
+   char id_str[32];
+   const char *v[1];
+   static OBJ_DATA obj_zero;
+
+   snprintf(id_str, sizeof(id_str), "%d", db_id);
+   v[0] = id_str;
+   res = xqp("SELECT id, where_vnum, nest, name, short_descr, description, "
+             "vnum, extra_flags, wear_flags, wear_loc, class_flags, item_type, "
+             "weight, level, timer, cost, "
+             "value_0, value_1, value_2, value_3, value_4, value_5, "
+             "value_6, value_7, value_8, value_9 "
+             "FROM corpses WHERE id=$1",
+             1, v);
+   if (!res)
+      return;
+
+   n = PQntuples(res);
+   for (r = 0; r < n; r++)
+   {
+      int child_db_id = atoi(PQgetvalue(res, r, 0));
+      int where_vnum = atoi(PQgetvalue(res, r, 1));
+      /* nest col unused — we track depth via iNest parameter */
+      const char *name = PQgetvalue(res, r, 3);
+      const char *short_descr = PQgetvalue(res, r, 4);
+      const char *description = PQgetvalue(res, r, 5);
+      int obj_vnum = atoi(PQgetvalue(res, r, 6));
+      long long extra_flags = atoll(PQgetvalue(res, r, 7));
+      int wear_flags = atoi(PQgetvalue(res, r, 8));
+      int wear_loc = atoi(PQgetvalue(res, r, 9));
+      int class_flags = atoi(PQgetvalue(res, r, 10));
+      int item_type = atoi(PQgetvalue(res, r, 11));
+      int weight = atoi(PQgetvalue(res, r, 12));
+      int level = atoi(PQgetvalue(res, r, 13));
+      int timer = atoi(PQgetvalue(res, r, 14));
+      int cost = atoi(PQgetvalue(res, r, 15));
+      OBJ_DATA *obj;
+      OBJ_INDEX_DATA *pIdx;
+
+      pIdx = get_obj_index(obj_vnum);
+      if (!pIdx)
+      {
+         pIdx = get_obj_index(1006); /* TEMP_VNUM fallback */
+         if (!pIdx)
+            continue;
+      }
+
+      GET_FREE(obj, obj_free);
+      *obj = obj_zero;
+      obj->pIndexData = pIdx;
+      obj->name = str_dup(name);
+      obj->short_descr = str_dup(short_descr);
+      obj->description = str_dup(description);
+      obj->extra_flags = (unsigned long long)extra_flags;
+      obj->wear_flags = wear_flags;
+      obj->wear_loc = wear_loc;
+      obj->item_apply = class_flags;
+      obj->item_type = item_type;
+      obj->weight = weight;
+      obj->level = level;
+      obj->timer = timer;
+      obj->cost = cost;
+      obj->value[0] = atoi(PQgetvalue(res, r, 16));
+      obj->value[1] = atoi(PQgetvalue(res, r, 17));
+      obj->value[2] = atoi(PQgetvalue(res, r, 18));
+      obj->value[3] = atoi(PQgetvalue(res, r, 19));
+      obj->value[4] = atoi(PQgetvalue(res, r, 20));
+      obj->value[5] = atoi(PQgetvalue(res, r, 21));
+      obj->value[6] = atoi(PQgetvalue(res, r, 22));
+      obj->value[7] = atoi(PQgetvalue(res, r, 23));
+      obj->value[8] = atoi(PQgetvalue(res, r, 24));
+      obj->value[9] = atoi(PQgetvalue(res, r, 25));
+
+      pIdx->count++;
+      LINK(obj, first_obj, last_obj, next, prev);
+
+      if (iNest == 0 || parent_obj == NULL)
+      {
+         ROOM_INDEX_DATA *room = get_room_index(where_vnum);
+         if (!room)
+            room = get_room_index(65323); /* ROOM_VNUM_MORGUE */
+         if (room)
+            obj_to_room(obj, room);
+      }
+      else
+      {
+         obj_to_obj(obj, parent_obj);
+      }
+
+      /* Recursively load children. */
+      {
+         PGresult *cres;
+         int c, nc;
+         char parent_str[32];
+         const char *cv[1];
+         snprintf(parent_str, sizeof(parent_str), "%d", child_db_id);
+         cv[0] = parent_str;
+         cres = xqp("SELECT id FROM corpses WHERE parent_id=$1 ORDER BY id", 1, cv);
+         if (cres)
+         {
+            nc = PQntuples(cres);
+            for (c = 0; c < nc; c++)
+               load_one_corpse(atoi(PQgetvalue(cres, c, 0)), obj, iNest + 1);
+            PQclear(cres);
+         }
+      }
+   }
+   PQclear(res);
+}
+
+void db_load_corpses(void)
+{
+   PGresult *res;
+   int r, n;
+
+   log_f("DB: loading corpses.");
+   /* Load top-level corpses only; children are loaded recursively. */
+   res = xq("SELECT id FROM corpses WHERE parent_id IS NULL ORDER BY id");
+   if (!res)
+      return;
+
+   n = PQntuples(res);
+   for (r = 0; r < n; r++)
+      load_one_corpse(atoi(PQgetvalue(res, r, 0)), NULL, 0);
+
+   PQclear(res);
+}
+
 #endif /* HAVE_LIBPQ */

@@ -840,14 +840,13 @@ void boot_db(void)
       area_update();
       log_f("Loading notes");
       load_notes();
-      log_f("Loading corpses.");
-      load_corpses();
-      booting_up = TRUE;
-      log_f("Loading room marks.");
-      load_marks();
-      booting_up = FALSE;
-      save_marks();
 #if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+      log_f("DB: loading corpses from database.");
+      db_load_corpses();
+      log_f("DB: loading room marks from database.");
+      db_load_room_marks();
+      log_f("DB: loading boards from database.");
+      db_load_boards();
       log_f("DB: loading bans from database.");
       db_load_bans();
       log_f("DB: loading ruler data from database.");
@@ -857,6 +856,13 @@ void boot_db(void)
       log_f("DB: loading system data from database.");
       db_load_sysdata();
 #else
+      log_f("Loading corpses.");
+      load_corpses();
+      booting_up = TRUE;
+      log_f("Loading room marks.");
+      load_marks();
+      booting_up = FALSE;
+      save_marks();
       log_f("Loading banned sites.");
       load_bans();
       log_f("Loading ruler data.");

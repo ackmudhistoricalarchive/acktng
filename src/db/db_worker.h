@@ -76,6 +76,36 @@ void db_worker_poll_results(void);
 /* 1 if the worker has entered emergency fallback mode (DB connection lost). */
 extern int db_worker_failed;
 
+/* -----------------------------------------------------------------------
+ * Convenience wrappers — game thread calls these instead of calling
+ * db_worker_enqueue_write() directly.  Each serialises the given live
+ * game data and enqueues the appropriate DB_WRITE_* operation.
+ * All return immediately (non-blocking).
+ * ----------------------------------------------------------------------- */
+
+/* Save all site bans to the DB. */
+void db_worker_save_bans(struct ban_data *first_ban_arg);
+
+/* Save the full social table (count = maxSocial). */
+void db_worker_save_socials(struct social_type *table, int count);
+
+/* Save clan diplomacy and treasury (nclan = MAX_CLAN).
+ * Callers must include config.h (via ack.h) before this header so that
+ * MAX_CLAN is defined when the array dimension is evaluated. */
+void db_worker_save_clans(const short diplomacy[][MAX_CLAN], const long *treasury, int nclan);
+
+/* Save sysdata boolean flags. */
+void db_worker_save_sysdata(int w_lock, int shownumbers);
+
+/* Save ruler list. */
+void db_worker_save_rulers(struct ruler_list *first_ruler_arg);
+
+/* Save brand list. */
+void db_worker_save_brands(struct dl_list *first_brand_arg);
+
+/* Save room mark list. */
+void db_worker_save_room_marks(struct mark_list_member *first_mark_arg);
+
 #endif /* HAVE_LIBPQ */
 
 #endif /* DB_WORKER_H */
