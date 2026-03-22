@@ -15,12 +15,19 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 telnet_port=8890
 tls_port=9890
 wss_port=9891
-tls_cert="$SCRIPT_DIR/../data/tls/cert.pem"
-tls_key="$SCRIPT_DIR/../data/tls/key.pem"
+tls_cert="${TLS_CERT:-/etc/letsencrypt/live/ackmud.com/fullchain.pem}"
+tls_key="${TLS_KEY:-/etc/letsencrypt/live/ackmud.com/privkey.pem}"
 ws_port=18890
 
-# Generate self-signed TLS certificate if not already present.
-"$SCRIPT_DIR/../data/tls/generate-certs.sh" --cert "$tls_cert" --key "$tls_key"
+# Verify Let's Encrypt certificates are present.
+if [ ! -f "$tls_cert" ] || [ ! -f "$tls_key" ]; then
+    echo "startup: WARNING: TLS cert not found at $tls_cert — TLS disabled" >&2
+    echo "startup: WARNING: ensure Let's Encrypt certs are present before starting" >&2
+    tls_cert=""
+    tls_key=""
+else
+    echo "startup: using TLS certificate $tls_cert"
+fi
 
 # set up
 cd ../reports
@@ -70,7 +77,13 @@ do
   cp ../src/ack "$ack_snapshot"
 
   # run the mud
-  ../src/ack $telnet_port --tls-port $tls_port --wss-port $wss_port --ws-loopback $ws_port --tls-cert $tls_cert --tls-key $tls_key >$logfile 2>&1
+  if [ -n "$tls_cert" ]; then
+    tls_args="--tls-port $tls_port --wss-port $wss_port --tls-cert $tls_cert --tls-key $tls_key"
+  else
+    tls_args=""
+  fi
+  # shellcheck disable=SC2086
+  ../src/ack $telnet_port --ws-loopback $ws_port $tls_args >$logfile 2>&1
 
   # If do_hotreboot() ran, it wrote a snapshot of the binary it exec'd;
   # that is more accurate than our startup-time snapshot, so prefer it.

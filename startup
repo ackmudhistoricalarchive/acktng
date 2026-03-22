@@ -8,8 +8,7 @@
 #
 # The script will:
 #   1. Build the server binary (if out of date).
-#   2. Validate or generate a self-signed TLS certificate.
-#      Replace the generated cert with a real CA-signed one for production.
+#   2. Locate TLS certificates (Let's Encrypt by default).
 #   3. Launch the server on four fixed ports:
 #        8890  — plain telnet  (always plain, never TLS)
 #        9890  — telnet-TLS    (Mudlet "connect securely"; requires cert/key)
@@ -25,13 +24,19 @@
 #   9891  WSS            --wss-port (native WebSocket+TLS; binds to 0.0.0.0)
 #   18890 WebSocket      --ws-loopback (binds to 127.0.0.1; for nginx proxy)
 #
+# TLS certificates are read from the standard Let's Encrypt location:
+#   /etc/letsencrypt/live/ackmud.com/fullchain.pem  (certificate + chain)
+#   /etc/letsencrypt/live/ackmud.com/privkey.pem    (private key)
+# A separate service is responsible for obtaining and renewing the certs.
+# TLS is disabled with a warning if the cert files are not present.
+#
 # Environment overrides:
 #   PORT      plain-telnet port       (default: 8890)
 #   TLS_PORT  TLS telnet port         (default: 9890)
 #   WSS_PORT  native WSS port         (default: 9891)
 #   WS_PORT   WebSocket loopback port (default: 18890)
-#   TLS_CERT  path to PEM cert        (default: data/tls/cert.pem)
-#   TLS_KEY   path to PEM key         (default: data/tls/key.pem)
+#   TLS_CERT  path to PEM cert        (default: /etc/letsencrypt/live/ackmud.com/fullchain.pem)
+#   TLS_KEY   path to PEM key         (default: /etc/letsencrypt/live/ackmud.com/privkey.pem)
 #   TEST      set to 1 to use ephemeral OS-assigned ports (for testing)
 
 set -e
@@ -57,8 +62,8 @@ else
     WS_PORT="${WS_PORT:-18890}"
 fi
 
-TLS_CERT="${TLS_CERT:-$SCRIPT_DIR/data/tls/cert.pem}"
-TLS_KEY="${TLS_KEY:-$SCRIPT_DIR/data/tls/key.pem}"
+TLS_CERT="${TLS_CERT:-/etc/letsencrypt/live/ackmud.com/fullchain.pem}"
+TLS_KEY="${TLS_KEY:-/etc/letsencrypt/live/ackmud.com/privkey.pem}"
 
 # ---------------------------------------------------------------------------
 # Step 1: build
@@ -72,8 +77,13 @@ echo "startup: building server..."
 TLS_ARGS=""
 
 if pkg-config --libs openssl >/dev/null 2>&1; then
-    "$SCRIPT_DIR/data/tls/generate-certs.sh" --cert "$TLS_CERT" --key "$TLS_KEY"
-    TLS_ARGS="--tls-port $TLS_PORT --wss-port $WSS_PORT --tls-cert $TLS_CERT --tls-key $TLS_KEY"
+    if [ -f "$TLS_CERT" ] && [ -f "$TLS_KEY" ]; then
+        echo "startup: using TLS certificate $TLS_CERT"
+        TLS_ARGS="--tls-port $TLS_PORT --wss-port $WSS_PORT --tls-cert $TLS_CERT --tls-key $TLS_KEY"
+    else
+        echo "startup: WARNING: TLS cert not found at $TLS_CERT — TLS disabled" >&2
+        echo "startup: WARNING: ensure Let's Encrypt certs are present before starting" >&2
+    fi
 fi
 
 # ---------------------------------------------------------------------------
