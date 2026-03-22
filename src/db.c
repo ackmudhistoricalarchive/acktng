@@ -47,6 +47,11 @@
 #include "act_mob.h"
 #endif
 
+#ifdef HAVE_LIBPQ
+#include "db/db_conn.h"
+#include "db/db_load.h"
+#endif
+
 #if !defined(macintosh)
 extern int _filbuf args((FILE *));
 #endif
@@ -573,6 +578,12 @@ void boot_db(void)
     *   Read in clan data table
     */
 
+#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+   {
+      log_f("DB: loading clan diplomacy from database.");
+      db_load_clans();
+   }
+#else
    {
       FILE *clanfp;
       char clan_file_name[MAX_STRING_LENGTH];
@@ -635,18 +646,31 @@ void boot_db(void)
       db_format_status(buf, sizeof(buf), "Done Loading", clan_file_name);
       log_f("%s", buf);
    }
+#endif /* USE_DB_LOAD */
 
    /*
     * Read in all the socials.
     */
+#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
    {
-
+      log_f("DB: loading socials from database.");
+      db_load_socials();
+   }
+#else
+   {
       load_social_table();
    }
+#endif /* USE_DB_LOAD */
 
    /*
     * Read in all the area files.
     */
+#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+   {
+      log_f("DB: loading areas from database.");
+      db_load_areas_from_db();
+   }
+#else
    {
       FILE *fpList;
       log_f("Reading Area Files...");
@@ -731,8 +755,20 @@ void boot_db(void)
          fpList = NULL;
       }
    }
+#endif /* USE_DB_LOAD */
 
+#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+   {
+      log_f("DB: loading help files from database.");
+      db_load_helps_from_db();
+      log_f("DB: loading shelp files from database.");
+      db_load_shelps_from_db();
+      log_f("DB: loading lore from database.");
+      db_load_lore_from_db();
+   }
+#else
    load_help_files();
+#endif /* USE_DB_LOAD */
    log_f("Loading quest templates.");
    quest_load_templates();
 
@@ -811,6 +847,16 @@ void boot_db(void)
       load_marks();
       booting_up = FALSE;
       save_marks();
+#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+      log_f("DB: loading bans from database.");
+      db_load_bans();
+      log_f("DB: loading ruler data from database.");
+      db_load_rulers();
+      log_f("DB: loading staff brands from database.");
+      db_load_brands();
+      log_f("DB: loading system data from database.");
+      db_load_sysdata();
+#else
       log_f("Loading banned sites.");
       load_bans();
       log_f("Loading ruler data.");
@@ -819,6 +865,7 @@ void boot_db(void)
       load_brands();
       log_f("Loading System Data.");
       load_sysdata();
+#endif /* USE_DB_LOAD */
    }
    auto_quest = TRUE;
    return;
