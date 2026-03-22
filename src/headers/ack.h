@@ -274,6 +274,7 @@ struct descriptor_data
 #ifdef HAVE_OPENSSL
    struct ssl_st *ssl;
    bool tls_handshake_pending; /* SSL_accept in progress; advanced in game loop */
+   bool wss_pending;           /* came in on WSS port; defer greeting until WebSocket upgrade */
 #endif
    bool tls_active;
 
