@@ -1295,7 +1295,10 @@ void new_descriptor(int control, bool is_tls, bool do_sniff, bool is_wss)
              */
             dnew->ssl = ssl;
             dnew->tls_handshake_pending = TRUE;
-            dnew->timeout = current_time + 10; /* short handshake deadline */
+            /* WSS connections come from internet browsers that may need extra
+             * time for AIA certificate-chain fetching; allow 30s.  Plain TLS
+             * telnet clients are typically local/LAN tools, so 10s is fine. */
+            dnew->timeout = current_time + (dnew->wss_pending ? 30 : 10);
          }
          else
          {

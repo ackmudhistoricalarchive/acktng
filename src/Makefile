@@ -206,7 +206,7 @@ O_FILES = affect.o ai.o act_clan.o act_comm.o act_info.o act_mob.o act_move.o ac
 # Source files for linting (all .c and .h excluding third-party sha256 and build artifacts)
 LINT_SOURCES = $(shell find . -name '*.c' -o -name '*.h' | grep -v sha256 | grep -v './build/' | sort)
 
-.PHONY: all clean purge unit-tests integration-test integration-test-telnet integration-test-telnet-tls lint format
+.PHONY: all clean purge unit-tests integration-test integration-test-telnet integration-test-telnet-tls integration-test-wss lint format
 
 all:
 	$(MAKE) clean
@@ -226,6 +226,10 @@ integration-test-telnet: ack
 # TLS telnet login flow (production port 9890 — Mudlet "connect securely")
 integration-test-telnet-tls: ack
 	cd .. && ./integration-test-telnet-tls.sh
+
+# WSS login flow (production port 9891 — direct TLS WebSocket from browsers)
+integration-test-wss: ack
+	cd .. && ./integration-test-wss.sh
 
 
 ifdef CYGWIN
