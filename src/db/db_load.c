@@ -16,6 +16,7 @@
 
 #include "globals.h"
 
+#include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1247,6 +1248,252 @@ void db_load_corpses(void)
       load_one_corpse(atoi(PQgetvalue(res, r, 0)), NULL, 0);
 
    PQclear(res);
+}
+
+/* -----------------------------------------------------------------------
+ * Keep chest loader
+ *
+ * Loads keep chest items from keep_chests / keep_chest_items.
+ * For any chest vnum present in data/chest/ but absent from the DB,
+ * falls back to the flat-file load_chest() and logs a warning.
+ * ----------------------------------------------------------------------- */
+void db_load_chests(void)
+{
+   PGresult *res;
+   int r, n;
+
+   /* --- Phase 1: load chests from the database -------------------------
+    * Collect all known DB vnums into a bitfield so we can detect flat-file
+    * stragglers below.  We use a simple sorted vnum list instead of a hash.
+    */
+   res = xq("SELECT kc.vnum, kci.id, kci.parent_id, kci.nest, kci.sort_order,"
+            " kci.name, kci.short_descr, kci.description, kci.vnum AS obj_vnum,"
+            " kci.extra_flags, kci.wear_flags, kci.wear_loc, kci.class_flags,"
+            " kci.item_type, kci.weight, kci.level, kci.timer, kci.cost,"
+            " kci.value_0, kci.value_1, kci.value_2, kci.value_3,"
+            " kci.value_4, kci.value_5, kci.value_6, kci.value_7,"
+            " kci.value_8, kci.value_9, kci.objfun, kc.id AS chest_db_id"
+            " FROM keep_chests kc"
+            " LEFT JOIN keep_chest_items kci ON kci.chest_id = kc.id"
+            " ORDER BY kc.vnum, kci.sort_order");
+   if (!res)
+      return;
+
+   n = PQntuples(res);
+
+   /* Track which DB vnums we have seen */
+   int *db_vnums = NULL;
+   int db_vnum_count = 0;
+
+   /* Collect distinct chest vnums first */
+   for (r = 0; r < n; r++)
+   {
+      int vnum = atoi(PQgetvalue(res, r, 0));
+      /* Only add once per chest */
+      int found = 0;
+      int k;
+      for (k = 0; k < db_vnum_count; k++)
+         if (db_vnums[k] == vnum)
+         {
+            found = 1;
+            break;
+         }
+      if (!found)
+      {
+         db_vnums = realloc(db_vnums, (size_t)(db_vnum_count + 1) * sizeof(int));
+         if (!db_vnums)
+            break;
+         db_vnums[db_vnum_count++] = vnum;
+      }
+   }
+
+   /* Per-chest item loading using rgObjNest nesting array.
+    * Items are stored with sort_order; the parent item with the matching
+    * sort_order must be found in the nest array.  We track a local mapping
+    * sort_order → OBJ_DATA* for items loaded so far in this chest.        */
+   int cur_chest_vnum = -1;
+   /* max items per chest is bounded by game config; 256 is safe headroom */
+#define CHEST_MAX_NEST_TRACK 512
+   int nest_sort[CHEST_MAX_NEST_TRACK];
+   OBJ_DATA *nest_obj[CHEST_MAX_NEST_TRACK];
+   int nest_count = 0;
+
+   for (r = 0; r < n; r++)
+   {
+      int chest_vnum = atoi(PQgetvalue(res, r, 0));
+      int is_null_item = PQgetisnull(res, r, 1); /* kci.id is NULL when no items */
+
+      if (chest_vnum != cur_chest_vnum)
+      {
+         /* Switch to a new chest */
+         cur_chest_vnum = chest_vnum;
+         nest_count = 0;
+
+         /* Locate the already-created chest object in the world */
+         OBJ_DATA *chest_obj = NULL;
+         OBJ_DATA *o;
+         for (o = first_obj; o != NULL; o = o->next)
+            if (o->pIndexData != NULL && o->pIndexData->vnum == chest_vnum &&
+                o->item_type == ITEM_CONTAINER && IS_SET(o->value[1], CONT_KEEP_CHEST))
+            {
+               chest_obj = o;
+               break;
+            }
+         if (!chest_obj)
+         {
+            log_f("db_load_chests: no world object for chest vnum %d, skipping.", chest_vnum);
+            continue;
+         }
+         /* Seed nest tracking: sort_order -1 means "child of chest root" */
+         nest_sort[0] = -1;
+         nest_obj[0] = chest_obj;
+         nest_count = 1;
+      }
+
+      if (is_null_item)
+         continue; /* chest exists in DB but has no items */
+
+      /* Build the item OBJ_DATA */
+      int parent_id_field = PQgetisnull(res, r, 2) ? -1 : atoi(PQgetvalue(res, r, 2));
+      int sort_order = PQgetisnull(res, r, 4) ? 0 : atoi(PQgetvalue(res, r, 4));
+      const char *name = PQgetvalue(res, r, 5);
+      const char *short_descr = PQgetvalue(res, r, 6);
+      const char *description = PQgetvalue(res, r, 7);
+      int obj_vnum = atoi(PQgetvalue(res, r, 8));
+      (void)parent_id_field;
+
+      OBJ_INDEX_DATA *pIdx = get_obj_index(obj_vnum);
+      /* If prototype not found, create a generic placeholder */
+      if (!pIdx)
+      {
+         log_f("db_load_chests: obj vnum %d not found, skipping item.", obj_vnum);
+         continue;
+      }
+
+      OBJ_DATA *obj;
+      static OBJ_DATA obj_zero;
+      GET_FREE(obj, obj_free);
+      *obj = obj_zero;
+      obj->pIndexData = pIdx;
+      obj->name = str_dup(name[0] ? name : pIdx->name);
+      obj->short_descr = str_dup(short_descr[0] ? short_descr : pIdx->short_descr);
+      obj->description = str_dup(description[0] ? description : pIdx->description);
+      obj->extra_flags = (long long)atoll(PQgetvalue(res, r, 9));
+      obj->wear_flags = atoi(PQgetvalue(res, r, 10));
+      obj->wear_loc = atoi(PQgetvalue(res, r, 11));
+      obj->item_apply = atoi(PQgetvalue(res, r, 12));
+      obj->item_type = atoi(PQgetvalue(res, r, 13));
+      obj->weight = atoi(PQgetvalue(res, r, 14));
+      obj->level = atoi(PQgetvalue(res, r, 15));
+      obj->timer = atoi(PQgetvalue(res, r, 16));
+      obj->cost = atoi(PQgetvalue(res, r, 17));
+      obj->value[0] = atoi(PQgetvalue(res, r, 18));
+      obj->value[1] = atoi(PQgetvalue(res, r, 19));
+      obj->value[2] = atoi(PQgetvalue(res, r, 20));
+      obj->value[3] = atoi(PQgetvalue(res, r, 21));
+      obj->value[4] = atoi(PQgetvalue(res, r, 22));
+      obj->value[5] = atoi(PQgetvalue(res, r, 23));
+      obj->value[6] = atoi(PQgetvalue(res, r, 24));
+      obj->value[7] = atoi(PQgetvalue(res, r, 25));
+      obj->value[8] = atoi(PQgetvalue(res, r, 26));
+      obj->value[9] = atoi(PQgetvalue(res, r, 27));
+
+      if (!PQgetisnull(res, r, 28))
+      {
+         const char *objfun_name = PQgetvalue(res, r, 28);
+         if (objfun_name[0])
+            obj->obj_fun = obj_fun_lookup(objfun_name);
+      }
+
+      pIdx->count++;
+      LINK(obj, first_obj, last_obj, next, prev);
+
+      /* Find parent container using sort_order lookup */
+      OBJ_DATA *parent_obj = nest_obj[0]; /* default: chest root */
+      {
+         int parent_db_id = PQgetisnull(res, r, 2) ? -1 : atoi(PQgetvalue(res, r, 2));
+         if (parent_db_id != -1)
+         {
+            /* Find which previously-loaded item has that DB id */
+            int ki;
+            for (ki = 0; ki < n; ki++)
+            {
+               if (PQgetisnull(res, ki, 1))
+                  continue;
+               if (atoi(PQgetvalue(res, ki, 1)) == parent_db_id)
+               {
+                  /* Find the nest_obj entry for that sort_order */
+                  int ps = PQgetisnull(res, ki, 4) ? 0 : atoi(PQgetvalue(res, ki, 4));
+                  int nk;
+                  for (nk = 0; nk < nest_count; nk++)
+                     if (nest_sort[nk] == ps)
+                     {
+                        parent_obj = nest_obj[nk];
+                        break;
+                     }
+                  break;
+               }
+            }
+         }
+      }
+
+      obj_to_obj(obj, parent_obj);
+
+      /* Track this item for child lookups */
+      if (nest_count < CHEST_MAX_NEST_TRACK)
+      {
+         nest_sort[nest_count] = sort_order;
+         nest_obj[nest_count] = obj;
+         nest_count++;
+      }
+   }
+#undef CHEST_MAX_NEST_TRACK
+
+   PQclear(res);
+
+   /* --- Phase 2: flat-file fallback for unmigrated chests ---------------
+    * Scan data/chest/ for files whose vnum is not in the DB vnum list.
+    */
+   {
+      DIR *dir;
+      struct dirent *entry;
+      char chest_dir[MAX_STRING_LENGTH];
+      snprintf(chest_dir, sizeof(chest_dir), "%s", CHEST_DIR);
+
+      dir = opendir(chest_dir);
+      if (dir)
+      {
+         while ((entry = readdir(dir)) != NULL)
+         {
+            int file_vnum;
+            int k, in_db;
+
+            if (entry->d_name[0] == '.')
+               continue;
+            file_vnum = atoi(entry->d_name);
+            if (file_vnum <= 0)
+               continue;
+
+            in_db = 0;
+            for (k = 0; k < db_vnum_count; k++)
+               if (db_vnums[k] == file_vnum)
+               {
+                  in_db = 1;
+                  break;
+               }
+
+            if (!in_db)
+            {
+               log_f("DB: chest vnum %d not in database, loading from flat file (migrate it!).",
+                     file_vnum);
+               load_chest(file_vnum);
+            }
+         }
+         closedir(dir);
+      }
+   }
+
+   free(db_vnums);
 }
 
 #endif /* HAVE_LIBPQ */

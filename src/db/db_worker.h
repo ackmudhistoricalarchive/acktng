@@ -39,6 +39,7 @@ typedef enum
    DB_WRITE_RULERS,     /* save ruler list           */
    DB_WRITE_BRANDS,     /* save brand list           */
    DB_WRITE_ROOM_MARKS, /* save room marks           */
+   DB_WRITE_CHEST,      /* save one keep chest       */
    /* Reads — worker fetches and posts result */
    DB_READ_PLAYER, /* load one player at login */
    /* Control */
@@ -105,6 +106,9 @@ void db_worker_save_brands(struct dl_list *first_brand_arg);
 
 /* Save room mark list. */
 void db_worker_save_room_marks(struct mark_list_member *first_mark_arg);
+
+/* Save one keep chest (and its contents). */
+void db_worker_save_chest(struct obj_data *chest);
 
 #endif /* HAVE_LIBPQ */
 

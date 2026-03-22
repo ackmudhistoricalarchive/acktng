@@ -578,6 +578,245 @@ static int handle_write_corpses(DB_REQUEST *req)
    return 1;
 }
 
+/* Chest serialisation format (SBuf / SER_RS / SER_FS):
+ *
+ *  Record 0 (chest header):
+ *    vnum FS owner_name FS max_items RS
+ *
+ *  Records 1…N (items in DFS pre-order, parent before children):
+ *    sort_order FS parent_sort FS obj_vnum FS name FS short_descr FS
+ *    description FS extra_flags FS wear_flags FS wear_loc FS
+ *    class_flags FS item_type FS weight FS level FS timer FS cost FS
+ *    v0 FS v1 FS v2 FS v3 FS v4 FS v5 FS v6 FS v7 FS v8 FS v9 FS
+ *    objfun RS
+ *
+ *  parent_sort == -1 means direct child of the chest (nest==1).
+ */
+static int handle_write_chest(DB_REQUEST *req)
+{
+   const char *p = (const char *)req->buf;
+   char f[3][1024];
+   PGresult *res;
+   int chest_vnum, max_items;
+   const char *cv[32];
+   char vbuf[32], mibuf[32];
+   char chest_id_s[32];
+
+   if (!p || req->len == 0)
+      return 0;
+   if (!ensure_connected())
+      return 0;
+
+   /* --- Parse header record ------------------------------------------- */
+   if (!rec_field(&p, f[0], sizeof(f[0])))
+      return 0; /* vnum */
+   if (!rec_field(&p, f[1], sizeof(f[1])))
+      return 0; /* owner_name */
+   if (!rec_field(&p, f[2], sizeof(f[2])))
+      return 0; /* max_items */
+   p = rec_next(p);
+
+   chest_vnum = atoi(f[0]);
+   max_items = atoi(f[2]);
+
+   /* --- BEGIN transaction -------------------------------------------- */
+   res = PQexec(worker_conn, "BEGIN");
+   if (PQresultStatus(res) != PGRES_COMMAND_OK)
+   {
+      fprintf(stderr, "DB worker chest: BEGIN failed: %s\n", PQerrorMessage(worker_conn));
+      PQclear(res);
+      return 0;
+   }
+   PQclear(res);
+
+   /* --- Upsert keep_chests row --------------------------------------- */
+   snprintf(vbuf, sizeof(vbuf), "%d", chest_vnum);
+   snprintf(mibuf, sizeof(mibuf), "%d", max_items);
+   cv[0] = vbuf;
+   cv[1] = f[1]; /* owner_name */
+   cv[2] = mibuf;
+   res = PQexecParams(worker_conn,
+                      "INSERT INTO keep_chests (vnum, owner_name, max_items)"
+                      " VALUES ($1, $2, $3)"
+                      " ON CONFLICT (vnum) DO UPDATE"
+                      "   SET owner_name=$2, max_items=$3, updated_at=NOW()"
+                      " RETURNING id",
+                      3, NULL, cv, NULL, NULL, 0);
+   if (PQresultStatus(res) != PGRES_TUPLES_OK || PQntuples(res) == 0)
+   {
+      fprintf(stderr, "DB worker chest: upsert keep_chests failed: %s\n",
+              PQerrorMessage(worker_conn));
+      PQclear(res);
+      PQexec(worker_conn, "ROLLBACK");
+      return 0;
+   }
+   snprintf(chest_id_s, sizeof(chest_id_s), "%s", PQgetvalue(res, 0, 0));
+   PQclear(res);
+
+   /* --- Delete existing items for this chest ------------------------- */
+   cv[0] = chest_id_s;
+   res = PQexecParams(worker_conn, "DELETE FROM keep_chest_items WHERE chest_id=$1", 1, NULL, cv,
+                      NULL, NULL, 0);
+   if (PQresultStatus(res) != PGRES_COMMAND_OK)
+   {
+      fprintf(stderr, "DB worker chest: DELETE items failed: %s\n", PQerrorMessage(worker_conn));
+      PQclear(res);
+      PQexec(worker_conn, "ROLLBACK");
+      return 0;
+   }
+   PQclear(res);
+
+   /* Track sort_order → generated DB id mapping for parent lookups */
+#define CHEST_SORT_MAP_SIZE 512
+   int map_sort[CHEST_SORT_MAP_SIZE];
+   int map_id[CHEST_SORT_MAP_SIZE];
+   int map_n = 0;
+
+   /* --- Insert item records ------------------------------------------ */
+   while (*p)
+   {
+      char sort_s[32], parent_sort_s[32], obj_vnum_s[32];
+      char item_name[1024], item_short[1024], item_desc[4096];
+      char eflags_s[32], wflags_s[32], wloc_s[32], cflags_s[32];
+      char itype_s[32], weight_s[32], level_s[32], timer_s[32], cost_s[32];
+      char v[10][32], objfun_s[256];
+      int vi, parent_sort, parent_db_id_str_found;
+      char parent_db_id_s[32];
+
+      if (!rec_field(&p, sort_s, sizeof(sort_s)))
+         break;
+      if (!rec_field(&p, parent_sort_s, sizeof(parent_sort_s)))
+         break;
+      if (!rec_field(&p, obj_vnum_s, sizeof(obj_vnum_s)))
+         break;
+      if (!rec_field(&p, item_name, sizeof(item_name)))
+         break;
+      if (!rec_field(&p, item_short, sizeof(item_short)))
+         break;
+      if (!rec_field(&p, item_desc, sizeof(item_desc)))
+         break;
+      if (!rec_field(&p, eflags_s, sizeof(eflags_s)))
+         break;
+      if (!rec_field(&p, wflags_s, sizeof(wflags_s)))
+         break;
+      if (!rec_field(&p, wloc_s, sizeof(wloc_s)))
+         break;
+      if (!rec_field(&p, cflags_s, sizeof(cflags_s)))
+         break;
+      if (!rec_field(&p, itype_s, sizeof(itype_s)))
+         break;
+      if (!rec_field(&p, weight_s, sizeof(weight_s)))
+         break;
+      if (!rec_field(&p, level_s, sizeof(level_s)))
+         break;
+      if (!rec_field(&p, timer_s, sizeof(timer_s)))
+         break;
+      if (!rec_field(&p, cost_s, sizeof(cost_s)))
+         break;
+      for (vi = 0; vi < 10; vi++)
+         if (!rec_field(&p, v[vi], sizeof(v[vi])))
+            break;
+      if (!rec_field(&p, objfun_s, sizeof(objfun_s)))
+         break;
+      p = rec_next(p);
+
+      /* Resolve parent sort_order → DB id */
+      parent_sort = atoi(parent_sort_s);
+      parent_db_id_str_found = 0;
+      snprintf(parent_db_id_s, sizeof(parent_db_id_s), "NULL");
+
+      if (parent_sort >= 0)
+      {
+         int ki;
+         for (ki = 0; ki < map_n; ki++)
+            if (map_sort[ki] == parent_sort)
+            {
+               snprintf(parent_db_id_s, sizeof(parent_db_id_s), "%d", map_id[ki]);
+               parent_db_id_str_found = 1;
+               break;
+            }
+         if (!parent_db_id_str_found)
+            fprintf(stderr, "DB worker chest: parent sort %d not found for sort %s\n", parent_sort,
+                    sort_s);
+      }
+
+      /* Build INSERT */
+      cv[0] = chest_id_s;
+      cv[1] = parent_db_id_str_found ? parent_db_id_s : NULL;
+      cv[2] = item_name;
+      cv[3] = item_short;
+      cv[4] = item_desc;
+      cv[5] = obj_vnum_s;
+      cv[6] = eflags_s;
+      cv[7] = wflags_s;
+      cv[8] = wloc_s;
+      cv[9] = cflags_s;
+      cv[10] = itype_s;
+      cv[11] = weight_s;
+      cv[12] = level_s;
+      cv[13] = timer_s;
+      cv[14] = cost_s;
+      cv[15] = v[0];
+      cv[16] = v[1];
+      cv[17] = v[2];
+      cv[18] = v[3];
+      cv[19] = v[4];
+      cv[20] = v[5];
+      cv[21] = v[6];
+      cv[22] = v[7];
+      cv[23] = v[8];
+      cv[24] = v[9];
+      cv[25] = objfun_s[0] ? objfun_s : NULL;
+      cv[26] = sort_s;
+
+      res = PQexecParams(worker_conn,
+                         "INSERT INTO keep_chest_items"
+                         " (chest_id, parent_id, name, short_descr, description,"
+                         "  vnum, extra_flags, wear_flags, wear_loc, class_flags,"
+                         "  item_type, weight, level, timer, cost,"
+                         "  value_0, value_1, value_2, value_3, value_4,"
+                         "  value_5, value_6, value_7, value_8, value_9,"
+                         "  objfun, sort_order)"
+                         " VALUES"
+                         " ($1, $2, $3, $4, $5,"
+                         "  $6, $7, $8, $9, $10,"
+                         "  $11, $12, $13, $14, $15,"
+                         "  $16, $17, $18, $19, $20,"
+                         "  $21, $22, $23, $24, $25,"
+                         "  $26, $27)"
+                         " RETURNING id",
+                         27, NULL, cv, NULL, NULL, 0);
+      if (PQresultStatus(res) != PGRES_TUPLES_OK || PQntuples(res) == 0)
+      {
+         fprintf(stderr, "DB worker chest: INSERT item failed: %s\n", PQerrorMessage(worker_conn));
+         PQclear(res);
+         PQexec(worker_conn, "ROLLBACK");
+         return 0;
+      }
+
+      /* Record the mapping sort_order → DB id */
+      if (map_n < CHEST_SORT_MAP_SIZE)
+      {
+         map_sort[map_n] = atoi(sort_s);
+         map_id[map_n] = atoi(PQgetvalue(res, 0, 0));
+         map_n++;
+      }
+      PQclear(res);
+   }
+#undef CHEST_SORT_MAP_SIZE
+
+   res = PQexec(worker_conn, "COMMIT");
+   if (PQresultStatus(res) != PGRES_COMMAND_OK)
+   {
+      fprintf(stderr, "DB worker chest: COMMIT failed: %s\n", PQerrorMessage(worker_conn));
+      PQclear(res);
+      PQexec(worker_conn, "ROLLBACK");
+      return 0;
+   }
+   PQclear(res);
+   return 1;
+}
+
 /* -----------------------------------------------------------------------
  * Public serialisation wrappers (called from game thread)
  * ----------------------------------------------------------------------- */
@@ -733,6 +972,118 @@ void db_worker_save_brands(DL_LIST *first_brand_arg)
    }
 }
 
+/* Serialise one keep chest's contents DFS pre-order. */
+static void sbuf_chest_items(SBuf *s, OBJ_DATA *obj, int parent_sort, int *counter)
+{
+   int my_sort = (*counter)++;
+   char objfun_name[64];
+   const char *fun_name = "";
+   OBJ_DATA *child;
+
+   if (obj->obj_fun)
+   {
+      const char *n = rev_obj_fun_lookup(obj->obj_fun);
+      if (n)
+         fun_name = n;
+   }
+   else
+   {
+      fun_name = "";
+   }
+   snprintf(objfun_name, sizeof(objfun_name), "%s", fun_name ? fun_name : "");
+
+   sbuf_puti(s, (long)my_sort);
+   sbuf_fs(s);
+   sbuf_puti(s, (long)parent_sort);
+   sbuf_fs(s);
+   sbuf_puti(s, (long)obj->pIndexData->vnum);
+   sbuf_fs(s);
+   sbuf_puts(s, obj->name ? obj->name : "");
+   sbuf_fs(s);
+   sbuf_puts(s, obj->short_descr ? obj->short_descr : "");
+   sbuf_fs(s);
+   sbuf_puts(s, obj->description ? obj->description : "");
+   sbuf_fs(s);
+   sbuf_puti(s, (long)obj->extra_flags);
+   sbuf_fs(s);
+   sbuf_puti(s, (long)obj->wear_flags);
+   sbuf_fs(s);
+   sbuf_puti(s, (long)obj->wear_loc);
+   sbuf_fs(s);
+   sbuf_puti(s, (long)obj->item_apply);
+   sbuf_fs(s);
+   sbuf_puti(s, (long)obj->item_type);
+   sbuf_fs(s);
+   sbuf_puti(s, (long)obj->weight);
+   sbuf_fs(s);
+   sbuf_puti(s, (long)obj->level);
+   sbuf_fs(s);
+   sbuf_puti(s, (long)obj->timer);
+   sbuf_fs(s);
+   sbuf_puti(s, (long)obj->cost);
+   sbuf_fs(s);
+   {
+      int vi;
+      for (vi = 0; vi < 10; vi++)
+      {
+         sbuf_puti(s, (long)obj->value[vi]);
+         sbuf_fs(s);
+      }
+   }
+   sbuf_puts(s, objfun_name);
+   sbuf_rs(s);
+
+   /* Recurse into contents (children of this item) */
+   for (child = obj->first_in_carry_list; child; child = child->next_in_carry_list)
+      sbuf_chest_items(s, child, my_sort, counter);
+}
+
+void db_worker_save_chest(OBJ_DATA *chest)
+{
+   SBuf s;
+   int sort_counter = 0;
+   OBJ_DATA *item;
+   /* Extract owner name from short_descr: "<name>'s Keep Chest" */
+   char owner[MAX_INPUT_LENGTH] = "";
+   if (chest->short_descr)
+   {
+      const char *ap = strstr(chest->short_descr, "'s Keep Chest");
+      if (ap)
+      {
+         size_t len = (size_t)(ap - chest->short_descr);
+         if (len >= sizeof(owner))
+            len = sizeof(owner) - 1;
+         strncpy(owner, chest->short_descr, len);
+         owner[len] = '\0';
+      }
+      else
+      {
+         strncpy(owner, chest->short_descr, sizeof(owner) - 1);
+         owner[sizeof(owner) - 1] = '\0';
+      }
+   }
+
+   sbuf_init(&s);
+
+   /* Header record: vnum, owner_name, max_items */
+   sbuf_puti(&s, (long)chest->pIndexData->vnum);
+   sbuf_fs(&s);
+   sbuf_puts(&s, owner);
+   sbuf_fs(&s);
+   sbuf_puti(&s, (long)chest->value[3]);
+   sbuf_rs(&s);
+
+   /* Items (DFS pre-order, -1 parent_sort = direct child of chest) */
+   for (item = chest->first_in_carry_list; item; item = item->next_in_carry_list)
+      sbuf_chest_items(&s, item, -1, &sort_counter);
+
+   if (s.buf)
+   {
+      db_worker_enqueue_write(DB_WRITE_CHEST, s.buf, s.len, NULL);
+      free(s.buf);
+   }
+}
+
 void db_worker_save_room_marks(MARK_LIST_MEMBER *first_mark_arg)
 {
    MARK_LIST_MEMBER *ml;
@@ -779,6 +1130,8 @@ static int dispatch(DB_REQUEST *req)
       return handle_write_brands(req);
    case DB_WRITE_ROOM_MARKS:
       return handle_write_room_marks(req);
+   case DB_WRITE_CHEST:
+      return handle_write_chest(req);
    case DB_READ_PLAYER:
       handle_read_player(req);
       return 1;

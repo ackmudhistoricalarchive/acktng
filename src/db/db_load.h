@@ -39,6 +39,7 @@ void db_load_sysdata(void);
 void db_load_boards(void);
 void db_load_room_marks(void);
 void db_load_corpses(void);
+void db_load_chests(void);
 
 #endif /* HAVE_LIBPQ */
 

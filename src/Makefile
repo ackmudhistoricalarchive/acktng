@@ -44,7 +44,7 @@ ifneq ($(OPENSSL_LIBS),)
 endif
 
 ifneq ($(LIBPQ_LIBS),)
-    C_FLAGS += -DHAVE_LIBPQ $(LIBPQ_CFLAGS)
+    C_FLAGS += -DHAVE_LIBPQ -DUSE_DB_LOAD $(LIBPQ_CFLAGS)
     L_FLAGS += $(LIBPQ_LIBS)
 endif
 
