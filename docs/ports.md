@@ -36,19 +36,35 @@ from Let's Encrypt (`/etc/letsencrypt/live/ackmud.com/`).  In development the
 
 ---
 
-## 18890 — WebSocket (ws://)
+## 9891 — WSS (wss://)
+
+| Field       | Value |
+|-------------|-------|
+| Protocol    | WebSocket over TLS (`wss://`) |
+| Clients     | Browser-based clients connecting directly (no proxy required) |
+| Server arg  | `--wss-port 9891` (binds to 0.0.0.0) |
+| TLS?        | **Always.**  Requires the same cert/key as `--tls-port`. |
+
+`--wss-port` is the native WSS listener.  The server performs a TLS handshake
+on accept, after which the WebSocket HTTP upgrade handshake proceeds over the
+encrypted channel.  The same cert/key files used by `--tls-port` are reused;
+no separate certificate is needed.
+
+---
+
+## 18890 — WebSocket loopback (ws://)
 
 | Field       | Value |
 |-------------|-------|
 | Protocol    | Plain WebSocket (`ws://`) |
-| Clients     | Browser-based clients, Mudlet WebSocket mode |
+| Clients     | nginx proxy on the same host forwarding from a public WSS port |
 | Server arg  | `--ws-loopback 18890` (binds to 127.0.0.1 only) |
-| TLS?        | No.  WSS (`wss://`) is not yet implemented; see `docs/proposals/` for design. |
+| TLS?        | No.  TLS is terminated by the proxy, not the server. |
 
-`--ws-loopback` binds only to the loopback interface (127.0.0.1).  Public
-WebSocket access currently requires a TLS-terminating proxy (e.g. nginx) on
-the same host forwarding `wss://ackmud.com:18890` → `ws://127.0.0.1:18890`.
-A native `--wss-port` option (server-side TLS WebSocket) is planned.
+`--ws-loopback` binds only to the loopback interface (127.0.0.1).  It is
+retained for deployments that route WSS through an nginx reverse proxy.
+Deployments without nginx can use `--wss-port` instead and omit
+`--ws-loopback` entirely.
 
 ---
 
@@ -57,8 +73,8 @@ A native `--wss-port` option (server-side TLS WebSocket) is planned.
 If you need to change a port assignment, update **all** of:
 
 - `docs/ports.md` (this file)
-- `startup` — dev startup script (`PORT`, `TLS_PORT`, `WS_PORT` defaults)
-- `scripts/startup` — production startup script (`telnet_port`, `tls_port`, `ws_port`)
+- `startup` — dev startup script (`PORT`, `TLS_PORT`, `WSS_PORT`, `WS_PORT` defaults)
+- `scripts/startup` — production startup script (`telnet_port`, `tls_port`, `wss_port`, `ws_port`)
 - `integration-test.sh` — WebSocket integration test (ephemeral ports, but comment)
 - `integration-test-telnet.sh` — plain telnet integration test
 - `integration-test-telnet-tls.sh` — TLS telnet integration test

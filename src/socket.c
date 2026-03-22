@@ -108,6 +108,7 @@ DESCRIPTOR_DATA *d_next; /* Next descriptor in loop      */
 
 int global_port;
 int global_ws_port = -1;
+int global_wss_port = -1;
 int global_tls_port = -1;
 int global_sniff_port = -1;
 int global_http_port = -1;
@@ -794,7 +795,8 @@ void reopen_socket(int sig)
 
 /* + */
 
-void game_loop(int control, int control_ws, int control_tls, int control_sniff, int control_http)
+void game_loop(int control, int control_ws, int control_tls, int control_sniff, int control_http,
+               int control_wss)
 {
    static struct timeval null_time;
    struct timeval last_time;
@@ -857,6 +859,11 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
             close(control_http);
             control_http = init_socket(global_http_port, INADDR_ANY);
          }
+         if (control_wss >= 0)
+         {
+            close(control_wss);
+            control_wss = init_socket(global_wss_port, INADDR_ANY);
+         }
          reopen_flag = 0;
       }
 
@@ -891,6 +898,11 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
       {
          FD_SET(control_http, &in_set);
          maxdesc = UMAX(maxdesc, control_http);
+      }
+      if (control_wss >= 0)
+      {
+         FD_SET(control_wss, &in_set);
+         maxdesc = UMAX(maxdesc, control_wss);
       }
 
       for (d = first_desc; d; d = d->next)
@@ -946,13 +958,15 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
             close(desc);
          }
       }
+      if (control_wss >= 0 && FD_ISSET(control_wss, &in_set))
+         new_descriptor(control_wss, TRUE, FALSE);
 
-      /*
-       * Advance any pending TLS handshakes non-blockingly.
-       * SSL_accept was deferred from new_descriptor to avoid blocking the
-       * game loop.  Each iteration we try to complete the handshake when the
-       * socket is ready, or time out after a short deadline.
-       */
+         /*
+          * Advance any pending TLS handshakes non-blockingly.
+          * SSL_accept was deferred from new_descriptor to avoid blocking the
+          * game loop.  Each iteration we try to complete the handshake when the
+          * socket is ready, or time out after a short deadline.
+          */
 #ifdef HAVE_OPENSSL
       for (d = first_desc; d != NULL; d = d_next)
       {
