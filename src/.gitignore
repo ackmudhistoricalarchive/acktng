@@ -5,3 +5,5 @@ nohup.out
 *.save
 unit-test*
 players.num
+tools/import_to_db
+tools/db_to_files
