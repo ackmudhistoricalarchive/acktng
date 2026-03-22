@@ -43,6 +43,7 @@
 
 static PGconn *conn;
 static int errors;
+static FILE *errlog; /* error/warning log file (opened in main) */
 
 /* -----------------------------------------------------------------------
  * SQL execution helpers
@@ -53,7 +54,7 @@ static int exec_sql(const char *sql)
    PGresult *res = PQexec(conn, sql);
    int ok = (PQresultStatus(res) == PGRES_COMMAND_OK || PQresultStatus(res) == PGRES_TUPLES_OK);
    if (!ok)
-      fprintf(stderr, "SQL error: %s\n--- %s\n", PQresultErrorMessage(res), sql);
+      fprintf(errlog, "SQL error: %s\n--- %s\n", PQresultErrorMessage(res), sql);
    PQclear(res);
    return ok;
 }
@@ -65,7 +66,7 @@ static int exec_params(const char *sql, int n, const char *const *vals)
    int ok = (s == PGRES_COMMAND_OK || s == PGRES_TUPLES_OK);
    if (!ok)
    {
-      fprintf(stderr, "ERROR [params]: %s\n", PQresultErrorMessage(res));
+      fprintf(errlog, "ERROR [params]: %s\n", PQresultErrorMessage(res));
       errors++;
    }
    PQclear(res);
@@ -82,7 +83,7 @@ static int exec_returning_id(const char *sql, int n, const char *const *vals)
       id = atoi(PQgetvalue(res, 0, 0));
    else
    {
-      fprintf(stderr, "ERROR [returning_id]: %s\n", PQresultErrorMessage(res));
+      fprintf(errlog, "ERROR [returning_id]: %s\n", PQresultErrorMessage(res));
       errors++;
    }
    PQclear(res);
@@ -398,7 +399,7 @@ static int import_one_helpfile(const char *path, const char *filename, const cha
    buf = read_file(path);
    if (!buf)
    {
-      fprintf(stderr, "  WARN: cannot read %s\n", path);
+      fprintf(errlog, "  WARN: cannot read %s\n", path);
       return 0;
    }
 
@@ -473,7 +474,7 @@ static int import_helpdir(const char *dirpath, const char *table)
    dp = opendir(dirpath);
    if (!dp)
    {
-      fprintf(stderr, "WARN: cannot open %s: %s\n", dirpath, strerror(errno));
+      fprintf(errlog, "WARN: cannot open %s: %s\n", dirpath, strerror(errno));
       return 0;
    }
 
@@ -579,7 +580,7 @@ static int import_one_lorefile(const char *path, const char *filename)
    buf = read_file(path);
    if (!buf)
    {
-      fprintf(stderr, "  WARN: cannot read lore %s\n", path);
+      fprintf(errlog, "  WARN: cannot read lore %s\n", path);
       return 0;
    }
 
@@ -622,7 +623,7 @@ static int import_one_lorefile(const char *path, const char *filename)
                       2, NULL, vals, NULL, NULL, 0);
    if (PQresultStatus(res) != PGRES_TUPLES_OK || PQntuples(res) == 0)
    {
-      fprintf(stderr, "ERROR: lore_topics upsert failed for %s: %s\n", filename,
+      fprintf(errlog, "ERROR: lore_topics upsert failed for %s: %s\n", filename,
               PQresultErrorMessage(res));
       PQclear(res);
       free(buf);
@@ -741,7 +742,7 @@ static int import_loredir(const char *dirpath)
    dp = opendir(dirpath);
    if (!dp)
    {
-      fprintf(stderr, "WARN: cannot open lore dir %s: %s\n", dirpath, strerror(errno));
+      fprintf(errlog, "WARN: cannot open lore dir %s: %s\n", dirpath, strerror(errno));
       return 0;
    }
 
@@ -1042,7 +1043,7 @@ static void import_rooms_section(FILE *fp, int area_id)
          }
          else
          {
-            fprintf(stderr, "WARN: room %d: unexpected sub-record '%c'\n", vnum, sub);
+            fprintf(errlog, "WARN: room %d: unexpected sub-record '%c'\n", vnum, sub);
             il_fread_to_eol(fp);
          }
       }
@@ -1582,7 +1583,7 @@ static void import_specials_section(FILE *fp)
       }
       else
       {
-         fprintf(stderr, "WARN: #SPECIALS: unexpected letter '%c'\n", letter);
+         fprintf(errlog, "WARN: #SPECIALS: unexpected letter '%c'\n", letter);
          il_fread_to_eol(fp);
       }
    }
@@ -1622,7 +1623,7 @@ static void import_objfuns_section(FILE *fp)
       }
       else
       {
-         fprintf(stderr, "WARN: #OBJFUNS: unexpected letter '%c'\n", letter);
+         fprintf(errlog, "WARN: #OBJFUNS: unexpected letter '%c'\n", letter);
          il_fread_to_eol(fp);
       }
    }
@@ -1647,7 +1648,7 @@ static int import_area_file(const char *path)
    fp = fopen(path, "r");
    if (!fp)
    {
-      fprintf(stderr, "WARN: cannot open area file %s: %s\n", path, strerror(errno));
+      fprintf(errlog, "WARN: cannot open area file %s: %s\n", path, strerror(errno));
       return 0;
    }
 
@@ -1677,7 +1678,7 @@ static int import_area_file(const char *path)
          area_id = import_area_header(fp, &area_revision);
          if (area_id < 0)
          {
-            fprintf(stderr, "ERROR: area header import failed for %s\n", path);
+            fprintf(errlog, "ERROR: area header import failed for %s\n", path);
             free(section);
             exec_sql("ROLLBACK");
             fclose(fp);
@@ -1748,7 +1749,7 @@ static int import_areas(const char *area_lst_path, const char *area_dir)
    fp = fopen(area_lst_path, "r");
    if (!fp)
    {
-      fprintf(stderr, "WARN: cannot open %s\n", area_lst_path);
+      fprintf(errlog, "WARN: cannot open %s\n", area_lst_path);
       return 0;
    }
 
@@ -1767,7 +1768,7 @@ static int import_areas(const char *area_lst_path, const char *area_dir)
       }
       else
       {
-         fprintf(stderr, "  WARN: failed to import %s\n", line);
+         fprintf(errlog, "  WARN: failed to import %s\n", line);
       }
    }
 
@@ -1795,7 +1796,7 @@ static int import_bans(const char *path)
    fp = fopen(path, "r");
    if (!fp)
    {
-      fprintf(stderr, "WARN: cannot open %s: %s\n", path, strerror(errno));
+      fprintf(errlog, "WARN: cannot open %s: %s\n", path, strerror(errno));
       return 0;
    }
 
@@ -1866,13 +1867,13 @@ static int import_socials(const char *path)
    fp = fopen(path, "r");
    if (!fp)
    {
-      fprintf(stderr, "WARN: cannot open %s: %s\n", path, strerror(errno));
+      fprintf(errlog, "WARN: cannot open %s: %s\n", path, strerror(errno));
       return 0;
    }
 
    if (fscanf(fp, "%d\n", &total) != 1)
    {
-      fprintf(stderr, "WARN: cannot read social count from %s\n", path);
+      fprintf(errlog, "WARN: cannot read social count from %s\n", path);
       fclose(fp);
       return 0;
    }
@@ -1951,7 +1952,7 @@ static int import_rulers(const char *path)
    fp = fopen(path, "r");
    if (!fp)
    {
-      fprintf(stderr, "WARN: cannot open %s: %s\n", path, strerror(errno));
+      fprintf(errlog, "WARN: cannot open %s: %s\n", path, strerror(errno));
       return 0;
    }
 
@@ -2019,7 +2020,7 @@ static int import_brands(const char *path)
    fp = fopen(path, "r");
    if (!fp)
    {
-      fprintf(stderr, "WARN: cannot open %s: %s\n", path, strerror(errno));
+      fprintf(errlog, "WARN: cannot open %s: %s\n", path, strerror(errno));
       return 0;
    }
 
@@ -2130,14 +2131,14 @@ static int import_clans(const char *clandata_path)
       }
       else
       {
-         fprintf(stderr, "WARN: clandata.dat MAX_CLAN=%d != %d, using defaults\n", file_max,
+         fprintf(errlog, "WARN: clandata.dat MAX_CLAN=%d != %d, using defaults\n", file_max,
                  IL_MAX_CLAN);
       }
       fclose(fp);
    }
    else
    {
-      fprintf(stderr, "WARN: cannot open %s, using defaults\n", clandata_path);
+      fprintf(errlog, "WARN: cannot open %s, using defaults\n", clandata_path);
    }
 
    exec_sql("BEGIN");
@@ -2300,7 +2301,7 @@ static int import_one_board(const char *path)
          break;
       if (letter != 'M')
       {
-         fprintf(stderr, "WARN: board %d: expected M, got '%c'\n", vnum, letter);
+         fprintf(errlog, "WARN: board %d: expected M, got '%c'\n", vnum, letter);
          break;
       }
 
@@ -2341,7 +2342,7 @@ static int import_boards(const char *boards_dir)
    dp = opendir(boards_dir);
    if (!dp)
    {
-      fprintf(stderr, "WARN: cannot open boards dir %s: %s\n", boards_dir, strerror(errno));
+      fprintf(errlog, "WARN: cannot open boards dir %s: %s\n", boards_dir, strerror(errno));
       return 0;
    }
 
@@ -2399,6 +2400,15 @@ int main(int argc, char *argv[])
    int n;
 
    printf("import_to_db — ACK!TNG database migration tool\n");
+
+   errlog = fopen("import_errors.log", "w");
+   if (!errlog)
+   {
+      fprintf(stderr, "WARN: cannot open import_errors.log for writing, falling back to stderr\n");
+      errlog = stderr;
+   }
+   else
+      printf("Errors and warnings will be written to: import_errors.log\n");
 
    if (argc > 1)
       connstr = argv[1];
@@ -2462,9 +2472,12 @@ int main(int argc, char *argv[])
 
    /* ------------------------------------------------------------------ */
    if (errors > 0)
-      printf("\n%d error(s) encountered — check stderr output above.\n", errors);
+      printf("\n%d error(s) encountered — see import_errors.log for details.\n", errors);
    else
       printf("\nAll imports completed successfully.\n");
+
+   if (errlog != stderr)
+      fclose(errlog);
 
    PQfinish(conn);
    return errors > 0 ? 1 : 0;
