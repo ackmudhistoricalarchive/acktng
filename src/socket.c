@@ -92,7 +92,7 @@ void stop_idling(CHAR_DATA *ch);
 /*
  * Forward declarations for socket.c-internal functions used before their definitions
  */
-void new_descriptor(int control, bool is_tls, bool do_sniff);
+void new_descriptor(int control, bool is_tls, bool do_sniff, bool is_wss);
 void init_descriptor(DESCRIPTOR_DATA *dnew, int desc);
 bool read_from_descriptor(DESCRIPTOR_DATA *d);
 bool write_websocket_frame(DESCRIPTOR_DATA *d, unsigned char opcode, const unsigned char *payload,
@@ -940,13 +940,13 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
        * New connection?
        */
       if (control >= 0 && FD_ISSET(control, &in_set))
-         new_descriptor(control, FALSE, TRUE);
+         new_descriptor(control, FALSE, TRUE, FALSE);
       if (control_ws >= 0 && FD_ISSET(control_ws, &in_set))
-         new_descriptor(control_ws, FALSE, FALSE);
+         new_descriptor(control_ws, FALSE, FALSE, FALSE);
       if (control_tls >= 0 && FD_ISSET(control_tls, &in_set))
-         new_descriptor(control_tls, TRUE, FALSE);
+         new_descriptor(control_tls, TRUE, FALSE, FALSE);
       if (control_sniff >= 0 && FD_ISSET(control_sniff, &in_set))
-         new_descriptor(control_sniff, FALSE, TRUE);
+         new_descriptor(control_sniff, FALSE, TRUE, FALSE);
       if (control_http >= 0 && FD_ISSET(control_http, &in_set))
       {
          struct sockaddr_in sa;
@@ -959,7 +959,7 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
          }
       }
       if (control_wss >= 0 && FD_ISSET(control_wss, &in_set))
-         new_descriptor(control_wss, TRUE, FALSE);
+         new_descriptor(control_wss, TRUE, FALSE, TRUE);
 
          /*
           * Advance any pending TLS handshakes non-blockingly.
@@ -993,7 +993,8 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
                d->tls_handshake_pending = FALSE;
                d->tls_active = TRUE;
                d->timeout = current_time + 180;
-               queue_login_greeting(d);
+               if (!d->wss_pending)
+                  queue_login_greeting(d);
             }
             else
             {
@@ -1220,7 +1221,7 @@ void free_desc(DESCRIPTOR_DATA *d)
       dispose(d->outbuf, d->outsize);
 }
 
-void new_descriptor(int control, bool is_tls, bool do_sniff)
+void new_descriptor(int control, bool is_tls, bool do_sniff, bool is_wss)
 {
    static DESCRIPTOR_DATA d_zero;
    char buf[MSL];
@@ -1265,6 +1266,7 @@ void new_descriptor(int control, bool is_tls, bool do_sniff)
    dnew->childpid = 0;
 
 #ifdef HAVE_OPENSSL
+   dnew->wss_pending = is_wss;
    if (do_sniff)
       is_tls = sniff_is_tls(desc);
    if (is_tls && global_ssl_ctx != NULL)
@@ -1308,6 +1310,7 @@ void new_descriptor(int control, bool is_tls, bool do_sniff)
 #else
    (void)is_tls;
    (void)do_sniff;
+   (void)is_wss;
 #endif
 
    size = sizeof(sock);
@@ -1390,7 +1393,7 @@ void new_descriptor(int control, bool is_tls, bool do_sniff)
       dnew->timeout = current_time + 180;
 
 #ifdef HAVE_OPENSSL
-   if (!dnew->tls_handshake_pending)
+   if (!dnew->tls_handshake_pending && !dnew->wss_pending)
 #endif
       queue_login_greeting(dnew);
 
@@ -1420,6 +1423,7 @@ void init_descriptor(DESCRIPTOR_DATA *dnew, int desc)
 #ifdef HAVE_OPENSSL
    dnew->ssl = NULL;
    dnew->tls_handshake_pending = FALSE;
+   dnew->wss_pending = FALSE;
 #endif
    dnew->msdp_active = FALSE;
    dnew->msdp_reported = 0;
