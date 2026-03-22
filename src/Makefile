@@ -191,7 +191,7 @@ SKILL_OBJS = \
 
 QUEST_OBJS = quests/template.o quests/state.o quests/cartography.o quests/notify.o quests/commands.o quests/crusade.o
 
-O_FILES = affect.o ai.o act_clan.o act_comm.o act_info.o act_mob.o act_move.o act_obj.o act_pub_society.o act_wiz.o npc_dialogue.o db/db_conn.o db/db_worker.o \
+O_FILES = affect.o ai.o act_clan.o act_comm.o act_info.o act_mob.o act_move.o act_obj.o act_pub_society.o act_wiz.o npc_dialogue.o db/db_conn.o db/db_worker.o db/db_load.o \
 	  areachk.o board.o build.o buildare.o buildtab.o caravan.o clutch.o comm.o hotreboot.o login.o socket.o prompt.o \
 	  const.o const_color.o const_class.o const_race.o const_clan.o const_exp.o const_liq.o const_pub_society.o \
 	  damage.o cloak.o death.o db.o email.o enchant.o fight.o handler.o hash.o hunt.o \
