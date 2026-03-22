@@ -119,7 +119,8 @@ static void ps_int(PSet *p, long v)
 
 static void ps_ull(PSet *p, unsigned long long v)
 {
-   snprintf(p->bufs[p->n], 32, "%llu", v);
+   /* PostgreSQL BIGINT is signed; cast so the bit pattern is preserved. */
+   snprintf(p->bufs[p->n], 32, "%lld", (long long)v);
    p->vals[p->n] = p->bufs[p->n];
    p->n++;
 }
@@ -494,13 +495,68 @@ static int import_helpdir(const char *dirpath, const char *table)
 }
 
 /* -----------------------------------------------------------------------
+ * Lore flag parser
+ *
+ * Converts a space-separated list of flag names to a numeric bit mask.
+ * Unknown tokens are silently ignored (forward compat).
+ * Writes the decimal result into out_buf (size >= 32).
+ * ----------------------------------------------------------------------- */
+
+static void parse_lore_flags(const char *names, char *out_buf, size_t out_sz)
+{
+   static const struct
+   {
+      const char *name;
+      unsigned long long bit;
+   } flag_table[] = {{"MIDGAARD", 1ULL << 0},  {"KIESS", 1ULL << 1},
+                     {"KOWLOON", 1ULL << 2},   {"RAKUEN", 1ULL << 3},
+                     {"MAFDET", 1ULL << 4},    {"HUMAN", 1ULL << 5},
+                     {"KHENARI", 1ULL << 6},   {"KHEPHARI", 1ULL << 7},
+                     {"ASHBORN", 1ULL << 8},   {"UMBRAL", 1ULL << 9},
+                     {"RIVENNID", 1ULL << 10}, {"DELTARI", 1ULL << 11},
+                     {"USHABTI", 1ULL << 12},  {"SERATHI", 1ULL << 13},
+                     {"KETHARI", 1ULL << 14},  {NULL, 0}};
+
+   unsigned long long result = 0;
+   char tmp[256];
+   char *tok;
+   int i;
+
+   strncpy(tmp, names, sizeof(tmp) - 1);
+   tmp[sizeof(tmp) - 1] = '\0';
+
+   tok = strtok(tmp, " \t");
+   while (tok)
+   {
+      /* upper-case comparison */
+      char upper[64];
+      int j;
+      for (j = 0; tok[j] && j < (int)(sizeof(upper) - 1); j++)
+         upper[j] = (char)toupper((unsigned char)tok[j]);
+      upper[j] = '\0';
+
+      for (i = 0; flag_table[i].name; i++)
+      {
+         if (strcmp(upper, flag_table[i].name) == 0)
+         {
+            result |= flag_table[i].bit;
+            break;
+         }
+      }
+      tok = strtok(NULL, " \t");
+   }
+
+   snprintf(out_buf, out_sz, "%llu", result);
+}
+
+/* -----------------------------------------------------------------------
  * Lore file importer
  *
  * File format:
  *   keywords <words...>
  *   ---
  *   <default body>
- *   [flags <N>
+ *   [flags <FLAG> [FLAG ...]
  *   ---
  *   <flagged body>]  (may repeat)
  * ----------------------------------------------------------------------- */
@@ -628,8 +684,8 @@ static int import_one_lorefile(const char *path, const char *filename)
                free(body);
             }
          }
-         strncpy(flags_str, line_buf + 6, sizeof(flags_str) - 1);
-         strip_trailing(flags_str);
+         strip_trailing(line_buf);
+         parse_lore_flags(line_buf + 6, flags_str, sizeof(flags_str));
          /* Skip the following "---" line */
          {
             char *next_p = line_end + 1;
@@ -1699,7 +1755,9 @@ static int import_areas(const char *area_lst_path, const char *area_dir)
    while (fgets(line, sizeof(line), fp))
    {
       strip_trailing(line);
-      if (line[0] == '\0' || line[0] == '$')
+      if (line[0] == '\0')
+         continue;
+      if (line[0] == '$')
          break;
       snprintf(path, sizeof(path), "%s/%s", area_dir, line);
       if (import_area_file(path))
