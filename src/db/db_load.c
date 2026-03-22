@@ -14,13 +14,14 @@
 
 #ifdef HAVE_LIBPQ
 
+#include "globals.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <libpq-fe.h>
 
-#include "ack.h"
 #include "db_conn.h"
 #include "db_load.h"
 
