@@ -10,9 +10,11 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # PORT ASSIGNMENTS ARE FIXED:
 #   8890  plain telnet   (positional argument — always plain, never TLS)
 #   9890  TLS telnet     (--tls-port; Mudlet "connect securely")
-#   18890 WebSocket      (--ws-loopback; ws:// only; wss:// not yet implemented)
+#   9891  WSS            (--wss-port; native WebSocket+TLS; binds to 0.0.0.0)
+#   18890 WebSocket      (--ws-loopback; ws:// loopback; for nginx proxy)
 telnet_port=8890
 tls_port=9890
+wss_port=9891
 tls_cert="$SCRIPT_DIR/../data/tls/cert.pem"
 tls_key="$SCRIPT_DIR/../data/tls/key.pem"
 ws_port=18890
@@ -68,7 +70,7 @@ do
   cp ../src/ack "$ack_snapshot"
 
   # run the mud
-  ../src/ack $telnet_port --tls-port $tls_port --ws-loopback $ws_port --tls-cert $tls_cert --tls-key $tls_key >$logfile 2>&1
+  ../src/ack $telnet_port --tls-port $tls_port --wss-port $wss_port --ws-loopback $ws_port --tls-cert $tls_cert --tls-key $tls_key >$logfile 2>&1
 
   # If do_hotreboot() ran, it wrote a snapshot of the binary it exec'd;
   # that is more accurate than our startup-time snapshot, so prefer it.
