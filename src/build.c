@@ -31,6 +31,9 @@
 #include <string.h>
 #include "globals.h"
 #include "tables.h"
+#ifdef HAVE_LIBPQ
+#include "db/db_worker.h"
+#endif
 
 /* This program provides the interpreting of building commands */
 
@@ -3536,6 +3539,11 @@ void build_dig(CHAR_DATA *ch, char *argument)
       pRoomIndex->exit[RevDirs[dir]] = pExit;
    }
 
+#ifdef HAVE_LIBPQ
+   db_worker_save_room(pRoomIndex);
+   db_worker_save_room(pCurRoom);
+#endif
+
    return;
 }
 
@@ -3646,6 +3654,9 @@ void build_addmob(CHAR_DATA *ch, char *argument)
 
    top_mob_index++;
    kill_table[URANGE(0, pMobIndex->level, MAX_LEVEL - 1)].number++;
+#ifdef HAVE_LIBPQ
+   db_worker_save_mob(pMobIndex);
+#endif
    return;
 }
 
@@ -3729,6 +3740,9 @@ void build_addobject(CHAR_DATA *ch, char *argument)
    LINK(pList, pArea->first_area_object, pArea->last_area_object, next, prev);
 
    top_obj_index++;
+#ifdef HAVE_LIBPQ
+   db_worker_save_obj(pObjIndex);
+#endif
 
    return;
 }
@@ -4512,6 +4526,11 @@ void build_delroom(CHAR_DATA *ch, char *argument)
 
    top_room--;
 
+#ifdef HAVE_LIBPQ
+   db_worker_delete_room(vnum);
+   db_worker_save_resets(pArea);
+#endif
+
    send_to_char("Done.\n\r", ch);
    return;
 }
@@ -4691,6 +4710,11 @@ void build_delobject(CHAR_DATA *ch, char *argument)
    PUT_FREE(pObjIndex, oid_free);
 
    top_obj_index--;
+
+#ifdef HAVE_LIBPQ
+   db_worker_delete_obj(vnum);
+   db_worker_save_resets(pArea);
+#endif
 
    send_to_char("Done.\n\r", ch);
    return;
@@ -4897,6 +4921,11 @@ void build_delmob(CHAR_DATA *ch, char *argument)
    PUT_FREE(pMobIndex, mid_free);
 
    top_mob_index--;
+
+#ifdef HAVE_LIBPQ
+   db_worker_delete_mob(vnum);
+   db_worker_save_resets(pArea);
+#endif
 
    send_to_char("Done.\n\r", ch);
    return;

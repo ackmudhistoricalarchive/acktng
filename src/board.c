@@ -38,6 +38,9 @@ include<types.h>
 #ifndef DEC_LISTS_H
 #include "lists.h"
 #endif
+#ifdef HAVE_LIBPQ
+#include "db/db_worker.h"
+#endif
 
 #define BOARD_DIR "boards"
 #define T2000 -1 /* Terminator for files... */
@@ -310,6 +313,10 @@ BOARD_DATA *load_board(OBJ_INDEX_DATA *pObj)
 
 void save_board(BOARD_DATA *board, CHAR_DATA *ch)
 {
+#ifdef HAVE_LIBPQ
+   db_worker_save_board(board);
+   return;
+#else
    char buf[MAX_STRING_LENGTH];
    FILE *board_file;
    MESSAGE_DATA *message;
@@ -369,6 +376,7 @@ void save_board(BOARD_DATA *board, CHAR_DATA *ch)
    }
 
    return;
+#endif /* HAVE_LIBPQ */
 }
 
 void do_delete(CHAR_DATA *ch, char *argument)

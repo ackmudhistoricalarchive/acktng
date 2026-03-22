@@ -31,6 +31,9 @@
 #include <string.h>
 #include "globals.h"
 #include "special.h"
+#ifdef HAVE_LIBPQ
+#include "../db/db_worker.h"
+#endif
 
 /* Way this works:
    Mud reads in area files, stores details in data lists.
@@ -141,6 +144,32 @@ void do_savearea(CHAR_DATA *ch, char *argument)
          loops = 1;
    }
 
+#ifdef HAVE_LIBPQ
+   {
+      BUILD_DATA_LIST *pList;
+
+      db_worker_save_area_meta(SaveArea);
+
+      for (pList = SaveArea->first_area_room; pList != NULL; pList = pList->next)
+         db_worker_save_room((ROOM_INDEX_DATA *)pList->data);
+
+      for (pList = SaveArea->first_area_mobile; pList != NULL; pList = pList->next)
+         db_worker_save_mob((MOB_INDEX_DATA *)pList->data);
+
+      for (pList = SaveArea->first_area_object; pList != NULL; pList = pList->next)
+         db_worker_save_obj((OBJ_INDEX_DATA *)pList->data);
+
+      for (pList = SaveArea->first_area_shop; pList != NULL; pList = pList->next)
+         db_worker_save_shop((SHOP_DATA *)pList->data);
+
+      db_worker_save_resets(SaveArea);
+
+      if (ch != NULL)
+         send_to_char("Area saved to database.\n", ch);
+   }
+   return;
+#endif
+
    if (ToBeSaved == CurrentSaving)
    {
       send_to_char("Too many areas in queue, please try later.\n", ch);
@@ -163,6 +192,9 @@ void do_savearea(CHAR_DATA *ch, char *argument)
 
 void build_save()
 {
+#ifdef HAVE_LIBPQ
+   return; /* DB saves are enqueued directly; no file-based save state machine needed. */
+#endif
    int a;
    char filename[255];
    char buf[MAX_STRING_LENGTH];
@@ -703,6 +735,8 @@ void build_save_flush()
 
    AreasModified = 0;
 }
+
+/* (unused variable suppression when compiled without file-based save) */
 
 void area_modified(AREA_DATA *pArea)
 {

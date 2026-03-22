@@ -123,6 +123,7 @@ void save_social(const struct social_type *s, FILE *fp)
 
 void save_social_table()
 {
+#ifndef HAVE_LIBPQ
    FILE *fp;
    int i;
 
@@ -150,7 +151,7 @@ void save_social_table()
       fclose(fp);
       fp = NULL;
    }
-#ifdef HAVE_LIBPQ
+#else
    db_worker_save_socials(social_table, maxSocial);
 #endif
 }

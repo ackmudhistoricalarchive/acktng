@@ -26,6 +26,12 @@
 /* Opaque forward declarations — db_worker.c includes ack.h for full types. */
 struct descriptor_data;
 struct char_data;
+struct area_data;
+struct room_index_data;
+struct mob_index_data;
+struct obj_index_data;
+struct shop_data;
+struct board_data;
 
 typedef enum
 {
@@ -40,6 +46,18 @@ typedef enum
    DB_WRITE_BRANDS,     /* save brand list           */
    DB_WRITE_ROOM_MARKS, /* save room marks           */
    DB_WRITE_CHEST,      /* save one keep chest       */
+   /* OLC area write operations */
+   DB_WRITE_AREA,       /* upsert one area's metadata          */
+   DB_WRITE_ROOM,       /* upsert one room + exits + exdescs   */
+   DB_WRITE_MOB,        /* upsert one mob prototype            */
+   DB_WRITE_OBJ,        /* upsert one object + affects + exdsc */
+   DB_WRITE_RESET_LIST, /* replace all resets for one area     */
+   DB_WRITE_SHOP,       /* upsert one shop                     */
+   DB_DELETE_ROOM,      /* delete one room by vnum             */
+   DB_DELETE_MOB,       /* delete one mob prototype by vnum    */
+   DB_DELETE_OBJ,       /* delete one object prototype by vnum */
+   /* Board write operations */
+   DB_WRITE_BOARD, /* upsert board metadata + all messages */
    /* Reads — worker fetches and posts result */
    DB_READ_PLAYER, /* load one player at login */
    /* Control */
@@ -109,6 +127,20 @@ void db_worker_save_room_marks(struct mark_list_member *first_mark_arg);
 
 /* Save one keep chest (and its contents). */
 void db_worker_save_chest(struct obj_data *chest);
+
+/* OLC save wrappers (game thread; all return immediately). */
+void db_worker_save_area_meta(struct area_data *pArea);
+void db_worker_save_room(struct room_index_data *pRoom);
+void db_worker_save_mob(struct mob_index_data *pMob);
+void db_worker_save_obj(struct obj_index_data *pObj);
+void db_worker_save_resets(struct area_data *pArea);
+void db_worker_save_shop(struct shop_data *pShop);
+void db_worker_delete_room(int vnum);
+void db_worker_delete_mob(int vnum);
+void db_worker_delete_obj(int vnum);
+
+/* Board save wrapper — replaces entire board (metadata + all messages). */
+void db_worker_save_board(struct board_data *board);
 
 #endif /* HAVE_LIBPQ */
 
