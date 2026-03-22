@@ -256,6 +256,9 @@ scan: $(OBJDIR)/scan.o
 tools/import_to_db: tools/import_to_db.c
 	$(CC) -O -g2 -Wall $(LIBPQ_CFLAGS) -o tools/import_to_db tools/import_to_db.c $(LIBPQ_LIBS)
 
+tools/db_to_files: tools/db_to_files.c
+	$(CC) -O -g2 -Wall $(LIBPQ_CFLAGS) -o tools/db_to_files tools/db_to_files.c $(LIBPQ_LIBS)
+
 # Check that all source files match the .clang-format style (fails if any differ)
 lint:
 	clang-format --dry-run --Werror $(LINT_SOURCES)
