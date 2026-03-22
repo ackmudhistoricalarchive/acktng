@@ -38,8 +38,8 @@
 #include "globals.h"
 
 #define SOCIAL_FILE DATA_DIR "socials.txt" /* or whatever fits you */
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
-#include "db/db_worker.h"
+#ifdef HAVE_LIBPQ
+#include "../db/db_worker.h"
 #endif
 /*
  * #define CONST_SOCIAL
@@ -150,7 +150,7 @@ void save_social_table()
       fclose(fp);
       fp = NULL;
    }
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+#ifdef HAVE_LIBPQ
    db_worker_save_socials(social_table, maxSocial);
 #endif
 }

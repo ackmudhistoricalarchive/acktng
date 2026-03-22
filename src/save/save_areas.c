@@ -34,8 +34,8 @@
  */
 
 #include "save.h"
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
-#include "db/db_worker.h"
+#ifdef HAVE_LIBPQ
+#include "../db/db_worker.h"
 #endif
 
 void save_marks()
@@ -78,7 +78,7 @@ void save_marks()
       fp = NULL;
    }
 
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+#ifdef HAVE_LIBPQ
    db_worker_save_room_marks(first_mark_list);
 #endif
    return;
@@ -122,7 +122,7 @@ void save_bans()
       fp = NULL;
    }
 
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+#ifdef HAVE_LIBPQ
    db_worker_save_bans(first_ban);
 #endif
    return;

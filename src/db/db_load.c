@@ -1,7 +1,7 @@
 /* db_load.c — ACK!TNG PostgreSQL boot-time loader.
  *
  * Implements the db_load_* family that replaces the flat-file loaders called
- * from boot_db() when compiled with -DHAVE_LIBPQ -DUSE_DB_LOAD.
+ * from boot_db() when compiled with -DHAVE_LIBPQ.
  *
  * All functions use the synchronous boot connection returned by db_conn_get().
  * They must be called after db_conn_open() and before db_conn_close() / the

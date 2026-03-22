@@ -39,8 +39,8 @@
 #else
 #include "globals.h"
 #include "tables.h"
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
-#include "db/db_worker.h"
+#ifdef HAVE_LIBPQ
+#include "../db/db_worker.h"
 #endif
 #endif
 
@@ -141,7 +141,7 @@ void save_rulers()
       fp = NULL;
    }
 
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+#ifdef HAVE_LIBPQ
    db_worker_save_rulers(first_ruler_list);
 #endif
    return;

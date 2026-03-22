@@ -37,7 +37,7 @@
  */
 
 #include "save.h"
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+#ifdef HAVE_LIBPQ
 #include "../db/db_worker.h"
 #endif
 
@@ -943,7 +943,7 @@ void save_chest(OBJ_DATA *chest)
    fclose(fp);
 
    rename(temp_path, path);
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+#ifdef HAVE_LIBPQ
    db_worker_save_chest(chest);
 #endif
 }

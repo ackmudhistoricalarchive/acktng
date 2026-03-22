@@ -36,7 +36,7 @@
 
 #include "globals.h"
 #include "tables.h"
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+#ifdef HAVE_LIBPQ
 #include "db/db_worker.h"
 #endif
 
@@ -128,7 +128,7 @@ void save_brands()
       fclose(fp);
       fp = NULL;
    }
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+#ifdef HAVE_LIBPQ
    db_worker_save_brands(first_brand);
 #endif
 }

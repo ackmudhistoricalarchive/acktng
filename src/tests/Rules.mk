@@ -466,5 +466,4 @@ unit-tests: unit-test-inlines unit-test-sentinel unit-test-mssp unit-test-gmcp u
 	./tests/unit-test-gmcp
 	./tests/unit-test-mccp
 	./tests/unit-test-chan-history
-	$(MAKE) integration-test
-	$(MAKE) integration-test-telnet
+	$(MAKE) integration-tests
