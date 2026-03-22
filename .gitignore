@@ -11,3 +11,4 @@ cores/*
 data/tls/key.pem
 data/tls/cert.pem
 data/db.conf
+area/import_errors.log
