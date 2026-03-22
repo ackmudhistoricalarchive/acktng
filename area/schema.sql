@@ -374,7 +374,7 @@ CREATE TABLE IF NOT EXISTS brands (
     id          SERIAL PRIMARY KEY,
     branded_by  TEXT   NOT NULL,
     item_name   TEXT   NOT NULL,
-    brand_date  TIMESTAMP WITH TIME ZONE NOT NULL,
+    brand_date  TEXT   NOT NULL,
     description TEXT   NOT NULL DEFAULT ''
 );
 
