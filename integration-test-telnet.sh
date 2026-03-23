@@ -67,8 +67,7 @@ if ! (cd "$SRC_DIR" && make ack); then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 2: remove any leftover player files so the login flow is always the
-# new-character path (idempotent test runs).
+# Step 2: remove any leftover player files (idempotent test runs).
 # ---------------------------------------------------------------------------
 remove_player_file "$TEST_PLAYER"
 

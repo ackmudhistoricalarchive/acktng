@@ -12,3 +12,9 @@ data/tls/key.pem
 data/tls/cert.pem
 data/db.conf
 area/import_errors.log
+area/boards/export/
+area/export/
+data/export/
+help/export/
+lore/export/
+shelp/export/

@@ -1,9 +1,9 @@
 /* db_load.h — ACK!TNG PostgreSQL boot-time loader.
  *
- * All functions are guarded by HAVE_LIBPQ.  Callers must either be compiled
- * with HAVE_LIBPQ or wrap calls in #ifdef USE_DB_LOAD / #endif.
+ * All functions are guarded by HAVE_LIBPQ.  When libpq is present the DB
+ * loaders are the sole boot path; flat-file loaders are the #else fallback.
  *
- * The typical boot-db sequence when USE_DB_LOAD is defined:
+ * The typical boot-db sequence (HAVE_LIBPQ):
  *   db_load_clans();           -- politics_data.diplomacy / treasury
  *   db_load_socials();         -- social_table[]
  *   db_load_areas_from_db();   -- areas + rooms + mobs + objects + resets …
@@ -36,6 +36,10 @@ void db_load_clans(void);
 void db_load_rulers(void);
 void db_load_brands(void);
 void db_load_sysdata(void);
+void db_load_boards(void);
+void db_load_room_marks(void);
+void db_load_corpses(void);
+void db_load_chests(void);
 
 #endif /* HAVE_LIBPQ */
 

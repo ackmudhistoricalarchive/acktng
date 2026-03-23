@@ -12,8 +12,8 @@
  *   db_conn_get()   — return the PGconn* for boot-time queries.
  *   db_conn_close() — close after all db_load_* calls complete.
  *
- * The db.conf path is: <area_dir>/../data/db.conf
- * Falls back to PG environment variables if the file is absent.
+ * Config file: $ACK_DB_CONF if set, otherwise <area_dir>/../data/db.conf.
+ * DB is disabled if the file does not exist.
  */
 
 #ifdef HAVE_LIBPQ
@@ -23,7 +23,10 @@
 /* Expected schema version compiled into this binary. */
 #define DB_SCHEMA_VERSION 2
 
-/* Open the boot connection.  Returns 1 on success, 0 on failure.
+/* Open the boot connection.
+ * Returns  1 on success,
+ *          0 on failure (db.conf present but connection/schema error),
+ *         -1 if db.conf is absent (DB disabled; caller should skip DB work).
  * On failure a descriptive message is printed to stderr. */
 int db_conn_open(const char *area_dir);
 

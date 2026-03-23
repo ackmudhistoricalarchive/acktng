@@ -65,6 +65,9 @@
 #include "socket.h"
 #include "prompt.h"
 #include "npc_dialogue.h"
+#ifdef HAVE_LIBPQ
+#include "db/db_worker.h"
+#endif
 
 void trigger_happy_hour(void);
 void copyover_recover args((void));
@@ -538,6 +541,9 @@ int main(int argc, char **argv)
    if (fCopyOver)
       abort_threshold = BOOT_DB_ABORT_THRESHOLD;
    boot_db();
+#ifdef HAVE_LIBPQ
+   db_worker_start(NULL);
+#endif
    npc_dialogue_init();
    init_mssp_counts();
 #ifndef WIN32
@@ -601,6 +607,9 @@ int main(int argc, char **argv)
    list_who_to_output();
 
    game_loop(control, control_ws, control_tls, control_sniff, control_http, control_wss);
+#ifdef HAVE_LIBPQ
+   db_worker_stop();
+#endif
    if (control >= 0)
       close(control);
    if (control_ws >= 0)

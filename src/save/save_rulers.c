@@ -39,6 +39,9 @@
 #else
 #include "globals.h"
 #include "tables.h"
+#ifdef HAVE_LIBPQ
+#include "../db/db_worker.h"
+#endif
 #endif
 
 size_t rulers_format_status_message(char *dest, size_t dest_size, const char *status,
@@ -138,6 +141,9 @@ void save_rulers()
       fp = NULL;
    }
 
+#ifdef HAVE_LIBPQ
+   db_worker_save_rulers(first_ruler_list);
+#endif
    return;
 }
 

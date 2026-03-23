@@ -50,6 +50,7 @@
 #ifdef HAVE_LIBPQ
 #include "db/db_conn.h"
 #include "db/db_load.h"
+#include "db/db_worker.h"
 #endif
 
 #if !defined(macintosh)
@@ -440,6 +441,13 @@ const char *db_test_get_area_name(void)
 }
 #endif
 
+/* Set to 1 if a real DB connection is established during boot_db().
+ * Stays 0 when data/db.conf is absent; create_object() uses this to
+ * decide whether to call load_chest() individually. */
+#ifdef HAVE_LIBPQ
+static int db_connected = 0;
+#endif
+
 /*
  * Big mama top level function.
  */
@@ -575,15 +583,43 @@ void boot_db(void)
    }
 
    /*
+    * Open DB connection.  Aborts only if data/db.conf is present but the
+    * connection or schema check fails.  If data/db.conf is absent the server
+    * boots from flat files (db_conn_open returns -1).
+    *
+    * db_connected = 1 only when the connection actually succeeded; all
+    * subsequent loading blocks check this at runtime so that a system with
+    * HAVE_LIBPQ compiled in but no data/db.conf still boots from flat files.
+    */
+#ifdef HAVE_LIBPQ
+   {
+      int db_rc = db_conn_open(".");
+      if (db_rc == 0)
+      {
+         log_f("FATAL: DB connection failed (check data/db.conf). Aborting.");
+         exit(1);
+      }
+      else if (db_rc == 1)
+      {
+         db_connected = 1;
+         log_f("DB: connection established.");
+      }
+      /* db_rc == -1: db.conf absent, fall through to flat-file loading */
+   }
+#endif
+
+   /*
     *   Read in clan data table
     */
 
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+#ifdef HAVE_LIBPQ
+   if (db_connected)
    {
       log_f("DB: loading clan diplomacy from database.");
       db_load_clans();
    }
-#else
+   else
+#endif
    {
       FILE *clanfp;
       char clan_file_name[MAX_STRING_LENGTH];
@@ -646,31 +682,31 @@ void boot_db(void)
       db_format_status(buf, sizeof(buf), "Done Loading", clan_file_name);
       log_f("%s", buf);
    }
-#endif /* USE_DB_LOAD */
 
    /*
     * Read in all the socials.
     */
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+#ifdef HAVE_LIBPQ
+   if (db_connected)
    {
       log_f("DB: loading socials from database.");
       db_load_socials();
    }
-#else
-   {
+   else
+#endif
       load_social_table();
-   }
-#endif /* USE_DB_LOAD */
 
-   /*
-    * Read in all the area files.
-    */
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+      /*
+       * Read in all the area files.
+       */
+#ifdef HAVE_LIBPQ
+   if (db_connected)
    {
       log_f("DB: loading areas from database.");
       db_load_areas_from_db();
    }
-#else
+   else
+#endif
    {
       FILE *fpList;
       log_f("Reading Area Files...");
@@ -755,9 +791,9 @@ void boot_db(void)
          fpList = NULL;
       }
    }
-#endif /* USE_DB_LOAD */
 
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
+#ifdef HAVE_LIBPQ
+   if (db_connected)
    {
       log_f("DB: loading help files from database.");
       db_load_helps_from_db();
@@ -766,9 +802,9 @@ void boot_db(void)
       log_f("DB: loading lore from database.");
       db_load_lore_from_db();
    }
-#else
-   load_help_files();
-#endif /* USE_DB_LOAD */
+   else
+#endif
+      load_help_files();
    log_f("Loading quest templates.");
    quest_load_templates();
 
@@ -840,33 +876,50 @@ void boot_db(void)
       area_update();
       log_f("Loading notes");
       load_notes();
-      log_f("Loading corpses.");
-      load_corpses();
-      booting_up = TRUE;
-      log_f("Loading room marks.");
-      load_marks();
-      booting_up = FALSE;
-      save_marks();
-#if defined(USE_DB_LOAD) && defined(HAVE_LIBPQ)
-      log_f("DB: loading bans from database.");
-      db_load_bans();
-      log_f("DB: loading ruler data from database.");
-      db_load_rulers();
-      log_f("DB: loading staff brands from database.");
-      db_load_brands();
-      log_f("DB: loading system data from database.");
-      db_load_sysdata();
-#else
-      log_f("Loading banned sites.");
-      load_bans();
-      log_f("Loading ruler data.");
-      load_rulers();
-      log_f("Loading staff brands.");
-      load_brands();
-      log_f("Loading System Data.");
-      load_sysdata();
-#endif /* USE_DB_LOAD */
+#ifdef HAVE_LIBPQ
+      if (db_connected)
+      {
+         log_f("DB: loading corpses from database.");
+         db_load_corpses();
+         log_f("DB: loading room marks from database.");
+         db_load_room_marks();
+         log_f("DB: loading boards from database.");
+         db_load_boards();
+         log_f("DB: loading bans from database.");
+         db_load_bans();
+         log_f("DB: loading ruler data from database.");
+         db_load_rulers();
+         log_f("DB: loading staff brands from database.");
+         db_load_brands();
+         log_f("DB: loading system data from database.");
+         db_load_sysdata();
+         log_f("DB: loading keep chests from database.");
+         db_load_chests();
+      }
+      else
+#endif
+      {
+         log_f("Loading corpses.");
+         load_corpses();
+         booting_up = TRUE;
+         log_f("Loading room marks.");
+         load_marks();
+         booting_up = FALSE;
+         save_marks();
+         log_f("Loading banned sites.");
+         load_bans();
+         log_f("Loading ruler data.");
+         load_rulers();
+         log_f("Loading staff brands.");
+         load_brands();
+         log_f("Loading System Data.");
+         load_sysdata();
+      }
    }
+#ifdef HAVE_LIBPQ
+   if (db_connected)
+      db_conn_close();
+#endif
    auto_quest = TRUE;
    return;
 }
@@ -2199,7 +2252,15 @@ OBJ_DATA *create_object(OBJ_INDEX_DATA *pObjIndex, int level)
    pObjIndex->count++;
 
    if (obj->item_type == ITEM_CONTAINER && IS_SET(obj->value[1], CONT_KEEP_CHEST))
+#ifdef HAVE_LIBPQ
+   {
+      if (!db_connected)
+         load_chest(pObjIndex->vnum);
+      /* else: db_load_chests() called at end of boot_db() handles this */
+   }
+#else
       load_chest(pObjIndex->vnum);
+#endif
 
    return obj;
 }

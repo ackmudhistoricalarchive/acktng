@@ -206,7 +206,7 @@ O_FILES = affect.o ai.o act_clan.o act_comm.o act_info.o act_mob.o act_move.o ac
 # Source files for linting (all .c and .h excluding third-party sha256 and build artifacts)
 LINT_SOURCES = $(shell find . -name '*.c' -o -name '*.h' | grep -v sha256 | grep -v './build/' | sort)
 
-.PHONY: all clean purge unit-tests integration-test integration-test-telnet integration-test-telnet-tls integration-test-wss lint format
+.PHONY: all clean purge unit-tests integration-tests integration-test integration-test-telnet integration-test-telnet-tls integration-test-wss lint format
 
 all:
 	$(MAKE) clean
@@ -214,6 +214,9 @@ all:
 	$(MAKE) lint
 	$(MAKE) ack
 	$(MAKE) unit-tests
+
+integration-tests: ack
+	cd .. && ./integration-tests.sh
 
 # WebSocket login flow (ws://, production port 18890)
 integration-test: ack
@@ -268,6 +271,9 @@ tools/import_to_db: tools/import_to_db.c
 
 tools/db_to_files: tools/db_to_files.c
 	$(CC) -O -g2 -Wall $(LIBPQ_CFLAGS) -o tools/db_to_files tools/db_to_files.c $(LIBPQ_LIBS)
+
+tools/migrate_chests: tools/migrate_chests.c
+	$(CC) -O -g2 -Wall $(LIBPQ_CFLAGS) -o tools/migrate_chests tools/migrate_chests.c $(LIBPQ_LIBS)
 
 # Check that all source files match the .clang-format style (fails if any differ)
 lint:

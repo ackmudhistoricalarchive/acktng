@@ -31,6 +31,9 @@
 #include "globals.h"
 #include <math.h>
 #include <stdlib.h>
+#ifdef HAVE_LIBPQ
+#include "../db/db_worker.h"
+#endif
 
 SYS_DATA_TYPE sysdata;
 
@@ -100,6 +103,9 @@ void save_sysdata(void)
          fp = NULL;
       }
    }
+#ifdef HAVE_LIBPQ
+   db_worker_save_sysdata(wizlock ? 1 : 0, sysdata.shownumbers ? 1 : 0);
+#endif
    return;
 }
 
