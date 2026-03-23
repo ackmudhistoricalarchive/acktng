@@ -469,3 +469,4 @@ unit-tests: unit-test-inlines unit-test-sentinel unit-test-mssp unit-test-gmcp u
 	$(MAKE) integration-test
 	$(MAKE) integration-test-telnet
 	$(MAKE) integration-test-telnet-tls
+	$(MAKE) integration-test-wss
