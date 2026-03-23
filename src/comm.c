@@ -132,6 +132,8 @@ time_t current_time; /* Time of this pulse           */
 /* port and control moved from local to global for HOTreboot - Flar */
 int port;
 int control = -1;
+int control_ws = -1;  /* plain WebSocket listen socket (e.g. nginx loopback) */
+int control_wss = -1; /* native WSS listen socket */
 
 int max_players = 0;
 int hotreboot_countdown = 0; /* Pulses remaining until automatic hotreboot; 0 = inactive */
@@ -344,9 +346,7 @@ int main(int argc, char **argv)
    struct timeval now_time;
    bool fCopyOver = FALSE; /* HOTreboot??? Well is it...is it???? - Flar */
    extern int abort_threshold;
-   int control_ws = -1;
    int ws_port = -1;
-   int control_wss = -1;
    int wss_port = -1;
    int control_tls = -1;
    int tls_port = -1;
@@ -380,11 +380,16 @@ int main(int argc, char **argv)
 
    if (argc > 2 && argv[2] && !strcmp(argv[2], "HOTreboot"))
    {
-      /* HOTreboot path: inherit control socket, no flag parsing needed */
+      /* HOTreboot path: inherit listen sockets, no flag parsing needed.
+       * Format: <exe> <port> HOTreboot <control_fd> <control_ws_fd> <control_wss_fd> */
       fCopyOver = TRUE;
       port = atoi(argv[1]);    /* may be -1 */
-      control = atoi(argv[3]); /* inherited fd */
-      flag_start = argc;       /* skip flags */
+      control = atoi(argv[3]); /* inherited plain-telnet fd */
+      if (argc > 4)
+         control_ws = atoi(argv[4]); /* inherited plain-WS fd (nginx loopback) */
+      if (argc > 5)
+         control_wss = atoi(argv[5]); /* inherited native-WSS fd */
+      flag_start = argc;              /* skip flags */
    }
    else if (argc > 1 && is_number(argv[1]) && argv[1][0] != '-')
    {
@@ -539,6 +544,12 @@ int main(int argc, char **argv)
    global_tls_port = tls_port;
    global_sniff_port = sniff_port;
    global_http_port = http_port;
+#ifdef HAVE_OPENSSL
+   /* HOTreboot: if a native WSS socket was inherited, re-create the TLS
+    * context (it lives in user-space memory and did not survive exec()). */
+   if (fCopyOver && control_wss >= 0)
+      init_tls_context(tls_cert, tls_key);
+#endif
    if (fCopyOver)
       abort_threshold = BOOT_DB_ABORT_THRESHOLD;
    boot_db();

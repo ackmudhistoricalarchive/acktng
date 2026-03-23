@@ -49,6 +49,7 @@
 #include "socket.h"
 
 extern int port, control;
+extern int control_ws, control_wss;
 extern FILE *fpReserve;
 
 /* Copy the about-to-be-exec'd binary to ../cores/ack.hotreboot so the
@@ -100,7 +101,7 @@ void do_hotreboot(CHAR_DATA *ch, char *argument)
 {
    FILE *fp;
    DESCRIPTOR_DATA *d, *d_next;
-   char buf[MSL], buf2[MSL], buf3[MSL];
+   char buf[MSL], buf2[MSL], buf3[MSL], buf4[MSL];
 
    fp = fopen(COPYOVER_FILE, "w");
 
@@ -205,7 +206,8 @@ void do_hotreboot(CHAR_DATA *ch, char *argument)
 
    sprintf(buf, "%d", port);
    sprintf(buf2, "%d", control);
-   strncpy(buf3, "-1", 100);
+   sprintf(buf3, "%d", control_ws);  /* inherited plain-WS fd (nginx loopback); -1 if unused */
+   sprintf(buf4, "%d", control_wss); /* inherited native-WSS fd; -1 if unused */
 
    /*
     * spec: handle profiling cleanly here
@@ -278,14 +280,14 @@ void do_hotreboot(CHAR_DATA *ch, char *argument)
       {
          exe_path[exe_len] = '\0';
          snapshot_exe_for_coredump(exe_path);
-         execl(exe_path, exe_path, buf, "HOTreboot", buf2, buf3, (char *)NULL);
+         execl(exe_path, exe_path, buf, "HOTreboot", buf2, buf3, buf4, (char *)NULL);
          log_f("do_hotreboot: execl(%s) failed: %m; retrying with EXE_FILE", exe_path);
       }
       else
          log_f("do_hotreboot: readlink /proc/self/exe failed (%m); falling back to EXE_FILE");
    }
    snapshot_exe_for_coredump(EXE_FILE);
-   execl(EXE_FILE, EXE_FILE, buf, "HOTreboot", buf2, buf3, (char *)NULL);
+   execl(EXE_FILE, EXE_FILE, buf, "HOTreboot", buf2, buf3, buf4, (char *)NULL);
 
    /*
     * Failed - sucessful exec will not return
