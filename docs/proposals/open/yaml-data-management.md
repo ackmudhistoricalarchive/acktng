@@ -177,6 +177,9 @@ flags: 0
   dr_mod: 5
   class: 0
   race: 0
+  ai_knowledge: 0
+  accent: 0
+  ai_prompt: null   # null for non-AI mobs; set to prompt text for AI-driven NPCs
   loot:
     - vnum: 3010
       chance: 50
