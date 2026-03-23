@@ -123,15 +123,14 @@ fi
 DB_CREATED=1
 
 echo "integration-tests: applying schema..."
-if ! pg_as_postgres "$PSQL -d $TEST_DB -f $AREA_DIR/schema.sql -q" 2>/dev/null; then
+if ! cat "$AREA_DIR/schema.sql" | pg_as_postgres "$PSQL -d $TEST_DB -q" 2>/dev/null; then
     echo "integration-tests: FAILED - schema apply failed"
     exit 1
 fi
 
-pg_as_postgres "$PSQL -d $TEST_DB -q \
-    -c 'GRANT ALL ON ALL TABLES IN SCHEMA public TO $DB_USER; \
-        GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO $DB_USER;'" \
-    2>/dev/null || true
+# Pipe the GRANT statement so postgres user doesn't need file-system access.
+printf 'GRANT ALL ON ALL TABLES IN SCHEMA public TO %s;\nGRANT ALL ON ALL SEQUENCES IN SCHEMA public TO %s;\n' \
+    "$DB_USER" "$DB_USER" | pg_as_postgres "$PSQL -d $TEST_DB -q" 2>/dev/null || true
 
 # ---------------------------------------------------------------------------
 # Step 3: load fixture data (MUD user connects via TCP with password).
