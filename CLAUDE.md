@@ -106,6 +106,10 @@ All tests must be run locally. Never run tests on remote systems or trigger remo
 
 **Unit tests should always be written for changes where possible.** When modifying or adding functionality, add a corresponding unit test in `src/tests/` to cover the new or changed behavior.
 
+## Branch and PR Policy
+
+**NEVER push directly to main. All changes must go through a branch and pull request — no exceptions.** Always create a feature/fix branch, push it, and open a PR. This applies to all changes including documentation, area files, and bugfixes.
+
 ## Pre-Push Requirements
 
 **Before committing or pushing any change, ALL of the following must pass — no exceptions:**
