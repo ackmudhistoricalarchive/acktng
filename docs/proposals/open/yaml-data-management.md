@@ -38,7 +38,7 @@ with three distinct categories of files and the Python tooling to apply them.
 - Shops
 - Quests (`quest_templates`)
 - Help entries (`help_entries`)
-- Staff help entries (`shelp_entries`)
+- Skill/spell help entries (`shelp_entries`)
 - Lore entries (`lore_entries`)
 
 **Three file categories:**
@@ -57,32 +57,52 @@ with three distinct categories of files and the Python tooling to apply them.
 All YAML files live under `acktng/yaml/`. All three subdirectories are **gitignored** — these
 files are ephemeral working surfaces, not version-controlled artifacts.
 
+The top-level structure is **content-type first, then operation**. Mobs, objects, rooms,
+resets, and shops all belong to areas and live exclusively within the `areas/` tree. Only
+content types with no area association (quests, help, shelp, lore) get their own top-level
+directory.
+
 ```
 acktng/yaml/
-  exports/
-    areas/           # One file per area; contains header, rooms, mobs, objects, resets, shops.
-    mobs/            # Per-type subdirs for standalone single-record exports.
-    objects/
-    quests/
-    help/            # Help entries
-    shelp/           # Staff help entries
-    lore/            # Lore entries
-  imports/
-    areas/           # New areas with all their contents
-    mobs/            # Standalone new mobs (adding to an existing area)
-    objects/         # Standalone new objects
-    quests/          # New quest templates
-    help/            # New help entries
-    shelp/           # New staff help entries
-    lore/            # New lore entries
-  updates/
-    areas/           # Patches to existing area header fields
-    mobs/            # Patches to existing mob fields
-    objects/         # Patches to existing object fields
-    quests/          # Patches to existing quest fields
-    help/            # Patches to existing help entries
-    shelp/           # Patches to existing shelp entries
-    lore/            # Patches to existing lore entries
+  areas/
+    export/
+      midgaard/        # One folder per area; each section is its own file.
+        area.yaml
+        rooms.yaml
+        mobs.yaml
+        objects.yaml
+        resets.yaml
+        shops.yaml
+    import/
+      whispering_forest_preserve/   # Same per-section layout for new areas.
+        area.yaml
+        rooms.yaml
+        mobs.yaml
+        objects.yaml
+        resets.yaml
+        shops.yaml
+    update/
+      midgaard/        # Only section files being patched need to be present.
+        area.yaml      # Patches to area header fields
+        mobs.yaml      # List of { vnum, ...changed fields }
+        objects.yaml
+        rooms.yaml
+  quests/
+    export/
+    import/
+    update/
+  help/
+    export/
+    import/
+    update/
+  shelp/
+    export/
+    import/
+    update/
+  lore/
+    export/
+    import/
+    update/
 ```
 
 Files in `exports/` are **never edited by hand** and are never read by `yaml_apply.py`.
@@ -95,169 +115,151 @@ directories clean and prevents double-application.
 
 ## 4. YAML Schema
 
-### 4.1 Area-centric export (one file per area)
+### 4.1 Area export (folder per area, one file per section)
 
-Exports for areas use a compound format that bundles all related records:
+Each area export is a folder named after the area keyword. Each section within the area is its
+own YAML file. All files in the folder are always written by an area export; only the files
+relevant to a given import or update need to be present.
 
+**`yaml/areas/export/midgaard/area.yaml`**
 ```yaml
-# yaml/exports/areas/midgaard.yaml
-area:
-  name: "Midgaard City"
-  min_vnum: 3000
-  max_vnum: 3999
-  keyword: midgaard
-  level_label: "10-20"
-  level_min: 10
-  level_max: 20
-  reset_rate: 15
-  music: midgaard.mp3
-  flags: 0
-
-rooms:
-  - vnum: 3000
-    name: "The Temple of Midgaard"
-    description: |
-      You are in the southern end of the temple hall in the city of Midgaard.
-    room_flags: 0
-    sector_type: 1
-    exits:
-      north:
-        dest_vnum: 3001
-        exit_flags: 0
-        key_vnum: null
-        keyword: null
-        description: null
-      south:
-        dest_vnum: 3048
-        exit_flags: 0
-    extra_descs:
-      - keyword: altar
-        description: |
-          The altar is made of white marble.
-
-mobiles:
-  - vnum: 3005
-    name: "the cityguard"
-    short_descr: "A cityguard"
-    long_descr: "A cityguard is here, doing his duty.\n"
-    description: "A burly guard stands at attention."
-    act_flags: 1
-    affected_by: 0
-    alignment: 0
-    level: 15
-    sex: 1
-    hp_mod: 0
-    ac_mod: 0
-    hr_mod: 5
-    dr_mod: 5
-    class: 0
-    race: 0
-    loot:
-      - vnum: 3010
-        chance: 50
-      - vnum: 3011
-        chance: 25
-
-objects:
-  - vnum: 3010
-    name: "a long sword"
-    short_descr: "a long sword"
-    description: "A long sword lies here."
-    item_type: 5
-    extra_flags: 0
-    wear_flags: 16384
-    item_apply: 0
-    value_0: 1
-    value_1: 10
-    value_2: 4
-    value_3: 0
-    weight: 10
-    cost: 100
-    affects:
-      - type: 1
-        modifier: 3
-
-resets:
-  - type: M
-    mob_vnum: 3005
-    room_vnum: 3001
-    mob_max: 5
-  - type: O
-    obj_vnum: 3010
-    room_vnum: 3001
-    obj_max: 2
-  - type: E
-    obj_vnum: 3010
-    wear_loc: 14
-
-shops:
-  - keeper_vnum: 3005
-    buy_type_0: 5
-    buy_type_1: 9
-    buy_type_2: 0
-    buy_type_3: 0
-    buy_type_4: 0
-    buy_profit: 110
-    sell_profit: 90
-    open_hour: 6
-    close_hour: 20
+name: "Midgaard City"
+min_vnum: 3000
+max_vnum: 3999
+keyword: midgaard
+level_label: "10-20"
+level_min: 10
+level_max: 20
+reset_rate: 15
+music: midgaard.mp3
+flags: 0
 ```
 
-Area-centric imports use the same schema. Area-centric updates are not supported — use the
-per-type update files instead.
-
-### 4.2 Standalone mob import
-
+**`yaml/areas/export/midgaard/rooms.yaml`**
 ```yaml
-# yaml/imports/mobs/3099.yaml
-vnum: 3099
-area_id: 1            # FK to areas.id; or use area_keyword: midgaard
-name: "the veteran guard"
-short_descr: "A veteran guard"
-long_descr: "A veteran guard stands here, eyeing you carefully.\n"
-description: "Scars mark this guard as a seasoned fighter."
-act_flags: 1
-alignment: 0
-level: 20
-sex: 1
-hp_mod: 10
-hr_mod: 6
-dr_mod: 6
-class: 2
-race: 0
-loot:
-  - vnum: 3010
-    chance: 40
+- vnum: 3000
+  name: "The Temple of Midgaard"
+  description: |
+    You are in the southern end of the temple hall in the city of Midgaard.
+  room_flags: 0
+  sector_type: 1
+  exits:
+    north:
+      dest_vnum: 3001
+      exit_flags: 0
+      key_vnum: null
+      keyword: null
+      description: null
+    south:
+      dest_vnum: 3048
+      exit_flags: 0
+  extra_descs:
+    - keyword: altar
+      description: |
+        The altar is made of white marble.
 ```
 
-### 4.3 Standalone object import
-
+**`yaml/areas/export/midgaard/mobs.yaml`**
 ```yaml
-# yaml/imports/objects/3099.yaml
-vnum: 3099
-area_id: 1            # or area_keyword: midgaard
-name: "a steel shield"
-short_descr: "a steel shield"
-description: "A battered steel shield lies here."
-item_type: 9
-extra_flags: 0
-wear_flags: 4096
-item_apply: 0
-value_0: 0
-value_1: 0
-value_2: 0
-value_3: 0
-weight: 15
-cost: 200
-affects:
-  - type: 3
-    modifier: 2
+- vnum: 3005
+  name: "the cityguard"
+  short_descr: "A cityguard"
+  long_descr: "A cityguard is here, doing his duty.\n"
+  description: "A burly guard stands at attention."
+  act_flags: 1
+  affected_by: 0
+  alignment: 0
+  level: 15
+  sex: 1
+  hp_mod: 0
+  ac_mod: 0
+  hr_mod: 5
+  dr_mod: 5
+  class: 0
+  race: 0
+  loot:
+    - vnum: 3010
+      chance: 50
+    - vnum: 3011
+      chance: 25
 ```
 
-### 4.4 Quest import
+**`yaml/areas/export/midgaard/objects.yaml`**
+```yaml
+- vnum: 3010
+  name: "a long sword"
+  short_descr: "a long sword"
+  description: "A long sword lies here."
+  item_type: 5
+  extra_flags: 0
+  wear_flags: 16384
+  item_apply: 0
+  value_0: 1
+  value_1: 10
+  value_2: 4
+  value_3: 0
+  weight: 10
+  cost: 100
+  affects:
+    - type: 1
+      modifier: 3
+```
+
+**`yaml/areas/export/midgaard/resets.yaml`**
+```yaml
+- type: M
+  mob_vnum: 3005
+  room_vnum: 3001
+  mob_max: 5
+- type: O
+  obj_vnum: 3010
+  room_vnum: 3001
+  obj_max: 2
+- type: E
+  obj_vnum: 3010
+  wear_loc: 14
+```
+
+**`yaml/areas/export/midgaard/shops.yaml`**
+```yaml
+- keeper_vnum: 3005
+  buy_type_0: 5
+  buy_type_1: 9
+  buy_type_2: 0
+  buy_type_3: 0
+  buy_type_4: 0
+  buy_profit: 110
+  sell_profit: 90
+  open_hour: 6
+  close_hour: 20
+```
+
+Area imports use the same per-file schema under `yaml/imports/areas/<keyword>/`. All six files
+should be present for a new area import (omitting a section file means that section is empty).
+
+Area updates follow the same folder structure under `yaml/updates/areas/<keyword>/`. Only the
+section files containing records to patch need to be present. Each file is a list of records
+where only the key field (vnum or keeper_vnum) and the fields to change are specified:
+
+**`yaml/areas/update/midgaard/mobs.yaml`** (patch subset of mobs)
+```yaml
+- vnum: 3005
+  level: 20
+  hp_mod: 10
+- vnum: 3006
+  dr_mod: 8
+```
+
+**`yaml/areas/update/midgaard/area.yaml`** (patch the area header)
+```yaml
+reset_rate: 20
+music: midgaard_v2.mp3
+```
+
+### 4.2 Quest import
 
 ```yaml
-# yaml/imports/quests/200.yaml
+# yaml/quests/import/200.yaml
 id: 200
 title: "Slay the Orc Chief"
 type: 0
@@ -281,10 +283,10 @@ reward_obj_weight: 0
 reward_obj_item_apply: 0
 ```
 
-### 4.5 Help entry import
+### 4.3 Help entry import
 
 ```yaml
-# yaml/imports/help/berserk.yaml
+# yaml/help/import/berserk.yaml
 keyword: "BERSERK"
 level: 0          # 0 = player-accessible; higher = restricted to that level+
 body: |
@@ -297,23 +299,26 @@ body: |
   Cooldown: 30 seconds after the effect ends.
 ```
 
-### 4.6 Staff help (shelp) import
+### 4.4 Skill/spell help (shelp) import
+
+`shelp` entries document skills and spells. They are separate from `help` entries, which cover
+general player commands and game concepts.
 
 ```yaml
-# yaml/imports/shelp/ban.yaml
-keyword: "BAN"
-level: 56         # Minimum staff level to see this entry
+# yaml/shelp/import/berserk.yaml
+keyword: "BERSERK"
+level: 0
 body: |
-  Syntax: ban <name|site> <type>
+  Syntax: berserk
 
-  BAN adds a ban entry. Types: name, site, newsite, permit.
-  See also: UNBAN, BANS
+  BERSERK is a warrior skill. See also: HELP BERSERK for general usage.
+  This shelp entry covers mechanical details used in skill lookups.
 ```
 
-### 4.7 Lore entry import
+### 4.5 Lore entry import
 
 ```yaml
-# yaml/imports/lore/midgaard-history.yaml
+# yaml/lore/import/midgaard-history.yaml
 keyword: "MIDGAARD-HISTORY"
 body: |
   Midgaard is the oldest city in the known world, founded in the Second Age
@@ -321,13 +326,13 @@ body: |
   city's founding and remains a center of worship for the gods of light.
 ```
 
-### 4.8 Update patches
+### 4.6 Update patches
 
 Update files specify only the fields to change. The vnum (or id for quests) identifies the
 record; all other present keys are applied as SET clauses. Missing keys are not touched.
 
 ```yaml
-# yaml/updates/mobs/3005.yaml
+# yaml/mobs/update/3005.yaml
 vnum: 3005
 level: 20
 hp_mod: 10
@@ -335,13 +340,13 @@ dr_mod: 8
 ```
 
 ```yaml
-# yaml/updates/objects/3010.yaml
+# yaml/objects/update/3010.yaml
 vnum: 3010
 cost: 150
 ```
 
 ```yaml
-# yaml/updates/quests/42.yaml
+# yaml/quests/update/42.yaml
 id: 42
 reward_gold: 750
 max_level: 60
@@ -358,14 +363,14 @@ music: midgaard_v2.mp3
 Help/shelp/lore updates are keyed by keyword:
 
 ```yaml
-# yaml/updates/help/berserk.yaml
+# yaml/help/update/berserk.yaml
 keyword: "BERSERK"
 body: |
   Updated description with new cooldown values.
 ```
 
 ```yaml
-# yaml/updates/lore/midgaard-history.yaml
+# yaml/lore/update/midgaard-history.yaml
 keyword: "MIDGAARD-HISTORY"
 body: |
   Revised lore text.
@@ -396,15 +401,16 @@ python3 tools/yaml_export.py --all-quests
 # Export help/shelp/lore
 python3 tools/yaml_export.py --help BERSERK
 python3 tools/yaml_export.py --all-help
-python3 tools/yaml_export.py --shelp BAN
+python3 tools/yaml_export.py --shelp BERSERK    # skill/spell help entries
 python3 tools/yaml_export.py --all-shelp
 python3 tools/yaml_export.py --lore MIDGAARD-HISTORY
 python3 tools/yaml_export.py --all-lore
 ```
 
-Output paths follow the directory structure in §3. An `--area midgaard` export writes
-`yaml/exports/areas/midgaard.yaml`. A `--mob 3005` export writes `yaml/exports/mobs/3005.yaml`.
-A `--help BERSERK` export writes `yaml/exports/help/berserk.yaml`.
+Output paths follow the directory structure in §3. An `--area midgaard` export creates
+`yaml/areas/export/midgaard/` with `area.yaml`, `rooms.yaml`, `mobs.yaml`, `objects.yaml`,
+`resets.yaml`, and `shops.yaml`. A `--mob 3005` export writes `yaml/mobs/export/3005.yaml`.
+A `--help BERSERK` export writes `yaml/help/export/berserk.yaml`.
 
 ### 5.2 `tools/yaml_apply.py`
 
@@ -415,27 +421,29 @@ Reads a YAML file and applies it to the DB. Infers operation from the subdirecto
 After successful application, the input file is **deleted**.
 
 ```
-python3 tools/yaml_apply.py yaml/imports/areas/new_area.yaml
-python3 tools/yaml_apply.py yaml/imports/mobs/3099.yaml
-python3 tools/yaml_apply.py yaml/imports/quests/200.yaml
-python3 tools/yaml_apply.py yaml/imports/help/berserk.yaml
-python3 tools/yaml_apply.py yaml/imports/shelp/ban.yaml
-python3 tools/yaml_apply.py yaml/imports/lore/midgaard-history.yaml
-python3 tools/yaml_apply.py yaml/updates/mobs/3005.yaml
-python3 tools/yaml_apply.py yaml/updates/quests/42.yaml
-python3 tools/yaml_apply.py yaml/updates/help/berserk.yaml
+# Area operations: pass the folder; tool reads all section files present
+python3 tools/yaml_apply.py yaml/areas/import/whispering_forest_preserve/
+python3 tools/yaml_apply.py yaml/areas/update/midgaard/
+
+# Standalone record operations (quests, help, shelp, lore)
+python3 tools/yaml_apply.py yaml/quests/import/200.yaml
+python3 tools/yaml_apply.py yaml/help/import/berserk.yaml
+python3 tools/yaml_apply.py yaml/shelp/import/ban.yaml
+python3 tools/yaml_apply.py yaml/lore/import/midgaard-history.yaml
+python3 tools/yaml_apply.py yaml/quests/update/42.yaml
+python3 tools/yaml_apply.py yaml/help/update/berserk.yaml
 ```
 
 A glob form is also supported for batch application:
 
 ```
-python3 tools/yaml_apply.py yaml/imports/mobs/        # apply all files in a dir, delete each on success
-python3 tools/yaml_apply.py yaml/updates/objects/
+python3 tools/yaml_apply.py yaml/quests/import/     # apply all files in a dir, delete each on success
+python3 tools/yaml_apply.py yaml/areas/update/      # apply all area update folders
 ```
 
-For area imports, `yaml_apply.py` inserts the area record first (obtaining `area_id`), then
-inserts rooms, mobs, objects, resets, and shops in dependency order. For standalone mob/object
-imports, `area_id` must be provided directly or resolved via `area_keyword`.
+For area imports, `yaml_apply.py` reads the folder, inserts the area record first (obtaining
+`area_id`), then inserts rooms, mobs, objects, resets, and shops in dependency order. After
+successful application of an area folder, all files within it and the folder itself are deleted.
 
 Both tools read the DB connection string from `data/db.conf` (same file the C server uses).
 
@@ -477,10 +485,11 @@ source of truth.
 If `yaml_apply.py` encounters a DB error, the file is left in place so the author can inspect
 and retry. Only a clean, committed transaction triggers deletion.
 
-**Area-centric vs. flat per-type exports:**
-Area exports bundle everything about an area into one file, matching how designers think about
-content ("the midgaard area"). Flat per-type exports (`yaml/exports/mobs/3005.yaml`) are also
-supported for single-record inspection. Both modes are available from `yaml_export.py`.
+**Mobs and objects live inside areas, not at the top level:**
+Mobs, objects, rooms, resets, and shops always belong to an area and are always accessed
+through the `yaml/areas/` tree. There are no standalone `mobs/` or `objects/` directories.
+Adding or patching content within an existing area uses an area update folder with only the
+relevant section file present.
 
 **Full export vs. partial:**
 Exports always dump the full record so the YAML is self-contained. Updates are intentionally
