@@ -10,9 +10,17 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SRC_DIR="$SCRIPT_DIR/src"
 AREA_DIR="$SCRIPT_DIR/area"
-PLAYER_DIR="$SCRIPT_DIR/player"
 RUN_SECONDS=2
 LOG_FILE="/tmp/mud-integration-test-$$.log"
+
+# Isolated scratch directory: the server runs from TEST_AREA_DIR so that
+# ../data/ resolves to TEST_DATA_DIR (not the production data directory) and
+# ../player/ resolves to TEST_PLAYER_DIR.  This prevents the test from
+# reading or writing any production data files.
+TEST_DIR=$(mktemp -d)
+TEST_AREA_DIR="$TEST_DIR/area"
+TEST_DATA_DIR="$TEST_DIR/data"
+TEST_PLAYER_DIR="$TEST_DIR/player"
 
 # Test player name (3-12 alpha chars, not a reserved name, unlikely to clash
 # with any mob name).
@@ -39,6 +47,7 @@ cleanup() {
         wait "$MUD_PID" 2>/dev/null || true
     fi
     rm -f "$LOG_FILE"
+    rm -rf "$TEST_DIR"
 }
 trap cleanup EXIT
 
@@ -52,27 +61,61 @@ if ! (cd "$SRC_DIR" && make ack); then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 2: remove any leftover player files so the login flows are always the
+# Step 2: set up isolated test environment so the server never touches
+# production data files (data/chest/, data/db.conf, etc.).
+# ---------------------------------------------------------------------------
+# Area directory: symlink every file/dir from the real area/ into TEST_AREA_DIR
+# so the server can still load all area files.
+mkdir -p "$TEST_AREA_DIR"
+for f in "$AREA_DIR"/*; do
+    ln -s "$f" "$TEST_AREA_DIR/$(basename "$f")"
+done
+
+# Data directory: symlink every entry from the real data/ directory except
+# chest/ (keep-chest flat files) and db.conf (must not exist so the server
+# never auto-connects to a production database when ACK_DB_CONF is absent).
+# An empty chest/ is created so there are no prod flat-file chests to load.
+mkdir -p "$TEST_DATA_DIR"
+for f in "$SCRIPT_DIR/data"/*; do
+    bname=$(basename "$f")
+    [ "$bname" = "chest" ]  && continue
+    [ "$bname" = "db.conf" ] && continue
+    ln -s "$f" "$TEST_DATA_DIR/$bname"
+done
+mkdir -p "$TEST_DATA_DIR/chest"
+
+# Help/shelp directories: symlink the real ones so the server can load
+# greeting help entries and the rest of the help system.
+ln -s "$SCRIPT_DIR/help"  "$TEST_DIR/help"
+ln -s "$SCRIPT_DIR/shelp" "$TEST_DIR/shelp"
+
+# Player directory: create per-letter subdirs so save_char_obj can write files.
+mkdir -p "$TEST_PLAYER_DIR"
+for letter in a b c d e f g h i j k l m n o p q r s t u v w x y z; do
+    mkdir -p "$TEST_PLAYER_DIR/$letter"
+done
+
+# ---------------------------------------------------------------------------
+# Step 3: remove any leftover player files so the login flows are always the
 # new-character path (idempotent test runs).
 # ---------------------------------------------------------------------------
 player_lower=$(echo "$TEST_PLAYER" | tr '[:upper:]' '[:lower:]')
 first_letter=$(echo "$player_lower" | cut -c1)
-rm -f "$PLAYER_DIR/$first_letter/$player_lower"
+rm -f "$TEST_PLAYER_DIR/$first_letter/$player_lower"
 
 # ---------------------------------------------------------------------------
-# Step 3: launch
-# The startup script runs the binary from the area/ directory so that
-# relative paths to area files, data files, and player directories resolve
-# correctly.
+# Step 4: launch
+# Run from TEST_AREA_DIR so that ../data/ and ../player/ resolve to the
+# isolated test directories rather than the production ones.
 # ---------------------------------------------------------------------------
 echo "integration-test: starting MUD on port $TEST_PORT..."
-(cd "$AREA_DIR" && ../src/ack "$TEST_PORT" --http-port "$HTTP_PORT") >"$LOG_FILE" 2>&1 &
+(cd "$TEST_AREA_DIR" && "$SRC_DIR/ack" "$TEST_PORT" --http-port "$HTTP_PORT") >"$LOG_FILE" 2>&1 &
 MUD_PID=$!
 
 echo "integration-test: MUD started (PID $MUD_PID), waiting for boot..."
 
 # ---------------------------------------------------------------------------
-# Step 4: wait until the server is ready (game loop started, max 90 s).
+# Step 5: wait until the server is ready (game loop started, max 90 s).
 # ---------------------------------------------------------------------------
 boot_wait=0
 while [ "$boot_wait" -lt 90 ]; do
@@ -102,7 +145,7 @@ fi
 echo "integration-test: MUD is up, validating websocket login flow for '${TEST_PLAYER}'..."
 
 # ---------------------------------------------------------------------------
-# Step 5: WebSocket handshake + walk the new-player login flow (happy path).
+# Step 6: WebSocket handshake + walk the new-player login flow (happy path).
 # ---------------------------------------------------------------------------
 python3 "$SCRIPT_DIR/websocket-test-client.py" "$TEST_PORT" "$TEST_PLAYER" "$TEST_PASSWORD"
 
@@ -116,7 +159,7 @@ if [ "$LOGIN_STATUS" -ne 0 ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 6: let the MUD keep running and watch for crashes.
+# Step 7: let the MUD keep running and watch for crashes.
 # ---------------------------------------------------------------------------
 echo "integration-test: monitoring MUD for ${RUN_SECONDS}s..."
 elapsed=0

@@ -22,9 +22,14 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SRC_DIR="$SCRIPT_DIR/src"
 AREA_DIR="$SCRIPT_DIR/area"
-PLAYER_DIR="$SCRIPT_DIR/player"
 RUN_SECONDS=2
 LOG_FILE="/tmp/mud-integration-test-wss-$$.log"
+
+# Isolated scratch directory so the server never touches production data.
+TEST_DIR=$(mktemp -d)
+TEST_AREA_DIR="$TEST_DIR/area"
+TEST_DATA_DIR="$TEST_DIR/data"
+TEST_PLAYER_DIR="$TEST_DIR/player"
 
 WSS_TEST_PLAYER="Wssplayer"
 WSS_TEST_PASSWORD="wsspass"
@@ -47,7 +52,7 @@ fi
 
 remove_player_file() {
     _lower=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-    rm -f "$PLAYER_DIR/$(echo "$_lower" | cut -c1)/$_lower"
+    rm -f "$TEST_PLAYER_DIR/$(echo "$_lower" | cut -c1)/$_lower"
 }
 
 cleanup() {
@@ -56,6 +61,7 @@ cleanup() {
         wait "$MUD_PID" 2>/dev/null || true
     fi
     rm -f "$LOG_FILE" "$TLS_CERT" "$TLS_KEY"
+    rm -rf "$TEST_DIR"
 }
 trap cleanup EXIT
 
@@ -95,15 +101,37 @@ if ! (cd "$SRC_DIR" && make ack); then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 3: remove any leftover player files.
+# Step 3: set up isolated test environment.
+# ---------------------------------------------------------------------------
+mkdir -p "$TEST_AREA_DIR"
+for f in "$AREA_DIR"/*; do
+    ln -s "$f" "$TEST_AREA_DIR/$(basename "$f")"
+done
+mkdir -p "$TEST_DATA_DIR"
+for f in "$SCRIPT_DIR/data"/*; do
+    bname=$(basename "$f")
+    [ "$bname" = "chest" ]  && continue
+    [ "$bname" = "db.conf" ] && continue
+    ln -s "$f" "$TEST_DATA_DIR/$bname"
+done
+mkdir -p "$TEST_DATA_DIR/chest"
+ln -s "$SCRIPT_DIR/help"  "$TEST_DIR/help"
+ln -s "$SCRIPT_DIR/shelp" "$TEST_DIR/shelp"
+mkdir -p "$TEST_PLAYER_DIR"
+for letter in a b c d e f g h i j k l m n o p q r s t u v w x y z; do
+    mkdir -p "$TEST_PLAYER_DIR/$letter"
+done
+
+# ---------------------------------------------------------------------------
+# Step 4: remove any leftover player files.
 # ---------------------------------------------------------------------------
 remove_player_file "$WSS_TEST_PLAYER"
 
 # ---------------------------------------------------------------------------
-# Step 4: launch
+# Step 5: launch from the isolated area directory.
 # ---------------------------------------------------------------------------
 echo "integration-test-wss: starting MUD on plain $PLAIN_PORT / WSS $WSS_PORT..."
-(cd "$AREA_DIR" && ../src/ack "$PLAIN_PORT" \
+(cd "$TEST_AREA_DIR" && "$SRC_DIR/ack" "$PLAIN_PORT" \
     --wss-port "$WSS_PORT" --tls-cert "$TLS_CERT" --tls-key "$TLS_KEY" \
     --http-port "$HTTP_PORT") >"$LOG_FILE" 2>&1 &
 MUD_PID=$!

@@ -701,10 +701,8 @@ static void fread_chest_item(FILE *fp)
                      obj->first_exdesc = ed->next;
                      PUT_FREE(ed, exdesc_free);
                   }
-                  free_string(obj->name);
-                  free_string(obj->short_descr);
-                  free_string(obj->description);
-                  PUT_FREE(obj, obj_free);
+                  PUT_FREE(obj,
+                           obj_free); /* obj_free_destructor frees name/short_descr/description */
                   return;
                }
 
@@ -759,10 +757,8 @@ static void fread_chest_item(FILE *fp)
                   monitor_chan("fread_chest_item: missing parent container in nest.", MONITOR_BAD);
                   obj->pIndexData->count--;
                   UNLINK(obj, first_obj, last_obj, next, prev);
-                  free_string(obj->name);
-                  free_string(obj->short_descr);
-                  free_string(obj->description);
-                  PUT_FREE(obj, obj_free);
+                  PUT_FREE(obj,
+                           obj_free); /* obj_free_destructor frees name/short_descr/description */
                }
                return;
             }
