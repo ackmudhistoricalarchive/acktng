@@ -210,17 +210,27 @@ flags: 0
 
 **`yaml/areas/export/midgaard/resets.yaml`**
 ```yaml
-- type: M
+- type: mob          # place a mob in a room (M)
   mob_vnum: 3005
   room_vnum: 3001
   mob_max: 5
-- type: O
+- type: object        # place an object in a room (O)
   obj_vnum: 3010
   room_vnum: 3001
   obj_max: 2
-- type: E
+- type: equip         # equip an object on the last mob reset (E)
   obj_vnum: 3010
   wear_loc: 14
+- type: give          # give an object to the last mob reset (G)
+  obj_vnum: 3011
+- type: put           # put an object inside a container object (P)
+  obj_vnum: 3012
+  container_vnum: 3020
+  obj_max: 1
+- type: door          # set a door state (D)
+  room_vnum: 3001
+  direction: 0        # 0=N 1=E 2=S 3=W 4=U 5=D
+  door_state: 1       # 0=open 1=closed 2=locked
 ```
 
 **`yaml/areas/export/midgaard/shops.yaml`**
