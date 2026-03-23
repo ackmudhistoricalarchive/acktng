@@ -2461,11 +2461,16 @@ static int import_quest_file(const char *path, int id)
    maxlv = 170;
    reward_exp = 0;
    if (sscanf(line, "%d %d %d %d %d %d %d %d %d %d %*d", &prereq, &type, &ntargets, &kill_needed,
-              &minlv, &maxlv, &offerer, &reward_gold, &reward_qp, &reward_exp) < 9)
+              &minlv, &maxlv, &offerer, &reward_gold, &reward_qp, &reward_exp) != 10)
    {
-      fprintf(errlog, "WARN: bad numeric line in %s\n", path);
-      fclose(fp);
-      return 0;
+      reward_exp = 0;
+      if (sscanf(line, "%d %d %d %d %d %d %d %d %d %*d", &prereq, &type, &ntargets, &kill_needed,
+                 &minlv, &offerer, &reward_gold, &reward_qp, &reward_exp) != 9)
+      {
+         fprintf(errlog, "WARN: bad numeric line in %s\n", path);
+         fclose(fp);
+         return 0;
+      }
    }
 
    /* Line 3: target vnums */
