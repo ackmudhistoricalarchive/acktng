@@ -1823,4 +1823,8 @@ void do_scout(CHAR_DATA *ch, char *argument)
 
       depth = depth - 1;
    }
+
+   /* v2 WebSocket: send scout data to browser client */
+   if (!IS_NPC(ch) && ch->desc && ch->desc->websocket_active)
+      ws_send_map_scout(ch->desc, ch);
 }
