@@ -1777,7 +1777,7 @@ bool process_output(DESCRIPTOR_DATA *d, bool fPrompt)
          CHAR_DATA *ch;
 
          ch = d->original ? d->original : d->character;
-         if (IS_SET(ch->config, CONFIG_BLANK))
+         if (IS_SET(ch->config, CONFIG_BLANK) && !d->websocket_active)
             write_to_buffer(d, "\n\r", 2);
          if (ch->hunting || ch->hunt_obj)
             char_hunt(ch);
