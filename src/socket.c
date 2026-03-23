@@ -2716,6 +2716,403 @@ void gmcp_send_channel(DESCRIPTOR_DATA *d, const char *channel, const char *talk
 
 /*
  * =========================================================================
+ * WebSocket v2 JSON protocol (browser MUD client)
+ * =========================================================================
+ */
+
+static const char *ws_terrain_name(sh_int sector)
+{
+   switch (sector)
+   {
+   case SECT_CITY:
+      return "city";
+   case SECT_FIELD:
+      return "field";
+   case SECT_FOREST:
+      return "forest";
+   case SECT_HILLS:
+      return "hills";
+   case SECT_MOUNTAIN:
+      return "mountain";
+   case SECT_WATER_SWIM:
+      return "water_swim";
+   case SECT_WATER_NOSWIM:
+      return "water_noswim";
+   case SECT_DESERT:
+      return "desert";
+   default:
+      return "inside";
+   }
+}
+
+/* Like json_str_escape but strips @@X color codes from the source string. */
+static void json_str_strip_color(char *buf, int *pos, int buf_size, const char *s)
+{
+   json_append(buf, pos, buf_size, "\"");
+   while (*s && *pos < buf_size - 2)
+   {
+      if (s[0] == '@' && s[1] == '@' && s[2] != '\0')
+      {
+         s += 3; /* skip @@X */
+         continue;
+      }
+      {
+         char c = *s++;
+         if (c == '"' || c == '\\')
+            buf[(*pos)++] = '\\';
+         buf[(*pos)++] = c;
+      }
+   }
+   buf[*pos] = '\0';
+   json_append(buf, pos, buf_size, "\"");
+}
+
+/* Append the first whitespace-delimited token from name_list as a JSON string. */
+static void json_first_keyword(char *buf, int *pos, int buf_size, const char *name_list)
+{
+   char kw[64];
+   int i = 0;
+
+   if (!name_list || !*name_list)
+   {
+      json_str_escape(buf, pos, buf_size, "");
+      return;
+   }
+   while (*name_list && !isspace((unsigned char)*name_list) && i < (int)sizeof(kw) - 1)
+      kw[i++] = *name_list++;
+   kw[i] = '\0';
+   json_str_escape(buf, pos, buf_size, kw);
+}
+
+/* Send a v2-tagged JSON message to a WebSocket client.
+ * Builds {"v":2,"tag":"<tag>","data":<data_json>} and fires it as a text frame. */
+static void ws_v2_send(DESCRIPTOR_DATA *d, const char *tag, const char *data_json)
+{
+   size_t data_len;
+   size_t total;
+   char *buf;
+   int pos = 0;
+
+   if (!d || !d->websocket_active)
+      return;
+
+   data_len = strlen(data_json);
+   total = data_len + strlen(tag) * 2 + 64; /* generous overhead for envelope + escaping */
+   buf = (char *)malloc(total);
+   if (!buf)
+      return;
+
+   json_append(buf, &pos, (int)total, "{\"v\":2,\"tag\":");
+   json_str_escape(buf, &pos, (int)total, tag);
+   json_append(buf, &pos, (int)total, ",\"data\":");
+   json_append(buf, &pos, (int)total, data_json);
+   json_append(buf, &pos, (int)total, "}");
+   write_websocket_frame(d, 0x1, (const unsigned char *)buf, (size_t)pos);
+   free(buf);
+}
+
+void ws_send_room(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
+{
+   static const char *const dir_name[] = {"north", "east", "south", "west", "up", "down"};
+   char buf[16384];
+   int pos = 0;
+   ROOM_INDEX_DATA *room;
+   CHAR_DATA *person;
+   OBJ_DATA *obj;
+   int door;
+   bool first;
+
+   if (!d || !d->websocket_active || !ch || !ch->in_room)
+      return;
+
+   room = ch->in_room;
+
+   json_append(buf, &pos, sizeof(buf), "{\"name\":");
+   json_str_strip_color(buf, &pos, sizeof(buf), room->name ? room->name : "");
+   json_append(buf, &pos, sizeof(buf), ",\"description\":");
+   json_str_strip_color(buf, &pos, sizeof(buf), room->description ? room->description : "");
+
+   /* exits: array of open direction strings */
+   json_append(buf, &pos, sizeof(buf), ",\"exits\":[");
+   first = TRUE;
+   for (door = 0; door < 6; door++)
+   {
+      EXIT_DATA *pexit = room->exit[door];
+      if (pexit && pexit->to_room && !IS_SET(pexit->exit_info, EX_CLOSED))
+      {
+         if (!first)
+            json_append(buf, &pos, sizeof(buf), ",");
+         first = FALSE;
+         json_str_escape(buf, &pos, sizeof(buf), dir_name[door]);
+      }
+   }
+   json_append(buf, &pos, sizeof(buf), "]");
+
+   /* mobs */
+   json_append(buf, &pos, sizeof(buf), ",\"mobs\":[");
+   first = TRUE;
+   for (person = room->first_person; person; person = person->next_in_room)
+   {
+      char id_str[32];
+
+      if (!IS_NPC(person))
+         continue;
+      if (!first)
+         json_append(buf, &pos, sizeof(buf), ",");
+      first = FALSE;
+
+      snprintf(id_str, sizeof(id_str), "%lu", (unsigned long)(uintptr_t)person);
+      json_append(buf, &pos, sizeof(buf), "{\"id\":");
+      json_append(buf, &pos, sizeof(buf), id_str);
+      json_append(buf, &pos, sizeof(buf), ",\"name\":");
+      json_str_strip_color(buf, &pos, sizeof(buf), person->short_descr ? person->short_descr : "");
+      json_append(buf, &pos, sizeof(buf), ",\"keywords\":[");
+      json_first_keyword(buf, &pos, sizeof(buf), person->name);
+      json_append(buf, &pos, sizeof(buf), "],\"actions\":[\"look\",\"attack\",\"consider\"]}");
+   }
+   json_append(buf, &pos, sizeof(buf), "]");
+
+   /* players (other than ch) */
+   json_append(buf, &pos, sizeof(buf), ",\"players\":[");
+   first = TRUE;
+   for (person = room->first_person; person; person = person->next_in_room)
+   {
+      if (IS_NPC(person) || person == ch)
+         continue;
+      if (!first)
+         json_append(buf, &pos, sizeof(buf), ",");
+      first = FALSE;
+      json_append(buf, &pos, sizeof(buf), "{\"name\":");
+      json_str_escape(buf, &pos, sizeof(buf), person->name ? person->name : "");
+      json_append(buf, &pos, sizeof(buf), ",\"actions\":[\"look\",\"tell\",\"group\"]}");
+   }
+   json_append(buf, &pos, sizeof(buf), "]");
+
+   /* objects on the floor */
+   json_append(buf, &pos, sizeof(buf), ",\"objects\":[");
+   first = TRUE;
+   for (obj = room->first_content; obj; obj = obj->next_in_room)
+   {
+      char id_str[32];
+
+      if (!first)
+         json_append(buf, &pos, sizeof(buf), ",");
+      first = FALSE;
+
+      snprintf(id_str, sizeof(id_str), "%lu", (unsigned long)(uintptr_t)obj);
+      json_append(buf, &pos, sizeof(buf), "{\"id\":");
+      json_append(buf, &pos, sizeof(buf), id_str);
+      json_append(buf, &pos, sizeof(buf), ",\"name\":");
+      json_str_strip_color(buf, &pos, sizeof(buf), obj->short_descr ? obj->short_descr : "");
+      json_append(buf, &pos, sizeof(buf), ",\"keyword\":");
+      json_first_keyword(buf, &pos, sizeof(buf), obj->name);
+      json_append(buf, &pos, sizeof(buf), ",\"actions\":[\"look\",\"get\",\"examine\"]}");
+   }
+   json_append(buf, &pos, sizeof(buf), "]");
+
+   json_append(buf, &pos, sizeof(buf), ",\"extras\":[]}");
+
+   ws_v2_send(d, "Room", buf);
+}
+
+#define WS_MAP_MAX_ROOMS 256
+#define WS_MAP_MAX_DEPTH 4
+
+void ws_send_map(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
+{
+   static const char *const dir_name[] = {"north", "east", "south", "west", "up", "down"};
+   /* BFS coordinate deltas: N/E/S/W/U/D */
+   static const int dir_dx[] = {0, 1, 0, -1, 0, 0};
+   static const int dir_dy[] = {-1, 0, 1, 0, -1, 1};
+
+   struct
+   {
+      ROOM_INDEX_DATA *room;
+      int rel_x, rel_y, depth;
+   } queue[WS_MAP_MAX_ROOMS];
+
+   ROOM_INDEX_DATA *visited[WS_MAP_MAX_ROOMS];
+   int head = 0, tail = 0, visited_count = 0;
+   char buf[32768];
+   int pos = 0;
+   bool first;
+
+   if (!d || !d->websocket_active || !ch || !ch->in_room)
+      return;
+
+   /* Seed BFS with the player's current room */
+   queue[tail].room = ch->in_room;
+   queue[tail].rel_x = 0;
+   queue[tail].rel_y = 0;
+   queue[tail].depth = 0;
+   tail++;
+   visited[visited_count++] = ch->in_room;
+
+   json_append(buf, &pos, sizeof(buf), "{\"current_room_id\":");
+   json_int_val(buf, &pos, sizeof(buf), (int)ch->in_room->vnum);
+   json_append(buf, &pos, sizeof(buf), ",\"rooms\":[");
+   first = TRUE;
+
+   while (head < tail)
+   {
+      int door;
+      int mob_count;
+      CHAR_DATA *person;
+      char id_str[32];
+      int cur_x, cur_y, cur_depth;
+      ROOM_INDEX_DATA *cur_room;
+
+      cur_room = queue[head].room;
+      cur_x = queue[head].rel_x;
+      cur_y = queue[head].rel_y;
+      cur_depth = queue[head].depth;
+      head++;
+
+      /* Count mobs in this room */
+      mob_count = 0;
+      for (person = cur_room->first_person; person; person = person->next_in_room)
+         if (IS_NPC(person))
+            mob_count++;
+
+      /* Emit this room entry */
+      if (!first)
+         json_append(buf, &pos, sizeof(buf), ",");
+      first = FALSE;
+
+      snprintf(id_str, sizeof(id_str), "%d", (int)cur_room->vnum);
+      json_append(buf, &pos, sizeof(buf), "{\"id\":");
+      json_append(buf, &pos, sizeof(buf), id_str);
+
+      snprintf(id_str, sizeof(id_str), "%d", cur_x);
+      json_append(buf, &pos, sizeof(buf), ",\"rel_x\":");
+      json_append(buf, &pos, sizeof(buf), id_str);
+
+      snprintf(id_str, sizeof(id_str), "%d", cur_y);
+      json_append(buf, &pos, sizeof(buf), ",\"rel_y\":");
+      json_append(buf, &pos, sizeof(buf), id_str);
+
+      json_append(buf, &pos, sizeof(buf), ",\"terrain\":");
+      json_str_escape(buf, &pos, sizeof(buf), ws_terrain_name(cur_room->sector_type));
+
+      /* exits array for this room */
+      json_append(buf, &pos, sizeof(buf), ",\"exits\":[");
+      {
+         bool first_exit = TRUE;
+
+         for (door = 0; door < 6; door++)
+         {
+            EXIT_DATA *pexit = cur_room->exit[door];
+            if (pexit && pexit->to_room && !IS_SET(pexit->exit_info, EX_CLOSED))
+            {
+               if (!first_exit)
+                  json_append(buf, &pos, sizeof(buf), ",");
+               first_exit = FALSE;
+               json_str_escape(buf, &pos, sizeof(buf), dir_name[door]);
+            }
+         }
+      }
+      json_append(buf, &pos, sizeof(buf), "]");
+
+      snprintf(id_str, sizeof(id_str), "%d", mob_count);
+      json_append(buf, &pos, sizeof(buf), ",\"mob_count\":");
+      json_append(buf, &pos, sizeof(buf), id_str);
+      json_append(buf, &pos, sizeof(buf), "}");
+
+      /* Expand BFS neighbours */
+      if (cur_depth < WS_MAP_MAX_DEPTH)
+      {
+         for (door = 0; door < 6; door++)
+         {
+            EXIT_DATA *pexit = cur_room->exit[door];
+            ROOM_INDEX_DATA *next_room;
+            bool already_visited;
+            int j;
+
+            if (!pexit || !pexit->to_room)
+               continue;
+            next_room = pexit->to_room;
+
+            already_visited = FALSE;
+            for (j = 0; j < visited_count; j++)
+            {
+               if (visited[j] == next_room)
+               {
+                  already_visited = TRUE;
+                  break;
+               }
+            }
+            if (already_visited)
+               continue;
+
+            if (tail >= WS_MAP_MAX_ROOMS || visited_count >= WS_MAP_MAX_ROOMS)
+               goto ws_bfs_done;
+
+            visited[visited_count++] = next_room;
+            queue[tail].room = next_room;
+            queue[tail].rel_x = cur_x + dir_dx[door];
+            queue[tail].rel_y = cur_y + dir_dy[door];
+            queue[tail].depth = cur_depth + 1;
+            tail++;
+         }
+      }
+   }
+ws_bfs_done:
+   json_append(buf, &pos, sizeof(buf), "]}");
+   ws_v2_send(d, "Map", buf);
+}
+
+void ws_send_map_scan(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
+{
+   static const char *const dir_name[] = {"north", "east", "south", "west", "up", "down"};
+   char buf[512];
+   int pos = 0;
+   int door;
+   bool first = TRUE;
+
+   if (!d || !d->websocket_active || !ch || !ch->in_room)
+      return;
+
+   json_append(buf, &pos, sizeof(buf), "{");
+   for (door = 0; door < 6; door++)
+   {
+      EXIT_DATA *pexit = ch->in_room->exit[door];
+
+      if (!first)
+         json_append(buf, &pos, sizeof(buf), ",");
+      first = FALSE;
+
+      json_str_escape(buf, &pos, sizeof(buf), dir_name[door]);
+      json_append(buf, &pos, sizeof(buf), ":");
+
+      if (!pexit || !pexit->to_room || IS_SET(pexit->exit_info, EX_CLOSED))
+      {
+         json_append(buf, &pos, sizeof(buf), "null");
+      }
+      else
+      {
+         CHAR_DATA *person;
+         int mob_count = 0;
+         char tmp[32];
+
+         for (person = pexit->to_room->first_person; person; person = person->next_in_room)
+            if (IS_NPC(person))
+               mob_count++;
+
+         snprintf(tmp, sizeof(tmp), "%d", (int)pexit->to_room->vnum);
+         json_append(buf, &pos, sizeof(buf), "{\"room_id\":");
+         json_append(buf, &pos, sizeof(buf), tmp);
+         snprintf(tmp, sizeof(tmp), "%d", mob_count);
+         json_append(buf, &pos, sizeof(buf), ",\"count\":");
+         json_append(buf, &pos, sizeof(buf), tmp);
+         json_append(buf, &pos, sizeof(buf), "}");
+      }
+   }
+   json_append(buf, &pos, sizeof(buf), "}");
+   ws_v2_send(d, "Map:Scan", buf);
+}
+
+/*
+ * =========================================================================
  * MCCP2 (server->client zlib compression, telnet option 86)
  * =========================================================================
  */
