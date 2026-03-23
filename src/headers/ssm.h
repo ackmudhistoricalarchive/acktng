@@ -90,7 +90,7 @@ extern BufEntry *ssm_buf_head, *ssm_buf_free;
 
 /* To allocate more memory increase MAX_CHUNKS */
 #ifndef MAX_CHUNKS
-#define MAX_CHUNKS 100
+#define MAX_CHUNKS 200
 #endif
 #define CHUNK_SIZE 0xfff0 /* Don't mess with this */
 extern long MAX_STRING;
