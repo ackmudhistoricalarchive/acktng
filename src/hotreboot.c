@@ -142,8 +142,6 @@ void do_hotreboot(CHAR_DATA *ch, char *argument)
       }
       else
       {
-         fprintf(fp, "%d %s %s %d\n", d->descriptor, och->name, d->host,
-                 d->websocket_active ? 1 : 0);
          if (och->level == 1)
          {
             write_to_buffer(d,
@@ -157,6 +155,25 @@ void do_hotreboot(CHAR_DATA *ch, char *argument)
          och->mana = och->max_mana;
          och->move = och->max_move;
          save_char_obj(och);
+
+         /* TLS connections (WSS and TLS telnet) cannot survive exec(): the SSL
+          * context lives in user-space memory and is torn down before exec().
+          * The raw fd is inherited but the client still expects TLS, so any
+          * attempt to restore them results in a broken connection.  Drop them
+          * gracefully here — their characters are already saved above. */
+         if (d->tls_active)
+         {
+            write_to_buffer(d,
+                            "\n\rEncrypted connections cannot be preserved across HOTreboot. "
+                            "Please reconnect.\n\r",
+                            0);
+            process_output(d, FALSE);
+            close_socket(d);
+            continue;
+         }
+
+         fprintf(fp, "%d %s %s %d\n", d->descriptor, och->name, d->host,
+                 d->websocket_active ? 1 : 0);
          /* Use write_to_buffer + process_output so WebSocket clients receive a
           * properly framed message and stay connected through the exec(). */
          write_to_buffer(d, buf, 0);
