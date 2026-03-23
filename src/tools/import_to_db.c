@@ -2627,6 +2627,53 @@ static int import_quests(const char *dirpath)
 }
 
 /* -----------------------------------------------------------------------
+ * Schema application
+ * ----------------------------------------------------------------------- */
+
+static int apply_schema(const char *schema_path)
+{
+   FILE *fp;
+   long len;
+   char *sql;
+   PGresult *res;
+
+   fp = fopen(schema_path, "r");
+   if (!fp)
+   {
+      fprintf(errlog, "ERROR: cannot open schema file: %s\n", schema_path);
+      return 0;
+   }
+
+   fseek(fp, 0, SEEK_END);
+   len = ftell(fp);
+   fseek(fp, 0, SEEK_SET);
+
+   sql = malloc(len + 1);
+   if (!sql)
+   {
+      fclose(fp);
+      fprintf(errlog, "ERROR: out of memory reading schema file\n");
+      return 0;
+   }
+
+   fread(sql, 1, len, fp);
+   sql[len] = '\0';
+   fclose(fp);
+
+   res = PQexec(conn, sql);
+   free(sql);
+
+   if (PQresultStatus(res) != PGRES_COMMAND_OK)
+   {
+      fprintf(errlog, "ERROR: schema apply failed: %s\n", PQresultErrorMessage(res));
+      PQclear(res);
+      return 0;
+   }
+   PQclear(res);
+   return 1;
+}
+
+/* -----------------------------------------------------------------------
  * main
  * ----------------------------------------------------------------------- */
 
@@ -2663,6 +2710,16 @@ int main(int argc, char *argv[])
       return 1;
    }
    printf("Connected to database.\n");
+
+   /* ------------------------------------------------------------------ */
+   printf("\nApplying schema...\n");
+   if (!apply_schema("../area/schema.sql"))
+   {
+      fprintf(stderr, "Failed to apply schema. Aborting.\n");
+      PQfinish(conn);
+      return 1;
+   }
+   printf("  Schema applied.\n");
 
    /* ------------------------------------------------------------------ */
    printf("\nImporting help files...\n");
