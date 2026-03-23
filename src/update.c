@@ -2077,11 +2077,6 @@ void update_handler(void)
    static int pulse_violence;
    static int pulse_point;
    static int pulse_auction;
-   extern int saving_area;
-
-   if (saving_area)
-      build_save(); /* For incremental area saving */
-
    if (--pulse_area <= 0)
    {
       pulse_area = number_range(PULSE_AREA / 2, 3 * PULSE_AREA / 2);

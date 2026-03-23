@@ -398,8 +398,6 @@ int area_revision = -1;
  */
 void init_mm args((void));
 
-void load_brands args((void));
-
 void fix_exits args((void));
 void check_resets args((void));
 
@@ -438,13 +436,6 @@ const char *db_test_get_area_name(void)
 {
    return strArea;
 }
-#endif
-
-/* Set to 1 if a real DB connection is established during boot_db().
- * Stays 0 when data/db.conf is absent; create_object() uses this to
- * decide whether to call load_chest() individually. */
-#ifdef HAVE_LIBPQ
-static int db_connected = 0;
 #endif
 
 /*
@@ -582,227 +573,41 @@ void boot_db(void)
    }
 
    /*
-    * Open DB connection.  Aborts only if data/db.conf is present but the
-    * connection or schema check fails.  If data/db.conf is absent the server
-    * boots from flat files (db_conn_open returns -1).
-    *
-    * db_connected = 1 only when the connection actually succeeded; all
-    * subsequent loading blocks check this at runtime so that a system with
-    * HAVE_LIBPQ compiled in but no data/db.conf still boots from flat files.
+    * Open DB connection.  Aborts if data/db.conf is absent or the connection
+    * fails — the DB is required.
     */
 #ifdef HAVE_LIBPQ
    {
       int db_rc = db_conn_open(".");
-      if (db_rc == 0)
+      if (db_rc != 1)
       {
          log_f("FATAL: DB connection failed (check data/db.conf). Aborting.");
          exit(1);
       }
-      else if (db_rc == 1)
-      {
-         db_connected = 1;
-         log_f("DB: connection established.");
-      }
-      /* db_rc == -1: db.conf absent, fall through to flat-file loading */
+      log_f("DB: connection established.");
    }
 #endif
 
    /*
     *   Read in clan data table
     */
-
-#ifdef HAVE_LIBPQ
-   if (db_connected)
-   {
-      log_f("DB: loading clan diplomacy from database.");
-      db_load_clans();
-   }
-   else
-#endif
-   {
-      FILE *clanfp;
-      char clan_file_name[MAX_STRING_LENGTH];
-      sh_int x, y;
-      char buf[MAX_STRING_LENGTH];
-      log_f("Loading in Clan diplomacy info.");
-
-      snprintf(clan_file_name, sizeof(clan_file_name), "%s", CLAN_FILE);
-
-      db_format_status(buf, sizeof(buf), "Loading", clan_file_name);
-      monitor_chan(buf, MONITOR_CLAN);
-
-      if ((clanfp = fopen(clan_file_name, "r")) == NULL)
-      {
-         log_f("failed open of clan_table.dat in load_clan_table");
-      }
-      else
-      {
-         fpArea = clanfp;
-         db_set_area_name(clan_file_name);
-
-         sh_int file_max_clan = fread_number(clanfp);
-         if (file_max_clan != MAX_CLAN)
-         {
-            log_f("WARNING: clandata.dat has MAX_CLAN=%d but code expects %d. "
-                  "Skipping load, using defaults.",
-                  file_max_clan, MAX_CLAN);
-         }
-         else
-         {
-            for (x = 1; x < MAX_CLAN; x++)
-            {
-               for (y = 1; y < MAX_CLAN; y++)
-               {
-                  politics_data.diplomacy[x][y] = fread_number(clanfp);
-               }
-            }
-
-            for (x = 1; x < MAX_CLAN; x++)
-            {
-               politics_data.treasury[x] = fread_number(clanfp);
-            }
-
-            for (x = 1; x < MAX_CLAN; x++)
-            {
-               for (y = 1; y < MAX_CLAN; y++)
-               {
-                  politics_data.end_current_state[x][y] = fread_number(clanfp);
-               }
-            }
-         }
-
-         if (clanfp != NULL)
-         {
-            fclose(clanfp);
-            clanfp = NULL;
-         }
-      }
-      fpArea = NULL;
-      db_format_status(buf, sizeof(buf), "Done Loading", clan_file_name);
-      log_f("%s", buf);
-   }
+   log_f("DB: loading clan diplomacy from database.");
+   db_load_clans();
 
    /*
     * Read in all the socials.
     */
-#ifdef HAVE_LIBPQ
-   if (db_connected)
-   {
-      log_f("DB: loading socials from database.");
-      db_load_socials();
-   }
-   else
-#endif
-      load_social_table();
+   log_f("DB: loading socials from database.");
+   db_load_socials();
 
-      /*
-       * Read in all the area files.
-       */
-#ifdef HAVE_LIBPQ
-   if (db_connected)
-   {
-      log_f("DB: loading areas from database.");
-      db_load_areas_from_db();
-   }
-   else
-#endif
-   {
-      FILE *fpList;
-      log_f("Reading Area Files...");
+   /*
+    * Read in all the area files.
+    */
+   log_f("DB: loading areas from database.");
+   db_load_areas_from_db();
 
-      if ((fpList = fopen(AREA_LIST, "r")) == NULL)
-      {
-         perror(AREA_LIST);
-         log_f("Unable to open area.lst, aborting bootup.");
-         kill(getpid(), SIGQUIT);
-      }
-
-      for (;;)
-      {
-         char areaBuf[MAX_STRING_LENGTH];
-         strcpy(strArea, fread_word(fpList));
-         if (strArea[0] == '$')
-            break;
-
-         if (strArea[0] == '-')
-         {
-            fpArea = stdin;
-         }
-         else
-         {
-            strcpy(areaBuf, AREA_DIR);
-            strcat(areaBuf, strArea);
-            if ((fpArea = fopen(areaBuf, "r")) == NULL)
-            {
-               log_string(areaBuf);
-               kill(getpid(), SIGQUIT);
-            }
-
-            log_f("%s successfully loaded.", areaBuf);
-         }
-
-         for (;;)
-         {
-            char *word;
-
-            if (fread_letter(fpArea) != '#')
-            {
-               bug("Boot_db: # not found.", 0);
-               kill(getpid(), SIGQUIT);
-            }
-
-            word = fread_word(fpArea);
-
-            if (word[0] == '$')
-               break;
-            else if (!str_cmp(word, "AREA"))
-               load_area(fpArea);
-            else if (!str_cmp(word, "MOBILES"))
-               load_mobiles(fpArea);
-            else if (!str_cmp(word, "OBJECTS"))
-               load_objects(fpArea);
-            else if (!str_cmp(word, "RESETS"))
-               load_resets(fpArea);
-            else if (!str_cmp(word, "ROOMS"))
-               load_rooms(fpArea);
-            else if (!str_cmp(word, "SHOPS"))
-               load_shops(fpArea);
-            else if (!str_cmp(word, "SPECIALS"))
-               load_specials(fpArea);
-            else if (!str_cmp(word, "SPEECH"))
-               load_speech(fpArea);
-            else if (!str_cmp(word, "OBJFUNS"))
-               load_objfuns(fpArea);
-            else
-            {
-               bug("Boot_db: bad section name.", 0);
-               exit(1);
-            }
-         }
-
-         if (fpArea != stdin)
-            fclose(fpArea);
-         fpArea = NULL;
-      }
-      if (fpList != NULL)
-      {
-         fclose(fpList);
-         fpList = NULL;
-      }
-   }
-
-#ifdef HAVE_LIBPQ
-   if (db_connected)
-   {
-      log_f("DB: loading quest templates from database.");
-      db_load_quest_templates();
-   }
-   else
-#endif
-   {
-      log_f("Loading quest templates.");
-      quest_load_templates();
-   }
+   log_f("DB: loading quest templates from database.");
+   db_load_quest_templates();
 
    /*
     * Fix up exits.
@@ -872,50 +677,24 @@ void boot_db(void)
       area_update();
       log_f("Loading notes");
       load_notes();
-#ifdef HAVE_LIBPQ
-      if (db_connected)
-      {
-         log_f("DB: loading corpses from database.");
-         db_load_corpses();
-         log_f("DB: loading room marks from database.");
-         db_load_room_marks();
-         log_f("DB: loading boards from database.");
-         db_load_boards();
-         log_f("DB: loading bans from database.");
-         db_load_bans();
-         log_f("DB: loading ruler data from database.");
-         db_load_rulers();
-         log_f("DB: loading staff brands from database.");
-         db_load_brands();
-         log_f("DB: loading system data from database.");
-         db_load_sysdata();
-         log_f("DB: loading keep chests from database.");
-         db_load_chests();
-      }
-      else
-#endif
-      {
-         log_f("Loading corpses.");
-         load_corpses();
-         booting_up = TRUE;
-         log_f("Loading room marks.");
-         load_marks();
-         booting_up = FALSE;
-         save_marks();
-         log_f("Loading banned sites.");
-         load_bans();
-         log_f("Loading ruler data.");
-         load_rulers();
-         log_f("Loading staff brands.");
-         load_brands();
-         log_f("Loading System Data.");
-         load_sysdata();
-      }
+      log_f("DB: loading corpses from database.");
+      db_load_corpses();
+      log_f("DB: loading room marks from database.");
+      db_load_room_marks();
+      log_f("DB: loading boards from database.");
+      db_load_boards();
+      log_f("DB: loading bans from database.");
+      db_load_bans();
+      log_f("DB: loading ruler data from database.");
+      db_load_rulers();
+      log_f("DB: loading staff brands from database.");
+      db_load_brands();
+      log_f("DB: loading system data from database.");
+      db_load_sysdata();
+      log_f("DB: loading keep chests from database.");
+      db_load_chests();
    }
-#ifdef HAVE_LIBPQ
-   if (db_connected)
-      db_conn_close();
-#endif
+   db_conn_close();
    auto_quest = TRUE;
    return;
 }
@@ -1883,16 +1662,7 @@ OBJ_DATA *create_object(OBJ_INDEX_DATA *pObjIndex, int level)
    LINK(obj, first_obj, last_obj, next, prev);
    pObjIndex->count++;
 
-   if (obj->item_type == ITEM_CONTAINER && IS_SET(obj->value[1], CONT_KEEP_CHEST))
-#ifdef HAVE_LIBPQ
-   {
-      if (!db_connected)
-         load_chest(pObjIndex->vnum);
-      /* else: db_load_chests() called at end of boot_db() handles this */
-   }
-#else
-      load_chest(pObjIndex->vnum);
-#endif
+   /* Keep chests are loaded at end of boot_db() via db_load_chests(). */
 
    return obj;
 }

@@ -1655,19 +1655,8 @@ void delete_chest_file args((int vnum));
 void load_chest args((int vnum));
 void fread_corpse args((FILE * fp));
 void save_marks args((void));
-void load_marks args((void));
 void save_bans args((void));
-void load_bans args((void));
 void load_notes args((void));
-void load_area args((FILE * fp));
-void load_mobiles args((FILE * fp));
-void load_objects args((FILE * fp));
-void load_resets args((FILE * fp));
-void load_rooms args((FILE * fp));
-void load_shops args((FILE * fp));
-void load_specials args((FILE * fp));
-void load_speech args((FILE * fp));
-void load_objfuns args((FILE * fp));
 char *initial args((const char *str));
 
 /*---------*\
@@ -1676,10 +1665,6 @@ char *initial args((const char *str));
 SF *spec_lookup args((const char *name));
 char *rev_spec_lookup args((void *func));
 void print_spec_lookup args((char *buf));
-
-/* social-edit.c  */
-
-void load_social_table args((void));
 
 /*---------*\
 ) obj_fun.c (
@@ -1715,7 +1700,6 @@ void write_interpret args((CHAR_DATA * ch, char *argument));
 /* build.c */
 void build_strdup(char **dest, char *src, bool freesrc, CHAR_DATA *ch);
 char *build_simpstrdup(char *buf); /* A plug in alternative to str_dup */
-void build_save args((void));
 extern const char *cDirs;
 int get_dir(char);
 char *show_values(const struct lookup_type *table, unsigned long long int value, bool fBit);
@@ -1772,7 +1756,6 @@ void temp_fread_string args((FILE * fp, char *buf));
  */
 
 void save_rulers args((void));
-void load_rulers args((void));
 char *get_ruler_title args((int ruler_rank, int sex));
 
 /*
@@ -1783,7 +1766,6 @@ void save_brands args((void));
 /*
  *  sysdat.c
  */
-void load_sysdata args((void));
 void save_sysdata args((void));
 
 /*

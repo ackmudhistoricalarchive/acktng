@@ -36,9 +36,7 @@
 
 #include "globals.h"
 #include "tables.h"
-#ifdef HAVE_LIBPQ
 #include "db/db_worker.h"
-#endif
 
 void spendqp_copy_text(char *dest, size_t dest_size, const char *src)
 {
@@ -89,122 +87,7 @@ void spendqp_append_word_with_space(char *dest, size_t dest_size, const char *wo
 
 void save_brands()
 {
-
-   FILE *fp;
-   char brand_file_name[MAX_STRING_LENGTH];
-   DL_LIST *brand;
-   BRAND_DATA *this_brand;
-
-   if (fpReserve != NULL)
-   {
-      fclose(fpReserve);
-      fpReserve = NULL;
-   }
-   sprintf(brand_file_name, "%s", BRANDS_FILE);
-
-   if ((fp = fopen(brand_file_name, "w")) == NULL)
-   {
-      bug("Save brands list: fopen", 0);
-      perror("failed open of brands.lst in save_brands");
-   }
-   else
-   {
-      for (brand = first_brand; brand != NULL; brand = brand->next)
-      {
-         this_brand = brand->this_one;
-         fprintf(fp, "#BRAND~\n");
-         fprintf(fp, "%s~\n", this_brand->branded);
-         fprintf(fp, "%s~\n", this_brand->branded_by);
-         fprintf(fp, "%s~\n", this_brand->dt_stamp);
-         fprintf(fp, "%s~\n", this_brand->message);
-         fprintf(fp, "%s~\n", this_brand->priority);
-      }
-      fprintf(fp, "#END~\n\n");
-   }
-
-   fflush(fp);
-   if (fp != NULL)
-   {
-      fclose(fp);
-      fp = NULL;
-   }
-#ifdef HAVE_LIBPQ
    db_worker_save_brands(first_brand);
-#endif
-}
-
-void load_brands(void)
-{
-
-   FILE *brandsfp;
-   char brands_file_name[MAX_STRING_LENGTH];
-   char buf[MAX_STRING_LENGTH];
-   BRAND_DATA *this_brand;
-   DL_LIST *brand_member;
-
-   snprintf(brands_file_name, sizeof(brands_file_name), "%s", BRANDS_FILE);
-
-   buf[0] = '\0';
-   safe_strcat(MAX_STRING_LENGTH, buf, "Loading ");
-   safe_strcat(MAX_STRING_LENGTH, buf, brands_file_name);
-   safe_strcat(MAX_STRING_LENGTH, buf, "\n\r");
-   monitor_chan(buf, MONITOR_CLAN);
-
-   if ((brandsfp = fopen(brands_file_name, "r")) == NULL)
-   {
-      bug("Load brands Table: fopen", 0);
-      perror("failed open of brands_table.dat in load_brands_table");
-   }
-   else
-   {
-      for (;;)
-      {
-
-         char *word;
-
-         word = fread_string(brandsfp);
-         if (!str_cmp(word, "#BRAND"))
-         {
-            GET_FREE(this_brand, brand_data_free);
-            GET_FREE(brand_member, dl_list_free);
-            this_brand->branded = fread_string(brandsfp);
-            this_brand->branded_by = fread_string(brandsfp);
-            this_brand->dt_stamp = fread_string(brandsfp);
-            this_brand->message = fread_string(brandsfp);
-            this_brand->priority = fread_string(brandsfp);
-
-            free_string(word);
-
-            brand_member->this_one = this_brand;
-            brand_member->next = NULL;
-            brand_member->prev = NULL;
-            LINK(brand_member, first_brand, last_brand, next, prev);
-         }
-         else if (!str_cmp(word, "#END"))
-         {
-            free_string(word);
-            break;
-         }
-         else
-         {
-            free_string(word);
-            monitor_chan("Load_brands: bad section.", MONITOR_BAD);
-            break;
-         }
-      }
-
-      if (brandsfp != NULL)
-      {
-         fclose(brandsfp);
-         brandsfp = NULL;
-      }
-
-      buf[0] = '\0';
-      safe_strcat(MAX_STRING_LENGTH, buf, "Done Loading ");
-      safe_strcat(MAX_STRING_LENGTH, buf, brands_file_name);
-      safe_strcat(MAX_STRING_LENGTH, buf, "\n\r");
-      monitor_chan(buf, MONITOR_CLAN);
-   }
 }
 
 void do_qpspend(CHAR_DATA *ch, char *argument)

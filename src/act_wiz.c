@@ -1334,15 +1334,8 @@ void do_reboot(CHAR_DATA *ch, char *argument)
 {
    char buf[MAX_STRING_LENGTH];
    extern bool merc_down;
-   extern int saving_area;
 
    build_save_flush();
-
-   if (saving_area)
-   {
-      send_to_char("Please wait until area saving complete.\n", ch);
-      return;
-   }
 
    sprintf(buf, "Reboot by %s.", ch->name);
    do_echo(ch, buf);
@@ -1360,15 +1353,8 @@ void do_shutdown(CHAR_DATA *ch, char *argument)
 {
    char buf[MAX_STRING_LENGTH];
    extern bool merc_down;
-   extern int saving_area;
 
    build_save_flush();
-
-   if (saving_area)
-   {
-      send_to_char("Please wait until area saving complete.\n", ch);
-      return;
-   }
 
    sprintf(buf, "Shutdown by %s.", ch->name);
    append_file(ch, SHUTDOWN_FILE, buf);

@@ -25,88 +25,19 @@
  *  around, comes around.                                                  *
  ***************************************************************************/
 
-#include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include "globals.h"
 #include <math.h>
 #include <stdlib.h>
-#ifdef HAVE_LIBPQ
 #include "../db/db_worker.h"
-#endif
 
 SYS_DATA_TYPE sysdata;
 
-void load_sysdata(void)
-{
-   FILE *sysfp;
-   char sys_file_name[MAX_STRING_LENGTH];
-   extern bool wizlock;
-   sprintf(sys_file_name, "%s", SYSDAT_FILE);
-
-   if ((sysfp = fopen(sys_file_name, "r")) == NULL)
-   {
-      bug("Load Sys Table: fopen", 0);
-      log_f("failed open of system.dat in load_sysdata");
-   }
-   else
-   {
-      sh_int looper;
-      sysdata.playtesters = fread_string(sysfp);
-      for (looper = 0; looper < MAX_NUM_STAFF; looper++)
-         sysdata.staff[looper].this_string = fread_string(sysfp);
-      sysdata.w_lock = fread_number(sysfp);
-      sysdata.shownumbers = (fread_number(sysfp) == 1 ? TRUE : FALSE);
-      if (sysdata.w_lock == 1)
-      {
-         wizlock = TRUE;
-      }
-   }
-   if (sysfp != NULL)
-   {
-      fclose(sysfp);
-      sysfp = NULL;
-   }
-}
-
 void save_sysdata(void)
 {
-
-   FILE *fp;
-   char sys_file_name[MAX_STRING_LENGTH];
    extern bool wizlock;
-
-   if (fpReserve != NULL)
-   {
-      fclose(fpReserve);
-      fpReserve = NULL;
-   }
-   sprintf(sys_file_name, "%s", SYSDAT_FILE);
-
-   if ((fp = fopen(sys_file_name, "w")) == NULL)
-   {
-      bug("Save Sysdata: fopen", 0);
-      log_f("failed open of system.dat in save_sysdata");
-   }
-   else
-   {
-      sh_int looper;
-      fprintf(fp, "%s~\n\r", sysdata.playtesters);
-      for (looper = 0; looper < MAX_NUM_STAFF; looper++)
-         fprintf(fp, "%s~\n\r", sysdata.staff[looper].this_string);
-      fprintf(fp, "%d\n\r", (wizlock ? 1 : 0));
-      fprintf(fp, "%d\n\r", (sysdata.shownumbers ? 1 : 0));
-      fflush(fp);
-      if (fp != NULL)
-      {
-         fclose(fp);
-         fp = NULL;
-      }
-   }
-#ifdef HAVE_LIBPQ
    db_worker_save_sysdata(wizlock ? 1 : 0, sysdata.shownumbers ? 1 : 0);
-#endif
-   return;
 }
 
 void do_sysdata(CHAR_DATA *ch, char *argument)

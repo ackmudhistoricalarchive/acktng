@@ -4,7 +4,6 @@ UNIT_TEST_TARGETS = \
 	tests/unit-test-skills \
 	tests/unit-test-skills-chi \
 	tests/unit-test-act-flags \
-	tests/unit-test-area-format \
 	tests/unit-test-sha256 \
 	tests/unit-test-update \
 	tests/unit-test-comm \
@@ -349,9 +348,6 @@ tests/unit-test-act-flags: $(OBJDIR)/tests/test_act_flags.o
 	rm -f $@
 	$(CC) -o $@ $^ $(L_FLAGS)
 
-tests/unit-test-area-format: $(OBJDIR)/tests/test_area_format.o
-	rm -f $@
-	$(CC) -o $@ $^ $(L_FLAGS)
 
 $(OBJDIR)/interp.unit-test.o: interp.c headers/ack.h
 	$(CC) -c $(C_FLAGS) -ffunction-sections -fdata-sections -o $(OBJDIR)/interp.unit-test.o interp.c
