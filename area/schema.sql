@@ -543,6 +543,6 @@ CREATE TABLE IF NOT EXISTS schema_version (
     version    INTEGER                  NOT NULL,
     applied_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
-INSERT INTO schema_version (version) VALUES (2);
+INSERT INTO schema_version (version) VALUES (6);
 
 COMMIT;
