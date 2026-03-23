@@ -100,24 +100,8 @@ fi
 # ---------------------------------------------------------------------------
 # Step 3: set up isolated test environment.
 # ---------------------------------------------------------------------------
-mkdir -p "$TEST_AREA_DIR"
-for f in "$AREA_DIR"/*; do
-    ln -s "$f" "$TEST_AREA_DIR/$(basename "$f")"
-done
-mkdir -p "$TEST_DATA_DIR"
-for f in "$SCRIPT_DIR/data"/*; do
-    bname=$(basename "$f")
-    [ "$bname" = "chest" ]  && continue
-    [ "$bname" = "db.conf" ] && continue
-    ln -s "$f" "$TEST_DATA_DIR/$bname"
-done
-mkdir -p "$TEST_DATA_DIR/chest"
-ln -s "$SCRIPT_DIR/help"  "$TEST_DIR/help"
-ln -s "$SCRIPT_DIR/shelp" "$TEST_DIR/shelp"
-mkdir -p "$TEST_PLAYER_DIR"
-for letter in a b c d e f g h i j k l m n o p q r s t u v w x y z; do
-    mkdir -p "$TEST_PLAYER_DIR/$letter"
-done
+. "$SCRIPT_DIR/test-helpers.sh"
+setup_test_environment
 
 # ---------------------------------------------------------------------------
 # Step 4: remove any leftover player files.

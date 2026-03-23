@@ -66,39 +66,10 @@ if ! (cd "$SRC_DIR" && make ack); then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 2: set up isolated test environment so the server never touches
-# production data files (data/chest/, data/db.conf, etc.).
+# Step 2: set up isolated test environment.
 # ---------------------------------------------------------------------------
-# Area directory: symlink every file/dir from the real area/ into TEST_AREA_DIR
-# so the server can still load all area files.
-mkdir -p "$TEST_AREA_DIR"
-for f in "$AREA_DIR"/*; do
-    ln -s "$f" "$TEST_AREA_DIR/$(basename "$f")"
-done
-
-# Data directory: symlink every entry from the real data/ directory except
-# chest/ (keep-chest flat files) and db.conf (must not exist so the server
-# never auto-connects to a production database when ACK_DB_CONF is absent).
-# An empty chest/ is created so there are no prod flat-file chests to load.
-mkdir -p "$TEST_DATA_DIR"
-for f in "$SCRIPT_DIR/data"/*; do
-    bname=$(basename "$f")
-    [ "$bname" = "chest" ]  && continue
-    [ "$bname" = "db.conf" ] && continue
-    ln -s "$f" "$TEST_DATA_DIR/$bname"
-done
-mkdir -p "$TEST_DATA_DIR/chest"
-
-# Help/shelp directories: symlink the real ones so the server can load
-# greeting help entries and the rest of the help system.
-ln -s "$SCRIPT_DIR/help"  "$TEST_DIR/help"
-ln -s "$SCRIPT_DIR/shelp" "$TEST_DIR/shelp"
-
-# Player directory: create per-letter subdirs so save_char_obj can write files.
-mkdir -p "$TEST_PLAYER_DIR"
-for letter in a b c d e f g h i j k l m n o p q r s t u v w x y z; do
-    mkdir -p "$TEST_PLAYER_DIR/$letter"
-done
+. "$SCRIPT_DIR/test-helpers.sh"
+setup_test_environment
 
 # ---------------------------------------------------------------------------
 # Step 3: remove any leftover player files so the login flows are always the
