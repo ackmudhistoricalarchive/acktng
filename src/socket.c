@@ -965,7 +965,9 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
          }
       }
       if (control_wss >= 0 && FD_ISSET(control_wss, &in_set))
+      {
          new_descriptor(control_wss, TRUE, FALSE, TRUE);
+      }
 
       /*
        * Advance any pending TLS handshakes non-blockingly.

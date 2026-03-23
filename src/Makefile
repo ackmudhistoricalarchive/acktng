@@ -286,11 +286,11 @@ tools/migrate_chests: tools/migrate_chests.c
 
 # Check that all source files match the .clang-format style (fails if any differ)
 lint:
-	clang-format --dry-run --Werror $(LINT_SOURCES)
+	clang-format-18 --dry-run --Werror $(LINT_SOURCES)
 
 # Auto-apply the .clang-format style to all source files
 format:
-	clang-format -i $(LINT_SOURCES)
+	clang-format-18 -i $(LINT_SOURCES)
 
 # Auto-generated header dependency files (produced by -MMD -MP during compilation)
 -include $(shell find $(OBJDIR) -name '*.d' 2>/dev/null)
