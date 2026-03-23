@@ -2814,7 +2814,7 @@ static const char *ws_terrain_name(sh_int sector)
 static void json_str_strip_color(char *buf, int *pos, int buf_size, const char *s)
 {
    json_append(buf, pos, buf_size, "\"");
-   while (*s && *pos < buf_size - 2)
+   while (*s && *pos < buf_size - 8)
    {
       if (s[0] == '@' && s[1] == '@' && s[2] != '\0')
       {
@@ -2822,13 +2822,24 @@ static void json_str_strip_color(char *buf, int *pos, int buf_size, const char *
          continue;
       }
       {
-         char c = *s++;
-         if (c == '"' || c == '\\')
-            buf[(*pos)++] = '\\';
-         buf[(*pos)++] = c;
+         unsigned char c = (unsigned char)*s++;
+         if (c == '"')
+            json_append(buf, pos, buf_size, "\\\"");
+         else if (c == '\\')
+            json_append(buf, pos, buf_size, "\\\\");
+         else if (c == '\n')
+            json_append(buf, pos, buf_size, "\\n");
+         else if (c == '\r')
+            ; /* strip carriage return */
+         else if (c == '\t')
+            json_append(buf, pos, buf_size, "\\t");
+         else
+         {
+            buf[(*pos)++] = (char)c;
+            buf[*pos] = '\0';
+         }
       }
    }
-   buf[*pos] = '\0';
    json_append(buf, pos, buf_size, "\"");
 }
 
