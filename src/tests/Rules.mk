@@ -471,3 +471,52 @@ tests/unit-test-mccp: $(OBJDIR)/tests/test_mccp.o
 unit-tests: $(UNIT_TEST_TARGETS)
 	@for t in $(UNIT_TEST_TARGETS); do ./$$t || exit 1; done
 	$(MAKE) integration-tests
+
+# Force test object recompilation when the module under test changes.
+# Make recompiles the test .o even if no header changed (e.g. new/removed
+# function body), ensuring the link step runs and the test is re-executed.
+$(OBJDIR)/tests/test_sha256.o:           sha256.c
+$(OBJDIR)/tests/test_update.o:           update.c
+$(OBJDIR)/tests/test_comm.o:             comm.c
+$(OBJDIR)/tests/test_login.o:            login.c
+$(OBJDIR)/tests/test_fight.o:            fight.c
+$(OBJDIR)/tests/test_act_info.o:         act_info.c
+$(OBJDIR)/tests/test_chan_history.o:      act_comm.c
+$(OBJDIR)/tests/test_act_move.o:         act_move.c
+$(OBJDIR)/tests/test_cloak.o:            cloak.c
+$(OBJDIR)/tests/test_spendqp.o:          spendqp.c
+$(OBJDIR)/tests/test_skills_chi.o:       skills_chi.c
+$(OBJDIR)/tests/test_spell_dam.o:        spell_dam.c
+$(OBJDIR)/tests/test_pdelete.o:          pdelete.c
+$(OBJDIR)/tests/test_email.o:            email.c
+$(OBJDIR)/tests/test_rulers.o:           save/save_rulers.c
+$(OBJDIR)/tests/test_save.o:             save/save.c save/save_players.c save/save_objects.c save/save_mobs.c save/save_areas.c
+$(OBJDIR)/tests/test_skills_obj.o:       skills_obj.c
+$(OBJDIR)/tests/test_skills_combo.o:     skills_combo.c
+$(OBJDIR)/tests/test_reincarnate.o:      reincarnate.c
+$(OBJDIR)/tests/test_ssm.o:              ssm.c
+$(OBJDIR)/tests/test_db.o:               db.c strfuns.c
+$(OBJDIR)/tests/test_magic.o:            magic.c heal.c
+$(OBJDIR)/tests/test_mapper.o:           mapper.c
+$(OBJDIR)/tests/test_damage.o:           damage.c
+$(OBJDIR)/tests/test_buildare.o:         buildare.c
+$(OBJDIR)/tests/test_keep.o:             keep.c
+$(OBJDIR)/tests/test_act_obj.o:          act_obj.c
+$(OBJDIR)/tests/test_quest.o:            quests/template.c quests/state.c quests/cartography.c quests/notify.c quests/commands.c quests/crusade.c
+$(OBJDIR)/tests/test_build.o:            build.c
+$(OBJDIR)/tests/test_invasion.o:         invasion.c
+$(OBJDIR)/tests/test_special.o:          special.c
+$(OBJDIR)/tests/test_npc_dialogue_help.o: npc_dialogue.c
+$(OBJDIR)/tests/test_item_generation.o:  item_generation.c item_generation_tables.c
+$(OBJDIR)/tests/test_interp.o:           interp.c
+$(OBJDIR)/tests/test_crusade.o:          quests/crusade.c
+$(OBJDIR)/tests/test_death.o:            death.c
+$(OBJDIR)/tests/test_strfuns.o:          strfuns.c
+$(OBJDIR)/tests/test_prompt.o:           prompt.c
+$(OBJDIR)/tests/test_skill_renames.o:    const.c stance.c
+$(OBJDIR)/tests/test_adept_skills.o:     const.c
+$(OBJDIR)/tests/test_handler.o:          handler.c
+$(OBJDIR)/tests/test_skills.o:           skills.c
+$(OBJDIR)/tests/test_revenant.o:         revenant.c
+$(OBJDIR)/tests/test_caravan_travel.o:   act_move.c
+$(OBJDIR)/tests/test_weapon_bond.o:      weapon_bond.c
