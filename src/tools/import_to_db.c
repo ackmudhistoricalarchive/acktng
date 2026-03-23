@@ -2530,7 +2530,7 @@ static int import_quest_file(const char *path, int id)
 
    /* Format numeric strings; use NULL for absent FK values */
    sprintf(id_str, "%d", id);
-   if (prereq >= 0)
+   if (prereq > 0)
       sprintf(prereq_str, "%d", prereq);
    sprintf(type_str, "%d", type);
    sprintf(ntargets_str, "%d", ntargets);
@@ -2549,7 +2549,7 @@ static int import_quest_file(const char *path, int id)
 
    params[0] = id_str;
    params[1] = title;
-   params[2] = (prereq >= 0) ? prereq_str : NULL;
+   params[2] = (prereq > 0) ? prereq_str : NULL;
    params[3] = type_str;
    params[4] = ntargets_str;
    params[5] = vnums_pg;
