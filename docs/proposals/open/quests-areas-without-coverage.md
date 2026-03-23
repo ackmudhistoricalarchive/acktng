@@ -219,7 +219,7 @@ ID 177 (chain final + boss):
   pattern used for most mid-range areas.
 - Scorched Wastes and Great Pyramid quests funnel through Port Mafdet NPCs, consistent
   with how the neighboring Scorching Sands and Pyramids are handled.
-- Boss quests for Scorched Wastes (Khepri, ID 166) and Great Pyramid (IDs 179–180)
+- Boss quests for Scorched Wastes (Khepri, ID 163) and Great Pyramid (IDs 176–177)
   have max_level set above the area's stated level ceiling to reflect the actual mob
   levels, following the same pattern used in Cinderteeth and Great Northern Forest.
 - The Academy has one standalone quest with no in-area chain; a two-quest chain is not
