@@ -1312,6 +1312,7 @@ void db_load_chests(void)
     * sort_order must be found in the nest array.  We track a local mapping
     * sort_order → OBJ_DATA* for items loaded so far in this chest.        */
    int cur_chest_vnum = -1;
+   bool cur_chest_valid = FALSE; /* TRUE only when cur chest has a world object */
    /* max items per chest is bounded by game config; 256 is safe headroom */
 #define CHEST_MAX_NEST_TRACK 512
    int nest_sort[CHEST_MAX_NEST_TRACK];
@@ -1327,6 +1328,7 @@ void db_load_chests(void)
       {
          /* Switch to a new chest */
          cur_chest_vnum = chest_vnum;
+         cur_chest_valid = FALSE;
          nest_count = 0;
 
          /* Locate the already-created chest object in the world */
@@ -1348,7 +1350,12 @@ void db_load_chests(void)
          nest_sort[0] = -1;
          nest_obj[0] = chest_obj;
          nest_count = 1;
+         cur_chest_valid = TRUE;
       }
+
+      /* Skip all rows for chests that had no matching world object */
+      if (!cur_chest_valid)
+         continue;
 
       if (is_null_item)
          continue; /* chest exists in DB but has no items */
