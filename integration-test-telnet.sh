@@ -1,7 +1,15 @@
 #!/bin/sh
 #
-# Integration test: build, start, boot, log in as a new player via raw
-# telnet (plain TCP), and run for 2 seconds checking for crashes.
+# Integration test: plain telnet login flow.
+#
+# Builds the server, starts it on an ephemeral plain-telnet port (mirroring
+# production port 8890), walks a full new-player login, and monitors for
+# crashes.  TLS and WebSocket are covered by separate integration tests.
+#
+# Port assignments (production):
+#   8890  plain telnet  ← this test
+#   9890  TLS telnet    ← integration-test-telnet-tls.sh
+#   18890 WebSocket     ← integration-test.sh (ws://)
 #
 # Exit codes:
 #   0 - MUD booted, accepted a player login via telnet, and ran without crashing
@@ -14,11 +22,10 @@ PLAYER_DIR="$SCRIPT_DIR/player"
 RUN_SECONDS=2
 LOG_FILE="/tmp/mud-integration-test-telnet-$$.log"
 
-# Different player name from other tests to avoid save-file collisions.
 TEST_PLAYER="Telnetrat"
 TEST_PASSWORD="telnetpass"
 
-# Ask the OS for a free ephemeral port to avoid collisions on shared CI hosts.
+# Ask the OS for free ephemeral ports to avoid collisions on shared CI hosts.
 if command -v python3 >/dev/null 2>&1; then
     TEST_PORT=$(python3 -c \
         "import socket; s=socket.socket(); s.bind(('', 0)); print(s.getsockname()[1]); s.close()")
@@ -65,16 +72,19 @@ fi
 remove_player_file "$TEST_PLAYER"
 
 # ---------------------------------------------------------------------------
-# Step 3: launch on sniff port so plain-telnet clients can connect.
+# Step 3: launch
+#
+# $TEST_PORT is the plain-telnet port (mirrors production port 8890).
+# No --tls-port here; TLS is tested separately.
 # ---------------------------------------------------------------------------
-echo "integration-test-telnet: starting MUD on port $TEST_PORT..."
-(cd "$AREA_DIR" && ../src/ack --sniff-port "$TEST_PORT" --http-port "$HTTP_PORT") >"$LOG_FILE" 2>&1 &
+echo "integration-test-telnet: starting MUD on port $TEST_PORT (plain telnet)..."
+(cd "$AREA_DIR" && ../src/ack "$TEST_PORT" --http-port "$HTTP_PORT") >"$LOG_FILE" 2>&1 &
 MUD_PID=$!
 
 echo "integration-test-telnet: MUD started (PID $MUD_PID), waiting for boot..."
 
 # ---------------------------------------------------------------------------
-# Step 4: wait until the server is ready (max 90 s).
+# Step 4: wait until the server is ready (game loop started, max 90 s).
 # ---------------------------------------------------------------------------
 boot_wait=0
 while [ "$boot_wait" -lt 90 ]; do
@@ -105,6 +115,23 @@ echo "integration-test-telnet: MUD is up, validating telnet login flow for '${TE
 
 # ---------------------------------------------------------------------------
 # Step 5: raw telnet (plain TCP) new-player login flow.
+#
+# Telnet negotiation: the server sends IAC sequences (0xFF + cmd [+ option])
+# for terminal negotiation.  We decline all options and strip IAC bytes from
+# the data we inspect.  ANSI colour codes (\x1b[...m) are also stripped.
+#
+# The login state machine:
+#   greeting        -> "What is your name?"
+#   CON_CONFIRM_NEW_NAME     -> "Did I get that right, <name> (Y/N)?"
+#   CON_GET_NEW_PASSWORD     -> "Give me a password for <name>:"
+#   CON_CONFIRM_NEW_PASSWORD -> "Please retype password:"
+#   CON_MENU                 -> numbered menu with "elect"
+#     1 -> sex menu   -> M
+#     2 -> race menu  -> Hmn
+#     3 -> class menu -> "War Mag Cle Cip"
+#     4 -> CON_READ_MOTD
+#   CON_READ_MOTD            -> any input -> CON_PLAYING
+#   CON_PLAYING              -> "Welcome"
 # ---------------------------------------------------------------------------
 python3 - "$TEST_PORT" "$TEST_PLAYER" "$TEST_PASSWORD" <<'PYEOF'
 import socket

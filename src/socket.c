@@ -92,7 +92,7 @@ void stop_idling(CHAR_DATA *ch);
 /*
  * Forward declarations for socket.c-internal functions used before their definitions
  */
-void new_descriptor(int control, bool is_tls, bool do_sniff);
+void new_descriptor(int control, bool is_tls, bool do_sniff, bool is_wss);
 void init_descriptor(DESCRIPTOR_DATA *dnew, int desc);
 bool read_from_descriptor(DESCRIPTOR_DATA *d);
 bool write_websocket_frame(DESCRIPTOR_DATA *d, unsigned char opcode, const unsigned char *payload,
@@ -108,6 +108,7 @@ DESCRIPTOR_DATA *d_next; /* Next descriptor in loop      */
 
 int global_port;
 int global_ws_port = -1;
+int global_wss_port = -1;
 int global_tls_port = -1;
 int global_sniff_port = -1;
 int global_http_port = -1;
@@ -794,7 +795,8 @@ void reopen_socket(int sig)
 
 /* + */
 
-void game_loop(int control, int control_ws, int control_tls, int control_sniff, int control_http)
+void game_loop(int control, int control_ws, int control_tls, int control_sniff, int control_http,
+               int control_wss)
 {
    static struct timeval null_time;
    struct timeval last_time;
@@ -857,6 +859,11 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
             close(control_http);
             control_http = init_socket(global_http_port, INADDR_ANY);
          }
+         if (control_wss >= 0)
+         {
+            close(control_wss);
+            control_wss = init_socket(global_wss_port, INADDR_ANY);
+         }
          reopen_flag = 0;
       }
 
@@ -891,6 +898,11 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
       {
          FD_SET(control_http, &in_set);
          maxdesc = UMAX(maxdesc, control_http);
+      }
+      if (control_wss >= 0)
+      {
+         FD_SET(control_wss, &in_set);
+         maxdesc = UMAX(maxdesc, control_wss);
       }
 
       for (d = first_desc; d; d = d->next)
@@ -928,13 +940,13 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
        * New connection?
        */
       if (control >= 0 && FD_ISSET(control, &in_set))
-         new_descriptor(control, FALSE, TRUE);
+         new_descriptor(control, FALSE, TRUE, FALSE);
       if (control_ws >= 0 && FD_ISSET(control_ws, &in_set))
-         new_descriptor(control_ws, FALSE, FALSE);
+         new_descriptor(control_ws, FALSE, FALSE, FALSE);
       if (control_tls >= 0 && FD_ISSET(control_tls, &in_set))
-         new_descriptor(control_tls, TRUE, FALSE);
+         new_descriptor(control_tls, TRUE, FALSE, FALSE);
       if (control_sniff >= 0 && FD_ISSET(control_sniff, &in_set))
-         new_descriptor(control_sniff, FALSE, TRUE);
+         new_descriptor(control_sniff, FALSE, TRUE, FALSE);
       if (control_http >= 0 && FD_ISSET(control_http, &in_set))
       {
          struct sockaddr_in sa;
@@ -946,13 +958,15 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
             close(desc);
          }
       }
+      if (control_wss >= 0 && FD_ISSET(control_wss, &in_set))
+         new_descriptor(control_wss, TRUE, FALSE, TRUE);
 
-      /*
-       * Advance any pending TLS handshakes non-blockingly.
-       * SSL_accept was deferred from new_descriptor to avoid blocking the
-       * game loop.  Each iteration we try to complete the handshake when the
-       * socket is ready, or time out after a short deadline.
-       */
+         /*
+          * Advance any pending TLS handshakes non-blockingly.
+          * SSL_accept was deferred from new_descriptor to avoid blocking the
+          * game loop.  Each iteration we try to complete the handshake when the
+          * socket is ready, or time out after a short deadline.
+          */
 #ifdef HAVE_OPENSSL
       for (d = first_desc; d != NULL; d = d_next)
       {
@@ -979,7 +993,8 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
                d->tls_handshake_pending = FALSE;
                d->tls_active = TRUE;
                d->timeout = current_time + 180;
-               queue_login_greeting(d);
+               if (!d->wss_pending)
+                  queue_login_greeting(d);
             }
             else
             {
@@ -1206,7 +1221,7 @@ void free_desc(DESCRIPTOR_DATA *d)
       dispose(d->outbuf, d->outsize);
 }
 
-void new_descriptor(int control, bool is_tls, bool do_sniff)
+void new_descriptor(int control, bool is_tls, bool do_sniff, bool is_wss)
 {
    static DESCRIPTOR_DATA d_zero;
    char buf[MSL];
@@ -1251,6 +1266,7 @@ void new_descriptor(int control, bool is_tls, bool do_sniff)
    dnew->childpid = 0;
 
 #ifdef HAVE_OPENSSL
+   dnew->wss_pending = is_wss;
    if (do_sniff)
       is_tls = sniff_is_tls(desc);
    if (is_tls && global_ssl_ctx != NULL)
@@ -1279,7 +1295,10 @@ void new_descriptor(int control, bool is_tls, bool do_sniff)
              */
             dnew->ssl = ssl;
             dnew->tls_handshake_pending = TRUE;
-            dnew->timeout = current_time + 10; /* short handshake deadline */
+            /* WSS connections come from internet browsers that may need extra
+             * time for AIA certificate-chain fetching; allow 30s.  Plain TLS
+             * telnet clients are typically local/LAN tools, so 10s is fine. */
+            dnew->timeout = current_time + (dnew->wss_pending ? 30 : 10);
          }
          else
          {
@@ -1294,6 +1313,7 @@ void new_descriptor(int control, bool is_tls, bool do_sniff)
 #else
    (void)is_tls;
    (void)do_sniff;
+   (void)is_wss;
 #endif
 
    size = sizeof(sock);
@@ -1376,7 +1396,7 @@ void new_descriptor(int control, bool is_tls, bool do_sniff)
       dnew->timeout = current_time + 180;
 
 #ifdef HAVE_OPENSSL
-   if (!dnew->tls_handshake_pending)
+   if (!dnew->tls_handshake_pending && !dnew->wss_pending)
 #endif
       queue_login_greeting(dnew);
 
@@ -1406,6 +1426,7 @@ void init_descriptor(DESCRIPTOR_DATA *dnew, int desc)
 #ifdef HAVE_OPENSSL
    dnew->ssl = NULL;
    dnew->tls_handshake_pending = FALSE;
+   dnew->wss_pending = FALSE;
 #endif
    dnew->msdp_active = FALSE;
    dnew->msdp_reported = 0;
@@ -2075,7 +2096,7 @@ bool init_tls_context(const char *cert_file, const char *key_file)
       return FALSE;
    }
    SSL_CTX_set_min_proto_version(ctx, TLS1_2_VERSION);
-   if (SSL_CTX_use_certificate_file(ctx, cert_file, SSL_FILETYPE_PEM) <= 0 ||
+   if (SSL_CTX_use_certificate_chain_file(ctx, cert_file) <= 0 ||
        SSL_CTX_use_PrivateKey_file(ctx, key_file, SSL_FILETYPE_PEM) <= 0 ||
        SSL_CTX_check_private_key(ctx) != 1)
    {

@@ -345,6 +345,8 @@ int main(int argc, char **argv)
    extern int abort_threshold;
    int control_ws = -1;
    int ws_port = -1;
+   int control_wss = -1;
+   int wss_port = -1;
    int control_tls = -1;
    int tls_port = -1;
    int control_sniff = -1;
@@ -397,7 +399,8 @@ int main(int argc, char **argv)
    else if (argc > 1 && argv[1][0] != '-')
    {
       /* Non-numeric, non-flag first argument */
-      fprintf(stderr, "Usage: %s [port] [--sniff-port N] [--tls-port N] [--ws-loopback N]\n",
+      fprintf(stderr,
+              "Usage: %s [port] [--sniff-port N] [--tls-port N] [--ws-loopback N] [--wss-port N]\n",
               argv[0]);
       exit(1);
    }
@@ -417,6 +420,15 @@ int main(int argc, char **argv)
             if (ws_port <= 1024)
             {
                fprintf(stderr, "--ws-loopback port must be above 1024.\n");
+               exit(1);
+            }
+         }
+         else if (!strcmp(argv[i], "--wss-port") && i + 1 < argc)
+         {
+            wss_port = atoi(argv[++i]);
+            if (wss_port <= 1024)
+            {
+               fprintf(stderr, "--wss-port must be above 1024.\n");
                exit(1);
             }
          }
@@ -459,7 +471,7 @@ int main(int argc, char **argv)
    }
 
    /* Require at least one listening port */
-   if (!fCopyOver && port <= 0 && sniff_port <= 0 && tls_port <= 0 && ws_port <= 0)
+   if (!fCopyOver && port <= 0 && sniff_port <= 0 && tls_port <= 0 && ws_port <= 0 && wss_port <= 0)
    {
       fprintf(stderr,
               "Error: no listening port.  Specify a port number or --sniff-port / --tls-port.\n");
@@ -480,7 +492,7 @@ int main(int argc, char **argv)
          control_ws = init_socket(ws_port, INADDR_LOOPBACK);
       if (http_port > 0)
          control_http = init_socket(http_port, INADDR_ANY);
-      if (tls_port > 0 || sniff_port > 0)
+      if (tls_port > 0 || sniff_port > 0 || wss_port > 0)
       {
 #ifdef HAVE_OPENSSL
          bool tls_ctx_ok = init_tls_context(tls_cert, tls_key);
@@ -498,6 +510,13 @@ int main(int argc, char **argv)
                        "Warning: TLS context init failed; sniff port will serve plain only.\n");
             control_sniff = init_socket(sniff_port, INADDR_ANY);
          }
+         if (wss_port > 0)
+         {
+            if (tls_ctx_ok)
+               control_wss = init_socket(wss_port, INADDR_ANY);
+            else
+               fprintf(stderr, "Warning: TLS context init failed; --wss-port ignored.\n");
+         }
 #else
          if (tls_port > 0)
             fprintf(stderr, "Warning: OpenSSL not compiled in; --tls-port ignored.\n");
@@ -508,11 +527,14 @@ int main(int argc, char **argv)
                 "Note: OpenSSL not compiled in; sniff port will serve plain connections only.\n");
             control_sniff = init_socket(sniff_port, INADDR_ANY);
          }
+         if (wss_port > 0)
+            fprintf(stderr, "Warning: OpenSSL not compiled in; --wss-port ignored.\n");
 #endif
       }
    }
    global_port = port;
    global_ws_port = ws_port;
+   global_wss_port = wss_port;
    global_tls_port = tls_port;
    global_sniff_port = sniff_port;
    global_http_port = http_port;
@@ -538,6 +560,7 @@ int main(int argc, char **argv)
           {ws_port, "WebSocket loopback"},
           {control_tls >= 0 ? tls_port : -1, "TLS"},
           {sniff_port, "auto"},
+          {control_wss >= 0 ? wss_port : -1, "WSS"},
       };
       int n = sizeof(listeners) / sizeof(listeners[0]);
       int pos = sprintf(log_buf, "ACK! MUD is ready");
@@ -583,7 +606,7 @@ int main(int argc, char **argv)
    /* Seed WHO web output immediately on boot/copyover recovery. */
    list_who_to_output();
 
-   game_loop(control, control_ws, control_tls, control_sniff, control_http);
+   game_loop(control, control_ws, control_tls, control_sniff, control_http, control_wss);
 #ifdef HAVE_LIBPQ
    db_worker_stop();
 #endif
@@ -591,6 +614,8 @@ int main(int argc, char **argv)
       close(control);
    if (control_ws >= 0)
       close(control_ws);
+   if (control_wss >= 0)
+      close(control_wss);
    if (control_tls >= 0)
       close(control_tls);
    if (control_sniff >= 0)

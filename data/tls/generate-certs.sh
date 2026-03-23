@@ -5,6 +5,7 @@
 #   - key.pem or cert.pem does not exist
 #   - cert.pem expires within 30 days
 #   - cert.pem and key.pem do not share the same public key
+#   - cert.pem SAN does not cover ackmud.com (hostname mismatch check)
 #
 # Usage:
 #   data/tls/generate-certs.sh [--cert <path>] [--key <path>]
@@ -37,8 +38,8 @@ generate() {
         -out "$CERT" \
         -days 3650 \
         -nodes \
-        -subj "/CN=acktng/O=ACK!MUD TNG/C=US" \
-        -addext "subjectAltName=DNS:localhost,IP:127.0.0.1" \
+        -subj "/CN=ackmud.com/O=ACK!MUD TNG/C=US" \
+        -addext "subjectAltName=DNS:ackmud.com,DNS:localhost,IP:127.0.0.1" \
         2>/dev/null
     chmod 600 "$KEY"
     echo "startup: TLS certificate written to $CERT (valid 10 years)"
@@ -53,6 +54,13 @@ fi
 # Expiry check: regenerate if cert expires within 30 days
 if ! openssl x509 -in "$CERT" -noout -checkend 2592000 >/dev/null 2>&1; then
     echo "startup: TLS certificate expires within 30 days — regenerating..."
+    generate
+    exit 0
+fi
+
+# SAN check: regenerate if cert does not cover ackmud.com
+if ! openssl x509 -in "$CERT" -noout -text 2>/dev/null | grep -q "DNS:ackmud.com"; then
+    echo "startup: TLS certificate SAN missing ackmud.com — regenerating..."
     generate
     exit 0
 fi
