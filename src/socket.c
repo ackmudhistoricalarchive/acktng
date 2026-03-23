@@ -3089,9 +3089,6 @@ void ws_send_map(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
       }
       json_append(buf, &pos, sizeof(buf), "]");
 
-      snprintf(id_str, sizeof(id_str), "%d", mob_count);
-      json_append(buf, &pos, sizeof(buf), ",\"mob_count\":");
-      json_append(buf, &pos, sizeof(buf), id_str);
       json_append(buf, &pos, sizeof(buf), "}");
 
       /* Expand BFS neighbours */
@@ -3149,7 +3146,7 @@ void ws_send_map_scan(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
       return;
 
    json_append(buf, &pos, sizeof(buf), "{");
-   for (door = 0; door < 6; door++)
+   for (door = 0; door < 4; door++) /* n/e/s/w only */
    {
       EXIT_DATA *pexit = ch->in_room->exit[door];
 
@@ -3185,6 +3182,60 @@ void ws_send_map_scan(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
    }
    json_append(buf, &pos, sizeof(buf), "}");
    ws_v2_send(d, "Map:Scan", buf);
+}
+
+void ws_send_map_scout(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
+{
+   /* Scout depth: 3 rooms in each cardinal direction (n/e/s/w). */
+   static const int scout_doors[] = {0, 1, 2, 3}; /* north, east, south, west */
+   char buf[512];
+   int pos = 0;
+   int i;
+   bool first = TRUE;
+
+   if (!d || !d->websocket_active || !ch || !ch->in_room)
+      return;
+
+   json_append(buf, &pos, sizeof(buf), "{\"rooms\":[");
+
+   for (i = 0; i < 4; i++)
+   {
+      int door = scout_doors[i];
+      ROOM_INDEX_DATA *cur = ch->in_room;
+      int step;
+
+      for (step = 1; step <= 3; step++)
+      {
+         EXIT_DATA *pexit = cur->exit[door];
+         CHAR_DATA *person;
+         int mob_count = 0;
+         char tmp[32];
+
+         if (!pexit || !pexit->to_room || IS_SET(pexit->exit_info, EX_CLOSED))
+            break;
+
+         cur = pexit->to_room;
+
+         for (person = cur->first_person; person; person = person->next_in_room)
+            if (IS_NPC(person))
+               mob_count++;
+
+         if (!first)
+            json_append(buf, &pos, sizeof(buf), ",");
+         first = FALSE;
+
+         snprintf(tmp, sizeof(tmp), "%d", (int)cur->vnum);
+         json_append(buf, &pos, sizeof(buf), "{\"id\":");
+         json_append(buf, &pos, sizeof(buf), tmp);
+         snprintf(tmp, sizeof(tmp), "%d", mob_count);
+         json_append(buf, &pos, sizeof(buf), ",\"mob_count\":");
+         json_append(buf, &pos, sizeof(buf), tmp);
+         json_append(buf, &pos, sizeof(buf), "}");
+      }
+   }
+
+   json_append(buf, &pos, sizeof(buf), "]}");
+   ws_v2_send(d, "Map:Scout", buf);
 }
 
 /*

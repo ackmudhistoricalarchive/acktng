@@ -71,6 +71,7 @@ extern const char go_ahead_str[];
 void ws_send_room(DESCRIPTOR_DATA *d, CHAR_DATA *ch);
 void ws_send_map(DESCRIPTOR_DATA *d, CHAR_DATA *ch);
 void ws_send_map_scan(DESCRIPTOR_DATA *d, CHAR_DATA *ch);
+void ws_send_map_scout(DESCRIPTOR_DATA *d, CHAR_DATA *ch);
 
 int init_socket(int port, unsigned long bind_addr);
 #ifdef HAVE_OPENSSL
