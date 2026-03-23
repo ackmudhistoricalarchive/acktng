@@ -209,7 +209,7 @@ LINT_SOURCES = $(shell find . -name '*.c' -o -name '*.h' | grep -v sha256 | grep
 
 .PHONY: all clean purge unit-tests integration-tests integration-test integration-test-telnet integration-test-telnet-tls integration-test-wss lint format
 
-all: ack $(UNIT_TEST_TARGETS)
+all: format lint ack $(UNIT_TEST_TARGETS)
 	@set -e; \
 	stamp="$(STAMP_FILE)"; \
 	changed_tests=""; \
@@ -227,7 +227,7 @@ all: ack $(UNIT_TEST_TARGETS)
 		if [ -n "$$changed_tests" ]; then \
 			for t in $$changed_tests; do ./$$t; done; \
 		fi; \
-		$(MAKE) integration-test; \
+		$(MAKE) integration-tests; \
 		touch "$$stamp"; \
 	fi
 
