@@ -54,8 +54,8 @@ with three distinct categories of files and the Python tooling to apply them.
 
 ## 3. Directory Structure
 
-All YAML files live under `acktng/yaml/`. All three subdirectories are **gitignored** — these
-files are ephemeral working surfaces, not version-controlled artifacts.
+All YAML files live under `acktng/yaml/` and are **committed to the repo**. This is what
+provides the version-controllable content history described in §1.
 
 The top-level structure is **content-type first, then operation**. Mobs, objects, rooms,
 resets, and shops all belong to areas and live exclusively within the `areas/` tree. Only
@@ -105,11 +105,14 @@ acktng/yaml/
     update/
 ```
 
-Files in `exports/` are **never edited by hand** and are never read by `yaml_apply.py`.
+Files in `exports/` are **never edited by hand** and are never read by `yaml_apply.py`. They
+are committed as snapshots — re-running an export overwrites them, and the diff shows what
+changed in the DB.
 
-Files in `imports/` and `updates/` are hand-authored or tool-generated. After `yaml_apply.py`
-successfully processes a file, it **deletes the file** automatically. This keeps the working
-directories clean and prevents double-application.
+Files in `imports/` and `updates/` are committed before being applied. After `yaml_apply.py`
+successfully processes a file, it **deletes the file**. That deletion is then committed,
+leaving a clean working tree while preserving the full history in git. This prevents
+double-application while keeping an auditable record of every content change.
 
 ---
 
@@ -478,8 +481,7 @@ These are dev/tooling dependencies only — not linked into the server binary.
 - `acktng/tools/yaml_export.py` — new
 - `acktng/tools/yaml_apply.py` — new
 - `acktng/tools/requirements.txt` — new (`psycopg2-binary`, `pyyaml`)
-- `acktng/yaml/` — new directory tree; gitignored via `acktng/.gitignore`
-- `acktng/.gitignore` — add `yaml/` entry
+- `acktng/yaml/` — new directory tree; committed to the repo
 - `aicli/setup.sh` — add `pip install -r acktng/tools/requirements.txt` step
 
 No C code changes. No schema changes.
@@ -488,11 +490,13 @@ No C code changes. No schema changes.
 
 ## 7. Trade-offs
 
-**All YAML is ephemeral and gitignored:**
-The `yaml/` tree is never committed. Exports are transient working copies for inspection or
-use as templates. Imports and updates are consumed and deleted on successful apply. There is no
-attempt to maintain a version-controlled YAML representation of the DB — the DB itself is the
-source of truth.
+**All YAML is committed to git:**
+Exports are committed as DB snapshots — diffing two exports shows exactly what changed in the
+DB between them. Imports and updates are committed before being applied, then deleted after a
+successful apply (the deletion is also committed). This means git history always contains a
+record of what content was added or patched and when, while the working tree stays clean after
+apply. The DB remains the runtime source of truth; the YAML tree is the auditable authoring
+history.
 
 **Imports and updates are deleted on success, not on failure:**
 If `yaml_apply.py` encounters a DB error, the file is left in place so the author can inspect
