@@ -39,9 +39,7 @@
 #else
 #include "globals.h"
 #include "tables.h"
-#ifdef HAVE_LIBPQ
 #include "../db/db_worker.h"
-#endif
 #endif
 
 size_t rulers_format_status_message(char *dest, size_t dest_size, const char *status,
@@ -91,140 +89,7 @@ char *get_ruler_title(int ruler_rank, int sex)
 
 void save_rulers()
 {
-
-   FILE *fp;
-   char ruler_file_name[MAX_STRING_LENGTH];
-   RULER_LIST *ruler;
-   CONTROL_LIST *control;
-
-   if (fpReserve != NULL)
-   {
-      fclose(fpReserve);
-      fpReserve = NULL;
-   }
-   sprintf(ruler_file_name, "%s", RULERS_FILE);
-
-   if ((fp = fopen(ruler_file_name, "w")) == NULL)
-   {
-      bug("Save ruler list: fopen", 0);
-      perror("failed open of rulers.lst in save_ruler");
-   }
-   else
-   {
-      for (ruler = first_ruler_list; ruler != NULL; ruler = ruler->next)
-      {
-         char keybuf[MSL];
-         char catkeybuf[MSL];
-
-         fprintf(fp, "#RULER~\n");
-         fprintf(fp, "%s~\n", ruler->this_one->name);
-         fprintf(fp, "%d\n", ruler->this_one->affiliation_index);
-         fprintf(fp, "%d\n", ruler->this_one->flags);
-         fprintf(fp, "%d\n", ruler->this_one->ruler_rank);
-
-         sprintf(keybuf, "%s", "");
-
-         for (control = ruler->this_one->first_control; control; control = control->next)
-         {
-            sprintf(catkeybuf, "%s ", control->this_one->keyword);
-            safe_strcat(MSL, keybuf, catkeybuf);
-         }
-         fprintf(fp, "%s~\n", keybuf);
-      }
-      fprintf(fp, "#END~\n\n");
-   }
-
-   fflush(fp);
-   if (fp != NULL)
-   {
-      fclose(fp);
-      fp = NULL;
-   }
-
-#ifdef HAVE_LIBPQ
    db_worker_save_rulers(first_ruler_list);
-#endif
-   return;
-}
-
-/*
-#define RKEY( literal, field, value )  if ( !str_cmp( word, literal ) ) { field  = value; fMatch =
-TRUE;  break;} #define RSKEY( literal, field, value )  if ( !str_cmp( word, literal ) ) { if
-(field!=NULL) free_string(field);field  = value; fMatch = TRUE;  break;}
-*/
-
-void load_rulers(void)
-{
-
-   FILE *rulersfp;
-   char rulers_file_name[MAX_STRING_LENGTH];
-   char buf[MAX_STRING_LENGTH];
-   RULER_DATA *ruler;
-   RULER_LIST *ruler_member;
-
-   sprintf(rulers_file_name, "%s", RULERS_FILE);
-
-   rulers_format_status_message(buf, sizeof(buf), "Loading", rulers_file_name);
-   monitor_chan(buf, MONITOR_CLAN);
-
-   if ((rulersfp = fopen(rulers_file_name, "r")) == NULL)
-   {
-      bug("Load rulers Table: fopen", 0);
-      perror("failed open of rulers_table.dat in load_rulers_table");
-   }
-   else
-   {
-      for (;;)
-      {
-
-         char *word;
-
-         word = fread_string(rulersfp);
-         if (!str_cmp(word, "#RULER"))
-         {
-            GET_FREE(ruler, ruler_data_free);
-            GET_FREE(ruler_member, ruler_list_free);
-            ruler->name = fread_string(rulersfp);
-            ruler->affiliation_index = fread_number(rulersfp);
-            if (ruler->affiliation_index == 0)
-               ruler->affiliation_name = str_dup("No Affiliation");
-            else
-               ruler->affiliation_name = str_dup(clan_table[ruler->affiliation_index].clan_abbr);
-            ruler->flags = fread_number(rulersfp);
-            ruler->ruler_rank = fread_number(rulersfp);
-            ruler->keywords = fread_string(rulersfp);
-            ruler->first_control = NULL;
-            ruler->last_control = NULL;
-
-            free_string(word);
-
-            ruler_member->this_one = ruler;
-            ruler_member->next = NULL;
-            ruler_member->prev = NULL;
-            LINK(ruler_member, first_ruler_list, last_ruler_list, next, prev);
-         }
-         else if (!str_cmp(word, "#END"))
-         {
-            free_string(word);
-            break;
-         }
-         else
-         {
-            free_string(word);
-            monitor_chan("Load_marks: bad section.", MONITOR_BAD);
-            break;
-         }
-      }
-
-      if (rulersfp != NULL)
-      {
-         fclose(rulersfp);
-         rulersfp = NULL;
-      }
-
-      rulers_format_status_message(buf, sizeof(buf), "Done Loading", rulers_file_name);
-      monitor_chan(buf, MONITOR_CLAN);
-   }
 }
 
 void do_rulers(CHAR_DATA *ch, char *argument)

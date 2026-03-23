@@ -281,13 +281,6 @@ scan: $(OBJDIR)/scan.o
 	rm -f scan
 	$(CC) $(L_FLAGS) -o scan $(OBJDIR)/scan.o
 
-# Migration / DB tools (require HAVE_LIBPQ)
-tools/import_to_db: tools/import_to_db.c
-	$(CC) -O -g2 -Wall $(LIBPQ_CFLAGS) -o tools/import_to_db tools/import_to_db.c $(LIBPQ_LIBS)
-
-tools/db_to_files: tools/db_to_files.c
-	$(CC) -O -g2 -Wall $(LIBPQ_CFLAGS) -o tools/db_to_files tools/db_to_files.c $(LIBPQ_LIBS)
-
 tools/migrate_chests: tools/migrate_chests.c
 	$(CC) -O -g2 -Wall $(LIBPQ_CFLAGS) -o tools/migrate_chests tools/migrate_chests.c $(LIBPQ_LIBS)
 

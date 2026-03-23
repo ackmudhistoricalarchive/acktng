@@ -1,1523 +1,0 @@
-#AREA
-@@dThe Crypts of Kel'Shadra@@N~
-Q 16
-K kelshadra crypts shadow dark~
-L {150-170}~
-N 0
-I 150 150
-V 2450 2499
-X 0
-F 20
-U The air grows cold and the shadows seem to breathe around you.~
-O Virant~
-R all~
-W all~
-#ROOMS
-#2450
-The Shattered Gate~
-The towering iron gates of Kel'Shadra lie shattered and bent, torn from their
-hinges by some ancient and terrible force. Beyond them yawns the darkness of
-a crypt that has not seen living feet in centuries. The stonework is cracked
-and weeping with black moisture, and runes of binding have been forcibly
-broken from the archway overhead. A faint, sickly phosphorescence clings to
-the walls, just enough to reveal the horror of what lies ahead. The path
-south leads deeper into the crypts.
-~
-8201 11
-D0
-~
-~
-0 0 1674
-D2
-~
-~
-0 -1 2451
-D4
-~
-~
-0 0 1674
-E
-gate runes archway~
-The binding runes were carved by the ancient order of Kel'Shadra to seal
-whatever nightmares lurk within. They have been shattered from the inside.
-~
-S
-#2451
-The Entry Hall of Lamentations~
-The entry hall stretches before you in grim grandeur, its vaulted ceiling
-lost in shadow above. Along the walls are carved bas-reliefs depicting the
-final moments of those who were sealed within -- faces frozen in expressions
-of absolute terror. The floor is cracked obsidian, polished by centuries of
-dark rituals. Iron sconces still hold black candles that burn with cold blue
-flame, though no mortal lit them. Exits lead north back to the gate, east
-into a nave, west toward a vestibule, and south deeper into the complex.
-~
-8201 11
-D0
-~
-~
-0 -1 2450
-D1
-~
-~
-0 -1 2453
-D2
-~
-~
-0 -1 2455
-D3
-~
-~
-0 -1 2452
-E
-bas-reliefs carvings~
-The carvings show a procession of robed figures being driven into the crypt
-by something massive and terrible, depicted only as shadow. The last carving
-shows the gates sealing behind them -- from the inside.
-~
-E
-candles flame blue~
-The candles burn with no heat and no wax is consumed. They are fed by
-something far older than fire.
-~
-S
-#2452
-The Western Vestibule~
-A small antechamber with three iron doors, each marked with a different
-symbol: a spiral, a broken circle, and an eye. The doors are sealed with
-mechanisms of ancient brass and bone. The floor here is inscribed with a
-warning in an archaic script. The exit east returns to the entry hall.
-~
-8201 11
-D1
-~
-~
-0 -1 2451
-E
-inscription warning script~
-The inscription reads: 'Three doors, three truths, three keys. The spiral
-turns forever inward. The circle was broken so that something might escape.
-The eye sees what you cannot hide. Speak the name of what you fear most to
-open the way.'
-~
-E
-spiral door~
-A door marked with an endless inward-turning spiral. Sealed tightly.
-~
-E
-circle door broken~
-A door marked with a circle that has been violently cracked through its center.
-~
-E
-eye door~
-A door marked with a single unblinking eye that seems to follow your gaze.
-~
-S
-#2453
-The Eastern Nave~
-A long hall that once served as the nave of a dark chapel. Rows of stone
-pews face an altar of black glass at the far end. The pews are occupied
-by skeletal figures in rotted vestments, slumped in eternal congregation.
-Carved into the floor between the pews is a complex circular diagram --
-a ritual seal that radiates a faint warmth, as though it still functions
-after all this time. The exit west returns to the entry hall, and a door
-leads north.
-~
-8201 11
-D2
-~
-~
-0 -1 2454
-D3
-~
-~
-0 -1 2451
-E
-altar glass black~
-The altar of black glass reflects not what is in the room, but something
-else -- a dark, inverted reflection of a place you do not recognize.
-~
-E
-seal ritual diagram~
-The ritual seal appears to be a binding circle. At its center, a single
-word is inscribed that you cannot quite read -- your eyes slide away from
-it whenever you try to focus.
-~
-S
-#2454
-The Dark Chancel~
-Beyond the nave, the chancel is a place of concentrated malevolence. The
-ceiling here is painted with a mural of the night sky, but the stars are
-wrong -- arranged in patterns that suggest terrible geometries. A massive
-obsidian sarcophagus dominates the center of the room, its lid shifted
-slightly to one side, suggesting something crawled out long ago. Heavy chains
-are secured to the sarcophagus but they too have been broken. The path south
-leads back to the nave, and a passage descends down.
-~
-8201 11
-D2
-~
-~
-0 -1 2453
-D5
-~
-~
-0 -1 2462
-E
-sarcophagus obsidian~
-The sarcophagus bears no name. Instead, a long epitaph in the shadow-tongue
-reads: 'Laid here not in rest but in restraint. That which was bound here
-endures beyond death, beyond ending. If you have found this place, it is
-already too late.'
-~
-E
-chains broken~
-Thick iron chains, each link as wide as your fist, snapped like thread.
-~
-E
-mural stars ceiling~
-The star patterns form a map -- not of any sky you know, but of a place
-where the boundaries between life and death have collapsed entirely.
-~
-S
-#2455
-The Southern Corridor~
-A long corridor running south from the entry hall. The walls here are lined
-with sealed niches, each containing a mummified corpse standing upright,
-wrapped in black linen and bound with silver wire. Their hollow eye sockets
-seem to track your movement. The floor is treacherous -- certain flagstones
-are pressure plates that trigger mechanisms in the walls. The corridor
-continues south and branches east.
-~
-8201 11
-D0
-~
-~
-0 -1 2451
-D1
-~
-~
-0 -1 2456
-D2
-~
-~
-0 -1 2457
-E
-niches mummies corpses~
-The mummies are bound in silver wire for a reason. The silver is etched
-with suppression runes, keeping whatever animates them from acting freely.
-Some of the silver wires look strained.
-~
-E
-flagstones pressure plates~
-You notice that every third flagstone is slightly raised. Best to step
-carefully.
-~
-S
-#2456
-The Ossuary Alcove~
-A wide alcove branching east from the southern corridor. The walls here
-are entirely composed of human bones, arranged with grotesque artistry --
-patterns of skulls and femurs interlocking in spiraling designs. At the
-center of the far wall is a large skull set into an iron frame. Its eye
-sockets glow with sickly green light. Beneath the skull is a recessed
-compartment. The exit west returns to the southern corridor.
-~
-8201 11
-D3
-~
-~
-0 -1 2455
-E
-skull iron frame~
-The skull is not human. It is too large, with an extra orbital socket above
-the other two. Its jaw moves slightly as you approach, as though trying to
-speak.
-~
-E
-compartment recessed~
-The compartment is empty, but shaped to hold something roughly cylindrical --
-a key, perhaps, or a rod.
-~
-S
-#2457
-The Hall of Mirrors~
-The corridor opens into a wide hall lined with tall mirrors set in tarnished
-silver frames. The mirrors do not show accurate reflections -- instead, each
-one shows a different version of you: one covered in wounds, one standing
-victorious over a heap of bones, one consumed by shadow, one simply absent,
-the mirror showing only an empty room. The floor is marked with four symbols.
-You may exit north back to the corridor or south.
-~
-8201 11
-D0
-~
-~
-0 -1 2455
-D2
-~
-~
-0 -1 2458
-E
-mirrors reflections~
-Each mirror shows you a potential fate. The one that shows an empty room
-is perhaps the most disturbing -- it implies one possible future where you
-simply cease to exist entirely.
-~
-E
-symbols floor~
-Four symbols mark the floor: a sword, a flame, a hand, and a void. Standing
-on each causes a different sensation: the sword vibrates, the flame warms,
-the hand feels grasped, the void feels like falling.
-~
-S
-#2458
-The Chamber of Whispers~
-A perfectly circular chamber where the acoustics are supernatural. Any sound
-made here is amplified and distorted, transformed into voices speaking in
-languages you do not know. The walls are covered in writing -- not carved but
-burned, as if by dark energy from within. At the center of the chamber is a
-stone pedestal with an indentation shaped like a hand. The exits are north
-and south, and a sealed door to the east.
-~
-8201 11
-D0
-~
-~
-0 -1 2457
-D1
-~
-door~
-1 2470 2459
-D2
-~
-~
-0 -1 2459
-E
-pedestal indentation hand~
-The hand-shaped indentation on the pedestal pulses very faintly. Placing
-your hand in it causes the voices to momentarily align into a single phrase
-you almost understand.
-~
-E
-writing burned walls~
-The writing is a record of every person who has entered this crypt. The
-most recent entry appears to have been made recently. It ends mid-word.
-~
-S
-#2459
-The Puzzle Antechamber~
-A square room with four alcoves, each containing a stone statue depicting
-one of the cardinal virtues corrupted: Courage shown as reckless slaughter,
-Wisdom shown as manipulative scheming, Justice shown as cruel punishment,
-and Mercy shown as weakness. The statues hold objects -- a blade, a tome,
-scales, and an open hand respectively. The north exit is sealed with a
-massive stone door covered in combination locks. An inscription above it reads
-'Only the one who understands corruption may pass.' The exit south returns to
-the chamber of whispers.
-~
-8201 11
-D0
-~
-~
-0 -1 2458
-D2
-~
-~
-0 -1 2460
-E
-statues alcoves~
-The four statues each have a slight mechanism in their bases. They can
-rotate. Perhaps their orientation matters.
-~
-E
-locks combination door stone~
-The stone door has four rotating rings, each with symbols. The correct
-combination must correspond to the lesson taught by the corrupted virtues.
-~
-E
-inscription~
-'Only the one who understands corruption may pass' -- perhaps meaning you
-must embrace the corrupted interpretations of the virtues to advance.
-~
-S
-#2460
-The Gallery of the Fallen~
-A long gallery displaying portraits of those who founded the order of
-Kel'Shadra, each framed in bone. As you walk past, their painted eyes
-seem to follow you with expressions of sorrow and warning. The floor here
-has partially given way, and crossing it requires care -- some boards are
-missing, revealing a darkness below that produces sounds of breathing. A
-door stands at the far south end, and the exit north returns to the antechamber.
-~
-8201 11
-D0
-~
-~
-0 -1 2459
-D2
-~
-~
-0 -1 2461
-E
-portraits founders~
-The name plaques beneath each portrait have been removed. Someone did not
-want these people remembered. The eyes in every portrait share one thing:
-an expression that says 'turn back.'
-~
-E
-floor boards gap~
-The gap in the floor is perhaps eight feet wide. The breathing from below
-is rhythmic and slow, like something very large is sleeping.
-~
-S
-#2461
-The Threshold of the Abyss~
-The grand entrance to the lower crypts -- a wide landing at the top of a
-massive staircase descending into absolute darkness. The architecture here
-changes: instead of stone, the walls are made of some dark, slightly warm
-material that is not quite rock and not quite bone. The railing along the
-staircase is carved from a single piece of shadow-iron, depicting writhing
-figures. The exit north returns to the gallery, and the stairs descend.
-~
-8201 11
-D0
-~
-~
-0 -1 2460
-D5
-~
-~
-0 -1 2462
-S
-#2462
-The Antechamber of Darkness~
-The bottom of the great stair opens into an antechamber bathed in total
-darkness, save for a ring of green-flamed torches that burn waist high.
-The air here is thick and tastes of iron and old death. The walls press
-close and the ceiling is very high, lost in shadow. You can feel things
-watching you from beyond the torch-light. Exits lead up to the threshold,
-north into the labyrinth, east and west.
-~
-8201 11
-D0
-~
-~
-0 -1 2463
-D1
-~
-~
-0 -1 2480
-D3
-~
-~
-0 -1 2481
-D4
-~
-~
-0 -1 2461
-E
-torches green flame~
-The green flames cast no warmth. They exist not to light the room but to
-mark the boundary beyond which the things that dwell here prefer not to go.
-They prefer. This does not mean they will not.
-~
-S
-#2463
-The Labyrinth Entrance~
-You stand at the entrance to the great labyrinth of Kel'Shadra. The walls
-of the maze rise twenty feet high, carved from volcanic stone worn smooth
-by ages of dark energy. The passages twist immediately in multiple directions,
-designed to confuse. Above the entrance arch, a warning is carved: 'The
-labyrinth remembers all who enter. Not all of what it remembers is friendly.'
-Exits lead south back to the antechamber and into the labyrinth north.
-~
-532489 11
-D2
-~
-~
-0 -1 2462
-D3
-~
-~
-0 -1 2464
-S
-#2464
-The Labyrinth - North Fork~
-The labyrinth branches here into three passages. The walls are marked with
-faint scratches left by previous explorers, though many of the marks appear
-to lead in circles. The stone overhead is carved with a repeating motif of
-eyes. This section of the maze has a faint sound of dripping water coming
-from somewhere to the east. Passages lead south, east, and west.
-~
-532489 11
-D2
-~
-~
-0 -1 2465
-D3
-~
-~
-0 -1 2463
-D4
-~
-~
-0 -1 2466
-S
-#2465
-The Labyrinth - Eastern Passage~
-A narrow passage that widens slightly as it curves south. The right-hand
-wall is lined with iron spikes, some of which bear scraps of clothing.
-The floor here is damp and the footing uncertain. The passage continues
-east and returns west.
-~
-532489 11
-D2
-~
-~
-0 -1 2467
-D4
-~
-~
-0 -1 2464
-S
-#2466
-The Labyrinth - Western Dead End~
-The western passage terminates in a wall that seems to have been built
-after the labyrinth was constructed -- the stonework is different, newer,
-and the mortar shows signs of hasty application. Something was walled in
-here. Faint scratching can be heard from the other side. The only exit
-is east.
-~
-532489 11
-D5
-~
-~
-0 -1 2464
-E
-wall newer stonework~
-The wall is solid, but the scratching from the other side has been going
-on for a very long time, based on the depth of the grooves visible where
-the mortar meets the original stone.
-~
-S
-#2467
-The Labyrinth - The Crossroads~
-The dead center of the labyrinth -- a wider space where four passages meet.
-At the center of this intersection is a stone column bearing a compass rose
-carved in relief, but the cardinal directions are wrong: North is marked
-'Below', East is 'Within', South is 'Without', West is 'Above'. The column
-rotates very slowly under its own power. Passages lead north, south, east,
-and west.
-~
-532489 11
-D0
-~
-~
-0 -1 2470
-D2
-~
-~
-0 -1 2469
-D3
-~
-~
-0 -1 2468
-D4
-~
-~
-0 -1 2465
-E
-column compass rose~
-The compass directions that are wrong may be an instruction rather than an
-error. 'Below' could mean descend, 'Within' could mean inward. The column
-continues its slow rotation, always pointing the same direction despite
-seeming to spin.
-~
-S
-#2468
-The Labyrinth - The False Exit~
-A passage that seems to lead upward toward light -- but the light is false,
-a phosphorescent patch of mold arranged to look like daylight. Beyond it,
-the passage loops back on itself and deposits you back at the crossroads.
-A small alcove in the wall here contains a dusty skeleton whose hands are
-still pressed flat against the wall, as though it died pushing futilely
-against solid stone. The exit south returns to the crossroads.
-~
-532489 11
-D3
-~
-~
-0 -1 2467
-E
-light false phosphorescent~
-Upon close examination, the light is indeed mold. Clever placement makes
-it look like sunlight from a distance. You are not the first to be deceived.
-~
-E
-skeleton alcove~
-The skeleton's finger bones are worn smooth on the tips from long contact
-with the stone. Its expression, remarkably preserved by the dry air, is one
-of exhausted resignation.
-~
-S
-#2469
-The Labyrinth - The Dark Pool~
-The eastern passage opens into a small chamber containing a black pool whose
-surface is perfectly still and perfectly dark. The pool reflects nothing --
-not even light touches its surface. Looking into it too long causes visual
-distortion and a sensation of vertigo. The exit west returns to the crossroads,
-and a narrow ledge circles the pool to a door on the far side.
-~
-532489 11
-D1
-~
-~
-0 -1 2467
-D3
-~
-door~
-1 2471 2476
-E
-pool black dark~
-The pool is bottomless, as far as you can determine. Whatever exists in its
-depths makes no sound and offers no reflection. The vertigo it causes
-suggests that looking into it is looking into something that looks back.
-~
-S
-#2470
-The Labyrinth - The Trap Corridor~
-The western passage is lined with mechanisms that are unfortunately quite
-visible -- pressure plates in the floor, tripwires across the corridor, and
-small apertures in the walls that lead to some unseen mechanism. Either the
-traps were never reset after previous victims triggered them, or this is
-meant to make you feel safe. The passage continues west and east back to
-the crossroads.
-~
-532489 11
-D1
-~
-~
-0 -1 2467
-D3
-~
-~
-0 -1 2471
-S
-#2471
-The Labyrinth - The Sentinel Room~
-A chamber at the western end of the labyrinth, guarded by ancient iron
-constructs that now stand inert, their mechanisms long since failed. They
-are impressive nonetheless: eight feet tall, in the shape of armed knights,
-with faces made of hammered iron beaten into expressions of grim menace.
-One construct, in the far corner, may not be entirely inert -- its head
-moves very slightly when you are not watching it directly. A door leads north
-and the exit east returns to the trap corridor.
-~
-532489 11
-D1
-~
-~
-0 -1 2470
-D3
-~
-door~
-1 2471 2472
-E
-constructs knights iron~
-The constructs bear the sigil of Kel'Shadra on their breastplates. They were
-built to prevent exit, not entry. The one that moves slightly has no visible
-power source, yet its joints show no rust. Something maintains it.
-~
-S
-#2472
-The Labyrinth - The Lower Junction~
-The passage descends and opens into a junction room where the floors are
-covered in a thin layer of grey dust, unmarked -- meaning nothing has passed
-here recently. The junction connects several passages and a stairway leading
-further down. The exits are south back toward the sentinels, east toward the
-pool chamber, west, and down.
-~
-532489 11
-D0
-~
-~
-0 -1 2471
-D2
-~
-~
-0 -1 2482
-D3
-~
-~
-0 -1 2473
-D4
-~
-~
-0 -1 2476
-S
-#2473
-The Labyrinth - The Echo Chamber~
-A roughly spherical chamber where sounds echo with impossible complexity,
-creating layered harmonics. Speaking aloud here causes your own voice to
-be returned in fragments over the course of several minutes, mixed with
-other voices that were here long before you. The chamber has no purpose
-that is immediately apparent, but the echoes themselves seem to contain
-information. The exit east returns to the junction.
-~
-532489 11
-D4
-~
-~
-0 -1 2472
-E
-echoes voices harmonics~
-By listening carefully to the returned echoes, you can make out words:
-fragments of prayers, desperate pleas, and most disturbing, instructions.
-The instructions seem to describe a ritual, but the fragments are too
-incomplete to understand in full.
-~
-S
-#2474
-The Ritual Chamber of Binding~
-The end goal of those who built the labyrinth: a vast circular chamber with
-a ritual circle of power that fills the entire floor, inscribed with thousands
-of runes. At the center stands an altar of pure black stone atop which rests
-an ancient tome sealed with seven locks. The power in this room is palpable
-and crushing. The air shimmers slightly, as though reality itself is under
-strain here. The exit north returns to the antechamber below.
-~
-8205 11
-D0
-~
-~
-0 -1 2482
-E
-tome sealed seven locks~
-The tome pulses with dark energy. Each lock bears a different symbol. The
-book was sealed here to be forgotten, but whatever sealed it did not have
-the heart to destroy it.
-~
-E
-runes ritual circle~
-The ritual circle is a work of terrible genius. It was designed not to summon
-something but to hold it, to compress and contain a force so immense that the
-entire structure of Kel'Shadra was built around this single room to support
-the binding.
-~
-E
-altar black stone~
-The altar has been used. Many times. The stains are very old but the grooves
-cut by ritual implements are deep.
-~
-S
-#2475
-The Sealed Library~
-A hidden library accessible through the sealed door in the chamber of whispers.
-The shelves here are intact and filled with tomes, scrolls, and tablets, all
-perfectly preserved by the sealed environment. The dust has been undisturbed
-for centuries. This is the personal collection of the order's archivist, and
-it contains knowledge that was meant to die here with them. The exit west
-returns to the chamber of whispers.
-~
-8201 11
-D3
-~
-door~
-1 2470 2458
-E
-shelves tomes scrolls tablets~
-The collection covers the history of the order, the ritual of binding, the
-nature of the entity that was sealed here, and detailed records of what
-happened in the final days before the crypt was sealed. Reading any of it
-is deeply unsettling but also enormously informative.
-~
-S
-#2476
-The Pool Chamber~
-On the far side of the dark pool, accessible by the narrow ledge, this chamber
-contains the mechanism that controls the pool's properties. A series of brass
-wheels and levers of bone connect to pipes that vanish into the ceiling and
-floor. Adjusting them might change the pool's nature. The chamber also contains
-a locked iron chest. The exit west returns across the pool, and a door leads
-north from here through the labyrinth.
-~
-532489 11
-D0
-~
-door~
-1 2471 2469
-D5
-~
-~
-0 -1 2472
-E
-mechanism wheels levers~
-The mechanism seems designed to either purify the pool or to corrupt it
-further. Some of the pipes have labels in old script: 'above', 'below',
-'between'. These correspond to the compass column at the crossroads.
-~
-E
-chest iron locked~
-A heavy iron chest with a combination lock. The combination is three numbers.
-The numbers are hidden somewhere in the labyrinth.
-~
-S
-#2477
-The Crypt of the First Warden~
-A grand burial chamber for the first leader of the order of Kel'Shadra.
-The sarcophagus here is ornate marble, heavily carved with scenes of battle
-against entities from beyond the veil. The warden's effigy atop the lid
-depicts a figure of great authority, one hand raised in command, the other
-pressed to its own chest as though in pain. The chamber exits south.
-~
-8205 11
-D2
-~
-~
-0 -1 2478
-E
-sarcophagus marble warden~
-The warden's sarcophagus still holds its occupant -- or what remains. The
-effigy's pressed-to-chest hand position is notable because the figure depicted
-appears to be removing something from within itself, not simply touching its chest.
-~
-S
-#2478
-The Hall of the Order~
-A processional hall lined with the burial alcoves of the order's senior members.
-Unlike the entry hall, these alcoves are sealed with glass, and through the glass
-you can see the preserved remains of each member, still in their ritual robes,
-seated in chairs as though presiding over an eternal meeting. At the end of the
-hall, a great set of doors stands sealed with nine separate mechanisms. North
-leads to the first warden's crypt, south leads to the final sanctum.
-~
-8205 11
-D0
-~
-~
-0 -1 2477
-D2
-~
-~
-0 -1 2479
-E
-alcoves glass preserved~
-The preservation is uncanny. Each face is still recognizable as a person. Some
-of them appear to have died mid-gesture, their hands raised in ritual positions,
-their mouths open. One appears to be laughing.
-~
-E
-doors sealed nine mechanisms~
-Each mechanism is unique -- a combination lock, a key-lock, a pressure mechanism,
-a word-lock, a sound-lock, and four others whose function is not immediately
-obvious. All nine must be satisfied to open the doors.
-~
-S
-#2479
-The Final Sanctum~
-The deepest room of the Crypts of Kel'Shadra. A vast chamber, cathedral-like,
-where the architecture reaches its apex of dark grandeur. The floor here is
-living shadow, shifting and writhing underfoot. The ceiling is so high it
-cannot be seen. At the chamber's center, suspended in a cage of black iron,
-is the entity that the entire crypt was built to contain: an ancient darkness
-that has waited here for centuries, patient beyond mortal understanding.
-It is aware of you. It has always been aware of you. The exit north returns.
-~
-8205 11
-D0
-~
-~
-0 -1 2478
-E
-entity darkness ancient~
-The entity has no form you can perceive directly. Looking at it causes your
-vision to invert and your thoughts to temporarily scatter. It communicates
-not in words but in impressions: patience, hunger, recognition, and most
-disturbingly, something that might be gratitude.
-~
-E
-cage iron black~
-The cage was built to hold the entity, but the entity has had centuries to
-study its construction. The locks remain intact only because the entity
-chooses, for its own reasons, not to leave. Yet.
-~
-S
-#2480
-The Eastern Catacombs~
-Branching east from the lower antechamber, this wing of the crypt contains
-row upon row of burial shelves carved into the walls, each holding the wrapped
-remains of a member of the order's lower ranks. The shelves extend deep into
-the stone in both directions. Some of the wrappings have been disturbed --
-pulled open, the remains scattered, as though something searched through them.
-The exit west returns to the antechamber.
-~
-8201 11
-D3
-~
-~
-0 -1 2462
-E
-shelves burial remains wrappings~
-Whatever searched through these remains was looking for something specific.
-Most were left untouched, but perhaps one in twenty has been thoroughly
-examined, the wrappings carefully re-arranged afterward.
-~
-S
-#2481
-The Western Catacombs~
-Branching west from the lower antechamber, this wing contains the crypt's
-alchemical laboratory, long abandoned but still intact. Glass vessels contain
-dark reagents, and iron retorts stand over cold braziers. The notes left by
-the order's alchemist are still legible, detailing experiments in containing
-and stabilizing dark energy. One formula is circled in red ink. The exit east
-returns to the antechamber, and a stair descends to a lower level.
-~
-8201 11
-D1
-~
-~
-0 -1 2462
-D5
-~
-~
-0 -1 2482
-E
-laboratory vessels reagents~
-The reagents are still potent after all this time, sealed in their vessels.
-The alchemist clearly understood that the work would outlast the worker.
-~
-E
-notes formula circled~
-The circled formula involves three components: shadowblood, nightstone, and
-something called 'the echo of a last breath.' The formula creates something
-described only as 'the key to the final door.'
-~
-S
-#2482
-The Deep Ossuary~
-Far below the main crypt level, this chamber is the repository of those
-who were sacrificed during the construction and consecration of the crypt.
-Thousands of bones are stacked in precise geometric arrangements that form
-patterns only visible from the ceiling. A raised dais at the center holds
-nothing -- but the outline of something large was placed there for a long
-time, the stone worn smooth around it. Passages lead up through the labyrinth
-above and east.
-~
-8201 11
-D0
-~
-~
-0 -1 2474
-D1
-~
-~
-0 -1 2483
-D4
-~
-~
-0 -1 2472
-E
-bones patterns geometric~
-From above, the bones form a map -- of the crypt itself, with every room
-and passage accurately represented. But the map shows three rooms that
-do not appear to exist in the crypt as you have explored it.
-~
-E
-dais worn smooth~
-Whatever rested on the dais was immensely heavy and was placed there with
-great ceremony. The surrounding stone shows evidence of ritual work.
-~
-S
-#2483
-The Chamber of the Undying~
-A chamber accessible from the deep ossuary where the boundary between life
-and death is at its thinnest. The air here flickers and shimmers, and
-shapes move at the edge of vision -- not quite visible, not quite gone.
-These are the spirits of those who died in the crypt's construction, bound
-here by the ritual. They are not hostile but they are deeply distressed.
-The exit west returns to the deep ossuary.
-~
-8201 11
-D3
-~
-~
-0 -1 2482
-E
-spirits shapes bound~
-The spirits communicate through sensation rather than sound. One impression
-comes through clearly: there is a way to release them, but it requires undoing
-a fundamental part of the ritual that binds the crypt together. Doing so
-might have consequences beyond freeing spirits.
-~
-S
-#0
-#MOBILES
-#2450
-grave crawler crypt~
-a grave crawler~
-A grave crawler scuttles through the shadows here.
-~
-This pale, eyeless creature moves on too many legs, its translucent skin
-revealing dark organs beneath. It was once a person. Now it seeks only to
-consume and infect.
-~
-33554529 512 -500 S
-150 0
-0 0 0 0
-! 0 0 4 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9400 9401 0 0 0 0 0 0 0 
-L 50 30 0 0 0 0 0 0 0 
-#2451
-shadow wraith phantom~
-a shadow wraith~
-A shadow wraith drifts through the darkness here.
-~
-This creature appears as a tattered silhouette with no distinct form, its edges
-fraying into darkness. Its presence causes an unnatural chill and a feeling of
-profound despair. It feeds on fear and memory.
-~
-33685601 524800 -750 S
-152 0
-0 0 0 0
-! 0 0 10 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9400 9401 9415 0 0 0 0 0 0 
-L 40 40 20 0 0 0 0 0 0 
-#2452
-bone guardian skeleton~
-a bone guardian~
-A bone guardian stands watch with ancient vigilance.
-~
-Assembled from the bones of multiple warriors and bound together by dark
-sorcery, this construct carries two blades of shadow-iron and wears armor
-fashioned from its own ribs. Its skull bears an eternal grin of menace.
-It exists only to destroy the living.
-~
-33570913 512 -1000 S
-155 1
-0 0 0 0
-! 0 0 10 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9402 9403 0 0 0 0 0 0 0 
-L 30 50 0 0 0 0 0 0 0 
-#2453
-crypt horror abomination~
-a crypt horror~
-A crypt horror lurches forward, its form barely contained.
-~
-Whatever this creature was before the crypt claimed it, it is now a mass of
-necrotic flesh and fractured bone, barely holding together, driven by a rage
-that transcends death. Its wounds are too numerous to count, yet it does not
-fall. It simply endures and attacks.
-~
-33570913 512 -750 S
-155 0
-0 0 0 0
-! 0 0 4 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9402 9403 0 0 0 0 0 0 0 
-L 30 50 0 0 0 0 0 0 0 
-#2454
-dark cultist zealot priest~
-a dark cultist~
-A dark cultist regards you with fanatic eyes.
-~
-Gaunt and tattooed with ritual sigils, this individual was once a willing
-member of the order of Kel'Shadra. Centuries of the crypt's influence have
-not made them sane. They clutch a blade in one hand and a tome in the other,
-muttering a continuous prayer to something that does not love them.
-~
-33554529 512 -500 S
-155 2
-0 0 0 0
-! 0 0 4 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9404 9405 9414 9417 0 0 0 0 0 
-L 25 35 20 20 0 0 0 0 0 
-#2455
-maze runner lost soul~
-a maze runner~
-A maze runner scurries frantically through the passages.
-~
-Once a living person who entered the labyrinth seeking treasure or knowledge,
-this creature has been trapped here so long it has become part of the maze.
-It knows every passage by memory but can no longer comprehend escape. It
-attacks anything it encounters out of mindless territorial aggression.
-~
-33554529 512 -250 S
-153 0
-0 0 0 0
-! 0 0 4 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9400 9401 9419 0 0 0 0 0 0 
-L 35 40 25 0 0 0 0 0 0 
-#2456
-void stalker shadow predator~
-a void stalker~
-A void stalker slides through the shadows, barely visible.
-~
-This creature exists partially outside normal reality, its outline flickering
-between existence and absence. It hunts by sensing fear, tracking its prey
-through the emotional resonance of panic. Its touch causes temporary blindness
-and a profound sense of isolation. It appears to enjoy the hunt.
-~
-33685617 524800 -1000 S
-157 0
-0 0 0 0
-! 0 0 4 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9402 9403 9411 0 0 0 0 0 0 
-L 30 40 30 0 0 0 0 0 0 
-#2457
-death knight warden eternal~
-a death knight~
-A death knight blocks the way, black armor gleaming with cold light.
-~
-This was once the greatest warrior of the order of Kel'Shadra, elevated
-in death to serve as its eternal guardian. The armor it wears is fused with
-its form, the sword it wields absorbs light, and its eyes burn with a cold
-hatred for all living things. It remembers the warmth of life and despises
-you for still possessing it.
-~
-67125363 131584 -1000 S
-160 1
-0 0 0 0
-! 0 0 10 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9404 9405 9406 0 0 0 0 0 0 
-L 30 40 30 0 0 0 0 0 0 
-#2458
-shadow archon dark herald~
-a shadow archon~
-A shadow archon manifests from the darkness, immense and terrible.
-~
-A being of pure solidified darkness, the shadow archon is a lieutenant of
-the entity sealed in the final sanctum. It speaks in a voice like collapsing
-structures and its presence warps light in a visible radius around it. It
-has been assigned to prevent any from reaching the depths of the crypt, and
-it takes its assignment with absolute seriousness.
-~
-67108979 524800 -1000 S
-162 0
-0 0 0 0
-! 0 0 4 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9406 9407 9410 9418 0 0 0 0 0 
-L 20 30 30 20 0 0 0 0 0 
-#2459
-bone colossus construct ancient~
-a bone colossus~
-A bone colossus fills the passage, its size almost incomprehensible.
-~
-Assembled from the remains of hundreds of individuals, this construct stands
-twelve feet tall and moves with a terrible grinding of bone on bone. It
-carries no weapon -- it uses its body as a weapon, crushing and sweeping
-with limbs composed of fused femurs and spinal columns. It is not intelligent.
-It is relentless.
-~
-67125363 512 -1000 S
-165 0
-0 0 0 0
-! 0 0 19 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9404 9405 9406 9409 0 0 0 0 0 
-L 25 30 25 20 0 0 0 0 0 
-#2460
-lich undead necromancer ancient~
-the Lich of Kel'Shadra~
-The Lich of Kel'Shadra presides here, ancient beyond reckoning.
-~
-Once the greatest mage of the order, this being chose undeath rather than
-accept the end. Its physical form has been maintained by sheer will and
-dark magic for centuries, now little more than a skeleton in magnificent
-robes threaded with light-absorbing material. Its mind is vast, cold, and
-utterly alien in its perspective. It views the living with academic interest
-and combative enthusiasm. It is extremely dangerous.
-~
-67125363 131584 -1000 S
-170 0
-0 0 0 0
-! 0 0 10 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9406 9407 9408 9412 9413 0 0 0 0 
-L 15 20 30 20 15 0 0 0 0 
-#2461
-nightmare steed dark horse~
-a nightmare steed~
-A nightmare steed paws the stone floor, trailing cold fire.
-~
-This creature resembles a horse in the same way that a void resembles a room.
-Its body is formed of solidified darkness, its mane and tail of cold flame.
-Its eyes are blank white voids. It serves as a mount for the death knight
-and attacks independently with terrible hooves and teeth of shadow-iron.
-~
-33554529 512 -750 S
-158 0
-0 0 0 0
-! 0 0 14 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9402 9403 0 0 0 0 0 0 0 
-L 30 50 0 0 0 0 0 0 0 
-#2462
-undying sentinel guardian crypt~
-an undying sentinel~
-An undying sentinel stands motionless, awaiting transgression.
-~
-Preserved by ritual far beyond the normal span of undead, this sentinel
-has guarded its assigned position for so long that its form has partially
-merged with the stone around it. Tendrils of dark energy connect it to the
-wall. It appears inert but this is by design: it waits until you are within
-striking range to reveal that it is very much active.
-~
-33570913 512 -750 S
-160 1
-0 0 0 0
-! 0 0 10 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9404 9405 9416 0 0 0 0 0 0 
-L 30 40 30 0 0 0 0 0 0 
-#2463
-shadow spawn creature darkness~
-a shadow spawn~
-A shadow spawn coalesces from the ambient darkness.
-~
-Born from the concentrated dark energy that permeates the lower crypts, this
-creature has no true physical form but can exert tremendous force on the
-physical world. It forms briefly into something almost solid when it attacks,
-then dissipates back into shadow. Conventional attacks pass through it;
-magic and silver affect it normally.
-~
-33685601 524800 -750 S
-155 0
-0 0 0 0
-! 0 0 4 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9400 9401 0 0 0 0 0 0 0 
-L 50 30 0 0 0 0 0 0 0 
-#2464
-flesh golem construct ritual~
-a flesh golem~
-A flesh golem assembled from ritual components lumbers forward.
-~
-The crypt's alchemist created several of these as guardians, and this one
-continues to function centuries after its creator's death. It is assembled
-from preserved flesh bound together by dark energy, stitched with thread
-made from dried veins. It has no will of its own and follows its last
-standing order: kill intruders. It is disturbingly effective at this task.
-~
-33554529 512 -500 S
-157 0
-0 0 0 0
-! 0 0 19 7 0 0 0
-| 0 0 0 0 0 0 0
-+ 0 0 0 0 0 0 0 0 0
-l 100 9402 9403 0 0 0 0 0 0 0 
-L 30 50 0 0 0 0 0 0 0 
-#0
-#OBJECTS
-#2450
-shadow iron helm~
-@@NA @@dShadow-Iron@@N Helm~
-A shadow-iron helm lies discarded here.~
-9 201326720 8388616 145
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2451
-shadow iron breastplate~
-@@NA @@dShadow-Iron@@N Breastplate~
-A shadow-iron breastplate lies here.~
-9 201326720 8650752 1049
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2452
-shadow iron greaves~
-@@dShadow-Iron @@NGreaves~
-A pair of shadow-iron greaves lies here.~
-9 201326720 9437184 1
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2453
-shadow iron vambraces~
-@@dShadow-Iron@@N Vambraces~
-Shadow-iron vambraces lie here.
-~
-9 201326720 8390656 4353
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2454
-shadow iron gauntlets~
-@@dShadow-Iron@@N Gauntlets~
-A pair of shadow-iron gauntlets lies here.~
-9 201326720 8392704 65537
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2455
-shadow iron boots~
-@@dShadow-Iron@@N Boots~
-A pair of shadow-iron boots lies here.~
-9 201326720 10485760 1
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2456
-shadow iron pauldrons~
-@@dShadow-Iron@@N Pauldrons~
-Shadow-iron pauldrons lie here.
-~
-9 201326720 8389120 4097
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2457
-shadow iron buckler shield~
-@@NA @@dShadow-Iron@@N Buckler~
-A shadow-iron buckler lies here.~
-9 469762176 8421376 1
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2458
-void blade longsword~
-@@NA Void@@d Blade@@N~
-A void blade lies here, absorbing the light around it.~
-5 201326720 8421376 0
-0 0 0 3 0 0 0 0 0 0
-8
-L
-150
-#2459
-bone scythe weapon~
-@@NA Bone @@dScythe@@N~
-A scythe carved from enormous bones lies here.~
-5 2348810368 8421376 0
-0 0 0 1 0 0 0 0 0 0
-10
-L
-150
-#2460
-shadow weave cloak~
-@@NA @@dShadow-Weave@@N Cloak~
-A cloak that seems to absorb shadow lies here.~
-9 201326720 8454144 1
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2461
-ring shadow bound~
-@@NA Ring of @@dShadow-Binding@@N~
-A dark ring etched with binding runes lies here.~
-8 67108992 8396800 0
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2462
-amulet kel'shadra void~
-@@NAn @@dAmulet@@N of Kel'Shadra~
-An amulet bearing the crest of Kel'Shadra lies here.~
-8 201326720 8388736 1024
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2463
-lich robes vestments~
-@@NLich @@dVestments@@N~
-Ancient lich vestments lie here, radiating cold energy.~
-9 201326720 8650752 1
-0 0 0 0 0 0 0 0 0 0
-3
-L
-150
-#2464
-shadow iron sword short~
-@@NA @@dShadow-Iron@@N Short Sword~
-A short shadow-iron sword lies here.~
-5 67108992 8421376 0
-0 0 0 3 0 0 0 0 0 0
-14
-L
-150
-#2465
-void touched earring~
-@@NA Void-Touched @@dEarring@@N~
-A void-touched earring lies here.~
-8 67108992 8388672 384
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2466
-shadow iron wristguards~
-@@dShadow-Iron@@N Wristguards~
-Shadow-iron wristguards lie here.
-~
-9 67108992 8390656 49152
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2467
-darkbone staff weapon~
-@@NA Darkbone @@dStaff@@N~
-A staff carved from darkbone lies here.~
-5 67108992 8421376 0
-0 0 0 6 0 0 0 0 0 0
-7
-L
-150
-#2468
-void touched halo~
-@@NA Void-Touched @@dHalo@@N~
-An inverted halo of shadow-iron floats here.~
-9 201326720 8388609 2
-0 0 0 0 0 0 0 0 0 0
-14
-L
-150
-#2469
-shadow iron dagger~
-@@NA @@dShadow-Iron@@N Dagger~
-A shadow-iron dagger lies here.~
-5 67108992 8421376 0
-0 0 0 11 0 0 0 0 0 0
-9
-L
-150
-#2470
-kelshadra crypt key old~
-an old crypt key~
-An old crypt key lies here.~
-18 128 8421376 0
-0 9425 0 0 0 0 0 0 0 0
-1
-L
-150
-#2471
-void pool key~
-a void pool key~
-A strange key that seems made of solidified shadow lies here.~
-18 128 8421376 0
-0 9426 0 0 0 0 0 0 0 0
-1
-L
-150
-#0
-#RESETS
-M 0 2450 5 2451   (null)
-
-M 0 2451 4 2451   (null)
-
-M 0 2451 3 2454   (null)
-
-M 0 2452 3 2453   (null)
-
-M 0 2453 3 2453   (null)
-
-M 0 2452 3 2456   (null)
-
-M 0 2454 4 2454   (null)
-
-M 0 2453 3 2457   (null)
-
-M 0 2455 5 2463   (null)
-
-M 0 2455 5 2464   (null)
-
-M 0 2455 5 2465   (null)
-
-M 0 2455 5 2467   (null)
-
-M 0 2455 5 2468   (null)
-
-M 0 2456 3 2469   (null)
-
-M 0 2455 5 2470   (null)
-
-M 0 2462 3 2471   (null)
-
-M 0 2456 2 2472   (null)
-
-M 0 2463 4 2473   (null)
-
-M 0 2450 5 2480   (null)
-
-M 0 2450 5 2481   (null)
-
-M 0 2463 5 2482   (null)
-
-M 0 2463 4 2483   (null)
-
-M 0 2464 3 2475   (null)
-
-M 0 2456 2 2476   (null)
-
-M 0 2458 1 2474   (null)
-
-M 0 2457 1 2477   (null)
-
-M 0 2459 1 2478   (null)
-
-M 0 2461 2 2462   (null)
-
-M 0 2460 1 2479   (null)
-
-M 0 2454 4 2458   (null)
-
-M 0 2453 3 2459   (null)
-
-M 0 2452 3 2460   (null)
-
-M 0 2454 3 2461   (null)
-
-D 0 2458 1 2   (null)
-
-D 0 2469 3 2   (null)
-
-D 0 2471 3 2   (null)
-
-O 0 2470 0 2475   (null)
-
-O 0 2471 0 2482   (null)
-
-S
-#SPECIALS
-M 2457 spec_cast_bigtime
-M 2458 spec_cast_bigtime
-M 2460 spec_cast_bigtime
-M 2456 spec_breath_any
-M 2461 spec_breath_any
-M 2451 spec_cast_undead
-M 2463 spec_cast_undead
-S
-#$

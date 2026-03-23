@@ -1,87 +1,0 @@
-#BRAND~
-Tester~
-@@rSystem@@N~
-Tue Jun 17 06:59:13 2025~
-UNIQUE ITEM: keyword: diploma, Name: @@pA SoESHM Diploma@@N, flags: magic unique 
- level: 100, affects:
-Affects strength by 10.
-Affects intelligence by 10.
-Affects wisdom by 9.
-Affects dexterity by 10.
-Affects constitution by 9.
-Total cost: 43 qp
-Enchantments Used: sigil dex (4812) 
-sigil dex (4812) 
-sigil dex (4812) 
-sigil dex (4812) 
-sigil dex (4812) 
-sigil con (4813) 
-sigil con (4813) 
-sigil con (4813) 
-sigil con (4813) 
-sigil wis (4811) 
-sigil wis (4811) 
-sigil wis (4811) 
-sigil wis (4811) 
-sigil int (4810) 
-sigil int (4810) 
-sigil int (4810) 
-sigil int (4810) 
-sigil int (4810) 
-sigil str (4809) 
-sigil str (4809) 
-sigil str (4809) 
-sigil str (4809) 
-
-sigil str (4809) 
-~
-unique~
-#BRAND~
-Tester~
-@@rSystem@@N~
-Wed Jun 18 10:55:16 2025~
-UNIQUE ITEM: keyword: Stealth, Name: @@dS@@mt@@pe@@ga@@pl@@mt@@dh@@N, flags: glow nodisarm evil magic anti-good anti-neutral noloot unique lifestealer auto 
- level: 150, affects:
-Affects damage roll by 4.
-Affects strength by 10.
-Affects intelligence by 10.
-Affects wisdom by 10.
-Affects dexterity by 10.
-Affects constitution by 10.
-Affects hp by 49.
-Affects mana by 49.
-Affects moves by 49.
-Affects hit roll by 88.
-Affects damage roll by 88.
-Affects armor class by -49.
-Total cost: 45 qp
-Enchantments Used: sigil dex (4812) 
-sigil dex (4812) 
-sigil dex (4812) 
-sigil dex (4812) 
-sigil dex (4812) 
-sigil con (4813) 
-sigil con (4813) 
-sigil con (4813) 
-sigil con (4813) 
-sigil con (4813) 
-sigil wis (4811) 
-sigil wis (4811) 
-sigil wis (4811) 
-sigil wis (4811) 
-sigil wis (4811) 
-sigil int (4810) 
-sigil int (4810) 
-sigil int (4810) 
-sigil int (4810) 
-sigil int (4810) 
-sigil str (4809) 
-sigil str (4809) 
-sigil str (4809) 
-sigil str (4809) 
-sigil str (4809) 
-
-~
-unique~
-#END~
-

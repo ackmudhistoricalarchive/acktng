@@ -36,124 +36,17 @@
 #include <string.h>
 #include <time.h>
 #include "globals.h"
-
-#define SOCIAL_FILE DATA_DIR "socials.txt" /* or whatever fits you */
-#ifdef HAVE_LIBPQ
 #include "../db/db_worker.h"
-#endif
-/*
- * #define CONST_SOCIAL
- */
-/*
- * remove this in Step 2
- */
 
 int maxSocial; /* max number of socials */
 
 #ifndef CONST_SOCIAL
 struct social_type *social_table; /* and social table */
-
-void load_social(FILE *fp, struct social_type *social)
-{
-   social->name = fread_string(fp);
-   social->char_no_arg = fread_string(fp);
-   social->others_no_arg = fread_string(fp);
-   social->char_found = fread_string(fp);
-   social->others_found = fread_string(fp);
-   social->vict_found = fread_string(fp);
-   social->char_auto = fread_string(fp);
-   social->others_auto = fread_string(fp);
-}
-
-void load_social_table()
-{
-   FILE *fp;
-   int i;
-
-   fp = fopen(SOCIAL_FILE, "r");
-
-   if (!fp)
-   {
-      bug("Could not open " SOCIAL_FILE " for reading.", 0);
-      exit(1);
-   }
-
-   if (fscanf(fp, "%d\n", &maxSocial) != 1)
-   {
-      bug("Could not read social count from " SOCIAL_FILE ".", 0);
-      fclose(fp);
-      exit(1);
-   }
-
-   /*
-    * IMPORTANT to use malloc so we can realloc later on
-    */
-
-   social_table = malloc(sizeof(struct social_type) * (maxSocial + 1));
-
-   for (i = 0; i < maxSocial; i++)
-      load_social(fp, &social_table[i]);
-
-   /*
-    * For backwards compatibility
-    */
-
-   social_table[maxSocial].name = str_dup(""); /* empty! */
-
-   if (fp != NULL)
-   {
-      fclose(fp);
-      fp = NULL;
-   }
-}
-
-#endif /* CONST_SOCIAL */
-
-void save_social(const struct social_type *s, FILE *fp)
-{
-   /*
-    * get rid of (null)
-    */
-   fprintf(fp, "%s~\n%s~\n%s~\n%s~\n%s~\n%s~\n%s~\n%s~\n\n", s->name ? s->name : "",
-           s->char_no_arg ? s->char_no_arg : "", s->others_no_arg ? s->others_no_arg : "",
-           s->char_found ? s->char_found : "", s->others_found ? s->others_found : "",
-           s->vict_found ? s->vict_found : "", s->char_auto ? s->char_auto : "",
-           s->others_auto ? s->others_auto : "");
-}
+#endif                            /* CONST_SOCIAL */
 
 void save_social_table()
 {
-#ifndef HAVE_LIBPQ
-   FILE *fp;
-   int i;
-
-   fp = fopen(SOCIAL_FILE, "w");
-
-   if (!fp)
-   {
-      bug("Could not open " SOCIAL_FILE " for writing.", 0);
-      return;
-   }
-
-#ifdef CONST_SOCIAL /* If old table still in use, count socials first */
-
-   for (maxSocial = 0; social_table[maxSocial].name[0]; maxSocial++)
-      ; /* empty */
-#endif
-
-   fprintf(fp, "%d\n", maxSocial);
-
-   for (i = 0; i < maxSocial; i++)
-      save_social(&social_table[i], fp);
-
-   if (fp != NULL)
-   {
-      fclose(fp);
-      fp = NULL;
-   }
-#else
    db_worker_save_socials(social_table, maxSocial);
-#endif
 }
 
 /* Find a social based on name */

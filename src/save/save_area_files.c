@@ -31,82 +31,9 @@
 #include <string.h>
 #include "globals.h"
 #include "special.h"
-#ifdef HAVE_LIBPQ
 #include "../db/db_worker.h"
-#endif
 
-/* Way this works:
-   Mud reads in area files, stores details in data lists.
-   Edit rooms, objects, resets.
-   type savearea.
-   Sets bool saving_area to true.
-   Incrementally saves an area, using data lists.
-*/
-
-#define SAVEQUEUESIZE 50
-#define NOT_SAVING 0
-#define START_SAVING 1
-#define AM_SAVING 2
-#define BUILD_OK -1
-#define BUILD_CANTSAVE 1
-#define BUILD_TOOMANY 2
-
-#define BUILD_SEC_AREA 1
-#define BUILD_SEC_ROOMS 2
-#define BUILD_SEC_MOBILES 3
-#define BUILD_SEC_OBJECTS 4
-#define BUILD_SEC_SHOPS 5
-#define BUILD_SEC_RESETS 6
-#define BUILD_SEC_SPECIALS 7
-#define BUILD_SEC_SPEECH 8
-#define BUILD_SEC_OBJFUNS 9 /* -S- Mod */
-#define BUILD_SEC_END 10
-#define AREA_VERSION 16
-
-struct save_queue_type
-{
-   AREA_DATA *area;
-   CHAR_DATA *ch;
-   int loops;
-} SaveQ[SAVEQUEUESIZE];
-
-/* Semi-local vars. */
-int saving_area = 0;
-
-/* local */
-int offset;
-int ToBeSaved = 0;
-int CurrentSaving = -1;
-AREA_DATA *CurSaveArea = NULL;
-CHAR_DATA *CurSaveChar = NULL;
-int CurLoops = 1;
-int Section;
-BUILD_DATA_LIST *Pointer;
-RESET_DATA *ResetPointer;
-FILE *SaveFile;
-FILE *Envy;
 int AreasModified = 0;
-
-/* Local functions */
-/* void build_save(); proto in merc.h */
-void build_save_area(void);
-void build_save_mobs(void);
-void build_save_objects(void);
-void build_save_rooms(void);
-void build_save_shops(void);
-void build_save_resets(void);
-void build_save_specs(void);
-void build_save_speech(void);
-void build_save_objfuns(void);
-void build_save_end(void);
-void vuild_save_flush(void);
-/*  int convert(int lev); */
-/* Convert levels from ack -> envy! */
-
-/* int  convert(int lev)	*/
-/*  { 		*/
-/*   return( lev - ( lev/5 ) ); 	*/
-/* }   */
 
 void do_savearea(CHAR_DATA *ch, char *argument)
 {
@@ -144,7 +71,6 @@ void do_savearea(CHAR_DATA *ch, char *argument)
          loops = 1;
    }
 
-#ifdef HAVE_LIBPQ
    {
       BUILD_DATA_LIST *pList;
 
@@ -167,34 +93,12 @@ void do_savearea(CHAR_DATA *ch, char *argument)
       if (ch != NULL)
          send_to_char("Area saved to database.\n", ch);
    }
-   return;
-#endif
-
-   if (ToBeSaved == CurrentSaving)
-   {
-      send_to_char("Too many areas in queue, please try later.\n", ch);
-      return;
-   }
-
-   SaveQ[ToBeSaved].area = SaveArea;
-   SaveQ[ToBeSaved].ch = ch;
-   SaveQ[ToBeSaved].loops = loops;
-   ToBeSaved = (ToBeSaved + 1) % SAVEQUEUESIZE;
-
-   if (saving_area == NOT_SAVING)
-      saving_area = START_SAVING;
-   else
-      send_to_char("Save is queued, please wait. \n", ch);
-
-   build_save();
-   return;
 }
 
+/* build_save() removed — DB saves are handled directly in do_savearea(). */
+#if 0
 void build_save()
 {
-#ifdef HAVE_LIBPQ
-   return; /* DB saves are enqueued directly; no file-based save state machine needed. */
-#endif
    int a;
    char filename[255];
    char buf[MAX_STRING_LENGTH];
@@ -716,6 +620,7 @@ void build_save_end()
    else
       saving_area = START_SAVING;
 }
+#endif /* build_save and build_save_* removed */
 
 void build_save_flush()
 {
@@ -749,9 +654,8 @@ const int convert_wearflags[] = {BIT_24, BIT_14, BIT_8,  BIT_19, BIT_4,  BIT_21,
                                  BIT_7,  BIT_16, BIT_24, BIT_24, BIT_24, BIT_24, BIT_24, BIT_24,
                                  BIT_24, BIT_24, BIT_24, BIT_24, BIT_24, BIT_24, BIT_24, BIT_24};
 
-/*
- * Snarf an 'area' header line.
- */
+/* load_area() through load_objfuns() removed — area content is loaded from the database. */
+#if 0
 void load_area(FILE *fp)
 {
    AREA_DATA *pArea;
@@ -1803,3 +1707,4 @@ void load_objfuns(FILE *fp)
       fread_to_eol(fp);
    }
 }
+#endif /* flat-file area loaders removed */
