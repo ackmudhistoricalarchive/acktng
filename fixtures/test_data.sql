@@ -53,6 +53,20 @@ INSERT INTO help_entries (filename, level, keywords, body) VALUES
     ('test_help',  0, 'TEST',      'This is a test help entry.');
 
 -- -----------------------------------------------------------------------
+-- quest_templates — one entry to verify the load path
+-- -----------------------------------------------------------------------
+INSERT INTO quest_templates
+    (id, title, prerequisite_template_id, type, num_targets, target_vnums,
+     kill_needed, min_level, max_level, offerer_vnum,
+     reward_gold, reward_qp, reward_exp,
+     accept_message, completion_message)
+VALUES
+    (1, 'Test Quest', NULL, 1, 1, '{4900}',
+     3, 1, 10, NULL,
+     100, 1, 500,
+     'Go defeat the test creatures.', 'Well done, adventurer.');
+
+-- -----------------------------------------------------------------------
 -- shelp_entries — one entry to verify the load path
 -- -----------------------------------------------------------------------
 INSERT INTO shelp_entries (filename, level, keywords, body)

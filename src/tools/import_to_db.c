@@ -2390,6 +2390,243 @@ static char *read_db_conf(const char *base_dir)
 }
 
 /* -----------------------------------------------------------------------
+ * Quest template import  (quests/*.prop)
+ * ----------------------------------------------------------------------- */
+
+#define IL_QUEST_MAX_TARGETS 10
+
+/* Read next non-empty, non-comment line; strip leading/trailing whitespace. */
+static int quest_read_line(FILE *fp, char *buf, size_t size)
+{
+   while (fgets(buf, (int)size, fp) != NULL)
+   {
+      char *p = buf;
+      size_t len;
+      while (*p && (*p == ' ' || *p == '\t'))
+         memmove(p, p + 1, strlen(p));
+      len = strlen(buf);
+      while (len > 0 && (buf[len - 1] == '\n' || buf[len - 1] == '\r' || buf[len - 1] == ' '))
+         buf[--len] = '\0';
+      if (buf[0] == '\0' || buf[0] == '#')
+         continue;
+      return 1;
+   }
+   return 0;
+}
+
+static int import_quest_file(const char *path, int id)
+{
+   FILE *fp;
+   char line[4096];
+   const char *params[22];
+   char id_str[16], prereq_str[16], type_str[16], ntargets_str[16];
+   char kill_str[16], minlv_str[16], maxlv_str[16], offerer_str[16];
+   char gold_str[16], qp_str[16], exp_str[16];
+   char wear_str[16], extra_str[16], weight_str[16], apply_str[16];
+   char vnums_pg[256]; /* PostgreSQL array literal, e.g. {1234,5678} */
+   int prereq = -1, type = 0, ntargets = 0, kill_needed = 0;
+   int minlv = 0, maxlv = 170, offerer = 0;
+   int reward_gold = 0, reward_qp = 0, reward_exp = 0;
+   int target_vnums[IL_QUEST_MAX_TARGETS];
+   char *title = "", *accept = "", *completion = "";
+   char *obj_short = "", *obj_name = "", *obj_long = "";
+   int obj_wear = 0, obj_extra = 0, obj_weight = 0, obj_apply = 0;
+   char title_buf[4096], accept_buf[4096], completion_buf[4096];
+   char short_buf[4096], name_buf[4096], long_buf[4096];
+   int i;
+   PGresult *res;
+
+   fp = fopen(path, "r");
+   if (!fp)
+      return 0;
+
+   memset(target_vnums, 0, sizeof(target_vnums));
+   title_buf[0] = accept_buf[0] = completion_buf[0] = '\0';
+   short_buf[0] = name_buf[0] = long_buf[0] = '\0';
+
+   /* Line 1: title */
+   if (!quest_read_line(fp, title_buf, sizeof(title_buf)))
+   {
+      fclose(fp);
+      return 0;
+   }
+   title = title_buf;
+
+   /* Line 2: numeric fields */
+   if (!quest_read_line(fp, line, sizeof(line)))
+   {
+      fclose(fp);
+      return 0;
+   }
+   maxlv = 170;
+   reward_exp = 0;
+   if (sscanf(line, "%d %d %d %d %d %d %d %d %d %d %*d", &prereq, &type, &ntargets, &kill_needed,
+              &minlv, &maxlv, &offerer, &reward_gold, &reward_qp, &reward_exp) != 10)
+   {
+      reward_exp = 0;
+      if (sscanf(line, "%d %d %d %d %d %d %d %d %d %*d", &prereq, &type, &ntargets, &kill_needed,
+                 &minlv, &offerer, &reward_gold, &reward_qp, &reward_exp) != 9)
+      {
+         fprintf(errlog, "WARN: bad numeric line in %s\n", path);
+         fclose(fp);
+         return 0;
+      }
+   }
+
+   /* Line 3: target vnums */
+   if (!quest_read_line(fp, line, sizeof(line)))
+   {
+      fclose(fp);
+      return 0;
+   }
+   {
+      char *tok = strtok(line, " \t");
+      for (i = 0; i < IL_QUEST_MAX_TARGETS && tok; i++)
+      {
+         target_vnums[i] = atoi(tok);
+         tok = strtok(NULL, " \t");
+      }
+   }
+
+   /* Line 4: accept message */
+   if (quest_read_line(fp, accept_buf, sizeof(accept_buf)))
+      accept = accept_buf;
+
+   /* Line 5: completion message */
+   if (quest_read_line(fp, completion_buf, sizeof(completion_buf)))
+      completion = completion_buf;
+
+   /* Lines 6-12: optional reward object fields */
+   if (quest_read_line(fp, short_buf, sizeof(short_buf)))
+      obj_short = short_buf;
+   if (quest_read_line(fp, name_buf, sizeof(name_buf)))
+      obj_name = name_buf;
+   if (quest_read_line(fp, long_buf, sizeof(long_buf)))
+      obj_long = long_buf;
+   if (quest_read_line(fp, line, sizeof(line)))
+      obj_wear = atoi(line);
+   if (quest_read_line(fp, line, sizeof(line)))
+      obj_extra = atoi(line);
+   if (quest_read_line(fp, line, sizeof(line)))
+      obj_weight = atoi(line);
+   if (quest_read_line(fp, line, sizeof(line)))
+      obj_apply = atoi(line);
+
+   fclose(fp);
+
+   /* Build PostgreSQL integer array literal */
+   {
+      char *p = vnums_pg;
+      *p++ = '{';
+      for (i = 0; i < ntargets && i < IL_QUEST_MAX_TARGETS; i++)
+      {
+         if (i > 0)
+            *p++ = ',';
+         p += sprintf(p, "%d", target_vnums[i]);
+      }
+      *p++ = '}';
+      *p = '\0';
+   }
+
+   /* Format numeric strings; use NULL for absent FK values */
+   sprintf(id_str, "%d", id);
+   if (prereq >= 0)
+      sprintf(prereq_str, "%d", prereq);
+   sprintf(type_str, "%d", type);
+   sprintf(ntargets_str, "%d", ntargets);
+   sprintf(kill_str, "%d", kill_needed);
+   sprintf(minlv_str, "%d", minlv);
+   sprintf(maxlv_str, "%d", maxlv);
+   if (offerer > 0)
+      sprintf(offerer_str, "%d", offerer);
+   sprintf(gold_str, "%d", reward_gold);
+   sprintf(qp_str, "%d", reward_qp);
+   sprintf(exp_str, "%d", reward_exp);
+   sprintf(wear_str, "%d", obj_wear);
+   sprintf(extra_str, "%d", obj_extra);
+   sprintf(weight_str, "%d", obj_weight);
+   sprintf(apply_str, "%d", obj_apply);
+
+   params[0] = id_str;
+   params[1] = title;
+   params[2] = (prereq >= 0) ? prereq_str : NULL;
+   params[3] = type_str;
+   params[4] = ntargets_str;
+   params[5] = vnums_pg;
+   params[6] = kill_str;
+   params[7] = minlv_str;
+   params[8] = maxlv_str;
+   params[9] = (offerer > 0) ? offerer_str : NULL;
+   params[10] = gold_str;
+   params[11] = qp_str;
+   params[12] = exp_str;
+   params[13] = accept;
+   params[14] = completion;
+   params[15] = obj_short;
+   params[16] = obj_name;
+   params[17] = obj_long;
+   params[18] = wear_str;
+   params[19] = extra_str;
+   params[20] = weight_str;
+   params[21] = apply_str;
+
+   res = PQexecParams(conn,
+                      "INSERT INTO quest_templates "
+                      "(id, title, prerequisite_template_id, type, num_targets, target_vnums, "
+                      " kill_needed, min_level, max_level, offerer_vnum, "
+                      " reward_gold, reward_qp, reward_exp, "
+                      " accept_message, completion_message, "
+                      " reward_obj_short, reward_obj_name, reward_obj_long, "
+                      " reward_obj_wear_flags, reward_obj_extra_flags, "
+                      " reward_obj_weight, reward_obj_item_apply) "
+                      "VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,"
+                      "        $11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22) "
+                      "ON CONFLICT (id) DO NOTHING",
+                      22, NULL, params, NULL, NULL, 0);
+
+   if (PQresultStatus(res) != PGRES_COMMAND_OK)
+   {
+      fprintf(errlog, "quest %d (%s): %s", id, path, PQresultErrorMessage(res));
+      errors++;
+      PQclear(res);
+      return 0;
+   }
+   PQclear(res);
+   return 1;
+}
+
+static int import_quests(const char *dirpath)
+{
+   DIR *d;
+   struct dirent *ent;
+   int count = 0;
+   char path[512];
+
+   d = opendir(dirpath);
+   if (!d)
+   {
+      fprintf(errlog, "WARN: cannot open quest directory: %s\n", dirpath);
+      return 0;
+   }
+
+   while ((ent = readdir(d)) != NULL)
+   {
+      int id;
+      size_t len = strlen(ent->d_name);
+      if (len < 6 || strcmp(ent->d_name + len - 5, ".prop") != 0)
+         continue;
+      id = atoi(ent->d_name);
+      if (id <= 0)
+         continue;
+      snprintf(path, sizeof(path), "%s/%s", dirpath, ent->d_name);
+      if (import_quest_file(path, id))
+         count++;
+   }
+   closedir(d);
+   return count;
+}
+
+/* -----------------------------------------------------------------------
  * main
  * ----------------------------------------------------------------------- */
 
@@ -2469,6 +2706,10 @@ int main(int argc, char *argv[])
    printf("\nImporting boards...\n");
    n = import_boards("../area/boards");
    printf("  %d board file(s) imported.\n", n);
+
+   printf("\nImporting quest templates...\n");
+   n = import_quests("../quests");
+   printf("  %d quest template(s) imported.\n", n);
 
    /* ------------------------------------------------------------------ */
    if (errors > 0)
