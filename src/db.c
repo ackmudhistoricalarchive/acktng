@@ -791,8 +791,18 @@ void boot_db(void)
       }
    }
 
-   log_f("Loading quest templates.");
-   quest_load_templates();
+#ifdef HAVE_LIBPQ
+   if (db_connected)
+   {
+      log_f("DB: loading quest templates from database.");
+      db_load_quest_templates();
+   }
+   else
+#endif
+   {
+      log_f("Loading quest templates.");
+      quest_load_templates();
+   }
 
    /*
     * Fix up exits.

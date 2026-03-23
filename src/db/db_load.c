@@ -25,6 +25,7 @@
 
 #include "db_conn.h"
 #include "db_load.h"
+#include "../quests/quest_internal.h"
 
 /* -----------------------------------------------------------------------
  * Internal SQL helpers
@@ -1411,6 +1412,114 @@ void db_load_chests(void)
    }
 
    free(db_vnums);
+}
+
+/* -----------------------------------------------------------------------
+ * Quest templates
+ * ----------------------------------------------------------------------- */
+
+/* Parse a PostgreSQL integer array literal like "{1234,5678,90}" into
+ * an int array.  Returns the number of elements parsed. */
+static int parse_pg_int_array(const char *pg, int *out, int max)
+{
+   const char *p;
+   int count = 0;
+
+   if (!pg || *pg != '{')
+      return 0;
+
+   p = pg + 1; /* skip '{' */
+   while (*p && *p != '}' && count < max)
+   {
+      out[count++] = atoi(p);
+      while (*p && *p != ',' && *p != '}')
+         p++;
+      if (*p == ',')
+         p++;
+   }
+   return count;
+}
+
+void db_load_quest_templates(void)
+{
+   PGresult *res;
+   int nrows, i;
+
+   res = xq("SELECT id, title, prerequisite_template_id, type, num_targets, "
+            "       target_vnums, kill_needed, min_level, max_level, offerer_vnum, "
+            "       reward_gold, reward_qp, reward_exp, "
+            "       accept_message, completion_message, "
+            "       reward_obj_short, reward_obj_name, reward_obj_long, "
+            "       reward_obj_wear_flags, reward_obj_extra_flags, "
+            "       reward_obj_weight, reward_obj_item_apply "
+            "FROM quest_templates ORDER BY id");
+   if (!res)
+      return;
+
+   nrows = PQntuples(res);
+   if (nrows == 0)
+   {
+      log_f("DB: quest_templates table is empty.");
+      PQclear(res);
+      return;
+   }
+
+   /* Free any previously loaded templates */
+   if (quest_template_table != NULL)
+   {
+      for (i = 0; i < quest_template_count; i++)
+      {
+         free_string(quest_template_table[i].title);
+         free_string(quest_template_table[i].reward_obj_short);
+         free_string(quest_template_table[i].reward_obj_name);
+         free_string(quest_template_table[i].reward_obj_long);
+         free_string(quest_template_table[i].accept_message);
+         free_string(quest_template_table[i].completion_message);
+      }
+      free(quest_template_table);
+      quest_template_table = NULL;
+      quest_template_count = 0;
+   }
+
+   quest_template_table = calloc(nrows, sizeof(QUEST_TEMPLATE));
+   if (!quest_template_table)
+   {
+      log_f("DB: out of memory allocating %d quest templates.", nrows);
+      PQclear(res);
+      return;
+   }
+
+   for (i = 0; i < nrows; i++)
+   {
+      QUEST_TEMPLATE *tpl = &quest_template_table[i];
+
+      tpl->id = atoi(PQgetvalue(res, i, 0));
+      tpl->title = str_dup(PQgetvalue(res, i, 1));
+      tpl->prerequisite_template_id = PQgetisnull(res, i, 2) ? -1 : atoi(PQgetvalue(res, i, 2));
+      tpl->type = atoi(PQgetvalue(res, i, 3));
+      tpl->num_targets = atoi(PQgetvalue(res, i, 4));
+      parse_pg_int_array(PQgetvalue(res, i, 5), tpl->target_vnum, QUEST_MAX_TARGETS);
+      tpl->kill_needed = atoi(PQgetvalue(res, i, 6));
+      tpl->min_level = atoi(PQgetvalue(res, i, 7));
+      tpl->max_level = atoi(PQgetvalue(res, i, 8));
+      tpl->offerer_vnum = PQgetisnull(res, i, 9) ? 0 : atoi(PQgetvalue(res, i, 9));
+      tpl->reward_gold = atoi(PQgetvalue(res, i, 10));
+      tpl->reward_qp = atoi(PQgetvalue(res, i, 11));
+      tpl->reward_exp = atoi(PQgetvalue(res, i, 12));
+      tpl->accept_message = str_dup(PQgetvalue(res, i, 13));
+      tpl->completion_message = str_dup(PQgetvalue(res, i, 14));
+      tpl->reward_obj_short = str_dup(PQgetvalue(res, i, 15));
+      tpl->reward_obj_name = str_dup(PQgetvalue(res, i, 16));
+      tpl->reward_obj_long = str_dup(PQgetvalue(res, i, 17));
+      tpl->reward_obj_wear_flags = atoi(PQgetvalue(res, i, 18));
+      tpl->reward_obj_extra_flags = atoi(PQgetvalue(res, i, 19));
+      tpl->reward_obj_weight = atoi(PQgetvalue(res, i, 20));
+      tpl->reward_obj_item_apply = atoi(PQgetvalue(res, i, 21));
+   }
+
+   quest_template_count = nrows;
+   log_f("DB: loaded %d quest template%s.", nrows, nrows == 1 ? "" : "s");
+   PQclear(res);
 }
 
 #endif /* HAVE_LIBPQ */
