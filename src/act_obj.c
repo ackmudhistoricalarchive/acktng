@@ -1038,44 +1038,6 @@ void do_give(CHAR_DATA *ch, char *argument)
              * trigger_handler( ch, obj, TRIGGER_DROP );
              */
 
-#ifdef LOTS
-            /* Interesting LOTS teaser here...this is how I run my individual quest system */
-            if ((IS_NPC(victim)) && (str_cmp(victim->pIndexData->guilds, "")))
-            {
-               char questbuf[MSL];
-
-               sprintf(questbuf, "%s%s%d", ch->name, victim->pIndexData->guilds, 2);
-               if ((get_quest(questbuf) != NULL) && (get_iquest(ch, questbuf) != NULL))
-               {
-                  /* this code was suggested by Drylock@AR, to handle creating a hash key from a
-                   * string + integer */
-                  unsigned int iHash;
-                  {
-                     char *area_key;
-                     iHash = 0;
-                     area_key = questbuf;
-                     while (*area_key)
-                        iHash = iHash * 33U + tolower(*area_key++);
-                     iHash = iHash % MAX_KEY_HASH;
-                  }
-                  if (obj->value[8] == iHash)
-                  {
-                     resolve_quest(ch, questbuf);
-                     end_quest(get_quest(questbuf), ch->name);
-                     save_quests();
-                  }
-                  else
-                  {
-                     char saybuf[MSL];
-                     sprintf(saybuf, "Well, thanks, %s, but I really didn't need %s",
-                             PERS(ch, victim), obj->short_descr);
-                     do_say(victim, saybuf);
-                     do_drop(victim, "treasure");
-                  }
-               }
-            }
-#endif
-
             if ((quest || auto_quest) && IS_NPC(victim) && victim == quest_mob &&
                 obj == quest_object)
             {
