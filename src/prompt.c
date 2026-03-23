@@ -120,6 +120,10 @@ void bust_a_prompt(DESCRIPTOR_DATA *d)
 
    ch = d->character;
 
+   /* v2 WebSocket clients have no use for a text prompt */
+   if (d->websocket_active)
+      return;
+
    /*
     * if editing a note, show a REAL simple prompt ;P
     */
