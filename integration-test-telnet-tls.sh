@@ -22,9 +22,14 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SRC_DIR="$SCRIPT_DIR/src"
 AREA_DIR="$SCRIPT_DIR/area"
-PLAYER_DIR="$SCRIPT_DIR/player"
 RUN_SECONDS=2
 LOG_FILE="/tmp/mud-integration-test-telnet-tls-$$.log"
+
+# Isolated scratch directory so the server never touches production data.
+TEST_DIR=$(mktemp -d)
+TEST_AREA_DIR="$TEST_DIR/area"
+TEST_DATA_DIR="$TEST_DIR/data"
+TEST_PLAYER_DIR="$TEST_DIR/player"
 
 TLS_TEST_PLAYER="Tlstelnet"
 TLS_TEST_PASSWORD="tlspass"
@@ -52,7 +57,7 @@ fi
 # ---------------------------------------------------------------------------
 remove_player_file() {
     _lower=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-    rm -f "$PLAYER_DIR/$(echo "$_lower" | cut -c1)/$_lower"
+    rm -f "$TEST_PLAYER_DIR/$(echo "$_lower" | cut -c1)/$_lower"
 }
 
 # ---------------------------------------------------------------------------
@@ -64,6 +69,7 @@ cleanup() {
         wait "$MUD_PID" 2>/dev/null || true
     fi
     rm -f "$LOG_FILE" "$TLS_CERT" "$TLS_KEY"
+    rm -rf "$TEST_DIR"
 }
 trap cleanup EXIT
 
@@ -92,18 +98,24 @@ if ! (cd "$SRC_DIR" && make ack); then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 3: remove any leftover player files.
+# Step 3: set up isolated test environment.
+# ---------------------------------------------------------------------------
+. "$SCRIPT_DIR/test-helpers.sh"
+setup_test_environment
+
+# ---------------------------------------------------------------------------
+# Step 4: remove any leftover player files.
 # ---------------------------------------------------------------------------
 remove_player_file "$TLS_TEST_PLAYER"
 
 # ---------------------------------------------------------------------------
-# Step 4: launch
+# Step 5: launch from the isolated area directory.
 #
 # $PLAIN_PORT is a required positional arg (plain telnet listener).
 # $TLS_PORT mirrors production port 9890 (Mudlet "connect securely").
 # ---------------------------------------------------------------------------
 echo "integration-test-telnet-tls: starting MUD on plain $PLAIN_PORT / TLS $TLS_PORT..."
-(cd "$AREA_DIR" && ../src/ack "$PLAIN_PORT" \
+(cd "$TEST_AREA_DIR" && "$SRC_DIR/ack" "$PLAIN_PORT" \
     --tls-port "$TLS_PORT" --tls-cert "$TLS_CERT" --tls-key "$TLS_KEY" \
     --http-port "$HTTP_PORT") >"$LOG_FILE" 2>&1 &
 MUD_PID=$!
@@ -111,7 +123,7 @@ MUD_PID=$!
 echo "integration-test-telnet-tls: MUD started (PID $MUD_PID), waiting for boot..."
 
 # ---------------------------------------------------------------------------
-# Step 5: wait until the server is ready (max 90 s).
+# Step 6: wait until the server is ready (max 90 s).
 # ---------------------------------------------------------------------------
 boot_wait=0
 while [ "$boot_wait" -lt 90 ]; do

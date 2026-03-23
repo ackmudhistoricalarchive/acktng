@@ -18,9 +18,14 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SRC_DIR="$SCRIPT_DIR/src"
 AREA_DIR="$SCRIPT_DIR/area"
-PLAYER_DIR="$SCRIPT_DIR/player"
 RUN_SECONDS=2
 LOG_FILE="/tmp/mud-integration-test-telnet-$$.log"
+
+# Isolated scratch directory so the server never touches production data.
+TEST_DIR=$(mktemp -d)
+TEST_AREA_DIR="$TEST_DIR/area"
+TEST_DATA_DIR="$TEST_DIR/data"
+TEST_PLAYER_DIR="$TEST_DIR/player"
 
 TEST_PLAYER="Telnetrat"
 TEST_PASSWORD="telnetpass"
@@ -42,7 +47,7 @@ fi
 # ---------------------------------------------------------------------------
 remove_player_file() {
     _lower=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-    rm -f "$PLAYER_DIR/$(echo "$_lower" | cut -c1)/$_lower"
+    rm -f "$TEST_PLAYER_DIR/$(echo "$_lower" | cut -c1)/$_lower"
 }
 
 # ---------------------------------------------------------------------------
@@ -54,6 +59,7 @@ cleanup() {
         wait "$MUD_PID" 2>/dev/null || true
     fi
     rm -f "$LOG_FILE"
+    rm -rf "$TEST_DIR"
 }
 trap cleanup EXIT
 
@@ -67,24 +73,27 @@ if ! (cd "$SRC_DIR" && make ack); then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 2: remove any leftover player files (idempotent test runs).
+# Step 2: set up isolated test environment.
+# ---------------------------------------------------------------------------
+. "$SCRIPT_DIR/test-helpers.sh"
+setup_test_environment
+
+# ---------------------------------------------------------------------------
+# Step 3: remove any leftover player files (idempotent test runs).
 # ---------------------------------------------------------------------------
 remove_player_file "$TEST_PLAYER"
 
 # ---------------------------------------------------------------------------
-# Step 3: launch
-#
-# $TEST_PORT is the plain-telnet port (mirrors production port 8890).
-# No --tls-port here; TLS is tested separately.
+# Step 4: launch from the isolated area directory.
 # ---------------------------------------------------------------------------
 echo "integration-test-telnet: starting MUD on port $TEST_PORT (plain telnet)..."
-(cd "$AREA_DIR" && ../src/ack "$TEST_PORT" --http-port "$HTTP_PORT") >"$LOG_FILE" 2>&1 &
+(cd "$TEST_AREA_DIR" && "$SRC_DIR/ack" "$TEST_PORT" --http-port "$HTTP_PORT") >"$LOG_FILE" 2>&1 &
 MUD_PID=$!
 
 echo "integration-test-telnet: MUD started (PID $MUD_PID), waiting for boot..."
 
 # ---------------------------------------------------------------------------
-# Step 4: wait until the server is ready (game loop started, max 90 s).
+# Step 5: wait until the server is ready (game loop started, max 90 s).
 # ---------------------------------------------------------------------------
 boot_wait=0
 while [ "$boot_wait" -lt 90 ]; do
