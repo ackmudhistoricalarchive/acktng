@@ -55,7 +55,7 @@ zone. Boss quest; carries an equipment reward.
 - short: `@@Wan academy graduate's field badge@@N`
 - name: `academy graduate field badge`
 - long: `A small enameled badge marking completion of Academy field training lies here.`
-- wear_flags: 128 (wrist), extra_flags: 2097344, weight: 1, item_apply: 512
+- wear_flags: 2048 (wrist), extra_flags: 2097344, weight: 1, item_apply: 512
 
 Accept/completion message in the voice of the Academy Guide framing it as the
 graduation exercise before heading into the wider world.
@@ -93,7 +93,7 @@ ID 161 (chain final):
 - short: `@@ya gnoll raider's bone talisman@@N`
 - name: `gnoll raider bone talisman`
 - long: `A crude talisman of gnoll bone and dried sinew taken from a desert raider lies here.`
-- wear_flags: 128 (wrist), extra_flags: 2097344, weight: 2, item_apply: 256
+- wear_flags: 2048 (wrist), extra_flags: 2097344, weight: 2, item_apply: 256
 
 ID 163 (boss):
 - short: `@@yKhepri's scarab signet@@N`
@@ -140,7 +140,7 @@ ID 166 (chain final):
 - short: `@@ga drowned-root revenant binding cord@@N`
 - name: `drowned root revenant binding cord`
 - long: `A length of rootwood cord etched with banishment marks, taken from the revenant's binding, lies here.`
-- wear_flags: 128 (wrist), extra_flags: 2097344, weight: 2, item_apply: 65536
+- wear_flags: 2048 (wrist), extra_flags: 2097344, weight: 2, item_apply: 65536
 
 ID 169 (chain final + boss):
 - short: `@@pColwen Dast's official signet@@N`
@@ -190,7 +190,7 @@ ID 171 (chain final):
 - short: `@@ya scarab-shell ward token@@N`
 - name: `scarab shell ward token`
 - long: `A flat disc of polished scarab shell engraved with a ward against swarm-creatures lies here.`
-- wear_flags: 128 (wrist), extra_flags: 2097344, weight: 2, item_apply: 65536
+- wear_flags: 2048 (wrist), extra_flags: 2097344, weight: 2, item_apply: 65536
 
 ID 176 (boss):
 - short: `@@yHigh Priest Amenhotep's ceremonial ankh@@N`
@@ -202,7 +202,7 @@ ID 177 (chain final + boss):
 - short: `@@ythe Eternal Pharaoh's cartouche seal@@N`
 - name: `eternal pharaoh cartouche seal`
 - long: `A heavy golden cartouche bearing Pharaoh Ramesses's royal seal, torn from his burial wrappings, lies here.`
-- wear_flags: 2097344, extra_flags: 136315072, weight: 5, item_apply: 1536
+- wear_flags: 128 (neck), extra_flags: 136315072, weight: 5, item_apply: 1536
 
 ---
 
