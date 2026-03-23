@@ -58,11 +58,11 @@ no separate certificate is needed.
 |-------------|-------|
 | Protocol    | Plain WebSocket (`ws://`) |
 | Clients     | nginx proxy on the same host forwarding from a public WSS port |
-| Server arg  | `--ws-loopback 18890` (binds to 127.0.0.1 only) |
+| Server arg  | `--ws-loopback 18890` (binds to 0.0.0.0) |
 | TLS?        | No.  TLS is terminated by the proxy, not the server. |
 
-`--ws-loopback` binds only to the loopback interface (127.0.0.1).  It is
-retained for deployments that route WSS through an nginx reverse proxy.
+`--ws-loopback` binds to all interfaces (0.0.0.0) so that an nginx reverse
+proxy on a separate host (e.g. the web container) can reach it over the LAN.
 Deployments without nginx can use `--wss-port` instead and omit
 `--ws-loopback` entirely.
 

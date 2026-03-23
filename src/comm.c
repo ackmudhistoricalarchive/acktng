@@ -408,8 +408,8 @@ int main(int argc, char **argv)
    /* else: no positional arg – port stays -1, flag_start stays 1 */
 
    /*
-    * Parse --ws-loopback <port>: open a second socket bound to 127.0.0.1
-    * for WebSocket connections forwarded by a TLS proxy (e.g. nginx).
+    * Parse --ws-loopback <port>: open a second socket for WebSocket
+    * connections forwarded by a TLS proxy (e.g. nginx).
     */
    {
       int i;
@@ -490,7 +490,7 @@ int main(int argc, char **argv)
       if (port > 0)
          control = init_socket(port, INADDR_ANY);
       if (ws_port > 0)
-         control_ws = init_socket(ws_port, INADDR_LOOPBACK);
+         control_ws = init_socket(ws_port, INADDR_ANY);
       if (http_port > 0)
          control_http = init_socket(http_port, INADDR_ANY);
       if (tls_port > 0 || sniff_port > 0 || wss_port > 0)
