@@ -1,12 +1,15 @@
 # CLAUDE.md — ACK!MUD TNG 4.3.1
 
-## Design Document Requirement
+## Design Proposal Requirement
 
-For any implementation task that involves `src/` changes, you MUST first deliver a design document describing the proposed changes — including the problem, approach, affected files, and any trade-offs — and discuss it with the user. Do NOT begin implementation until the user has explicitly signed off on the design document. No code changes, no file creation, no prototyping until approval is given. Design documents should be placed in `docs/proposals/`.
+For any task that is not a bugfix, you MUST first deliver a design proposal describing the proposed changes — including the problem, approach, affected files, and any trade-offs — and discuss it with the user. Do NOT begin implementation until the user has explicitly signed off on the proposal. No code changes, no file creation, no prototyping until approval is given.
 
-Changes that do not touch `src/` (e.g. lore files, area files, documentation) do NOT require a design document and may be implemented directly. Bugfixes to `src/` also do NOT require a design document and may be implemented directly.
+Bugfixes do NOT require a proposal and may be implemented directly.
 
-Once a proposal has been fully implemented, move it from `docs/proposals/` to `docs/proposals/completed/`. Active proposals (pending discussion or implementation) live in `docs/proposals/`. Completed proposals (fully implemented) live in `docs/proposals/completed/`.
+Proposals live in `docs/proposals/` within this repository:
+- `docs/proposals/open/` — active proposals pending discussion or implementation
+- `docs/proposals/completed/` — proposals that have been fully implemented
+- `docs/proposals/rejected/` — proposals that were rejected
 
 When writing any document (design proposals, lore files, area plans, etc.), write and deliver it in sections rather than producing the entire document at once. Continue through all sections without waiting for confirmation between them, unless the user asks for a different approach.
 
@@ -109,6 +112,8 @@ All tests must be run locally. Never run tests on remote systems or trigger remo
 ## Branch and PR Policy
 
 **NEVER push directly to main. All changes must go through a branch and pull request — no exceptions.** Always create a feature/fix branch, push it, and open a PR. This applies to all changes including documentation, area files, and bugfixes.
+
+**A PR may NEVER be merged unless all GitHub CI checks pass.** If CI fails, fix the failure before merging. No overrides, no exceptions.
 
 ## Pre-Push Requirements
 
