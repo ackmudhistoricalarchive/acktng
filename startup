@@ -13,7 +13,7 @@
 #        8890  — plain telnet  (always plain, never TLS)
 #        9890  — telnet-TLS    (Mudlet "connect securely"; requires cert/key)
 #        9891  — WebSocket+TLS (wss://; native WSS; requires cert/key)
-#        18890 — WebSocket     (ws://, loopback only; for nginx proxy deployments)
+#        18890 — WebSocket     (ws://, all interfaces; for nginx proxy deployments)
 #
 # The process runs in the foreground.  Use a process supervisor (systemd,
 # screen, tmux, etc.) to keep it running in the background.
@@ -22,7 +22,7 @@
 #   8890  plain telnet   passed as the positional port argument
 #   9890  TLS telnet     --tls-port
 #   9891  WSS            --wss-port (native WebSocket+TLS; binds to 0.0.0.0)
-#   18890 WebSocket      --ws-loopback (binds to 127.0.0.1; for nginx proxy)
+#   18890 WebSocket      --ws-loopback (binds to 0.0.0.0; for nginx proxy)
 #
 # TLS certificates are read from the standard Let's Encrypt location:
 #   /etc/letsencrypt/live/ackmud.com/fullchain.pem  (certificate + chain)

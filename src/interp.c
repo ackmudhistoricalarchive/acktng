@@ -58,22 +58,13 @@ bool fLogAll = FALSE;
  * CMD_WAIT       - command that introduces wait state; queued while ch->wait > 0
  * CMD_NINJA_WAIT - CMD_NINJA + CMD_WAIT
  */
-#define CMD(name, fun, pos, lvl, log, type, show)                                                  \
-   {                                                                                               \
-      name, fun, pos, lvl, log, type, show, 0                                                      \
-   }
+#define CMD(name, fun, pos, lvl, log, type, show) {name, fun, pos, lvl, log, type, show, 0}
 #define CMD_NINJA(name, fun, pos, lvl, log, type, show)                                            \
-   {                                                                                               \
-      name, fun, pos, lvl, log, type, show, CMD_FLAG_NINJA_OK                                      \
-   }
+   {name, fun, pos, lvl, log, type, show, CMD_FLAG_NINJA_OK}
 #define CMD_WAIT(name, fun, pos, lvl, log, type, show)                                             \
-   {                                                                                               \
-      name, fun, pos, lvl, log, type, show, CMD_FLAG_WAIT                                          \
-   }
+   {name, fun, pos, lvl, log, type, show, CMD_FLAG_WAIT}
 #define CMD_NINJA_WAIT(name, fun, pos, lvl, log, type, show)                                       \
-   {                                                                                               \
-      name, fun, pos, lvl, log, type, show, CMD_FLAG_NINJA_OK | CMD_FLAG_WAIT                      \
-   }
+   {name, fun, pos, lvl, log, type, show, CMD_FLAG_NINJA_OK | CMD_FLAG_WAIT}
 
 /*
  * Command table.

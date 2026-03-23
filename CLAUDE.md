@@ -134,7 +134,7 @@ Run these in order. Do not push if any step fails. Fix the failure first.
 
 The CI workflow enforces these same checks on every PR. A PR will not be merged if any check fails.
 
-**clang-format version mismatch warning:** CI runs clang-format 18 (Ubuntu 24.04). If your local system has a different version (e.g., 19), `make format` may produce output that passes locally but fails in CI. Only format files you actually changed — do not run `make format` across the entire codebase. If CI lint fails on files you didn't modify, the formatting difference is a version mismatch, not your problem. To match CI exactly, install `clang-format-18` and use it directly.
+**All lint issues must be fixed before pushing** — not just those in files you changed. If `make lint` fails on any file, run `make format` to fix the entire codebase, then verify `make lint` passes cleanly. Do not push while any lint error exists regardless of which file contains it.
 
 ## Repository Structure
 
