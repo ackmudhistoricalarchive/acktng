@@ -1,6 +1,0 @@
-level 0
-keywords ooc
----
-Syntax: ooc <message>
-
-Sends a message on the out-of-character channel.

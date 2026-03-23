@@ -1,6 +1,0 @@
-level -1
-keywords build_stop
----
-BUILD HELP : STOP
------------------
-Typing STOP will cause you to leave the Builder.

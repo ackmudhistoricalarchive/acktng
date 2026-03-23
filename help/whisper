@@ -1,6 +1,0 @@
-level 0
-keywords whisper
----
-Syntax: whisper <player> <message>
-
-Sends a quiet message to someone in the same room.

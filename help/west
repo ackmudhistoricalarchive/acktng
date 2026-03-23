@@ -1,6 +1,0 @@
-level 0
-keywords west
----
-Syntax: west
-
-Moves one room west, if an exit exists.

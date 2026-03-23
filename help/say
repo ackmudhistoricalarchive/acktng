@@ -1,6 +1,0 @@
-level 0
-keywords say
----
-Syntax: say <message>
-
-Speaks to everyone in the current room.

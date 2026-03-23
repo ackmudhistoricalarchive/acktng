@@ -3,7 +3,7 @@
  *
  * Unit tests for:
  *   1. spec_lookup (spec_mudschool_guide registration)
- *   2. collect_help_context (help/shelp keyword injection)
+ *   2. collect_help_context (help/shelp keyword injection via DB stubs)
  */
 
 #include <assert.h>
@@ -17,15 +17,77 @@
 #include "npc_dialogue.h"
 
 /* -------------------------------------------------------------------------
- * Globals required by linked modules.
+ * Stub DB help tables.  Tests populate these before calling the function
+ * under test.  db_help_lookup / db_shelp_lookup do a case-insensitive
+ * prefix match: the stored keyword must START WITH the query argument.
  * -------------------------------------------------------------------------*/
 
-HELP_DATA *first_help = NULL;
-HELP_DATA *last_help = NULL;
-HELP_DATA *first_shelp = NULL;
-HELP_DATA *last_shelp = NULL;
+typedef struct
+{
+   const char *kw;
+   const char *text;
+} stub_help_entry;
 
-/* Minimal string-function stubs (avoids linking the full strfuns.o). */
+static stub_help_entry stub_help_table[8];
+static int stub_help_n = 0;
+static stub_help_entry stub_shelp_table[8];
+static int stub_shelp_n = 0;
+
+int db_help_lookup(const char *keyword, int level, char *kw_out, size_t kw_sz, char *text_out,
+                   size_t text_sz, int *level_out)
+{
+   int i;
+   size_t kwlen = strlen(keyword);
+   (void)level;
+   for (i = 0; i < stub_help_n; i++)
+   {
+      if (strncasecmp(stub_help_table[i].kw, keyword, kwlen) == 0)
+      {
+         snprintf(kw_out, kw_sz, "%s", stub_help_table[i].kw);
+         snprintf(text_out, text_sz, "%s", stub_help_table[i].text);
+         if (level_out)
+            *level_out = 0;
+         return 1;
+      }
+   }
+   return 0;
+}
+
+int db_shelp_lookup(const char *keyword, int level, char *kw_out, size_t kw_sz, char *text_out,
+                    size_t text_sz, int *level_out)
+{
+   int i;
+   size_t kwlen = strlen(keyword);
+   (void)level;
+   for (i = 0; i < stub_shelp_n; i++)
+   {
+      if (strncasecmp(stub_shelp_table[i].kw, keyword, kwlen) == 0)
+      {
+         snprintf(kw_out, kw_sz, "%s", stub_shelp_table[i].kw);
+         snprintf(text_out, text_sz, "%s", stub_shelp_table[i].text);
+         if (level_out)
+            *level_out = 0;
+         return 1;
+      }
+   }
+   return 0;
+}
+
+int db_lore_collect_by_flags(long npc_flags, int max_results,
+                             void (*result_cb)(const char *keyword, const char *body,
+                                               void *userdata),
+                             void *userdata)
+{
+   (void)npc_flags;
+   (void)max_results;
+   (void)result_cb;
+   (void)userdata;
+   return 0;
+}
+
+/* -------------------------------------------------------------------------
+ * Minimal string-function stubs (avoids linking the full strfuns.o).
+ * -------------------------------------------------------------------------*/
 bool str_prefix(const char *astr, const char *bstr)
 {
    if (!astr || !bstr)
@@ -99,8 +161,9 @@ char *one_argument(char *argument, char *arg_first)
    return argument;
 }
 
-/* Minimal spec_lookup/rev_spec_lookup stubs (avoids linking the full special.o
- * which references ~50 spec functions not needed by these tests). */
+/* -------------------------------------------------------------------------
+ * Minimal spec_lookup/rev_spec_lookup stubs.
+ * -------------------------------------------------------------------------*/
 SPEC_FUN *spec_lookup(const char *name)
 {
    if (!str_cmp(name, "spec_mudschool_guide"))
@@ -115,7 +178,9 @@ char *rev_spec_lookup(void *func)
    return "(none)";
 }
 
-/* Stubs for functions referenced by npc_dialogue.c but not called in tests */
+/* -------------------------------------------------------------------------
+ * Stubs for functions referenced by npc_dialogue.c but not called in tests.
+ * -------------------------------------------------------------------------*/
 void do_say(CHAR_DATA *ch, char *arg)
 {
    (void)ch;
@@ -136,23 +201,10 @@ bool is_fighting(CHAR_DATA *ch)
    return FALSE;
 }
 
-/* Stub for spec_mudschool_guide — the real impl calls npc_dialogue_dispatch
- * which drags in pthreads/HTTP; the stub satisfies spec_lookup's table. */
 bool spec_mudschool_guide(CHAR_DATA *ch)
 {
    (void)ch;
    return FALSE;
-}
-
-/* -------------------------------------------------------------------------
- * Helper: build a HELP_DATA node on the stack.
- * -------------------------------------------------------------------------*/
-static void make_help(HELP_DATA *h, const char *keyword, const char *text)
-{
-   memset(h, 0, sizeof(*h));
-   h->keyword = (char *)keyword;
-   h->text = (char *)text;
-   h->level = 0;
 }
 
 /* -------------------------------------------------------------------------
@@ -171,34 +223,32 @@ static void test_spec_lookup_finds_mudschool_guide(void)
  * -------------------------------------------------------------------------*/
 static void test_collect_help_context_skips_greet(void)
 {
-   HELP_DATA h;
    char out[256];
 
-   make_help(&h, "MOVEMENT", "Type north/south/east/west to move.");
-   h.next = NULL;
-   first_help = &h;
+   stub_help_table[0].kw = "MOVEMENT";
+   stub_help_table[0].text = "Type north/south/east/west to move.";
+   stub_help_n = 1;
 
    npc_dialogue_test_collect_help_context("[GREET] Zorkin has arrived.", out, sizeof(out));
    assert(out[0] == '\0');
-   first_help = NULL;
+   stub_help_n = 0;
    printf("PASS test_collect_help_context_skips_greet\n");
 }
 
 /* -------------------------------------------------------------------------
- * Test 6: collect_help_context matches a keyword in first_help.
+ * Test 6: collect_help_context matches a keyword in the help table.
  * -------------------------------------------------------------------------*/
 static void test_collect_help_context_matches_help_keyword(void)
 {
-   HELP_DATA h;
    char out[512];
 
-   make_help(&h, "MOVEMENT", "Type north/south/east/west to move around the world.");
-   h.next = NULL;
-   first_help = &h;
+   stub_help_table[0].kw = "MOVEMENT";
+   stub_help_table[0].text = "Type north/south/east/west to move around the world.";
+   stub_help_n = 1;
 
    npc_dialogue_test_collect_help_context("How do I use movement commands?", out, sizeof(out));
    assert(strstr(out, "[HELP: MOVEMENT]") != NULL);
-   first_help = NULL;
+   stub_help_n = 0;
    printf("PASS test_collect_help_context_matches_help_keyword\n");
 }
 
@@ -207,19 +257,18 @@ static void test_collect_help_context_matches_help_keyword(void)
  * -------------------------------------------------------------------------*/
 static void test_collect_help_context_deduplicates(void)
 {
-   HELP_DATA h;
    char out[512];
    int count;
    const char *p;
 
-   make_help(&h, "COMBAT", "Type kill <target> to begin fighting.");
-   h.next = NULL;
-   first_help = &h;
+   stub_help_table[0].kw = "COMBAT";
+   stub_help_table[0].text = "Type kill <target> to begin fighting.";
+   stub_help_n = 1;
 
    /* Message has two words that both prefix-match "COMBAT" */
    npc_dialogue_test_collect_help_context("combat combat fighting", out, sizeof(out));
 
-   /* Count occurrences of "[HELP: COMBAT]" — should be exactly 1 */
+   /* Count occurrences of "[HELP:" — should be exactly 1 */
    count = 0;
    p = out;
    while ((p = strstr(p, "[HELP:")) != NULL)
@@ -228,26 +277,25 @@ static void test_collect_help_context_deduplicates(void)
       p++;
    }
    assert(count == 1);
-   first_help = NULL;
+   stub_help_n = 0;
    printf("PASS test_collect_help_context_deduplicates\n");
 }
 
 /* -------------------------------------------------------------------------
- * Test 8: collect_help_context searches first_shelp when help has no match.
+ * Test 8: collect_help_context searches shelp when help has no match.
  * -------------------------------------------------------------------------*/
 static void test_collect_help_context_searches_shelp(void)
 {
-   HELP_DATA sh;
    char out[512];
 
-   first_help = NULL;
-   make_help(&sh, "STAFF", "Staff commands");
-   sh.next = NULL;
-   first_shelp = &sh;
+   stub_help_n = 0;
+   stub_shelp_table[0].kw = "STAFF";
+   stub_shelp_table[0].text = "Staff commands";
+   stub_shelp_n = 1;
 
    npc_dialogue_test_collect_help_context("What staff commands exist?", out, sizeof(out));
    assert(strstr(out, "[HELP: STAFF]") != NULL);
-   first_shelp = NULL;
+   stub_shelp_n = 0;
    printf("PASS test_collect_help_context_searches_shelp\n");
 }
 
@@ -256,16 +304,15 @@ static void test_collect_help_context_searches_shelp(void)
  * -------------------------------------------------------------------------*/
 static void test_collect_help_context_respects_cap(void)
 {
-   HELP_DATA h;
    char out[32]; /* very small cap */
 
-   make_help(&h, "SCORE", "The score command shows your statistics.");
-   h.next = NULL;
-   first_help = &h;
+   stub_help_table[0].kw = "SCORE";
+   stub_help_table[0].text = "The score command shows your statistics.";
+   stub_help_n = 1;
 
    npc_dialogue_test_collect_help_context("show score statistics", out, sizeof(out));
    assert(strlen(out) < sizeof(out));
-   first_help = NULL;
+   stub_help_n = 0;
    printf("PASS test_collect_help_context_respects_cap\n");
 }
 

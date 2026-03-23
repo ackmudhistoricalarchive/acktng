@@ -1,6 +1,0 @@
-level 0
-keywords ask
----
-Syntax: ask <target> <message>
-
-Sends speech to one target in the room.

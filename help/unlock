@@ -1,6 +1,0 @@
-level 0
-keywords unlock
----
-Syntax: unlock <object|door>
-
-Unlocks a door/container with a key.

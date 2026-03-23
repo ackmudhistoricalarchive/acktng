@@ -1,6 +1,0 @@
-level 0
-keywords beep
----
-Syntax: beep <player>
-
-Sends an audible/page notification to another player.

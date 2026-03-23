@@ -1,8 +1,0 @@
-level -1
-keywords build_nedit
----
-BUILD HELP : NEDIT
-------------------
-The NEDIT command places you in No EDITing mode.
-Syntax:  NEDIT
-This sets your editing mode to nothing.  

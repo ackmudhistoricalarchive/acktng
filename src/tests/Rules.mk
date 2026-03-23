@@ -5,7 +5,6 @@ UNIT_TEST_TARGETS = \
 	tests/unit-test-skills-chi \
 	tests/unit-test-act-flags \
 	tests/unit-test-area-format \
-	tests/unit-test-help-format \
 	tests/unit-test-sha256 \
 	tests/unit-test-update \
 	tests/unit-test-comm \
@@ -328,10 +327,10 @@ tests/unit-test-special: $(OBJDIR)/tests/test_special.o $(OBJDIR)/special.unit-t
 	$(CC) -Wl,--gc-sections -o $@ $^ $(L_FLAGS)
 
 $(OBJDIR)/npc_dialogue.unit-test.o: npc_dialogue.c headers/ack.h
-	$(CC) -c $(C_FLAGS) -DUNIT_TEST_NPC_DIALOGUE -ffunction-sections -fdata-sections -o $(OBJDIR)/npc_dialogue.unit-test.o npc_dialogue.c
+	$(CC) -c $(C_FLAGS) -DUNIT_TEST_NPC_DIALOGUE -DHAVE_LIBPQ -ffunction-sections -fdata-sections -o $(OBJDIR)/npc_dialogue.unit-test.o npc_dialogue.c
 
 $(OBJDIR)/tests/test_npc_dialogue_help.o: tests/test_npc_dialogue_help.c headers/ack.h
-	$(CC) -c $(C_FLAGS) -ffunction-sections -fdata-sections -I. -Itests/headers -o $(OBJDIR)/tests/test_npc_dialogue_help.o tests/test_npc_dialogue_help.c
+	$(CC) -c $(C_FLAGS) -DHAVE_LIBPQ -ffunction-sections -fdata-sections -I. -Itests/headers -o $(OBJDIR)/tests/test_npc_dialogue_help.o tests/test_npc_dialogue_help.c
 
 tests/unit-test-npc-dialogue-help: $(OBJDIR)/tests/test_npc_dialogue_help.o $(OBJDIR)/npc_dialogue.unit-test.o
 	rm -f $@
@@ -351,10 +350,6 @@ tests/unit-test-act-flags: $(OBJDIR)/tests/test_act_flags.o
 	$(CC) -o $@ $^ $(L_FLAGS)
 
 tests/unit-test-area-format: $(OBJDIR)/tests/test_area_format.o
-	rm -f $@
-	$(CC) -o $@ $^ $(L_FLAGS)
-
-tests/unit-test-help-format: $(OBJDIR)/tests/test_help_format.o
 	rm -f $@
 	$(CC) -o $@ $^ $(L_FLAGS)
 

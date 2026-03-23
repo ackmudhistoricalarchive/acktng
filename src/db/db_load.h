@@ -7,9 +7,6 @@
  *   db_load_clans();           -- politics_data.diplomacy / treasury
  *   db_load_socials();         -- social_table[]
  *   db_load_areas_from_db();   -- areas + rooms + mobs + objects + resets …
- *   db_load_helps_from_db();   -- first_help / last_help
- *   db_load_shelps_from_db();  -- first_shelp / last_shelp
- *   db_load_lore_from_db();    -- first_lore / last_lore
  *   db_load_bans();            -- first_ban / last_ban
  *   db_load_rulers();          -- first_ruler_list / last_ruler_list
  *   db_load_brands();          -- first_brand / last_brand
@@ -23,11 +20,6 @@
 
 /* World content -----------------------------------------------------------*/
 void db_load_areas_from_db(void);
-
-/* Help / shelp / lore directories ----------------------------------------*/
-void db_load_helps_from_db(void);
-void db_load_shelps_from_db(void);
-void db_load_lore_from_db(void);
 
 /* Runtime data files ------------------------------------------------------*/
 void db_load_bans(void);

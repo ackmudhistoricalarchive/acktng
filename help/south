@@ -1,6 +1,0 @@
-level 0
-keywords south
----
-Syntax: south
-
-Moves one room south, if an exit exists.

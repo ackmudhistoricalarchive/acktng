@@ -1,6 +1,0 @@
-level 0
-keywords drink
----
-Syntax: drink <container>
-
-Drinks from a drink container or fountain.

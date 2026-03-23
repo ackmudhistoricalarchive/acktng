@@ -1,6 +1,0 @@
-level 0
-keywords write
----
-Syntax: write <object>
-
-Writes on a writable object such as paper/note.

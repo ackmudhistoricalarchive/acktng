@@ -1,6 +1,0 @@
-level 0
-keywords fill
----
-Syntax: fill <container> <source>
-
-Fills a container from a liquid source.

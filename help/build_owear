@@ -1,8 +1,0 @@
-level -1
-keywords build_owear
----
-OBJECT WEAR FLAGS:
-Take		Finger		Neck		Body		Head
-Legs		Feet		Hands		Arms		Shield
-About		Waist		Wrist		Hold		Face
-Ear		Clutch

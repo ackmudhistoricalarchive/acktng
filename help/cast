@@ -1,6 +1,0 @@
-level 0
-keywords cast
----
-Syntax: cast <spell> [target]
-
-Casts a known spell, optionally on a target.

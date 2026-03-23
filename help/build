@@ -1,8 +1,0 @@
-level 2
-keywords build
----
-Syntax: build
-        build <subcommand>
-
-Enter and use the building command set for area editing.
-Use @@Yhelp build_summary@@N for the full list of builder subcommands.

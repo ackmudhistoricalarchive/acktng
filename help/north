@@ -1,6 +1,0 @@
-level 0
-keywords north
----
-Syntax: north
-
-Moves one room north, if an exit exists.

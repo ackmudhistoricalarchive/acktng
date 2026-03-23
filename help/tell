@@ -1,6 +1,0 @@
-level 0
-keywords tell
----
-Syntax: tell <player> <message>
-
-Sends a private message to another player.

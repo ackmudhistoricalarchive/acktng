@@ -336,20 +336,6 @@ struct stance_app_type
 };
 
 /*
- * Help table types.
- */
-struct help_data
-{
-   bool is_free; /* Ramias:for run-time checks of LINK/UNLINK */
-   HELP_DATA *next;
-   HELP_DATA *prev;
-   sh_int level;
-   long flags;
-   char *keyword;
-   char *text;
-};
-
-/*
  * Shop types.
  */
 struct shop_data

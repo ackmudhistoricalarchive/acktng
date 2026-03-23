@@ -1,6 +1,0 @@
-level 0
-keywords wake
----
-Syntax: wake [target]
-
-Wakes yourself or another sleeping character.

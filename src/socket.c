@@ -59,6 +59,9 @@
 #include <unistd.h> /* for execl */
 #include "globals.h"
 #include "cursor.h"
+#ifdef HAVE_LIBPQ
+#include "db/db_help.h"
+#endif
 
 bool command_has_wait_flag args((CHAR_DATA * ch, const char *argument));
 
@@ -354,8 +357,6 @@ static void base64_encode(const unsigned char *in, size_t in_len, char *out, siz
 void queue_login_greeting(DESCRIPTOR_DATA *d)
 {
    char buf[MAX_STRING_LENGTH];
-   HELP_DATA *pHelp;
-   extern HELP_DATA *first_help;
 
    if (d == NULL || d->greeting_sent)
       return;
@@ -381,15 +382,20 @@ void queue_login_greeting(DESCRIPTOR_DATA *d)
 
    sprintf(buf, "greeting%d", number_range(1, 6));
 
-   for (pHelp = first_help; pHelp != NULL; pHelp = pHelp->next)
-      if (!str_cmp(pHelp->keyword, buf))
+#ifdef HAVE_LIBPQ
+   {
+      char kw_buf[256];
+      char text_buf[16384];
+      int lev_out;
+      if (db_help_lookup(buf, 100, kw_buf, sizeof(kw_buf), text_buf, sizeof(text_buf), &lev_out))
       {
-         if (pHelp->text[0] == '.')
-            write_to_buffer(d, pHelp->text + 1, 0);
+         if (text_buf[0] == '.')
+            write_to_buffer(d, text_buf + 1, 0);
          else
-            write_to_buffer(d, pHelp->text, 0);
-         break;
+            write_to_buffer(d, text_buf, 0);
       }
+   }
+#endif
 }
 
 static void get_request_path(const char *request, char *out, size_t outsz)

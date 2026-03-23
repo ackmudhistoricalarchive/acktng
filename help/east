@@ -1,6 +1,0 @@
-level 0
-keywords east
----
-Syntax: east
-
-Moves one room east, if an exit exists.

@@ -1,6 +1,0 @@
-level 0
-keywords pagelength
----
-Syntax: pagelength <lines>
-
-Sets output pagination length for long text.

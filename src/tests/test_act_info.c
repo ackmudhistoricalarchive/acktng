@@ -6,15 +6,10 @@
 #include "globals.h"
 #include "config.h"
 
-HELP_DATA *first_lore = NULL;
-HELP_DATA *last_lore = NULL;
-
 int find_race_index_by_name(const char *name);
 int score_should_show_invasion_rewards(CHAR_DATA *ch);
 void parse_shelp_query(char *argument, char *search_term, size_t search_term_size,
                        char *full_argument, size_t full_argument_size);
-HELP_DATA *find_best_lore(const char *argument, CHAR_DATA *ch, long npc_flags,
-                          bool (*match_fn)(const char *, const char *));
 long get_room_lore_flags(CHAR_DATA *ch);
 CHAR_DATA *who_get_char(DESCRIPTOR_DATA *d);
 
@@ -184,45 +179,6 @@ static void test_score_invasion_rewards_visibility(void)
    assert(score_should_show_invasion_rewards(&player) == 1);
 }
 
-static void test_find_best_lore_selects_by_flags(void)
-{
-   HELP_DATA entry_default = {0};
-   HELP_DATA entry_midgaard = {0};
-   HELP_DATA entry_midgaard_human = {0};
-
-   entry_default.keyword = "topic";
-   entry_default.text = "default text";
-   entry_default.flags = 0;
-   entry_default.next = &entry_midgaard;
-
-   entry_midgaard.keyword = "topic";
-   entry_midgaard.text = "midgaard text";
-   entry_midgaard.flags = LORE_FLAG_MIDGAARD;
-   entry_midgaard.next = &entry_midgaard_human;
-
-   entry_midgaard_human.keyword = "topic";
-   entry_midgaard_human.text = "midgaard human text";
-   entry_midgaard_human.flags = LORE_FLAG_MIDGAARD | LORE_FLAG_HUMAN;
-   entry_midgaard_human.next = NULL;
-
-   first_lore = &entry_default;
-
-   /* npc_flags=0 returns only the unflagged default entry */
-   assert(find_best_lore("topic", NULL, 0, str_cmp) == &entry_default);
-
-   /* npc_flags=MIDGAARD returns the most specific matching entry */
-   assert(find_best_lore("topic", NULL, LORE_FLAG_MIDGAARD, str_cmp) == &entry_midgaard);
-
-   /* npc_flags=MIDGAARD|HUMAN returns the most specific matching entry */
-   assert(find_best_lore("topic", NULL, LORE_FLAG_MIDGAARD | LORE_FLAG_HUMAN, str_cmp) ==
-          &entry_midgaard_human);
-
-   /* npc_flags with a flag not in any entry falls back to default */
-   assert(find_best_lore("topic", NULL, LORE_FLAG_KIESS, str_cmp) == &entry_default);
-
-   first_lore = NULL;
-}
-
 static void test_pc_lore_flags_are_always_zero(void)
 {
    CHAR_DATA pc = {0};
@@ -367,7 +323,6 @@ int main(void)
    test_parse_shelp_query_handles_multi_word_arguments();
    test_parse_shelp_query_unwraps_quoted_multi_word_arguments();
    test_score_invasion_rewards_visibility();
-   test_find_best_lore_selects_by_flags();
    test_pc_lore_flags_are_always_zero();
    test_npc_lore_flags_come_from_room();
    test_who_get_char_filters_non_playing();

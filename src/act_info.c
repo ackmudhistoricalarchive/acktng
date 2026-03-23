@@ -44,6 +44,9 @@
 #ifndef CONFIG_H
 #include "config.h"
 #endif
+#ifdef HAVE_LIBPQ
+#include "db/db_help.h"
+#endif
 
 extern bool deathmatch;
 
@@ -194,15 +197,14 @@ void do_rhelp(CHAR_DATA *ch, char *argument)
    send_to_char(buf, ch);
 
    {
-      HELP_DATA *pHelp;
-      for (pHelp = first_help; pHelp != NULL; pHelp = pHelp->next)
-      {
-         if (!str_cmp(race_table[i].race_title, pHelp->keyword))
-         {
-            send_to_char(pHelp->text[0] == '.' ? pHelp->text + 1 : pHelp->text, ch);
-            break;
-         }
-      }
+#ifdef HAVE_LIBPQ
+      char kw_buf[256];
+      char text_buf[16384];
+      int lev_out;
+      if (db_help_lookup(race_table[i].race_title, get_trust(ch), kw_buf, sizeof(kw_buf), text_buf,
+                         sizeof(text_buf), &lev_out))
+         send_to_char(text_buf[0] == '.' ? text_buf + 1 : text_buf, ch);
+#endif
    }
 
    strcpy(sendBuf, "");
@@ -2189,60 +2191,37 @@ void do_weather(CHAR_DATA *ch, char *argument)
 
 void do_help(CHAR_DATA *ch, char *argument)
 {
-   HELP_DATA *pHelp;
-
    if (argument[0] == '\0')
       argument = "summary";
 
-   for (pHelp = first_help; pHelp != NULL; pHelp = pHelp->next)
+#ifdef HAVE_LIBPQ
    {
-      if (pHelp->level > get_trust(ch))
-         continue;
+      char kw_buf[256];
+      char text_buf[16384];
+      int lev_out = 0;
 
-      if (!str_cmp(argument, pHelp->keyword))
+      if (!db_help_lookup(argument, get_trust(ch), kw_buf, sizeof(kw_buf), text_buf,
+                          sizeof(text_buf), &lev_out))
       {
-         if (pHelp->level >= 0 && str_cmp(argument, "staffmotd"))
-         {
-            send_to_char(pHelp->keyword, ch);
-            send_to_char("\n\r", ch);
-         }
-
-         /*
-          * Strip leading '.' to allow initial blanks.
-          */
-         if (pHelp->text[0] == '.')
-            send_to_char(pHelp->text + 1, ch);
-         else
-            send_to_char(pHelp->text, ch);
+         send_to_char("No help on that word.\n\r", ch);
          return;
       }
-   }
 
-   for (pHelp = first_help; pHelp != NULL; pHelp = pHelp->next)
-   {
-      if (pHelp->level > get_trust(ch))
-         continue;
-
-      if (!str_prefix(argument, pHelp->keyword))
+      if (lev_out >= 0 && str_cmp(argument, "staffmotd"))
       {
-         if (pHelp->level >= 0 && str_cmp(argument, "staffmotd"))
-         {
-            send_to_char(pHelp->keyword, ch);
-            send_to_char("\n\r", ch);
-         }
-
-         /*
-          * Strip leading '.' to allow initial blanks.
-          */
-         if (pHelp->text[0] == '.')
-            send_to_char(pHelp->text + 1, ch);
-         else
-            send_to_char(pHelp->text, ch);
-         return;
+         send_to_char(kw_buf, ch);
+         send_to_char("\n\r", ch);
       }
-   }
 
+      /* Strip leading '.' to allow initial blanks. */
+      if (text_buf[0] == '.')
+         send_to_char(text_buf + 1, ch);
+      else
+         send_to_char(text_buf, ch);
+   }
+#else
    send_to_char("No help on that word.\n\r", ch);
+#endif
    return;
 }
 
@@ -5241,68 +5220,40 @@ void do_whois(CHAR_DATA *ch, char *argument)
 
 void do_shelp(CHAR_DATA *ch, char *argument)
 {
-   HELP_DATA *pHelp;
    char search_term[MAX_INPUT_LENGTH];
    char full_argument[MAX_INPUT_LENGTH];
 
    parse_shelp_query(argument, search_term, sizeof(search_term), full_argument,
                      sizeof(full_argument));
 
-   for (pHelp = first_shelp; pHelp != NULL; pHelp = pHelp->next)
+#ifdef HAVE_LIBPQ
    {
-      if (pHelp->level > get_trust(ch))
-         continue;
+      char kw_buf[256];
+      char text_buf[16384];
+      int lev_out = 0;
 
-      if (full_argument[0] != '\0' && !str_cmp(full_argument, pHelp->keyword))
+      if (!db_shelp_lookup(full_argument, get_trust(ch), kw_buf, sizeof(kw_buf), text_buf,
+                           sizeof(text_buf), &lev_out))
       {
-         if (pHelp->level >= 0)
-         {
-            send_to_char(pHelp->keyword, ch);
-            send_to_char("\n\r", ch);
-         }
-
-         if (pHelp->text[0] == '.')
-            send_to_char(pHelp->text + 1, ch);
-         else
-            send_to_char(pHelp->text, ch);
+         send_to_char("No help on that word.\n\r", ch);
          return;
       }
-   }
 
-   for (pHelp = first_shelp; pHelp != NULL; pHelp = pHelp->next)
-   {
-      if (pHelp->level > get_trust(ch))
-         continue;
-
-      if (!str_prefix(full_argument, pHelp->keyword))
+      if (lev_out >= 0)
       {
-         if (pHelp->level >= 0)
-         {
-            send_to_char(pHelp->keyword, ch);
-            send_to_char("\n\r", ch);
-         }
-
-         if (pHelp->text[0] == '.')
-            send_to_char(pHelp->text + 1, ch);
-         else
-            send_to_char(pHelp->text, ch);
-         return;
+         send_to_char(kw_buf, ch);
+         send_to_char("\n\r", ch);
       }
-   }
 
+      if (text_buf[0] == '.')
+         send_to_char(text_buf + 1, ch);
+      else
+         send_to_char(text_buf, ch);
+   }
+#else
    send_to_char("No help on that word.\n\r", ch);
+#endif
    return;
-}
-
-static int count_bits(long v)
-{
-   int count = 0;
-   while (v)
-   {
-      count += v & 1;
-      v >>= 1;
-   }
-   return count;
 }
 
 long get_room_lore_flags(CHAR_DATA *ch)
@@ -5321,73 +5272,26 @@ long get_room_lore_flags(CHAR_DATA *ch)
    return flags;
 }
 
-HELP_DATA *find_best_lore(const char *argument, CHAR_DATA *ch, long npc_flags,
-                          bool (*match_fn)(const char *, const char *))
-{
-   HELP_DATA *pHelp;
-   HELP_DATA *best = NULL;
-   int best_score = -1;
-
-   for (pHelp = first_lore; pHelp != NULL; pHelp = pHelp->next)
-   {
-      /* str_cmp and str_prefix return FALSE (0) on match */
-      if (match_fn(argument, pHelp->keyword))
-         continue;
-
-      /* Entry flags must be a subset of the NPC's flags */
-      if (pHelp->flags != 0 && (pHelp->flags & npc_flags) != pHelp->flags)
-         continue;
-
-      int score = count_bits(pHelp->flags & npc_flags);
-      if (pHelp->flags == 0 && best == NULL)
-      {
-         /* Default (unflagged) entry -- lowest priority */
-         best = pHelp;
-         best_score = 0;
-      }
-      else if (score > best_score)
-      {
-         best = pHelp;
-         best_score = score;
-      }
-   }
-   return best;
-}
-
-static void show_lore_entry(HELP_DATA *pHelp, CHAR_DATA *ch)
-{
-   if (pHelp->text[0] == '.')
-      send_to_char(pHelp->text + 1, ch);
-   else
-      send_to_char(pHelp->text, ch);
-}
-
 void do_lore(CHAR_DATA *ch, char *argument)
 {
-   HELP_DATA *pHelp;
-   long npc_flags;
-
    if (argument[0] == '\0')
       argument = "lore";
 
-   /* PCs always see only the default (unflagged) lore entry */
-   npc_flags = IS_NPC(ch) ? get_room_lore_flags(ch) : 0;
-
-   /* Exact match pass */
-   pHelp = find_best_lore(argument, ch, npc_flags, str_cmp);
-   if (pHelp != NULL)
+#ifdef HAVE_LIBPQ
    {
-      show_lore_entry(pHelp, ch);
-      return;
+      /* PCs always see only the default (unflagged) lore entry */
+      long npc_flags = IS_NPC(ch) ? get_room_lore_flags(ch) : 0;
+      char text_buf[16384];
+      if (db_lore_lookup(argument, npc_flags, text_buf, sizeof(text_buf)))
+      {
+         if (text_buf[0] == '.')
+            send_to_char(text_buf + 1, ch);
+         else
+            send_to_char(text_buf, ch);
+         return;
+      }
    }
-
-   /* Prefix match pass */
-   pHelp = find_best_lore(argument, ch, npc_flags, str_prefix);
-   if (pHelp != NULL)
-   {
-      show_lore_entry(pHelp, ch);
-      return;
-   }
+#endif
 
    send_to_char("No lore on that subject.\n\r", ch);
    return;
