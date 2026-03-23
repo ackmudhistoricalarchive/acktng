@@ -948,7 +948,7 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
       if (control >= 0 && FD_ISSET(control, &in_set))
          new_descriptor(control, FALSE, TRUE, FALSE);
       if (control_ws >= 0 && FD_ISSET(control_ws, &in_set))
-         new_descriptor(control_ws, FALSE, FALSE, FALSE);
+         new_descriptor(control_ws, FALSE, FALSE, TRUE);
       if (control_tls >= 0 && FD_ISSET(control_tls, &in_set))
          new_descriptor(control_tls, TRUE, FALSE, FALSE);
       if (control_sniff >= 0 && FD_ISSET(control_sniff, &in_set))
