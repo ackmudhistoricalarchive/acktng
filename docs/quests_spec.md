@@ -89,13 +89,13 @@ These are bit flags built using the `BIT_N` macro where `BIT_0 = 0`, `BIT_1 = 1`
 |---|---|---|
 | `ITEM_MAGIC` | 64 | BIT_7 |
 | `ITEM_NODROP` | 128 | BIT_8 |
-| `ITEM_QUEST_REWARD` | 2097152 | BIT_22 — must be set on all quest reward objects |
+| `vamp` (`ITEM_QUEST_REWARD`) | 2097152 | BIT_22 — must be set on all quest reward objects; named `vamp` in `buildtab.c` |
 | `ITEM_LOOT` | 67108864 | BIT_27 |
 | `ITEM_BOSS` | 134217728 | BIT_28 |
 
 Common combinations used in quest reward items:
-- `2097344` = ITEM_MAGIC + ITEM_NODROP + ITEM_QUEST_REWARD (non-boss quest rewards)
-- `136315072` = ITEM_MAGIC + ITEM_NODROP + ITEM_QUEST_REWARD + ITEM_BOSS (boss-kill quest rewards)
+- `2097344` = ITEM_MAGIC + ITEM_NODROP + vamp (non-boss quest rewards)
+- `136315072` = ITEM_MAGIC + ITEM_NODROP + vamp + ITEM_BOSS (boss-kill quest rewards)
 
 ## Currently loadable static quests (`1.prop`-`105.prop`)
 

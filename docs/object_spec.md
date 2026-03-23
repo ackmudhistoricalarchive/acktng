@@ -139,7 +139,7 @@ Second integer on the header flags line. Defined in `src/config.h`:
 | 262144 | `ITEM_MYTHIC` | Mythic rarity |
 | 524288 | `ITEM_LEGENDARY` | Legendary rarity |
 | 1048576 | `ITEM_RARE` | Rare rarity |
-| 2097152 | `ITEM_QUEST_REWARD` | Quest reward item — set by the quest system on inline reward objects; required on all quest reward items. Named **`vamp`** in `buildtab.c` (legacy string name used by the area file parser and admin tools) |
+| 2097152 | `vamp` | Quest reward item (`ITEM_QUEST_REWARD` in `config.h`) — set by the quest system on inline reward objects; should not be authored in area files |
 | 4194304 | `ITEM_NOLOOT` | Cannot be looted from corpse |
 | 8388608 | `ITEM_NOSAC` | Cannot be sacrificed |
 | 16777216 | `ITEM_UNIQUE` | Unique (only one per player) |
