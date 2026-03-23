@@ -1894,8 +1894,10 @@ void write_to_buffer(DESCRIPTOR_DATA *d, const char *txt, int length)
 
    /*
     * Initial \n\r if needed.
+    * WebSocket clients skip this: the leading \n\r is for telnet to
+    * separate output from the prompt; for WS it renders as a blank line.
     */
-   if (d->outtop == 0 && !d->fcommand)
+   if (d->outtop == 0 && !d->fcommand && !d->websocket_active)
    {
       d->outbuf[0] = '\n';
       d->outbuf[1] = '\r';
