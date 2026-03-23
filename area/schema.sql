@@ -537,12 +537,40 @@ CREATE TABLE IF NOT EXISTS keep_chest_items (
 );
 
 -- -----------------------------------------------------------------------
--- 4.31 schema_version
+-- 4.31 quest_templates
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS quest_templates (
+    id                       INTEGER PRIMARY KEY,
+    title                    TEXT    NOT NULL,
+    prerequisite_template_id INTEGER NOT NULL DEFAULT -1,
+    type                     INTEGER NOT NULL DEFAULT 0,
+    num_targets              INTEGER NOT NULL DEFAULT 0,
+    target_vnums             INTEGER[] NOT NULL DEFAULT '{}',
+    kill_needed              INTEGER NOT NULL DEFAULT 0,
+    min_level                INTEGER NOT NULL DEFAULT 0,
+    max_level                INTEGER NOT NULL DEFAULT 170,
+    offerer_vnum             INTEGER NOT NULL DEFAULT 0,
+    reward_gold              INTEGER NOT NULL DEFAULT 0,
+    reward_qp                INTEGER NOT NULL DEFAULT 0,
+    reward_exp               INTEGER NOT NULL DEFAULT 0,
+    accept_message           TEXT    NOT NULL DEFAULT '',
+    completion_message       TEXT    NOT NULL DEFAULT '',
+    reward_obj_short         TEXT    NOT NULL DEFAULT '',
+    reward_obj_name          TEXT    NOT NULL DEFAULT '',
+    reward_obj_long          TEXT    NOT NULL DEFAULT '',
+    reward_obj_wear_flags    INTEGER NOT NULL DEFAULT 0,
+    reward_obj_extra_flags   INTEGER NOT NULL DEFAULT 0,
+    reward_obj_weight        INTEGER NOT NULL DEFAULT 0,
+    reward_obj_item_apply    INTEGER NOT NULL DEFAULT 0
+);
+
+-- -----------------------------------------------------------------------
+-- 4.32 schema_version
 -- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS schema_version (
     version    INTEGER                  NOT NULL,
     applied_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
-INSERT INTO schema_version (version) VALUES (6);
+INSERT INTO schema_version (version) VALUES (7);
 
 COMMIT;
