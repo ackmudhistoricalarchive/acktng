@@ -10,7 +10,6 @@ password hash, and places the character in ROOM_VNUM_SCHOOL (4900).
 
 import os
 import sys
-import warnings
 
 PLAYER_DIR = sys.argv[1]
 NAME = sys.argv[2]
@@ -18,10 +17,12 @@ PASSWORD = sys.argv[3]
 
 # Generate DES crypt hash using the name as salt.
 # This mirrors the MUD's: pwdnew = crypt(argument, ch->name);
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore", DeprecationWarning)
-    import crypt
-    pwd_hash = crypt.crypt(PASSWORD, NAME)
+import ctypes
+import ctypes.util
+_libcrypt = ctypes.CDLL(ctypes.util.find_library("crypt") or "libcrypt.so")
+_libcrypt.crypt.restype = ctypes.c_char_p
+_libcrypt.crypt.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
+pwd_hash = _libcrypt.crypt(PASSWORD.encode(), NAME.encode()).decode()
 
 # Compute the canonical file name (cap_nocol: all lowercase, first letter upper).
 name_canonical = NAME[0].upper() + NAME[1:].lower()

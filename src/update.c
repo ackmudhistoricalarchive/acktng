@@ -35,6 +35,7 @@
 #include "sentinel.h"
 #include <signal.h>
 #include "npc_dialogue.h"
+#include "socket.h"
 
 bool should_abort_for_checkpoint_timeout(int usage_now, int checkpoint, int threshold,
                                          bool disable_abort)
