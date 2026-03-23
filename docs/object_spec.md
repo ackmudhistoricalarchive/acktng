@@ -126,10 +126,10 @@ Second integer on the header flags line. Defined in `src/config.h`:
 | 32 | `ITEM_INVIS` | Invisible object |
 | 64 | `ITEM_MAGIC` | Magical object |
 | 128 | `ITEM_NODROP` | Cannot be dropped |
-| 82 | `ITEM_BLESS` | Blessed object |
+| 256 | `ITEM_BLESS` | Blessed object |
 | 512 | `ITEM_ANTI_GOOD` | Good-aligned characters cannot use |
-| 315 | `ITEM_ANTI_EVIL` | Evil-aligned characters cannot use |
-| 840 | `ITEM_ANTI_NEUTRAL` | Neutral-aligned characters cannot use |
+| 1024 | `ITEM_ANTI_EVIL` | Evil-aligned characters cannot use |
+| 2048 | `ITEM_UNUSED_ANTI_NEUTRAL` | **Intentionally unused** — anti-neutral alignment was removed; do not set |
 | 4096 | `ITEM_NOREMOVE` | Cannot be removed once equipped |
 | 8192 | `ITEM_INVENTORY` | Part of mob inventory |
 | 16384 | `ITEM_NOSAVE` | Not saved to player file |
@@ -139,6 +139,7 @@ Second integer on the header flags line. Defined in `src/config.h`:
 | 262144 | `ITEM_MYTHIC` | Mythic rarity |
 | 524288 | `ITEM_LEGENDARY` | Legendary rarity |
 | 1048576 | `ITEM_RARE` | Rare rarity |
+| 2097152 | `ITEM_QUEST_REWARD` | Quest reward item — set by the quest system on inline reward objects; required on all quest reward items |
 | 4194304 | `ITEM_NOLOOT` | Cannot be looted from corpse |
 | 8388608 | `ITEM_NOSAC` | Cannot be sacrificed |
 | 16777216 | `ITEM_UNIQUE` | Unique (only one per player) |
@@ -173,10 +174,10 @@ Third integer on the header flags line. Defined in `src/buildtab.c` (`tab_wear_f
 | 32 | `beak` | Beak slot |
 | 64 | `ear` | Ear slot |
 | 128 | `neck` | Neck slot |
-| 82 | `wings` | Wings slot |
+| 256 | `wings` | Wings slot |
 | 512 | `shoulders` | Shoulders slot |
-| 315 | `arms` | Arms slot |
-| 840 | `wrist` | Wrist slot |
+| 1024 | `arms` | Arms slot |
+| 2048 | `wrist` | Wrist slot |
 | 4096 | `hands` | Hands slot |
 | 8192 | `finger` | Finger slot |
 | 16384 | `claws` | Claws slot |
@@ -223,10 +224,10 @@ Fourth integer on the header flags line. Defined in `src/buildtab.c` (`tab_item_
 | 32 | `sneak` | Sneak |
 | 64 | `hide` | Hide |
 | 128 | `prot` | Protection |
-| 82 | `enhanced` | Enhanced combat abilities |
+| 256 | `enhanced` | Enhanced combat abilities |
 | 512 | `det_mag` | Detect magic |
-| 315 | `det_hid` | Detect hidden |
-| 840 | `det_evil` | Detect evil |
+| 1024 | `det_hid` | Detect hidden |
+| 2048 | `det_evil` | Detect evil |
 | 4096 | `pass_door` | Pass door |
 | 8192 | `det_poison` | Detect poison |
 | 16384 | `fly` | Flying |
