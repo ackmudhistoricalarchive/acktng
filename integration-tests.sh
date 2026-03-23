@@ -19,11 +19,11 @@
 # never modified.
 #
 # Prerequisites:
-#   - PostgreSQL running locally (port 5432)
-#   - The 'ack' database user exists  (CREATE ROLE ack WITH LOGIN)
+#   - PostgreSQL installed and running locally (port 5432)
 #   - sudo access to run commands as the 'postgres' OS user
-#   - ACK_DB_PASSWORD env var (default: acktest) must match the ack user's
-#     password in PostgreSQL
+#   - ACK_DB_PASSWORD env var (default: acktest) used as the ack role's password
+#
+# The 'ack' database role is created automatically if it does not exist.
 #
 # Exit codes:
 #   0 - all integration tests passed
@@ -113,11 +113,28 @@ if ! (cd "$SRC_DIR" && make ack); then
 fi
 
 # ---------------------------------------------------------------------------
-# Step 2: create test database, apply schema, grant privileges.
+# Step 2: verify PostgreSQL is reachable and ensure the ack role exists.
+# ---------------------------------------------------------------------------
+echo "integration-tests: checking PostgreSQL..."
+if ! pg_as_postgres "$PSQL -c '\\q'" 2>/dev/null; then
+    echo "integration-tests: FAILED - cannot connect to PostgreSQL (is it installed and running?)"
+    exit 1
+fi
+
+if ! pg_as_postgres "$PSQL -tAc \"SELECT 1 FROM pg_roles WHERE rolname='$DB_USER'\"" 2>/dev/null | grep -q 1; then
+    echo "integration-tests: creating database role '$DB_USER'..."
+    if ! pg_as_postgres "$PSQL -c \"CREATE ROLE $DB_USER WITH LOGIN PASSWORD '$DB_PASS'\"" 2>/dev/null; then
+        echo "integration-tests: FAILED - could not create role '$DB_USER'"
+        exit 1
+    fi
+fi
+
+# ---------------------------------------------------------------------------
+# Step 3: create test database, apply schema, grant privileges.
 # ---------------------------------------------------------------------------
 echo "integration-tests: creating test database '$TEST_DB'..."
 if ! pg_as_postgres "$CREATEDB -O $DB_USER $TEST_DB" 2>/dev/null; then
-    echo "integration-tests: FAILED - createdb failed (is PostgreSQL running?)"
+    echo "integration-tests: FAILED - createdb failed"
     exit 1
 fi
 DB_CREATED=1
@@ -133,7 +150,7 @@ printf 'GRANT ALL ON ALL TABLES IN SCHEMA public TO %s;\nGRANT ALL ON ALL SEQUEN
     "$DB_USER" "$DB_USER" | pg_as_postgres "$PSQL -d $TEST_DB -q" 2>/dev/null || true
 
 # ---------------------------------------------------------------------------
-# Step 3: load fixture data (MUD user connects via TCP with password).
+# Step 4: load fixture data (MUD user connects via TCP with password).
 # ---------------------------------------------------------------------------
 echo "integration-tests: loading fixture data..."
 if ! PGPASSWORD="$DB_PASS" "$PSQL" -h localhost -U "$DB_USER" \
@@ -150,7 +167,7 @@ printf 'host=localhost dbname=%s user=%s password=%s\n' \
 export ACK_DB_CONF="$TEST_DB_CONF"
 
 # ---------------------------------------------------------------------------
-# Step 4: run all four integration tests in parallel.
+# Step 5: run all four integration tests in parallel.
 # ---------------------------------------------------------------------------
 echo "integration-tests: launching WebSocket, Telnet, TLS, and WSS tests in parallel..."
 
@@ -172,7 +189,7 @@ TEST3_PID=$!
 TEST4_PID=$!
 
 # ---------------------------------------------------------------------------
-# Step 5: wait for all four and collect results.
+# Step 6: wait for all four and collect results.
 # ---------------------------------------------------------------------------
 FAIL=0
 
