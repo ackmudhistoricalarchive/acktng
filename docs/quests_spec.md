@@ -9,6 +9,7 @@ This document specifies the static quest file format currently used by ACK and c
 - The parser ignores blank lines, comment lines beginning with `#`, and leading/trailing whitespace around each significant line.
 - Repository snapshot: `105` quest files exist in `quests/`, all in the loadable range `1-105`.
 - Additional quest templates (IDs 106–158) are stored directly in the `quest_templates` database table and have no corresponding `.prop` files. They follow the same field semantics documented below.
+- The current maximum quest template ID in the database is **158**. New quests added after the `.prop` file era go directly into `quest_templates`; do not create new `.prop` files.
 
 ## File format (`.prop`)
 
@@ -87,12 +88,14 @@ These are bit flags built using the `BIT_N` macro where `BIT_0 = 0`, `BIT_1 = 1`
 | Flag | Value | Notes |
 |---|---|---|
 | `ITEM_MAGIC` | 64 | BIT_7 |
+| `ITEM_NODROP` | 128 | BIT_8 |
+| `vamp` (`ITEM_QUEST_REWARD`) | 2097152 | BIT_22 — must be set on all quest reward objects; named `vamp` in `buildtab.c` |
 | `ITEM_LOOT` | 67108864 | BIT_27 |
 | `ITEM_BOSS` | 134217728 | BIT_28 |
 
 Common combinations used in quest reward items:
-- `1048768` = ITEM_MAGIC + ITEM_NODROP + ITEM_RARE (non-boss quest rewards)
-- `135266496` = ITEM_MAGIC + ITEM_NODROP + ITEM_RARE + ITEM_BOSS (boss-kill quest rewards)
+- `2097344` = ITEM_MAGIC + ITEM_NODROP + vamp (non-boss quest rewards)
+- `136315072` = ITEM_MAGIC + ITEM_NODROP + vamp + ITEM_BOSS (boss-kill quest rewards)
 
 ## Currently loadable static quests (`1.prop`-`105.prop`)
 
