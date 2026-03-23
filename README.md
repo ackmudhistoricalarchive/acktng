@@ -15,21 +15,22 @@ This is the current release of Release 1 from ackmud.com:8890. The code is kept 
 1. [Quick Start](#quick-start)
 2. [Repository Layout](#repository-layout)
 3. [Architecture Overview](#architecture-overview)
-4. [Startup Sequence](#startup-sequence)
-5. [Main Game Loop](#main-game-loop)
-6. [Command Processing](#command-processing)
-7. [Update Cycle](#update-cycle)
-8. [Core Data Structures](#core-data-structures)
-9. [Combat System](#combat-system)
-10. [Magic & Spell System](#magic--spell-system)
-11. [Skills System](#skills-system)
-12. [World Loading (Database)](#world-loading-database)
-13. [Area File Format](#area-file-format)
-14. [Save & Load System](#save--load-system)
-15. [Invasion System](#invasion-system)
-16. [Memory Management](#memory-management)
-17. [Building & Testing](#building--testing)
-18. [Open PR Validation Workflow](#open-pr-validation-workflow)
+4. [Ecosystem Architecture](#ecosystem-architecture)
+5. [Startup Sequence](#startup-sequence)
+6. [Main Game Loop](#main-game-loop)
+7. [Command Processing](#command-processing)
+8. [Update Cycle](#update-cycle)
+9. [Core Data Structures](#core-data-structures)
+10. [Combat System](#combat-system)
+11. [Magic & Spell System](#magic--spell-system)
+12. [Skills System](#skills-system)
+13. [World Loading (Database)](#world-loading-database)
+14. [Area File Format](#area-file-format)
+15. [Save & Load System](#save--load-system)
+16. [Invasion System](#invasion-system)
+17. [Memory Management](#memory-management)
+18. [Building & Testing](#building--testing)
+19. [Open PR Validation Workflow](#open-pr-validation-workflow)
 
 ---
 
@@ -131,6 +132,214 @@ The server is a single-process, `select()`-based event loop. All game state live
 │  │ (boot load)  │    │ (player I/O) │    │ (string mem) │   │
 │  └──────────────┘    └──────────────┘    └──────────────┘   │
 └─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Ecosystem Architecture
+
+ACK!TNG is deployed as a multi-service system across three LAN hosts.
+
+### Hosts
+
+| Host | IP | Role |
+|---|---|---|
+| Web host | 192.168.1.113 | nginx (TLS termination + reverse proxy), Python web server |
+| Game host | 192.168.1.103 | acktng game server + legacy game instances |
+| DB host | 192.168.1.112 | PostgreSQL 17 |
+
+### Services
+
+| Service | Repo | Tech | Port(s) | Description |
+|---|---|---|---|---|
+| nginx | `web/nginx/` | nginx | :80, :443, :18890, :8891, :8892 | TLS termination, HTTPS reverse proxy, WSS proxy to game host |
+| web server | `web/` | Python stdlib HTTP | :8080 | Serves ackmud.com and aha.ackmud.com |
+| acktng | `acktng/src/` | C | :4000 (telnet), :18890 (WS), :18891 (TLS telnet) | ACK!TNG game server |
+| tngdb | `tngdb/` | Python FastAPI + asyncpg | configurable | Read-only HTTP API for help/shelp/lore content |
+| tng-ai | `tng-ai/` | Python FastAPI + Groq | configurable | AI NPC response service |
+| PostgreSQL | — | PostgreSQL 17 | :5432 | Central database (32 tables) |
+
+### Full System Diagram
+
+```
+  ┌──────────────────────────────────────────────────────────────────┐
+  │                    Internet / Browser                            │
+  └───────┬──────────────────────┬─────────────────┬────────────────┘
+          │ HTTPS :443           │ WSS :18890       │ WSS :8891/:8892
+          ▼                      ▼                  ▼
+  ┌──────────────────────────────────────────────────────────────────┐
+  │               nginx  (web host 192.168.1.113)                    │
+  │                                                                  │
+  │  :80         ──► 301 → HTTPS  +  /.well-known/acme-challenge/   │
+  │  :443        ──► proxy_pass → 127.0.0.1:8080  (web server)      │
+  │  :18890 SSL  ──► WS proxy   → 192.168.1.103:18890  (ACK!TNG)    │
+  │  :8891  SSL  ──► WS proxy   → 192.168.1.103:18891  (ACK! 4.3.1) │
+  │  :8892  SSL  ──► WS proxy   → 192.168.1.103:18892  (ACK! 4.2)   │
+  │                                                                  │
+  │  TLS cert: Let's Encrypt via certbot --webroot                   │
+  │  Domains:  ackmud.com, www.ackmud.com, aha.ackmud.com           │
+  └───────────────────────┬──────────────────────────────────────────┘
+                          │ localhost :8080
+                          ▼
+  ┌──────────────────────────────────────────────────────────────────┐
+  │              Python web server  (:8080)                          │
+  │              web/web_who_server.py  (stdlib ThreadingHTTPServer) │
+  │                                                                  │
+  │  Host: ackmud.com      → "AHA: World of Lore"                   │
+  │  Host: aha.ackmud.com  → "ACKmud Historical Archive"            │
+  │                                                                  │
+  │  /who   /gsgp   ──HTTP──► $ACKTNG_GAME_URL  (game HTTP API)     │
+  │  /mud           → in-browser WebSocket MUD client (JS)          │
+  │  /reference/*   → help / shelp / lore from local filesystem     │
+  │  /map           → world map template                             │
+  │  /stories       → story HTML fragments                           │
+  └──────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────┐
+  │                  Game host  (192.168.1.103)                      │
+  │                                                                  │
+  │  ┌──────────────────────────────────────────────────────────┐   │
+  │  │  acktng  (C, single-process select() loop)               │   │
+  │  │                                                          │   │
+  │  │  :4000       ← plain telnet                              │   │
+  │  │  :18890      ← plain WebSocket  (nginx adds TLS)         │   │
+  │  │  :18891      ← TLS telnet                                │   │
+  │  │  HTTP /who   → live WHO list (HTML fragment)             │   │
+  │  │  HTTP /gsgp  → live player count + leaderboards (JSON)   │   │
+  │  │  HTTP /ai    ──► tng-ai  (AI NPC dialogue)               │   │
+  │  └───────────────────────────────┬──────────────────────────┘   │
+  │                                  │ libpq                         │
+  │  ┌─────────────────────┐  ┌──────────────────────┐              │
+  │  │  ACK! 4.3.1  (C)    │  │  ACK! 4.2  (C)       │              │
+  │  │  :18891 plain WS    │  │  :18892 plain WS     │              │
+  │  └─────────────────────┘  └──────────────────────┘              │
+  └───────────────────────────────┬──────────────────────────────────┘
+                                  │ PostgreSQL wire protocol (libpq / asyncpg)
+                                  ▼
+  ┌──────────────────────────────────────────────────────────────────┐
+  │              PostgreSQL 17  (192.168.1.112:5432)                 │
+  │                                                                  │
+  │  32 tables — key groups:                                         │
+  │  Content:   areas · rooms · room_exits · mobiles · objects       │
+  │             resets · shops · mobile_specials · mob_scripts       │
+  │  Help/Lore: help_entries · shelp_entries                         │
+  │             lore_topics · lore_entries                           │
+  │  Players:   players · clans · boards · board_messages            │
+  │             keep_chests · keep_chest_items · corpses             │
+  │             quest_templates · brands · rulers                    │
+  │  System:    bans · socials · sysdata · schema_version            │
+  └──────────────┬───────────────────────────────────────────────────┘
+                 │ asyncpg (DATABASE_URL env var)
+                 ▼
+  ┌──────────────────────────────────────────────────────────────────┐
+  │              tngdb  (FastAPI + asyncpg)                          │
+  │                                                                  │
+  │  GET /helps        list / search help entries                    │
+  │  GET /helps/{id}   single help entry                             │
+  │  GET /shelps       list / search skill-help entries              │
+  │  GET /shelps/{id}  single skill-help entry                       │
+  │  GET /lores        list / search lore topics (with entries)      │
+  │  GET /lores/{id}   single lore topic                             │
+  └──────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────┐
+  │              tng-ai  (FastAPI + Groq)                            │
+  │                                                                  │
+  │  GET  /health        liveness probe                              │
+  │  POST /v1/chat       NPC dialogue: messages[] → AI response      │
+  │                      provider: groq  (pluggable registry)        │
+  └──────────────────────────────────┬───────────────────────────────┘
+                                     │ HTTPS
+                                     ▼
+                              Groq API  (cloud LLM)
+```
+
+### nginx Configuration
+
+`web/nginx/ackmud.conf` is the single nginx config for the entire system.  Install it with:
+
+```sh
+sudo cp web/nginx/ackmud.conf /etc/nginx/sites-available/ackmud.conf
+sudo ln -sf /etc/nginx/sites-available/ackmud.conf /etc/nginx/sites-enabled/ackmud.conf
+sudo rm -f /etc/nginx/conf.d/ackmud-wss.conf   # remove any old per-server config
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+#### Virtual hosts
+
+| Server block | Listen | Behaviour |
+|---|---|---|
+| HTTP catchall | `:80` | Serves ACME challenge files at `/.well-known/acme-challenge/` from `/var/www/certbot`; redirects all other requests to HTTPS. |
+| `ackmud.com` / `www.ackmud.com` | `:443 ssl` | HTTPS reverse proxy to Python web server at `127.0.0.1:8080`. Web server uses the `Host` header to distinguish this site from `aha.ackmud.com`. |
+| `aha.ackmud.com` | `:443 ssl` | Same reverse proxy to `127.0.0.1:8080`; web server serves the Historical Archive. |
+| ACK!TNG WSS | `:18890 ssl` | Secure WebSocket proxy → `http://192.168.1.103:18890`. Browser clients connect here; nginx terminates TLS and forwards plain WS to the game host. |
+| ACK! 4.3.1 WSS | `:8891 ssl` | Secure WebSocket proxy → `http://192.168.1.103:18891`. |
+| ACK! 4.2 WSS | `:8892 ssl` | Secure WebSocket proxy → `http://192.168.1.103:18892`. |
+
+#### TLS certificates
+
+Certificates are issued by Let's Encrypt via `certbot --webroot`.  The ACME challenge directory `/var/www/certbot` is shared with the nginx HTTP vhost, so renewal does not require temporarily stopping nginx.
+
+```sh
+certbot certonly --webroot --webroot-path /var/www/certbot \
+  -d ackmud.com -d www.ackmud.com -d aha.ackmud.com
+```
+
+One certificate covers all three domains.  The same `fullchain.pem` / `privkey.pem` pair is referenced by all five HTTPS/WSS server blocks.
+
+#### WebSocket proxy settings
+
+The WSS blocks include:
+
+```nginx
+proxy_http_version  1.1;
+proxy_set_header    Upgrade    $http_upgrade;
+proxy_set_header    Connection "upgrade";
+proxy_read_timeout  3600s;   # keep long-lived game connections alive
+proxy_send_timeout  3600s;
+```
+
+The 1-hour timeouts are necessary for persistent MUD sessions.
+
+### Data Flows
+
+#### Browser MUD client → game server
+
+```
+Browser
+  └─ wss://ackmud.com:18890  ──► nginx :18890 SSL
+       └─ ws://192.168.1.103:18890  ──► acktng socket.c
+            └─ WebSocket upgrade → telnet stream → game loop
+```
+
+#### Web server → game server (live player data)
+
+```
+web_who_server.py  GET /who or /gsgp
+  └─ HTTP → $ACKTNG_GAME_URL  (e.g. http://192.168.1.103:XXXX)
+       └─ acktng HTTP handler
+            /who   → renders active player list as HTML
+            /gsgp  → returns JSON: { active_players, leaderboards }
+```
+
+#### Game server → database (help/lore lookup on demand)
+
+```
+acktng  interpret() receives "help fireball"
+  └─ db_help_lookup()  in src/db/db_help.c
+       └─ libpq query → PostgreSQL 17
+            SELECT text FROM help_entries WHERE ...
+```
+
+#### Game server → AI service (NPC dialogue)
+
+```
+acktng  mob special proc fires
+  └─ HTTP POST → tng-ai /v1/chat
+       └─ tng-ai → Groq API (cloud)
+            ← AI-generated NPC response text
+       ← ChatResponse { response, model, provider }
+  └─ send_to_char() → player's terminal
 ```
 
 ---
