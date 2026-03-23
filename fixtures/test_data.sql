@@ -61,8 +61,8 @@ INSERT INTO quest_templates
      reward_gold, reward_qp, reward_exp,
      accept_message, completion_message)
 VALUES
-    (1, 'Test Quest', -1, 1, 1, '{4900}',
-     3, 1, 10, 0,
+    (1, 'Test Quest', NULL, 1, 1, '{4900}',
+     3, 1, 10, NULL,
      100, 1, 500,
      'Go defeat the test creatures.', 'Well done, adventurer.');
 

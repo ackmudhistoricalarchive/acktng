@@ -2523,15 +2523,17 @@ static int import_quest_file(const char *path, int id)
       *p = '\0';
    }
 
-   /* Format numeric strings */
+   /* Format numeric strings; use NULL for absent FK values */
    sprintf(id_str, "%d", id);
-   sprintf(prereq_str, "%d", prereq);
+   if (prereq >= 0)
+      sprintf(prereq_str, "%d", prereq);
    sprintf(type_str, "%d", type);
    sprintf(ntargets_str, "%d", ntargets);
    sprintf(kill_str, "%d", kill_needed);
    sprintf(minlv_str, "%d", minlv);
    sprintf(maxlv_str, "%d", maxlv);
-   sprintf(offerer_str, "%d", offerer);
+   if (offerer > 0)
+      sprintf(offerer_str, "%d", offerer);
    sprintf(gold_str, "%d", reward_gold);
    sprintf(qp_str, "%d", reward_qp);
    sprintf(exp_str, "%d", reward_exp);
@@ -2542,14 +2544,14 @@ static int import_quest_file(const char *path, int id)
 
    params[0] = id_str;
    params[1] = title;
-   params[2] = prereq_str;
+   params[2] = (prereq >= 0) ? prereq_str : NULL;
    params[3] = type_str;
    params[4] = ntargets_str;
    params[5] = vnums_pg;
    params[6] = kill_str;
    params[7] = minlv_str;
    params[8] = maxlv_str;
-   params[9] = offerer_str;
+   params[9] = (offerer > 0) ? offerer_str : NULL;
    params[10] = gold_str;
    params[11] = qp_str;
    params[12] = exp_str;
