@@ -1130,6 +1130,9 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
       list_who_to_output();
 
       do_look(ch, "auto");
+      /* v2 WebSocket: push initial equipment state on game entry */
+      if (d->websocket_active)
+         ws_send_equipment(d, ch);
 
       return;
    }

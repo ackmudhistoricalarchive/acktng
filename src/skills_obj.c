@@ -1,6 +1,7 @@
 #include "globals.h"
 #include "magic.h"
 #include "weapon_bond.h"
+#include "headers/socket.h"
 
 void disarm(CHAR_DATA *ch, CHAR_DATA *victim);
 int find_door(CHAR_DATA *ch, char *arg);
@@ -101,6 +102,9 @@ void disarm(CHAR_DATA *ch, CHAR_DATA *victim)
    act("$n DISARMS $N!", ch, NULL, victim, TO_NOTVICT);
 
    unequip_char(ch, obj);
+   /* v2 WebSocket: push updated equipment to disarmed player */
+   if (!IS_NPC(victim) && victim->desc && victim->desc->websocket_active)
+      ws_send_equipment(victim->desc, victim);
 
    af.type = skill_lookup("disarm");
    af.location = APPLY_NONE;
