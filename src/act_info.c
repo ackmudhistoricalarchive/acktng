@@ -1704,6 +1704,13 @@ void do_exits(CHAR_DATA *ch, char *argument)
 
 void do_score(CHAR_DATA *ch, char *argument)
 {
+   /* v2 WebSocket: send structured Score panel; skip text output */
+   if (!IS_NPC(ch) && ch->desc && ch->desc->websocket_active)
+   {
+      ws_send_score(ch->desc, ch);
+      return;
+   }
+
    /*
     * Score text has been re-formatted to look a little nicer ;)
     * * Affected by now dealt with by command 'affected'

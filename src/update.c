@@ -33,6 +33,7 @@
 #include "globals.h"
 #include "weapon_bond.h"
 #include "sentinel.h"
+#include "headers/socket.h"
 #include <signal.h>
 #include "npc_dialogue.h"
 #include "socket.h"
@@ -2133,6 +2134,8 @@ void update_handler(void)
       msdp_update();
       log_f("update: gmcp_update");
       gmcp_update();
+      log_f("update: ws_score_update");
+      ws_score_update();
       log_f("update: violence block done");
    }
 
