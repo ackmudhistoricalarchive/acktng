@@ -1,4 +1,4 @@
-# Proposal: Move Skill/Spell Definitions to Database
+# Proposal: Move Skill/Spell Definitions and Logic to Database via Effect Composition
 
 **Status:** Open
 **Date:** 2026-03-23
@@ -8,79 +8,78 @@
 
 ## Problem
 
-All skill and spell metadata is compiled directly into the game binary via two large C data files:
+All skill and spell metadata and logic is compiled directly into the game binary:
 
-- `src/spells/spell_table_data.c` (~3087 lines, ~200+ spells)
-- `src/skills/skill_table_data.c` (~3358 lines, ~300+ skills)
+- `src/spells/spell_table_data.c` (~3087 lines) — metadata for ~200+ spells
+- `src/skills/skill_table_data.c` (~3358 lines) — metadata for ~300+ skills
+- `src/spells/spell_*.c` — individual C function per spell
+- `src/skills/do_*.c` — 109 individual C files, one per skill
 
-These files are `#include`d into `const.c` to initialize `skill_table[MAX_SKILL]` — a static 999-slot array. Adding, removing, or tuning any skill or spell requires editing C source and recompiling the game. There is no runtime visibility into skill data; the web frontend and tngdb have no access to it at all.
+Adding, removing, or tuning any skill or spell requires editing C source and recompiling the game. The web frontend and tngdb have no access to skill/spell data at all.
 
 ---
 
 ## Goal
 
-Move skill/spell **metadata** (name, per-class level requirements, mana cost, beats, targeting, messages, etc.) from compiled C into PostgreSQL, loaded at boot. Spell and skill **logic** (the `do_*` and `spell_*` C functions) stays in C — this proposal does not touch those.
+Move both skill/spell **metadata** (name, per-class levels, mana cost, etc.) and **logic** (effects) from C into PostgreSQL. Skills and spells are expressed as **compositions of data-driven effect primitives**. The C engine becomes a generic interpreter that executes these effect descriptions at runtime.
 
-Benefits:
-- Skills/spells can be tuned without a recompile
-- tngdb can expose a `/skills` and `/spells` endpoint for the web frontend
-- Class-level assignments become queryable (e.g. "what can a level-30 Mage cast?")
-- Reduces size of compiled binary and two ~3000-line data-only C files
+Spell and skill logic that cannot be expressed as compositions (a small set, ~8 spells) retains a registered C function as a fallback, invoked by name.
 
 ---
 
-## Background: Current Architecture
+## Effect Taxonomy
 
-### `struct skill_type` (ack.h:1268)
+A survey of all spell/skill implementations reveals the following composable effect categories:
 
-```c
-struct skill_type {
-    sh_int   flag2;                        // NORM(1) = normal skill/spell
-    char    *name;                         // "fireball", "backstab"
-    sh_int   skill_level[MAX_TOTAL_CLASS]; // required level per class; NO_USE(-999) = unavailable
-    SPELL_FUN *spell_fun;                  // function pointer (NULL/spell_null for pure skills)
-    sh_int   target;                       // TAR_* constant
-    sh_int   minimum_position;            // POS_* constant
-    sh_int  *pgsn;                         // pointer to gsn_* global variable
-    sh_int   slot;                         // #OBJECT slot number
-    sh_int   min_mana;                     // base mana cost (or energy base for skills)
-    sh_int   beats;                        // lag after use
-    bool     can_learn;
-    char    *noun_damage;
-    char    *msg_off;
-    char    *room_off;
-    sh_int   growth;                       // druid overgrowth per cast
-};
-```
+| Effect type | What it does | Examples |
+|---|---|---|
+| `DAMAGE` | Instant damage: element, formula, save | fireball, magic missile, holy wrath |
+| `DAMAGE_AOE` | Room/area damage: element, formula, flags | chain lightning, wall of fire, earthquake |
+| `HEAL` | Instant heal: resource (hp/mana/move), formula, target | cure light, refresh, group heal |
+| `HOT` | Heal-over-time affect | regen |
+| `DOT` | Damage-over-time affect | poison, black hand |
+| `APPLY_AFFECT` | Apply APPLY_* and/or AFF_* affect to character | armor, bless, sanctuary, haste, berserk |
+| `REMOVE_AFFECT` | Strip a specific affect type from target | cure blindness, cure poison, remove curse |
+| `DRAIN` | Reduce a resource (mana/move/xp), optionally heal caster | energy drain |
+| `ROOM_AFFECT` | Apply ROOM_BV_* affect to current room | rune fire, seal room, mana drain, cage |
+| `CREATE_OBJECT` | Spawn an object by vnum | create food, beacon, spring |
+| `SUMMON_CREATURE` | Summon a pet from a template or vnum | skeleton, diamond golem, gate |
+| `ENCHANT_OBJECT` | Add permanent affects to a held/worn object | enchant weapon, poison weapon |
+| `TRANSPORT` | Move a character to a destination | teleport, summon, word of recall |
+| `WAR_ATTACK` | Standard melee skill attack via `war_attack()` | kick, bash, punch, holystrike |
+| `CUSTOM` | Named C function for complex/unique logic | dispel magic, portal, animate, charm |
 
-### GSN Variables
+The vast majority of spells/skills (estimated 90%+) decompose cleanly into one or a small sequence of these types. The `CUSTOM` type handles the remainder without special-casing.
 
-Each skill/spell that needs fast lookup has a `gsn_*` global `sh_int` (e.g. `gsn_backstab`). At boot, `db.c:554` iterates the table and writes each entry's array index into the pointed-to `gsn_*` variable. Code then uses `skill_table[gsn_backstab]` directly.
+### Spells requiring `CUSTOM`
 
-### Two Non-Negotiable Constraints
+These ~8 spells have procedural logic that cannot be expressed as effect composition without losing fidelity:
 
-1. **Stable SNs.** The skill number (`sn`) — the index into `skill_table[]` — is embedded in player save data. Rows cannot be renumbered arbitrarily.
-2. **Function pointers cannot be stored in a DB.** `SPELL_FUN *spell_fun` and `sh_int *pgsn` must be resolved at boot by name lookup against a C-side registry.
+- `spell_dispel_magic` — iterative per-affect stripping with probability decay, cloak interaction, selective preserve
+- `spell_portal` — bidirectional portal creation consuming a beacon object via world search
+- `spell_animate` — animates a NPC corpse: transfers items, equips them, sets AI flags, adds follower
+- `spell_stalker` — spawns a mob scaled to target's stats with hunt AI; backfire path
+- `spell_energy_drain` — multi-resource drain (mana+move+xp) + self-heal + alignment shift + damage
+- `spell_charm_person` — follower management, extract timer, stop/add follower
+- `spell_identify` — pure information display with item-type switching
+- `spell_cage` — room affect with combo system interaction
 
 ---
 
-## Proposed Approach
+## Database Schema
 
-### Phase 1 — Schema and Data Migration (DB as source of truth, C still boots fine)
+### `skills` table
 
-Add a `skills` table to the acktng PostgreSQL schema. Populate it from the existing C data files via a one-time migration script. The game still boots from the C table — Phase 1 is additive only. This lets tngdb serve the data immediately and gives us a chance to validate the migration before cutting over.
-
-#### Database Schema
+Holds metadata (unchanged from original proposal):
 
 ```sql
 CREATE TABLE skills (
     sn            SMALLINT    PRIMARY KEY,        -- stable index, matches current array position
     name          TEXT        NOT NULL UNIQUE,
     flag2         SMALLINT    NOT NULL DEFAULT 1, -- 1=NORM
-    spell_fun     TEXT        NOT NULL DEFAULT '', -- C function name, e.g. "spell_fireball"; '' for skills
     target        SMALLINT    NOT NULL DEFAULT 0,
     min_position  SMALLINT    NOT NULL DEFAULT 0,
-    gsn_name      TEXT        NOT NULL DEFAULT '', -- C gsn variable name, e.g. "gsn_backstab"; '' if none
+    gsn_name      TEXT        NOT NULL DEFAULT '', -- C gsn variable name; '' if none
     slot          SMALLINT    NOT NULL DEFAULT 0,
     min_mana      SMALLINT    NOT NULL DEFAULT 0,
     beats         SMALLINT    NOT NULL DEFAULT 0,
@@ -89,66 +88,241 @@ CREATE TABLE skills (
     msg_off       TEXT        NOT NULL DEFAULT '',
     room_off      TEXT        NOT NULL DEFAULT '',
     growth        SMALLINT    NOT NULL DEFAULT 0,
-    class_levels  JSONB       NOT NULL DEFAULT '{}'  -- {"MAG": 5, "CLE": 10, ...}; absent = NO_USE
+    class_levels  JSONB       NOT NULL DEFAULT '{}' -- {"MAG": 5, "CLE": 10, ...}; absent = NO_USE
 );
 ```
 
-`class_levels` is a JSONB object mapping class abbreviation to minimum level. Classes absent from the object are treated as `NO_USE`. This mirrors the sparse `{LEVELS_INIT, L(CLASS_MAG, 5)}` initializer pattern.
+### `skill_effects` table
 
-#### Migration Script
+Each row is one effect in a skill/spell's composition. Multiple rows per skill, ordered by `seq`.
 
-A Python script (`acktng/tools/migrate_skills_to_db.py`) parses `spell_table_data.c` and `skill_table_data.c` and inserts rows into the `skills` table. It does not modify C source.
+```sql
+CREATE TABLE skill_effects (
+    id            SERIAL      PRIMARY KEY,
+    sn            SMALLINT    NOT NULL REFERENCES skills(sn) ON DELETE CASCADE,
+    seq           SMALLINT    NOT NULL DEFAULT 0,  -- execution order within the skill
+    effect_type   TEXT        NOT NULL,            -- see effect types below
+    params        JSONB       NOT NULL DEFAULT '{}' -- effect-type-specific parameters
+);
 
-### Phase 2 — Load `skill_table[]` from DB at Boot
+CREATE INDEX idx_skill_effects_sn ON skill_effects(sn, seq);
+```
 
-Replace the static `skill_table[MAX_SKILL]` with a dynamically allocated version loaded from the database during `boot_db()`.
+### Effect type parameter schemas
 
-#### C-Side Registries (new file: `src/db/db_skills.c`)
+Each `effect_type` defines which keys are expected in `params`:
 
-Two static arrays map string names to C symbols — populated at compile time, queried at boot:
+**`DAMAGE`**
+```json
+{
+  "element":  "FIRE",           // ELE_* constant name
+  "formula":  "level_table",    // "level_table" | "NdM" | "NdM+level*X"
+  "save":     "halve",          // "halve" | "none" | "negate"
+  "flags":    ["NO_REFLECT"]    // optional element modifier flags
+}
+```
+
+**`DAMAGE_AOE`**
+```json
+{
+  "element":  "LIGHTNING",
+  "formula":  "level_table",
+  "flags":    ["AOE_SAVES", "AOE_SKIP_GROUP"],
+  "decay":    0.20              // optional damage decay per target (chain lightning)
+}
+```
+
+**`HEAL`**
+```json
+{
+  "resource": "hp",             // "hp" | "mana" | "move"
+  "formula":  "5d8+level",
+  "cap":      50,               // optional cap
+  "target":   "victim",         // "victim" | "self" | "group"
+  "side_effects": ["cure_blind", "cure_poison"]  // optional
+}
+```
+
+**`HOT`**
+```json
+{
+  "formula":  "class_heal",     // "class_heal" | "Nd M"
+  "duration": "level/4",
+  "duration_type": "ROUND"      // "HOUR" | "ROUND"
+}
+```
+
+**`DOT`**
+```json
+{
+  "element":  "POISON",
+  "modifier": "level/5",
+  "duration": "level/3",
+  "duration_type": "ROUND",
+  "aff_flag": "AFF_POISON",     // optional AFF_* to apply alongside DOT
+  "stack":    true              // use affect_join (stacking) vs affect_to_char
+}
+```
+
+**`APPLY_AFFECT`**
+```json
+{
+  "affects": [
+    {"location": "AC",       "modifier": -20},
+    {"location": "HITROLL",  "modifier": 2},
+    {"aff_flag": "AFF_SANCTUARY"}
+  ],
+  "duration":      "level/4",
+  "duration_type": "HOUR",     // "HOUR" | "ROUND"
+  "save":          "negate"    // optional — return on save
+}
+```
+
+**`REMOVE_AFFECT`**
+```json
+{
+  "aff_flag": "AFF_BLIND"       // or "location": "APPLY_CURSE" — what to strip
+}
+```
+
+**`DRAIN`**
+```json
+{
+  "resources": ["mana", "move", "xp"],
+  "amount":    "fraction_quarter",  // "fraction_quarter" | formula
+  "heal_caster": true,
+  "alignment_shift": -200
+}
+```
+
+**`ROOM_AFFECT`**
+```json
+{
+  "room_bv":  "ROOM_BV_FIRE_RUNE",
+  "modifier": "level/5",
+  "duration": "level/4"
+}
+```
+
+**`CREATE_OBJECT`**
+```json
+{
+  "vnum":   12345,
+  "values": [{"index": 0, "formula": "level/2"}],
+  "location": "room"             // "room" | "inventory"
+}
+```
+
+**`SUMMON_CREATURE`**
+```json
+{
+  "template": "SKELETON",        // player_summon() template enum name
+  "level_formula": "class_level" // how to scale the summon
+}
+```
+
+**`ENCHANT_OBJECT`**
+```json
+{
+  "affects": [
+    {"location": "HITROLL", "modifier": "level/30+1"},
+    {"location": "DAMROLL", "modifier": "level/30+1"}
+  ],
+  "alignment_flags": true,       // apply anti-good/anti-evil based on caster alignment
+  "max_modifier_cap": true       // cap by object level
+}
+```
+
+**`TRANSPORT`**
+```json
+{
+  "dest_type": "random_teleport" // "random_teleport" | "to_caster" | "race_recall" | "direction"
+}
+```
+
+**`WAR_ATTACK`**
+```json
+{
+  "element_override": "HOLY",    // optional element added to base PHYSICAL
+  "damage_multiplier": 1.5       // optional (fleche)
+}
+```
+
+**`CUSTOM`**
+```json
+{
+  "function": "spell_dispel_magic"  // C function name in the registry
+}
+```
+
+---
+
+## C Runtime Engine
+
+### Effect dispatch (new file: `src/db/db_skills.c`)
+
+The C engine replaces each `spell_*` and `do_*` function with a single generic dispatcher:
 
 ```c
-// spell function registry
-typedef struct { const char *name; SPELL_FUN *fun; } SpellFunEntry;
-static const SpellFunEntry spell_fun_registry[] = {
-    { "spell_fireball",  spell_fireball },
-    { "spell_cure_light", spell_cure_light },
-    // ...
-    { NULL, NULL }
+void effect_execute(int sn, int level, CHAR_DATA *ch, void *vo, int target);
+```
+
+This is the new `SPELL_FUN` for all DB-driven spells. At cast time:
+
+1. Look up the preloaded `skill_effects` list for `sn`.
+2. Iterate effects in `seq` order.
+3. Dispatch each to the appropriate handler: `effect_damage()`, `effect_apply_affect()`, etc.
+4. For `CUSTOM`, call the function named in `params.function` via the C registry.
+
+Effect handlers are thin focused functions, replacing the entire current `spell_*.c` file per spell.
+
+### Registries (compile-time, in `db_skills.c`)
+
+Two registries remain in C:
+
+```c
+// GSN pointer registry (unchanged from original proposal)
+static const GsnEntry gsn_registry[] = {
+    { "gsn_backstab", &gsn_backstab },
+    ...
 };
 
-// gsn pointer registry
-typedef struct { const char *name; sh_int *ptr; } GsnEntry;
-static const GsnEntry gsn_registry[] = {
-    { "gsn_backstab",  &gsn_backstab },
-    { "gsn_kick",      &gsn_kick },
-    // ...
+// Custom function registry (only for CUSTOM effect type)
+static const CustomFunEntry custom_registry[] = {
+    { "spell_dispel_magic",  spell_dispel_magic  },
+    { "spell_portal",        spell_portal        },
+    { "spell_animate",       spell_animate       },
+    { "spell_stalker",       spell_stalker       },
+    { "spell_energy_drain",  spell_energy_drain  },
+    { "spell_charm_person",  spell_charm_person  },
+    { "spell_identify",      spell_identify      },
+    { "spell_cage",          spell_cage          },
     { NULL, NULL }
 };
 ```
 
-#### Boot Loading (`boot_db()`)
+The `custom_registry` is small (~8 entries) and changes rarely.
 
-`db_load_skill_table()` (called from `boot_db()`) executes `SELECT * FROM skills ORDER BY sn` and:
+### Boot loading
 
-1. Allocates `skill_table[MAX_SKILL]` on the heap (or a file-scope array — same declaration, different initializer).
-2. For each row, populates a `struct skill_type`:
-   - Resolves `spell_fun` string → function pointer via registry (falls back to `spell_null`).
-   - Resolves `gsn_name` string → `sh_int *` via registry; writes `sn` into the pointed-to variable.
-   - Converts `class_levels` JSONB → `sh_int skill_level[MAX_TOTAL_CLASS]` (all slots start at `NO_USE`).
-3. Entries not present in the DB remain zeroed/null (inert).
+`db_load_skill_table()` in `boot_db()`:
+1. `SELECT * FROM skills ORDER BY sn` — populates `skill_table[]` metadata.
+2. `SELECT * FROM skill_effects ORDER BY sn, seq` — populates a parallel `skill_effects_table[MAX_SKILL]` linked list.
+3. Resolves `gsn_name` → `sh_int *` via `gsn_registry`.
+4. Any skill without effects that has no `CUSTOM` entry uses a no-op handler.
 
-After Phase 2 lands, `spell_table_data.c` and `skill_table_data.c` are deleted, and `const.c` removes the `#include` lines.
+---
 
-### Phase 3 — tngdb `/skills` Endpoint (tngdb)
+## Phasing
 
-Add read-only endpoints to `tngdb/api/main.py`:
+| Phase | What changes | Game binary change? |
+|---|---|---|
+| 1 | `skills` + `skill_effects` tables in DB; migration script populates them; tngdb `/skills` endpoint | No |
+| 2 | Boot loads `skill_table[]` metadata from DB; deletes `spell_table_data.c` + `skill_table_data.c` | Yes |
+| 3 | Generic `effect_execute()` dispatcher; effect handler functions in C; deletes `spell_*.c` and most `do_*.c` | Yes |
+| 4 | The ~8 `CUSTOM` C functions are the only remaining per-spell C code | Yes |
 
-- `GET /skills` — paginated list, supports `?type=spell` / `?type=skill` filter
-- `GET /skills/{sn}` — single entry by sn
-- `GET /skills/lookup/{name}` — lookup by name (exact then prefix, matching game logic)
-
-Response shape mirrors `struct skill_type` fields plus class_levels as a map.
+Each phase ships independently. Phases 2 and 3 require no tngdb changes.
 
 ---
 
@@ -158,59 +332,50 @@ Response shape mirrors `struct skill_type` fields plus class_levels as a map.
 
 | File | Change |
 |---|---|
-| `area/schema.sql` | Add `skills` table |
-| `src/headers/ack.h` | `skill_table[]` declaration: change from `const` to non-const for dynamic load |
-| `src/headers/globals.h` | `extern struct skill_type skill_table[]` unchanged; possibly `extern int skill_table_size` |
+| `area/schema.sql` | Add `skills` and `skill_effects` tables |
+| `src/headers/ack.h` | Add `skill_effects` list struct; `skill_table[]` non-const for dynamic load |
 | `src/const.c` | Remove `skill_table[]` initializer (Phase 2) |
-| `src/db.c` | Call `db_load_skill_table()` in `boot_db()`; remove GSN assignment loop |
-| `src/db/db_skills.c` | New: DB load function, spell_fun registry, gsn registry |
-| `src/db/db_skills.h` | New: `db_load_skill_table()` declaration |
+| `src/db.c` | Call `db_load_skill_table()` in `boot_db()` |
+| `src/db/db_skills.c` | New: boot loader, `effect_execute()`, all effect handlers, gsn + custom registries |
+| `src/db/db_skills.h` | New: declarations |
 | `src/spells/spell_table_data.c` | Deleted (Phase 2) |
 | `src/skills/skill_table_data.c` | Deleted (Phase 2) |
-| `tools/migrate_skills_to_db.py` | New: one-time migration script |
+| `src/spells/spell_*.c` | ~190 files deleted (Phase 3), except ~8 `CUSTOM` functions |
+| `src/skills/do_*.c` | ~101 files deleted (Phase 3), except edge cases |
+| `tools/migrate_skills_to_db.py` | New: parses C data + source files, populates DB |
 
 ### tngdb
 
 | File | Change |
 |---|---|
-| `api/main.py` | Add `/skills`, `/skills/{sn}`, `/skills/lookup/{name}` endpoints (Phase 3) |
+| `api/main.py` | Add `/skills`, `/skills/{sn}`, `/skills/lookup/{name}` endpoints (Phase 1) |
 
 ---
 
 ## Trade-offs and Risks
 
-### Risks
-
 | Risk | Mitigation |
 |---|---|
-| SN stability: renumbering rows would corrupt player save data | `sn` is the PRIMARY KEY; it must never be reassigned. Migration preserves existing positions. Rows can be added at new SNs but never moved. |
-| Function pointer registry must stay in sync with actual C functions | Build-time: if a `spell_fun` or `gsn_name` in the DB has no registry entry, log a fatal error at boot. A CI check script can cross-validate registry vs DB. |
-| DB unavailable at boot | `db_load_skill_table()` calls `exit()` on failure — same as current behavior for other DB connections at boot. No silent degradation. |
-| `class_levels` JSONB requires class name → index mapping | A static `const char *class_names[MAX_TOTAL_CLASS]` array in `db_skills.c` provides the mapping. Same names used everywhere. |
-| Migration script misparses a data file entry | Phase 1 is read-only; the game still boots from C. Migration output is validated against the original C data before Phase 2 cutover. |
+| SN stability: renumbering rows corrupts player saves | `sn` is PK, never reassigned. Migration preserves existing positions. |
+| `custom_registry` out of sync with DB | Boot logs a fatal error if a `CUSTOM` function name has no registry entry. |
+| Formula evaluation security (e.g. `"level*2d6"`) | Formulas are a small closed DSL evaluated by a simple C parser — no `eval`, no arbitrary code. |
+| Migration script misclassifies a spell | Phase 1 is read-only; game still boots from C. Migration validated against original before Phase 2. |
+| `effect_execute()` performance vs direct function call | Dispatching ~15 effect types is an array lookup + function call — negligible vs combat logic. |
+| DB unavailable at boot | `db_load_skill_table()` calls `exit()` on failure — same as all other DB boot connections. |
 
 ### Intentional Non-Changes
 
-- Spell/skill **logic** (the `do_*`, `spell_*` functions) stays in C. This is purely a data migration.
-- `MAX_SKILL` (999) stays as the hard ceiling. The DB just needs to not exceed it.
-- Player proficiency (`learned[]`) and cooldown (`cooldown[]`) arrays are indexed by `sn` — no change.
-- `skill_lookup()` logic stays the same; it searches `skill_table[]` which is now DB-loaded.
-
----
-
-## Phasing Summary
-
-| Phase | What changes | Safe to ship independently? |
-|---|---|---|
-| 1 | `skills` DB table + migration script + tngdb endpoint stub | Yes — game binary unchanged |
-| 2 | acktng boots from DB; deletes C data files | Yes, after Phase 1 validated |
-| 3 | tngdb `/skills` endpoints live | Yes, after Phase 1 |
+- `MAX_SKILL` (999) ceiling unchanged.
+- `learned[]`, `cooldown[]`, `can_use_skill()`, `mana_cost()`, `raise_skill()` — all unchanged.
+- `skill_lookup()` still searches `skill_table[]` (now DB-loaded) — no change to call sites.
+- NPC `skills`/`power_skills` bitfields in `mobs` table — out of scope.
 
 ---
 
 ## Open Questions for Discussion
 
-1. **Class level encoding:** JSONB keyed by abbreviation (e.g. `"MAG"`) vs. a 29-element integer array vs. a separate `skill_class_levels` join table? JSONB is proposed for compactness and queryability.
-2. **Tuning workflow:** After Phase 2, editing a skill means a DB UPDATE + game reload (or a future hot-reload tick). Is a game reload acceptable, or should we design for hot-reload from the start?
-3. **Scope creep guard:** NPC `skills`/`power_skills` bitfields in the `mobs` table are separate from this effort — leave them alone.
-4. **tngdb auth:** The `/skills` endpoint will be public read-only, consistent with existing tngdb endpoints.
+1. **Formula DSL scope**: Should the formula mini-language support only arithmetic + dice (`NdM`, `level*N`, `level/N+M`) or also `class_level[X]` references? The latter appears in several holy/druid spells.
+2. **`APPLY_AFFECT` multi-affect**: Should multiple affects in one `APPLY_AFFECT` entry all share the same duration, or should each sub-affect have its own duration fields?
+3. **HOT/DOT modifier formulas**: Some HOTs use `class_heal_character()` which depends on class-specific scaling. Should this be a named formula (`"class_heal"`) or should the formula DSL be able to express it?
+4. **Phase 3 order**: Should the effect dispatcher be built and validated *before* deleting the old `spell_*.c` files (running both in parallel via a compile flag), or delete immediately once handlers are proven equivalent?
+5. **tngdb auth**: The `/skills` endpoint will be public read-only, consistent with existing endpoints — confirm?
