@@ -68,6 +68,10 @@ extern const char go_ahead_str[];
 #define GMCP_PKG_ROOM (1U << 1)
 #define GMCP_PKG_COMM (1U << 2)
 
+void ws_send_room(DESCRIPTOR_DATA *d, CHAR_DATA *ch);
+void ws_send_map(DESCRIPTOR_DATA *d, CHAR_DATA *ch);
+void ws_send_map_scan(DESCRIPTOR_DATA *d, CHAR_DATA *ch);
+
 int init_socket(int port, unsigned long bind_addr);
 #ifdef HAVE_OPENSSL
 bool init_tls_context(const char *cert_file, const char *key_file);

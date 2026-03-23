@@ -30,6 +30,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include "globals.h"
+#include "socket.h"
 #define NOWHERE -1
 
 char *const compass_name[] = {"north", "east", "south", "west", "up", "down"};
@@ -1649,6 +1650,11 @@ void do_scan(CHAR_DATA *ch, char *argument)
    {
       send_to_char("You fail to spot anyone around you.\n\r", ch);
    }
+
+   /* v2 WebSocket: send scan data to browser client */
+   if (!IS_NPC(ch) && ch->desc && ch->desc->websocket_active)
+      ws_send_map_scan(ch->desc, ch);
+
    return;
 }
 

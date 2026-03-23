@@ -35,6 +35,7 @@
 #include <crypt.h>
 #endif
 #include "globals.h"
+#include "socket.h"
 #include "tables.h"
 #include "cursor.h"
 #include <math.h>
@@ -1322,6 +1323,13 @@ void do_look(CHAR_DATA *ch, char *argument)
                      snprintf(money_show, sizeof(money_show), "%d gold lies in a pile.\n\r",
             ch->in_room->gold); send_to_char(money_show, ch);
                   }*/
+      }
+
+      /* v2 WebSocket: send room panel and map to browser client */
+      if (!IS_NPC(ch) && ch->desc && ch->desc->websocket_active)
+      {
+         ws_send_room(ch->desc, ch);
+         ws_send_map(ch->desc, ch);
       }
 
       return;
