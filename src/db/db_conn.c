@@ -10,18 +10,27 @@
 
 static PGconn *boot_conn = NULL;
 
-/* Read the connection string from <area_dir>/../data/db.conf.
- * Caller must free() the returned string.  Returns NULL if the file is absent
- * (callers should fall back to PG environment variables in that case). */
+/* Read the connection string from a db config file.
+ * If the ACK_DB_CONF environment variable is set, its value is used as the
+ * path to the config file directly.  Otherwise the path defaults to
+ * <area_dir>/../data/db.conf.
+ * Caller must free() the returned string.  Returns NULL if the file does
+ * not exist (DB disabled for this boot). */
 static char *read_db_conf(const char *area_dir)
 {
    char path[512];
+   const char *env_conf;
    FILE *fp;
    long file_size;
    char *buf;
    size_t n;
 
-   snprintf(path, sizeof(path), "%s/../data/db.conf", area_dir);
+   env_conf = getenv("ACK_DB_CONF");
+   if (env_conf && env_conf[0])
+      snprintf(path, sizeof(path), "%s", env_conf);
+   else
+      snprintf(path, sizeof(path), "%s/../data/db.conf", area_dir);
+
    fp = fopen(path, "r");
    if (!fp)
       return NULL;

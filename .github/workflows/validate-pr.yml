@@ -27,7 +27,22 @@ jobs:
             pkg-config \
             zlib1g-dev \
             libssl-dev \
+            libpq-dev \
+            postgresql-client \
             clang-format
+
+      - name: Set up PostgreSQL
+        run: |
+          sudo systemctl start postgresql
+          # Create the 'ack' user with a known password if it doesn't exist.
+          sudo -u postgres psql -tc \
+            "SELECT 1 FROM pg_roles WHERE rolname='ack'" \
+            | grep -q 1 || \
+            sudo -u postgres psql -c \
+              "CREATE ROLE ack WITH LOGIN PASSWORD 'acktest';"
+          # Ensure the password matches what the MUD expects.
+          sudo -u postgres psql -c \
+            "ALTER ROLE ack WITH PASSWORD 'acktest';"
 
       - name: Check formatting (make lint)
         working-directory: src
@@ -40,9 +55,10 @@ jobs:
           make ack
 
       - name: Run unit tests and integration tests (make unit-tests)
-        working-directory: src
+        env:
+          ACK_DB_PASSWORD: acktest
         run: |
-          make unit-tests
+          make -C src unit-tests
 
       - name: Comment on PR if checks pass
         if: success()

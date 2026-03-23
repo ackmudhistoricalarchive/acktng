@@ -12,8 +12,8 @@
  *   db_conn_get()   — return the PGconn* for boot-time queries.
  *   db_conn_close() — close after all db_load_* calls complete.
  *
- * The db.conf path is: <area_dir>/../data/db.conf
- * Falls back to PG environment variables if the file is absent.
+ * Config file: $ACK_DB_CONF if set, otherwise <area_dir>/../data/db.conf.
+ * DB is disabled if the file does not exist.
  */
 
 #ifdef HAVE_LIBPQ
