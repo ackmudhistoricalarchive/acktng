@@ -19,6 +19,11 @@ LOG_FILE="/tmp/mud-integration-test-$$.log"
 TEST_PLAYER="Integrat"
 TEST_PASSWORD="integrationpass"
 
+# Pre-seeded existing player used for the existing-character login test.
+# Room is ROOM_VNUM_SCHOOL (4900) so the character starts in the school.
+SEED_PLAYER="Loadchar"
+SEED_PASSWORD="loadcharpass"
+
 # Ask the OS for a free ephemeral port to avoid collisions on shared CI hosts.
 if command -v python3 >/dev/null 2>&1; then
     TEST_PORT=$(python3 -c \
@@ -54,10 +59,16 @@ fi
 # ---------------------------------------------------------------------------
 # Step 2: remove any leftover player files so the login flows are always the
 # new-character path (idempotent test runs).
+# Also seed the pre-existing player file used by the existing-player login test.
 # ---------------------------------------------------------------------------
 player_lower=$(echo "$TEST_PLAYER" | tr '[:upper:]' '[:lower:]')
 first_letter=$(echo "$player_lower" | cut -c1)
 rm -f "$PLAYER_DIR/$first_letter/$player_lower"
+
+seed_lower=$(echo "$SEED_PLAYER" | tr '[:upper:]' '[:lower:]')
+seed_first=$(echo "$seed_lower" | cut -c1)
+rm -f "$PLAYER_DIR/$seed_first/${SEED_PLAYER}"
+python3 "$SCRIPT_DIR/seed-test-player.py" "$PLAYER_DIR" "$SEED_PLAYER" "$SEED_PASSWORD"
 
 # ---------------------------------------------------------------------------
 # Step 3: launch
@@ -109,6 +120,21 @@ python3 "$SCRIPT_DIR/websocket-test-client.py" "$TEST_PORT" "$TEST_PLAYER" "$TES
 LOGIN_STATUS=$?
 if [ "$LOGIN_STATUS" -ne 0 ]; then
     echo "integration-test: FAILED - websocket login sequence did not complete"
+    echo "--- MUD output ---"
+    cat "$LOG_FILE"
+    echo "------------------"
+    exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# Step 5b: WebSocket login as the pre-seeded existing character.
+# ---------------------------------------------------------------------------
+echo "integration-test: validating websocket login flow for existing player '${SEED_PLAYER}'..."
+python3 "$SCRIPT_DIR/websocket-test-client.py" "$TEST_PORT" "$SEED_PLAYER" "$SEED_PASSWORD" --existing
+
+SEED_LOGIN_STATUS=$?
+if [ "$SEED_LOGIN_STATUS" -ne 0 ]; then
+    echo "integration-test: FAILED - existing-player login sequence did not complete"
     echo "--- MUD output ---"
     cat "$LOG_FILE"
     echo "------------------"

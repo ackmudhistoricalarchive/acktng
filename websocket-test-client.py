@@ -16,6 +16,9 @@ import time
 PORT     = int(sys.argv[1])
 PLAYER   = sys.argv[2]
 PASSWORD = sys.argv[3]
+# Pass --existing as the 4th argument to use the existing-player login flow
+# (password prompt directly, no character-creation menu).
+EXISTING = len(sys.argv) > 4 and sys.argv[4] == '--existing'
 
 def fail(msg, context=""):
     print(f"integration-test: FAILED - {msg}", flush=True)
@@ -169,55 +172,77 @@ if '101 Switching Protocols' not in headers or 'Sec-WebSocket-Accept:' not in he
 def send(msg):
     ws.send_text(msg + '\n')
 
-# Walk the new-player creation flow.
+# Walk the login flow.
 data = ws.recv_until('name', timeout=10.0)
 if 'name' not in data.lower():
     fail("expected name prompt in greeting", data)
 
 send(PLAYER)
-data = ws.recv_until('y/n', timeout=5.0)
-if 'y/n' not in data.lower():
-    fail("expected name confirmation (Y/N)", data)
 
-send('Y')
-data = ws.recv_until('assword', timeout=5.0)
-if 'assword' not in data:
-    fail("expected password prompt", data)
+if EXISTING:
+    # Existing-player flow: server sends "Password: " directly (no Y/N confirmation).
+    data = ws.recv_until('assword', timeout=5.0)
+    if 'assword' not in data:
+        fail("expected password prompt for existing player", data)
 
-send(PASSWORD)
-data = ws.recv_until('etype', timeout=5.0)
-if 'etype' not in data:
-    fail("expected retype-password prompt", data)
+    send(PASSWORD)
 
-send(PASSWORD)
-data = ws.recv_until('elect', timeout=5.0)
-if 'elect' not in data.lower():
-    fail("expected character-creation menu", data)
+    # The nanny() login state machine falls through from CON_GET_OLD_PASSWORD directly
+    # into CON_READ_MOTD in the same call, so the MOTD, Welcome message, room description,
+    # and prompt are all flushed in a single WebSocket frame.  No Enter press needed.
+    data = ws.recv_until('welcome', timeout=10.0)
+    if 'welcome' not in data.lower():
+        fail("expected 'Welcome' message after entering game", data)
 
-send('1')
-_ = ws.recv_until('ex', timeout=5.0)
-send('M')
-_ = ws.recv_until('elect', timeout=5.0)
+    time.sleep(2.0)
+    print(f"integration-test: websocket login successful - existing player '{PLAYER}' reached playing state and stayed connected for 2s", flush=True)
 
-send('2')
-_ = ws.recv_until('ace', timeout=5.0)
-send('Hmn')
-_ = ws.recv_until('elect', timeout=5.0)
+else:
+    # New-player creation flow.
+    data = ws.recv_until('y/n', timeout=5.0)
+    if 'y/n' not in data.lower():
+        fail("expected name confirmation (Y/N)", data)
 
-send('3')
-_ = ws.recv_until('lass', timeout=5.0)
-send('War Mag Cle Sen')
-_ = ws.recv_until('elect', timeout=5.0)
+    send('Y')
+    data = ws.recv_until('assword', timeout=5.0)
+    if 'assword' not in data:
+        fail("expected password prompt", data)
 
-send('4')
-_ = ws.recv_until('\n', timeout=5.0)
+    send(PASSWORD)
+    data = ws.recv_until('etype', timeout=5.0)
+    if 'etype' not in data:
+        fail("expected retype-password prompt", data)
 
-send('')
-data = ws.recv_until('welcome', timeout=10.0)
-if 'welcome' not in data.lower():
-    fail("expected 'Welcome' message after entering game", data)
+    send(PASSWORD)
+    data = ws.recv_until('elect', timeout=5.0)
+    if 'elect' not in data.lower():
+        fail("expected character-creation menu", data)
 
-time.sleep(2.0)
-print(f"integration-test: websocket login successful - '{PLAYER}' reached playing state and stayed connected for 2s", flush=True)
+    send('1')
+    _ = ws.recv_until('ex', timeout=5.0)
+    send('M')
+    _ = ws.recv_until('elect', timeout=5.0)
+
+    send('2')
+    _ = ws.recv_until('ace', timeout=5.0)
+    send('Hmn')
+    _ = ws.recv_until('elect', timeout=5.0)
+
+    send('3')
+    _ = ws.recv_until('lass', timeout=5.0)
+    send('War Mag Cle Sen')
+    _ = ws.recv_until('elect', timeout=5.0)
+
+    send('4')
+    _ = ws.recv_until('\n', timeout=5.0)
+
+    send('')
+    data = ws.recv_until('welcome', timeout=10.0)
+    if 'welcome' not in data.lower():
+        fail("expected 'Welcome' message after entering game", data)
+
+    time.sleep(2.0)
+    print(f"integration-test: websocket login successful - '{PLAYER}' reached playing state and stayed connected for 2s", flush=True)
+
 s.close()
 sys.exit(0)
