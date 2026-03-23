@@ -10,6 +10,7 @@ UNIT_TEST_TARGETS = \
 	tests/unit-test-login \
 	tests/unit-test-websocket-validation \
 	tests/unit-test-websocket-sanitize \
+	tests/unit-test-websocket-json-escape \
 	tests/unit-test-sniff-is-tls \
 	tests/unit-test-fight \
 	tests/unit-test-act-info \
@@ -92,6 +93,10 @@ tests/unit-test-websocket-validation: $(OBJDIR)/tests/test_websocket_validation.
 	$(CC) -o $@ $^ $(L_FLAGS)
 
 tests/unit-test-websocket-sanitize: $(OBJDIR)/tests/test_websocket_sanitize.o
+	rm -f $@
+	$(CC) -o $@ $^ $(L_FLAGS)
+
+tests/unit-test-websocket-json-escape: $(OBJDIR)/tests/test_websocket_json_escape.o
 	rm -f $@
 	$(CC) -o $@ $^ $(L_FLAGS)
 

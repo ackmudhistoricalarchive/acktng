@@ -1753,6 +1753,10 @@ void read_from_buffer(DESCRIPTOR_DATA *d)
    return;
 }
 
+/* Forward declarations for JSON helpers used in process_output (defined below). */
+static void json_append(char *buf, int *pos, int buf_size, const char *s);
+static void json_str_escape_raw(char *buf, int *pos, int buf_size, const char *s, int len);
+
 /*
  * Low level output function.
  */
@@ -1806,25 +1810,50 @@ bool process_output(DESCRIPTOR_DATA *d, bool fPrompt)
     */
    if (d->websocket_active)
    {
-      unsigned char *payload;
-      size_t payload_len;
+      /* Wrap buffered game text in a v2 JSON envelope so the web client
+       * stays in v2 mode and keeps the Map/Room panels visible.
+       * Step 1: sanitize (strip telnet sequences, \r) into a temp buffer.
+       * Step 2: JSON-escape and wrap as {"v":2,"tag":"Output","data":"<text>"}. */
+      unsigned char *sanitized;
+      size_t san_len;
+      char *json_buf;
+      size_t json_cap;
+      int jp = 0;
 
-      payload = (unsigned char *)malloc((size_t)d->outtop + 1);
-      if (payload == NULL)
+      sanitized = (unsigned char *)malloc((size_t)d->outtop + 1);
+      if (sanitized == NULL)
       {
          d->outtop = 0;
          return FALSE;
       }
+      san_len = sanitize_websocket_text_payload((const unsigned char *)d->outbuf, (size_t)d->outtop,
+                                                sanitized, (size_t)d->outtop + 1);
 
-      payload_len = sanitize_websocket_text_payload(
-          (const unsigned char *)d->outbuf, (size_t)d->outtop, payload, (size_t)d->outtop + 1);
-      if (!write_websocket_frame(d, 0x1, payload, payload_len))
+      /* Worst-case JSON expansion: 6 bytes per char (\uXXXX) + envelope overhead.
+       * Cap at the WebSocket text-frame limit of 65535 bytes. */
+      json_cap = san_len * 6 + 64;
+      if (json_cap > 65535)
+         json_cap = 65535;
+      json_buf = (char *)malloc(json_cap);
+      if (json_buf == NULL)
       {
-         free(payload);
+         free(sanitized);
          d->outtop = 0;
          return FALSE;
       }
-      free(payload);
+
+      json_append(json_buf, &jp, (int)json_cap, "{\"v\":2,\"tag\":\"Output\",\"data\":");
+      json_str_escape_raw(json_buf, &jp, (int)json_cap, (const char *)sanitized, (int)san_len);
+      json_append(json_buf, &jp, (int)json_cap, "}");
+      free(sanitized);
+
+      if (!write_websocket_frame(d, 0x1, (const unsigned char *)json_buf, (size_t)jp))
+      {
+         free(json_buf);
+         d->outtop = 0;
+         return FALSE;
+      }
+      free(json_buf);
       d->outtop = 0;
       return TRUE;
    }
@@ -2496,6 +2525,42 @@ static void json_str_escape(char *buf, int *pos, int buf_size, const char *s)
       buf[(*pos)++] = c;
    }
    buf[*pos] = '\0';
+   json_append(buf, pos, buf_size, "\"");
+}
+
+/* JSON-escape raw game text (may contain ANSI codes, newlines, control chars)
+ * as a JSON string value. Outputs surrounding quotes.
+ * Handles: \", \\, \n, \t, ESC (as \u001b), \r (stripped), other controls (\uXXXX).
+ * Stops 8 bytes before buf_size to leave room for a unicode escape + closing quote + NUL. */
+static void json_str_escape_raw(char *buf, int *pos, int buf_size, const char *s, int len)
+{
+   int i;
+   json_append(buf, pos, buf_size, "\"");
+   for (i = 0; i < len && *pos < buf_size - 8; i++)
+   {
+      unsigned char c = (unsigned char)s[i];
+      if (c == '"')
+         json_append(buf, pos, buf_size, "\\\"");
+      else if (c == '\\')
+         json_append(buf, pos, buf_size, "\\\\");
+      else if (c == '\n')
+         json_append(buf, pos, buf_size, "\\n");
+      else if (c == '\t')
+         json_append(buf, pos, buf_size, "\\t");
+      else if (c == '\r')
+         ; /* strip carriage return */
+      else if (c < 0x20 || c == 0x7f)
+      {
+         char esc[8];
+         snprintf(esc, sizeof(esc), "\\u%04x", (unsigned int)c);
+         json_append(buf, pos, buf_size, esc);
+      }
+      else
+      {
+         buf[(*pos)++] = (char)c;
+         buf[*pos] = '\0';
+      }
+   }
    json_append(buf, pos, buf_size, "\"");
 }
 
