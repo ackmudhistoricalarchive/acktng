@@ -30,6 +30,7 @@ import shutil
 import sys
 
 import psycopg2
+import psycopg2.sql
 import yaml
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -103,11 +104,16 @@ def load_yaml_opt(path):
 def _insert(cur, table, data):
     cols = list(data.keys())
     vals = [data[c] for c in cols]
-    cur.execute(
-        f"INSERT INTO {table} ({', '.join(cols)})"
-        f" VALUES ({', '.join(['%s'] * len(cols))})",
-        vals,
+    query = psycopg2.sql.SQL(
+        "INSERT INTO {table} ({cols}) VALUES ({placeholders})"
+    ).format(
+        table=psycopg2.sql.Identifier(table),
+        cols=psycopg2.sql.SQL(', ').join(map(psycopg2.sql.Identifier, cols)),
+        placeholders=psycopg2.sql.SQL(', ').join(
+            psycopg2.sql.Placeholder() for _ in cols
+        ),
     )
+    cur.execute(query, vals)
 
 
 def _update(cur, table, data, key_col, key_val):
@@ -115,9 +121,17 @@ def _update(cur, table, data, key_col, key_val):
     fields = {k: v for k, v in data.items() if k != key_col}
     if not fields:
         return
-    sets = ', '.join(f"{k} = %s" for k in fields)
-    vals = list(fields.values()) + [key_val]
-    cur.execute(f"UPDATE {table} SET {sets} WHERE {key_col} = %s", vals)
+    query = psycopg2.sql.SQL(
+        "UPDATE {table} SET {sets} WHERE {key} = %s"
+    ).format(
+        table=psycopg2.sql.Identifier(table),
+        sets=psycopg2.sql.SQL(', ').join(
+            psycopg2.sql.SQL("{} = %s").format(psycopg2.sql.Identifier(k))
+            for k in fields
+        ),
+        key=psycopg2.sql.Identifier(key_col),
+    )
+    cur.execute(query, list(fields.values()) + [key_val])
 
 
 # ---------------------------------------------------------------------------
