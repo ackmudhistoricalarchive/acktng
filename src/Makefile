@@ -49,6 +49,7 @@ ifneq ($(LIBPQ_LIBS),)
 endif
 
 OBJDIR = build/obj
+STAMP_FILE = $(OBJDIR)/.all-stamp
 
 include ai/Rules.mk
 include tests/Rules.mk
@@ -208,12 +209,27 @@ LINT_SOURCES = $(shell find . -name '*.c' -o -name '*.h' | grep -v sha256 | grep
 
 .PHONY: all clean purge unit-tests integration-tests integration-test integration-test-telnet integration-test-telnet-tls integration-test-wss lint format
 
-all:
-	$(MAKE) clean
-	$(MAKE) format
-	$(MAKE) lint
-	$(MAKE) ack
-	$(MAKE) unit-tests
+all: format lint ack $(UNIT_TEST_TARGETS)
+	@set -e; \
+	stamp="$(STAMP_FILE)"; \
+	changed_tests=""; \
+	run_integration=0; \
+	if [ ! -f "$$stamp" ] || [ ack -nt "$$stamp" ]; then \
+		run_integration=1; \
+	fi; \
+	for t in $(UNIT_TEST_TARGETS); do \
+		if [ ! -f "$$stamp" ] || [ "$$t" -nt "$$stamp" ]; then \
+			changed_tests="$$changed_tests $$t"; \
+			run_integration=1; \
+		fi; \
+	done; \
+	if [ "$$run_integration" -eq 1 ]; then \
+		if [ -n "$$changed_tests" ]; then \
+			for t in $$changed_tests; do ./$$t; done; \
+		fi; \
+		$(MAKE) integration-tests; \
+		touch "$$stamp"; \
+	fi
 
 integration-tests: ack
 	cd .. && ./integration-tests.sh
