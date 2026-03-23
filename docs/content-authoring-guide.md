@@ -1,6 +1,5 @@
-# Proposal: Game Content Authoring Guide
+# Game Content Authoring Guide
 
-**Status:** Open — reference guide for adding/editing/referencing all game content types
 **Scope:** Areas, Quests, Lore, Help, Shelp — creation, editing, deletion, and cross-referencing
 
 ---
