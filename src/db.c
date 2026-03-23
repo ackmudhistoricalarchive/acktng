@@ -695,9 +695,9 @@ void boot_db(void)
 #endif
       load_social_table();
 
-   /*
-    * Read in all the area files.
-    */
+      /*
+       * Read in all the area files.
+       */
 #ifdef HAVE_LIBPQ
    if (db_connected)
    {

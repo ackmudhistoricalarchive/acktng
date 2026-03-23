@@ -967,12 +967,12 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
       if (control_wss >= 0 && FD_ISSET(control_wss, &in_set))
          new_descriptor(control_wss, TRUE, FALSE, TRUE);
 
-      /*
-       * Advance any pending TLS handshakes non-blockingly.
-       * SSL_accept was deferred from new_descriptor to avoid blocking the
-       * game loop.  Each iteration we try to complete the handshake when the
-       * socket is ready, or time out after a short deadline.
-       */
+         /*
+          * Advance any pending TLS handshakes non-blockingly.
+          * SSL_accept was deferred from new_descriptor to avoid blocking the
+          * game loop.  Each iteration we try to complete the handshake when the
+          * socket is ready, or time out after a short deadline.
+          */
 #ifdef HAVE_OPENSSL
       for (d = first_desc; d != NULL; d = d_next)
       {
