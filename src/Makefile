@@ -35,7 +35,7 @@ ifeq ($(LIBPQ_LIBS),)
     endif
 endif
 
-C_FLAGS = -O -g2 -Wall -DACK_43 $(PROF) $(SOLARIS_FLAG) -Iheaders -Iai/headers -Itests/headers -Iquests
+C_FLAGS = -O -g2 -Wall -DACK_43 -MMD -MP $(PROF) $(SOLARIS_FLAG) -Iheaders -Iai/headers -Itests/headers -Iquests
 L_FLAGS = -O -g2 -lcrypt -lpthread $(PROF) $(SOLARIS_LINK) -lz
 
 ifneq ($(OPENSSL_LIBS),)
@@ -282,3 +282,6 @@ lint:
 # Auto-apply the .clang-format style to all source files
 format:
 	clang-format -i $(LINT_SOURCES)
+
+# Auto-generated header dependency files (produced by -MMD -MP during compilation)
+-include $(shell find $(OBJDIR) -name '*.d' 2>/dev/null)
