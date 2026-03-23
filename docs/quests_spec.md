@@ -98,21 +98,21 @@ Common combinations used in quest reward items:
 
 | File | Static ID | Title | Prereq ID | Type | Targets | Kill Needed | Level Range | Offerer | Rewards |
 |---|---:|---|---:|---:|---|---:|---|---:|---|
-| `1.prop` | 0 | Route reconnaissance: Forest of Confusion | -1 | 1 | `2340 2341 2342` | 0 | 20-39 | 3340 | 491 gold, 2 qp |
+| `1.prop` | 0 | Route reconnaissance: Forest of Confusion | -1 | 1 | `2340 2341 2342` | 0 | 20-39 | 1101 | 491 gold, 2 qp |
 | `2.prop` | 1 | Conclave residue containment | 0 | 3 | `302` | 8 | 40-54 | 3340 | 2200 gold, 3 qp |
 | `3.prop` | 2 | Eastern trade road interdiction | 1 | 1 | `4960 4965 4988` | 0 | 55-69 | 931 | 1366 gold, 4 qp |
 | `4.prop` | 3 | Sealed-warrant courier disruption | 2 | 1 | `1832 2898 3174` | 0 | 70-84 | 931 | 5000 gold, 5 qp |
 | `5.prop` | 4 | Blightfront quarantine sweep | 3 | 1 | `2751 321 341` | 0 | 85+ | 931 | 7000 gold, 6 qp |
-| `6.prop` | 5 | Road predator cull: Banner Hills to Dustward | -1 | 1 | `1313 1314 1316` | 0 | 15-30 | 1122 | 800 gold, 2 qp |
+| `6.prop` | 5 | Road predator cull: Banner Hills to Dustward | -1 | 1 | `1313 1314 1316` | 0 | 15-30 | 1104 | 800 gold, 2 qp |
 | `7.prop` | 6 | Tollbreak crew interdiction: River Crossing | -1 | 3 | `1324` | 6 | 30-44 | 1123 | 2000 gold, 3 qp |
 | `8.prop` | 7 | Shadow trade disruption: Crossroads to Greenveil | 7 | 1 | `1325 1326 1327` | 0 | 40-54 | 1123 | 3500 gold, 4 qp |
-| `9.prop` | 8 | Convoy route security: Dustward predator sweep | -1 | 3 | `1316` | 8 | 20-34 | 1123 | 1000 gold, 2 qp |
-| `10.prop` | 9 | Greenveil Spur reconnaissance: spirit clearance | -1 | 1 | `1323 1325` | 0 | 35-49 | 3677 | 1800 gold, 3 qp |
+| `9.prop` | 8 | Convoy route security: Dustward predator sweep | -1 | 3 | `1316` | 8 | 20-34 | 1104 | 1000 gold, 2 qp |
+| `10.prop` | 9 | Greenveil Spur reconnaissance: spirit clearance | -1 | 1 | `1323 1325` | 0 | 35-49 | 1101 | 1800 gold, 3 qp |
 | `11.prop` | 10 | Inlet smuggler crackdown: cave network purge | 10 | 3 | `1327` | 10 | 50-64 | 3677 | 4000 gold, 5 qp |
 | `12.prop` | 11 | Ruin custodian suppression: Weathered Causeway | -1 | 1 | `1319 1320 1321 1322` | 0 | 50-64 | 1123 | 4500 gold, 5 qp |
 | `13.prop` | 12 | Coastal hazard survey: Western Shore predators | -1 | 1 | `1317 1318 1315` | 0 | 40-54 | 3751 | 2500 gold, 3 qp |
 | `14.prop` | 13 | Transcontinental corridor assessment: full-road interdiction | 13 | 1 | `1313 1324 1319 1327 1318` | 0 | 60-74 | 3751 | 6000 gold, 6 qp |
-| `15.prop` | 14 | *(see file)* | — | — | — | — | — | — | — |
+| `15.prop` | 14 | Gateworks vermin purge | -1 | 1 | `21000 21001 21003` | 0 | 10-19 | 1100 | 800 gold, 2 qp |
 | `16.prop` | 15 | Lantern Road wolf cull | -1 | 3 | `3744` | 10 | 20-39 | 931 | 591 gold, 2 qp |
 | `17.prop` | 16 | Mosswater smuggler interdiction | -1 | 1 | `3769 3770 3776` | 0 | 30-54 | 3340 | 792 gold, 3 qp |
 | `18.prop` | 17 | Northern Crown predator survey | -1 | 1 | `3819 3822 3827` | 0 | 40-69 | 3460 | 2800 gold, 3 qp |
@@ -123,8 +123,8 @@ Common combinations used in quest reward items:
 | `23.prop` | 22 | Cairn-Keeper exorcism | -1 | 3 | `3800` | 6 | 60-84 | 3460 | 4000 gold, 4 qp |
 | `24.prop` | 23 | Ashfang war-chief elimination | 22 | 1 | `3806 3812` | 0 | 75-99 | 3460 | 6000 gold, 5 qp |
 | `25.prop` | 24 | Oathbreaker wraith banishment | 23 | 1 | `3823 3834` | 0 | 80+ | 3460 | 1632 gold, 6 qp |
-| `26.prop` | 25 | Bell-Post Line Reopening | -1 | 3 | `2343` | 8 | 18-38 | 3340 | 1700 gold, 2 qp |
-| `27.prop` | 26 | Mirrorbark Predator Census | -1 | 1 | `2346 2347 2349` | 0 | 28-49 | 931 | 2400 gold, 3 qp |
+| `26.prop` | 25 | Bell-Post Line Reopening | -1 | 3 | `2343` | 8 | 18-38 | 1123 | 1700 gold, 2 qp |
+| `27.prop` | 26 | Mirrorbark Predator Census | -1 | 1 | `2346 2347 2349` | 0 | 28-49 | 1104 | 2400 gold, 3 qp |
 | `28.prop` | 27 | Conclave Survey Slate Recovery | -1 | 2 | `2372` | 0 | 34-58 | 3460 | 2800 gold, 3 qp |
 | `29.prop` | 28 | Neogi Warrant Service | -1 | 3 | `2367` | 1 | 35-60 | 3340 | 1116 gold, 4 qp |
 | `30.prop` | 29 | Ashen Lattice Containment Sweep | -1 | 1 | `2359 2360 2362` | 0 | 42-68 | 931 | 3900 gold, 4 qp |
@@ -138,46 +138,46 @@ Common combinations used in quest reward items:
 | `38.prop` | 37 | Briar throne breach | -1 | 3 | `3824` | 1 | 90+ | 3460 | 9000 gold, 7 qp |
 | `39.prop` | 38 | Covenant ash purge | 37 | 1 | `3806 3828` | 0 | 92+ | 3460 | 2539 gold, 8 qp |
 | `40.prop` | 39 | Oathnight final rite | 38 | 1 | `3823 3834` | 0 | 95+ | 3460 | 11000 gold, 9 qp |
-| `41.prop` | 40 | Violet archive stabilization sweep | -1 | 1 | `3070 3073 3087` | 0 | 26-34 | 931 | 2800 gold, 3 qp |
-| `42.prop` | 41 | Evermeet reliquary quieting | -1 | 3 | `3095` | 6 | 28-36 | 3340 | 1116 gold, 3 qp |
-| `43.prop` | 42 | Lantern syndic penumbra audit | -1 | 1 | `3105 3108 3112` | 0 | 30-38 | 3460 | 3800 gold, 4 qp |
-| `44.prop` | 43 | Mirror-Queen injunction service | 42 | 1 | `3115 3116` | 0 | 34-39 | 3460 | 5200 gold, 5 qp |
-| `45.prop` | 44 | Noctivar deposition writ | 43 | 3 | `3118` | 1 | 36-40 | 931 | 7000 gold, 6 qp |
+| `41.prop` | 40 | Violet archive stabilization sweep | -1 | 1 | `3070 3073 3087` | 0 | 26-34 | 1119 | 2800 gold, 3 qp |
+| `42.prop` | 41 | Evermeet reliquary quieting | -1 | 3 | `3095` | 6 | 28-36 | 1119 | 1116 gold, 3 qp |
+| `43.prop` | 42 | Lantern syndic penumbra audit | -1 | 1 | `3105 3108 3112` | 0 | 30-38 | 1121 | 3800 gold, 4 qp |
+| `44.prop` | 43 | Mirror-Queen injunction service | 42 | 1 | `3115 3116` | 0 | 34-39 | 1120 | 5200 gold, 5 qp |
+| `45.prop` | 44 | Noctivar deposition writ | 43 | 3 | `3118` | 1 | 36-40 | 1118 | 7000 gold, 6 qp |
 | `46.prop` | 45 | Preserve command decapitation order | -1 | 1 | `4645 4646 4650` | 0 | 90-124 | 931 | 1932 gold, 7 qp |
 | `47.prop` | 46 | Preserve border attrition campaign | 45 | 3 | `4650` | 6 | 105-140 | 931 | 2539 gold, 8 qp |
 | `48.prop` | 47 | Warden removal final writ | -1 | 1 | `4646 4645 4650` | 0 | 120+ | 931 | 12000 gold, 10 qp |
-| `49.prop` | 48 | Reclaim labor disruption order | -1 | 3 | `21014` | 5 | 18-25 | 14023 | 1600 gold, 3 qp |
-| `50.prop` | 49 | Violet Compact enforcement: stalker suppression | 54 | 3 | `30115` | 5 | 8-15 | 3015 | 1200 gold, 3 qp |
-| `51.prop` | 50 | Covenant precedent recovery: militant purge | -1 | 1 | `30105 30108 30116` | 0 | 10-17 | 14030 | 1400 gold, 3 qp |
-| `52.prop` | 51 | Registry priority warrant: Ossuary Champion | 48 | 1 | `30113` | 0 | 15-20 | 3015 | 2000 gold, 4 qp |
-| `53.prop` | 52 | Jade Magistracy deep audit: warlock suppression | 49 | 3 | `30110` | 4 | 14-20 | 14004 | 1800 gold, 4 qp |
-| `54.prop` | 53 | Final covenant judgment: Matriarch Velastra | 51 | 1 | `30114` | 0 | 18-20 | 14000 | 3000 gold, 5 qp |
-| `55.prop` | 54 | Gloamvault threshold audit: novice interdiction | -1 | 1 | `30100 30102 30117` | 0 | 5-12 | 13010 | 800 gold, 2 qp |
-| `56.prop` | 55 | Compact jurisdiction survey: vault functionary assessment | -1 | 1 | `30101 30103 30118` | 0 | 8-14 | 3015 | 1000 gold, 2 qp |
-| `57.prop` | 56 | Processional corridor threat assessment | -1 | 1 | `21005 21006 21010` | 0 | 14-25 | 3015 | 1200 gold, 2 qp |
-| `58.prop` | 57 | Toll-Warden removal order | 55 | 3 | `21026` | 1 | 18-25 | 3015 | 1800 gold, 3 qp |
-| `59.prop` | 58 | Sealed Names injunction: Matriarch strike | 56 | 3 | `21029` | 1 | 22-25 | 3015 | 3000 gold, 5 qp |
-| `60.prop` | 59 | Covenant fracture investigation | -1 | 1 | `21011 21015 21017` | 0 | 18-25 | 13012 | 1400 gold, 3 qp |
-| `61.prop` | 60 | Final audit termination: Sepulcher Lich | 58 | 3 | `21030` | 1 | 22-25 | 13012 | 3200 gold, 5 qp |
-| `62.prop` | 61 | Compact intake disruption sweep | -1 | 1 | `30252 30255 30261` | 0 | 22-30 | 3015 | 2400 gold, 3 qp |
-| `63.prop` | 62 | Reliquary regent injunction | -1 | 3 | `30301` | 1 | 27-34 | 13000 | 3800 gold, 4 qp |
-| `64.prop` | 63 | Null-halo archive seizure | 61 | 1 | `30296 30302` | 0 | 29-35 | 13000 | 4600 gold, 5 qp |
-| `65.prop` | 64 | Thorn cardinal writ execution | 62 | 3 | `30303` | 1 | 31-35 | 14021 | 5600 gold, 6 qp |
-| `66.prop` | 65 | Violet throne final deposition | 63 | 3 | `30304` | 1 | 33-35 | 3015 | 7600 gold, 8 qp |
-| `67.prop` | 66 | Gloamvault cartography commission | -1 | 4 | `30100` | — | 5-20 | 3015 | 12000 gold, 20 qp |
-| `68.prop` | 67 | Nightfall catacombs cartography commission | -1 | 4 | `21000` | — | 10-25 | 3015 | 14000 gold, 20 qp |
-| `69.prop` | 68 | Sepulcher Pasture cartography commission | -1 | 4 | `30175` | — | 15-30 | 3155 | 24000 gold, 30 qp |
-| `70.prop` | 69 | Umbra Heartspire cartography commission | -1 | 4 | `11200` | — | 25-40 | 3156 | 45000 gold, 50 qp |
-| `71.prop` | 70 | Violet Eclipse Cathedral cartography commission | -1 | 4 | `30250` | — | 20-35 | 3156 | 35000 gold, 40 qp |
-| `72.prop` | 71 | Catacomb entry clearance | -1 | 1 | `21000 21001 21002` | 0 | 8-22 | 3063 | 1200 gold, 3 qp |
-| `73.prop` | 72 | Park vermin suppression | -1 | 3 | `21000` | 8 | 5-18 | 3121 | 800 gold, 2 qp |
+| `49.prop` | 48 | Reclaim labor disruption order | -1 | 3 | `21014` | 5 | 18-25 | 1121 | 1600 gold, 3 qp |
+| `50.prop` | 49 | Violet Compact enforcement: stalker suppression | 54 | 3 | `30115` | 5 | 8-15 | 1122 | 1200 gold, 3 qp |
+| `51.prop` | 50 | Covenant precedent recovery: militant purge | -1 | 1 | `30105 30108 30116` | 0 | 10-17 | 1115 | 1400 gold, 3 qp |
+| `52.prop` | 51 | Registry priority warrant: Ossuary Champion | 48 | 1 | `30113` | 0 | 15-20 | 1122 | 2000 gold, 4 qp |
+| `53.prop` | 52 | Jade Magistracy deep audit: warlock suppression | 49 | 3 | `30110` | 4 | 14-20 | 1114 | 1800 gold, 4 qp |
+| `54.prop` | 53 | Final covenant judgment: Matriarch Velastra | 51 | 1 | `30114` | 0 | 18-20 | 1115 | 3000 gold, 5 qp |
+| `55.prop` | 54 | Gloamvault threshold audit: novice interdiction | -1 | 1 | `30100 30102 30117` | 0 | 5-12 | 1112 | 800 gold, 2 qp |
+| `56.prop` | 55 | Compact jurisdiction survey: vault functionary assessment | -1 | 1 | `30101 30103 30118` | 0 | 8-14 | 1114 | 1000 gold, 2 qp |
+| `57.prop` | 56 | Processional corridor threat assessment | -1 | 1 | `21005 21006 21010` | 0 | 14-25 | 1100 | 1200 gold, 2 qp |
+| `58.prop` | 57 | Toll-Warden removal order | 55 | 3 | `21026` | 1 | 18-25 | 1123 | 1800 gold, 3 qp |
+| `59.prop` | 58 | Sealed Names injunction: Matriarch strike | 56 | 3 | `21029` | 1 | 22-25 | 1115 | 3000 gold, 5 qp |
+| `60.prop` | 59 | Covenant fracture investigation | -1 | 1 | `21011 21015 21017` | 0 | 18-25 | 1112 | 1400 gold, 3 qp |
+| `61.prop` | 60 | Final audit termination: Sepulcher Lich | 58 | 3 | `21030` | 1 | 22-25 | 1118 | 3200 gold, 5 qp |
+| `62.prop` | 61 | Compact intake disruption sweep | -1 | 1 | `30252 30255 30261` | 0 | 22-30 | 1121 | 2400 gold, 3 qp |
+| `63.prop` | 62 | Reliquary regent injunction | -1 | 3 | `30301` | 1 | 27-34 | 1115 | 3800 gold, 4 qp |
+| `64.prop` | 63 | Null-halo archive seizure | 61 | 1 | `30296 30302` | 0 | 29-35 | 1119 | 4600 gold, 5 qp |
+| `65.prop` | 64 | Thorn cardinal writ execution | 62 | 3 | `30303` | 1 | 31-35 | 1115 | 5600 gold, 6 qp |
+| `66.prop` | 65 | Violet throne final deposition | 63 | 3 | `30304` | 1 | 33-35 | 1118 | 7600 gold, 8 qp |
+| `67.prop` | 66 | Gloamvault cartography commission | -1 | 4 | `30100` | — | 5-20 | 1109 | 12000 gold, 20 qp |
+| `68.prop` | 67 | Nightfall catacombs cartography commission | -1 | 4 | `21000` | — | 10-25 | 1112 | 14000 gold, 20 qp |
+| `69.prop` | 68 | Sepulcher Pasture cartography commission | -1 | 4 | `30175` | — | 15-30 | 1109 | 24000 gold, 30 qp |
+| `70.prop` | 69 | Umbra Heartspire cartography commission | -1 | 4 | `11200` | — | 25-40 | 1114 | 45000 gold, 50 qp |
+| `71.prop` | 70 | Violet Eclipse Cathedral cartography commission | -1 | 4 | `30250` | — | 20-35 | 1114 | 35000 gold, 40 qp |
+| `72.prop` | 71 | Catacomb entry clearance | -1 | 1 | `21000 21001 21002` | 0 | 8-22 | 1112 | 1200 gold, 3 qp |
+| `73.prop` | 72 | Park vermin suppression | -1 | 3 | `21000` | 8 | 5-18 | 1103 | 800 gold, 2 qp |
 | `74.prop` | 73 | Midgaard city district survey | -1 | 4 | `3001` | — | 1-60 | 3099 | 5000 gold, 8 qp |
-| `75.prop` | 74 | Chapel approach clearance | -1 | 1 | `21003 21004 21005` | 0 | 10-25 | 3144 | 1400 gold, 3 qp |
+| `75.prop` | 74 | Chapel approach clearance | -1 | 1 | `21003 21004 21005` | 0 | 10-25 | 1102 | 1400 gold, 3 qp |
 | `76.prop` | 75 | Roc Road Byways cartographic survey | -1 | 4 | `3450` | — | 10-80 | 3015 | 3000 gold, 8 qp |
 | `77.prop` | 76 | Banner Hills wolf suppression | -1 | 1 | `3455 3456 3488` | 0 | 20-55 | 13001 | 2200 gold, 5 qp |
 | `78.prop` | 77 | Evermeet underfoundation shade clearance | -1 | 3 | `3475` | 3 | 45-80 | 13011 | 3500 gold, 6 qp |
 | `79.prop` | 78 | Evermeet remnant guardian removal | 76 | 3 | `3476` | 1 | 60-100 | 13001 | 6500 gold, 9 qp |
-| `80.prop` | 79 | Inlet cave pest clearance | -1 | 1 | `3472 3473` | 0 | 10-35 | 3015 | 1500 gold, 4 qp |
+| `80.prop` | 79 | Inlet cave pest clearance | -1 | 1 | `3472 3473` | 0 | 10-35 | 1101 | 1500 gold, 4 qp |
 | `81.prop` | 80 | Cinderteeth foothills raid suppression | -1 | 1 | `6125 6126 6143` | 0 | 120-155 | 3340 | 7000 gold, 6 qp |
 | `82.prop` | 81 | Warlord's blood oath, cancelled | 80 | 1 | `6130` | 0 | 120-155 | 3340 | 9500 gold, 8 qp + bracer |
 | `83.prop` | 82 | Chalkwind archive undead threat survey | -1 | 1 | `6147 6153 6162` | 0 | 125-160 | 3340 | 7500 gold, 6 qp |
@@ -244,7 +244,7 @@ These templates have no `.prop` file. All fields use the same semantics as above
 | 136 | Northern Oasis cartography commission | -1 | 4 | `2250` | — | 45-65 | 3756 | 80000 gold, 68 qp + item |
 | 137 | Kel'Shadra crypts cartography commission | -1 | 4 | `2450` | — | 150-170 | 4684 | 480000 gold, 240 qp + item |
 | 138 | Sunken Sanctum cartography commission | -1 | 4 | `2500` | — | 150 | 4689 | 450000 gold, 230 qp + item |
-| 139 | Public Dungeons cartography commission | -1 | 4 | `2551` | — | 5-35 | 3682 | 18000 gold, 22 qp + item |
+| 139 | Public Dungeons cartography commission | -1 | 4 | `2551` | — | 5-35 | 1114 | 18000 gold, 22 qp + item |
 | 140 | Forest of Confusion cartography commission | -1 | 4 | `2600` | — | 10-60 | 3671 | 58000 gold, 56 qp + item |
 | 141 | Southern Oasis cartography commission | -1 | 4 | `2800` | — | 50-70 | 3764 | 90000 gold, 73 qp + item |
 | 142 | Verdant Depths cartography commission | -1 | 4 | `3000` | — | 75-95 | 4685 | 150000 gold, 105 qp + item |
@@ -256,10 +256,10 @@ These templates have no `.prop` file. All fields use the same semantics as above
 | 148 | Great Northern Forest cartography commission | -1 | 4 | `4050` | — | 1-170 | 3683 | 180000 gold, 120 qp + item |
 | 149 | Rakuen city district survey | -1 | 4 | `4861` | — | 1-170 | 4682 | 8000 gold, 10 qp + item |
 | 150 | The Arroyo cartography commission | -1 | 4 | `4750` | — | 55-75 | 3878 | 95000 gold, 78 qp + item |
-| 151 | Whispering Forest Preserve cartography commission | -1 | 4 | `5000` | — | 1-10 | 3680 | 4000 gold, 6 qp + item |
+| 151 | Whispering Forest Preserve cartography commission | -1 | 4 | `5000` | — | 1-10 | 1101 | 4000 gold, 6 qp + item |
 | 152 | Scorched Wastes cartography commission | -1 | 4 | `5250` | — | 65-85 | 3899 | 110000 gold, 88 qp + item |
 | 153 | Scorching Sands cartography commission | -1 | 4 | `5350` | — | 65-85 | 3903 | 110000 gold, 88 qp + item |
-| 154 | Sultan's Palace cartography commission | -1 | 4 | `5750` | — | 30-50 | 3855 | 42000 gold, 42 qp + item |
+| 154 | Sultan's Palace cartography commission | -1 | 4 | `5750` | — | 30-50 | 1114 | 42000 gold, 42 qp + item |
 | 155 | Lost City cartography commission | -1 | 4 | `5850` | — | 35-55 | 3888 | 52000 gold, 52 qp + item |
 | 156 | Ancient Pyramid cartography commission | -1 | 4 | `6050` | — | 90-100 | 3857 | 175000 gold, 125 qp + item |
 | 157 | Khardaan necropolis cartography commission | -1 | 4 | `6200` | — | 60-80 | 3888 | 105000 gold, 85 qp + item |
