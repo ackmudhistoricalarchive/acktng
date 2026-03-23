@@ -1,215 +1,288 @@
-# Proposal: MUD Web Client with Rich Media Support
+# Proposal: ACK!MUD TNG Native Cross-Platform Client
 
 **Date:** 2026-03-23
 **Status:** Open — pending discussion
-**Repos affected:** `acktng` (server extensions, static file serving, media assets)
+**Repos affected:** `acktng` (server media protocol extensions, asset manifest endpoint); new `acktng-client` repository (Flutter app)
 
 ---
 
 ## 1. Problem
 
-Players currently connect to ACK!MUD TNG via:
-- A raw telnet client (no cross-platform GUI, no media support)
-- Custom MUD clients like MUSHclient or Mudlet (desktop only, Windows-centric)
-- The WebSocket protocol already implemented in the server, but with no first-party client
+Players have no first-party client. Raw telnet offers no media support; third-party MUD clients are desktop-only and don't support the V2 JSON protocol, graphics, video, or sound. A previous proposal suggested a JavaScript Progressive Web App, but that approach has three disqualifying limitations:
 
-There is no official, polished client that works across all major platforms (Windows, macOS, Linux, Android, iOS) and in a web browser without installation. The server already speaks WebSocket and WSS, already sends V2 JSON room/map data, and already has a music protocol — but these capabilities have no front end to surface them. We need a first-party web client that exposes all of this and adds support for graphics, video, and sound.
+1. **App store distribution is not possible** — Apple and Google do not accept pure PWAs in their stores without a native wrapper, and that wrapper negates the "no build complexity" benefit.
+2. **Bundled asset distribution is unreliable** — Service Worker caches are browser-managed and can be evicted at any time. There is no way to ship a first-run experience with pre-loaded art, music, and sound included in the download from the store.
+3. **Asset update caching is second-class** — Browser cache APIs offer no guarantee of persistence. A native app can write to its own document/cache directory and keep assets indefinitely.
 
----
-
-## 2. Goals
-
-- **Universal**: Works in any modern browser (Chrome, Firefox, Safari, Edge). No plugins required.
-- **Cross-platform installable**: Can be installed as a native-like app on Windows, macOS, Linux, Android, and iOS via Progressive Web App (PWA) technology.
-- **Rich media**: Supports background music, sound effects, video cutscenes, and graphical overlays.
-- **Structured UI**: Uses the V2 JSON protocol to populate a live room panel and minimap alongside the text terminal.
-- **Maintainable**: Built with vanilla HTML/CSS/JavaScript (no build pipeline required) so it can be maintained without Node.js tooling.
+The replacement approach must support: true app store distribution, bundled initial assets, persistent incremental asset updates, cross-platform reach (Windows, macOS, Linux, Android, iOS), and a configurable multi-panel UI with rich media (graphics, video, sound).
 
 ---
 
-## 3. Approach Overview
+## 2. Technology Choice: Flutter
 
-A single-page web application (SPA) built as a Progressive Web App:
+**Flutter** (Google, Dart language) is recommended as the client framework.
 
-| Layer | Technology | Rationale |
-|-------|-----------|-----------|
-| Terminal display | [xterm.js](https://xtermjs.org/) | Full ANSI/VT100 color support; scrollback buffer; keyboard handling |
-| WebSocket connection | Native browser `WebSocket` API | No library needed; already supported by the server |
-| Audio | Web Audio API + `<audio>` element | Handles music + SFX; works across all modern browsers |
-| Video | HTML5 `<video>` element | Universally supported; no plugin required |
-| Graphics / minimap | HTML5 `<canvas>` | Hardware-accelerated; no library needed for 2D tile rendering |
-| Layout | CSS Grid + Flexbox | Responsive; no framework needed |
-| PWA packaging | Service Worker + Web App Manifest | Install-to-homescreen on all platforms |
+### Why Flutter
 
-The client lives in a `web/client/` directory in this repo and is served as static files. No build step (no Webpack, Vite, etc.) is required — all JS is plain ES2020 modules.
+| Requirement | Flutter |
+|-------------|---------|
+| iOS App Store distribution | Native ARM binary — passes review |
+| Google Play distribution | Native ARM binary — passes review |
+| Microsoft Store distribution | Native Windows binary |
+| Mac App Store distribution | Native macOS binary |
+| Linux desktop | Native binary (no app store, but installable package) |
+| Web (browser) | Flutter Web compiles to Wasm/JS — works as fallback |
+| Bundled assets | `flutter pub` includes assets in the APK/IPA at build time |
+| Persistent local asset cache | Dart `path_provider` + direct file I/O to app cache directory |
+| WebSocket | `web_socket_channel` package |
+| Audio | `just_audio` package |
+| Video | `video_player` package |
+| 2D graphics / custom rendering | `CustomPainter` / `Canvas` API built into Flutter |
+| Configurable panel layout | Flutter's flexible widget tree supports any layout |
 
-### Platform Delivery
+### Why not the alternatives
 
-| Platform | Delivery method |
-|----------|----------------|
-| Any browser | Visit URL — works immediately |
-| Android / iOS | "Add to Home Screen" (PWA) — full-screen, offline-capable |
-| Windows / macOS / Linux | PWA install via Chrome/Edge "Install App" prompt |
-| App Store / Google Play (future) | Wrap with Capacitor (same HTML/JS/CSS, no code changes) |
+| Framework | Problem |
+|-----------|---------|
+| React Native | JavaScript — same category as the rejected PWA; JS bundle delivery; Facebook-governed |
+| Electron | JavaScript + Chromium — not accepted by Apple's App Store as-is; bundles a full browser |
+| Godot | Excellent for games but designed around a scene/node editor, not a panel-driven app UI; Dart/Flutter is a better fit for a configurable multi-panel client with text I/O |
+| Qt (C++) | Cross-platform but no official iOS/Android app store support path without Qt for Mobile license; C++ complexity |
+| .NET MAUI | No Linux desktop support; Microsoft-only ecosystem feel |
 
-This means one codebase serves all six platform targets. Capacitor wrapping is an optional future step — no Capacitor work is in scope for this proposal.
-
----
-
-## 4. UI Layout
-
-The client uses a three-panel responsive layout:
-
-```
-┌────────────┬──────────────┬────────────────────────┐
-│  #map      │  #room       │  #terminal             │
-│  (canvas)  │  (live data) │  (xterm.js scrollback) │
-│            │              ├────────────────────────┤
-│            │              │  #input (command bar)  │
-└────────────┴──────────────┴────────────────────────┘
-```
-
-- On viewports narrower than 768px (phones), panels stack vertically: terminal on top, room panel below, map at bottom.
-- Panels are resizable via drag dividers; sizes are persisted in `localStorage`.
-- Map and room panels are collapsible — they disappear for players who prefer a pure-text experience.
-- A settings drawer provides: server address, font size, volume controls (music, SFX), colour theme (dark/light).
-
-### Terminal panel
-
-- Uses xterm.js for rendering — handles all `@@color` codes after server-to-ANSI conversion (already done for WebSocket clients), scrollback, copy/paste, and keyboard events.
-- Supports the full existing game output unchanged.
-
-### Room panel
-
-- Populated by the existing V2 `Room` JSON messages the server already sends.
-- Shows room name, description, exit buttons (clickable → sends direction), and collapsible lists of mobs, players, and objects — each with action dropdowns.
-
-### Map panel
-
-- Canvas-based tile map populated by the existing V2 `Map` JSON messages.
-- Terrain tiles are small PNGs (32×32); the canvas falls back to solid fill colours if assets are absent.
-- Current room is highlighted; mob-count badges shown on adjacent rooms.
+Flutter is the only framework that targets all six platform targets with one codebase, compiles to native code on all of them, and has an established path through every major app store.
 
 ---
 
-## 5. Media Protocol Extensions
+## 3. Asset Strategy
 
-The server already has a music protocol:
+### 3.1 Bundled initial assets
 
-```json
-{"type":"music","action":"play","url":"/web/mp3/theme.mp3"}
-{"type":"music","action":"stop"}
-```
+Assets included in the app binary at build time via Flutter's `pubspec.yaml` `assets:` section. These ship with the app download from the store:
 
-Three new message types extend this for full rich-media support. These require small server-side additions (see §8):
+- Terrain tile images (minimap)
+- UI sound effects (button clicks, connect/disconnect tones)
+- Default theme music (or a short preview track)
+- Default background images for major areas
+- App icons, splash screen, fonts
 
-### 5.1 Sound Effects
+These cover the first-run experience completely — no network access needed to start playing.
 
-```json
-{"type":"sfx","action":"play","url":"/web/sfx/combat_hit.mp3","volume":0.6}
-```
+### 3.2 Downloadable asset updates
 
-- One-shot playback; no looping.
-- Volume is 0.0–1.0, defaulting to 1.0 if absent.
-- SFX are played concurrently — multiple hits in a combat round can overlap.
-
-### 5.2 Video
-
-```json
-{"type":"video","action":"play","url":"/web/video/intro.mp4","blocking":true}
-{"type":"video","action":"stop"}
-```
-
-- `blocking: true` overlays the video fullscreen over the client; the command input is disabled until the video ends or the player dismisses it.
-- `blocking: false` (default) plays the video in a small overlay in the corner without blocking input.
-- Used for story cutscenes, area intros, etc.
-
-### 5.3 Background Image
-
-```json
-{"type":"background","action":"set","url":"/web/img/midgaard.jpg","opacity":0.15}
-{"type":"background","action":"clear"}
-```
-
-- Sets a parallax background image behind the terminal, faded to `opacity` (default 0.1).
-- `clear` removes the background.
-- Used to give each major area a visual identity without obscuring the text.
-
----
-
-## 6. Progressive Web App (PWA)
-
-Two files make the client installable:
-
-### `manifest.json`
+The server exposes an **asset manifest endpoint** (new, see §8) at `/assets/manifest.json`:
 
 ```json
 {
-  "name": "ACK!MUD TNG",
-  "short_name": "ACK!MUD",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#1a1a2e",
-  "icons": [
-    {"src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
-    {"src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png"}
+  "version": 42,
+  "assets": [
+    {"path": "mp3/midgaard.mp3",      "hash": "a1b2c3d4", "size": 3145728},
+    {"path": "sfx/combat_hit.mp3",    "hash": "e5f6a7b8", "size": 22016},
+    {"path": "video/intro.mp4",       "hash": "c9d0e1f2", "size": 52428800},
+    {"path": "img/bg/midgaard.jpg",   "hash": "01234567", "size": 204800},
+    {"path": "img/terrain/city.png",  "hash": "89abcdef", "size": 4096}
   ]
 }
 ```
 
-### `service-worker.js`
+On startup the client:
+1. Fetches `/assets/manifest.json` from the configured server.
+2. Compares each entry's hash against its local cached file hash (stored in a local SQLite database via `sqflite`).
+3. Downloads only assets that are absent or whose hash has changed.
+4. Stores downloaded files in the app's cache directory (`path_provider`'s `getApplicationSupportDirectory()`).
+5. Updates the local hash database.
 
-Caches all client assets (HTML, CSS, JS, lib, icons) on first visit. Subsequent loads are instant and work offline (the terminal shows a "reconnecting" state when the server is unreachable). The service worker uses a cache-first strategy for static assets and network-first for API/WebSocket connections.
+Assets are never re-downloaded unless their hash changes. The cache directory is not cleared by the OS without user action (unlike browser caches). On first run against a server the client has never seen before, all assets download in the background while the player is logging in.
 
----
+### 3.3 Asset resolution at runtime
 
-## 7. File Structure
+When the client needs to play `mp3/midgaard.mp3`:
+1. Check local cache directory — if present, use it.
+2. If absent (not yet downloaded), fall back to the bundled version if one exists.
+3. If no bundled fallback, skip silently (no crash).
 
-All files live under `web/` in this repository:
-
-```
-web/
-├── client/
-│   ├── index.html              # Entry point; loads all panels
-│   ├── manifest.json           # PWA manifest
-│   ├── service-worker.js       # PWA offline caching
-│   ├── css/
-│   │   ├── client.css          # Layout, theme variables, responsive rules
-│   │   └── xterm.css           # xterm.js stylesheet (vendored)
-│   ├── js/
-│   │   ├── main.js             # Bootstrap: connects WS, wires panels
-│   │   ├── connection.js       # WebSocket lifecycle, reconnect, V2 routing
-│   │   ├── terminal.js         # xterm.js wrapper; ANSI rendering
-│   │   ├── room.js             # Room panel: render, delta updates
-│   │   ├── map.js              # Canvas minimap: BFS layout, tile render
-│   │   ├── audio.js            # Music + SFX via Web Audio API
-│   │   ├── video.js            # Video overlay
-│   │   ├── background.js       # Background image management
-│   │   └── settings.js         # Settings drawer; localStorage persistence
-│   ├── lib/
-│   │   ├── xterm.min.js        # xterm.js (vendored, no CDN dependency)
-│   │   └── xterm-addon-fit.min.js  # Auto-resize addon
-│   └── icons/
-│       ├── icon-192.png        # PWA icon
-│       └── icon-512.png        # PWA icon (splash)
-├── mp3/                        # Music files (already referenced by server)
-├── sfx/                        # Sound effect files
-├── video/                      # Video files
-├── img/                        # Background images, terrain tiles
-│   └── terrain/                # 32×32 PNG terrain tiles for canvas map
-└── README.md                   # Deployment instructions
-```
-
-`web/mp3/` already exists conceptually (server sends URLs pointing to it); this proposal formalises the directory structure.
+This means the app always works from the bundle and progressively enriches as downloads complete.
 
 ---
 
-## 8. Server-Side Changes
+## 4. Configurable Panel System
 
-The server needs minimal additions to support the new media message types. All changes are conditional on `d->websocket_active` — telnet clients are unaffected.
+The UI is a **dockable panel system**. Players can add, remove, resize, reorder, and float any panel. Layout is persisted to a local config file.
 
-### 8.1 New message-sending helpers in `socket.c`
+### 4.1 Available panel types
+
+| Panel type | Content |
+|------------|---------|
+| `Terminal` | Main game text output (ANSI color, scrollback) |
+| `Room` | Live room name, description, exits, mobs, players, objects |
+| `Minimap` | Canvas tile map from V2 Map JSON |
+| `Combat` | Combat-only text stream filtered from game output |
+| `Chat` | Communication channels (tell, say, gossip, clan) filtered from game output |
+| `Inventory` | Player inventory and equipment (populated via V2 protocol extension) |
+| `Stats` | HP/MP/MV bars, level, XP — populated via V2 Vitals messages |
+| `Input` | Command input bar (always present, cannot be removed) |
+| `Media` | Now-playing track, volume controls, video viewport |
+
+Any number of panels can be open simultaneously. Multiple `Terminal` panels can exist for split views. The minimum viable layout is `Input` + one `Terminal`.
+
+### 4.2 Layout engine
+
+Layout is defined as a tree of **splits** and **tabs**:
+
+```
+SplitH
+├── SplitV
+│   ├── Minimap (30%)
+│   └── Room (70%)
+└── SplitV
+    ├── Terminal (60%)
+    ├── SplitH
+    │   ├── Combat (50%)
+    │   └── Chat (50%)
+    └── Input (fixed height)
+```
+
+- `SplitH` / `SplitV` are horizontal/vertical splits with draggable dividers.
+- `Tab` groups multiple panels into a tabbed container.
+- Panels can be dragged from one split to another, or torn off into a floating window (desktop only).
+- On mobile, a simplified layout mode stacks panels vertically with swipe-to-switch navigation between them.
+
+### 4.3 Layout persistence
+
+The layout tree is serialised to JSON and saved to a local file (`layouts.json` in the app support directory). Multiple named layouts can be saved:
+
+```json
+{
+  "active": "Default",
+  "layouts": {
+    "Default": { ... layout tree ... },
+    "Combat Focus": { ... layout tree ... },
+    "Mobile": { ... layout tree ... }
+  }
+}
+```
+
+Players can switch layouts from a toolbar menu. Layouts are per-server-address, so connecting to a different server can have a different default layout.
+
+---
+
+## 5. Media Protocol
+
+The server side already has:
+- Music: `{"type":"music","action":"play","url":"/assets/mp3/..."}` ✓
+- Music stop: `{"type":"music","action":"stop"}` ✓
+
+New message types (require server additions — see §8):
+
+### 5.1 Sound effects
+
+```json
+{"type":"sfx","action":"play","url":"/assets/sfx/combat_hit.mp3","volume":0.6}
+```
+
+One-shot; multiple may overlap. Client resolves the URL against local cache first.
+
+### 5.2 Video
+
+```json
+{"type":"video","action":"play","url":"/assets/video/intro.mp4","blocking":true}
+{"type":"video","action":"stop"}
+```
+
+`blocking: true` plays fullscreen and pauses game input until dismissed. `blocking: false` plays in the `Media` panel without interrupting play.
+
+### 5.3 Background image
+
+```json
+{"type":"background","action":"set","url":"/assets/img/bg/midgaard.jpg","opacity":0.12}
+{"type":"background","action":"clear"}
+```
+
+Sets a faded background image visible behind the terminal text. Intended to set area atmosphere without obscuring the text.
+
+### 5.4 V2 protocol additions
+
+Two new V2 tags are needed to populate the `Stats` and `Inventory` panels:
+
+**`Vitals`** — sent each prompt:
+```json
+{"v":2,"tag":"Vitals","data":{"hp":350,"max_hp":450,"mp":120,"max_mp":200,"mv":80,"max_mv":100}}
+```
+
+**`Inventory`** — sent after `inventory`, `equipment`, `get`, `drop`, `wear`, `remove`:
+```json
+{"v":2,"tag":"Inventory","data":{"carried":[...],"worn":[...],"gold":1500}}
+```
+
+These allow the Stats and Inventory panels to stay live without screen-scraping the terminal text.
+
+---
+
+## 6. Repository Structure
+
+The client lives in a new repository `acktng-client` (separate from `acktng` to keep the C server repo clean and to allow independent versioning and CI):
+
+```
+acktng-client/
+├── lib/
+│   ├── main.dart                   # Entry point
+│   ├── app.dart                    # MaterialApp / theme
+│   ├── connection/
+│   │   ├── websocket_client.dart   # WebSocket lifecycle, reconnect
+│   │   └── message_router.dart     # V2 JSON routing to panel streams
+│   ├── panels/
+│   │   ├── panel_registry.dart     # All available panel types
+│   │   ├── terminal_panel.dart     # ANSI text display
+│   │   ├── room_panel.dart         # Room data display
+│   │   ├── minimap_panel.dart      # Canvas tile map
+│   │   ├── combat_panel.dart       # Filtered combat text
+│   │   ├── chat_panel.dart         # Filtered comms text
+│   │   ├── inventory_panel.dart    # Inventory + equipment
+│   │   ├── stats_panel.dart        # HP/MP/MV bars
+│   │   └── media_panel.dart        # Now playing, video viewport
+│   ├── layout/
+│   │   ├── layout_engine.dart      # Split/Tab tree model
+│   │   ├── layout_persistence.dart # JSON serialisation
+│   │   └── layout_editor.dart      # Drag-to-rearrange UI
+│   ├── assets/
+│   │   ├── asset_manifest.dart     # Manifest fetch + diff
+│   │   ├── asset_cache.dart        # Local file resolution
+│   │   └── asset_downloader.dart   # Background download queue
+│   ├── media/
+│   │   ├── audio_manager.dart      # just_audio wrapper: music + SFX
+│   │   └── video_manager.dart      # video_player wrapper
+│   └── settings/
+│       └── settings.dart           # Server address, theme, per-layout prefs
+├── assets/                         # Bundled initial assets
+│   ├── mp3/
+│   ├── sfx/
+│   ├── img/
+│   │   ├── bg/
+│   │   └── terrain/
+│   └── fonts/
+├── test/                           # Dart unit + widget tests
+├── pubspec.yaml
+├── android/                        # Android-specific configuration
+├── ios/                            # iOS-specific configuration
+├── macos/                          # macOS-specific configuration
+├── windows/                        # Windows-specific configuration
+├── linux/                          # Linux-specific configuration
+└── web/                            # Flutter Web output (optional)
+```
+
+---
+
+## 7. Server-Side Changes (`acktng` repo)
+
+### 7.1 Asset manifest endpoint
+
+Extend the HTTP handler in `comm.c` to serve `/assets/manifest.json`. This is a generated JSON file rebuilt whenever the `web/` asset directory changes. The simplest approach: a script (`tools/build_asset_manifest.py`) that walks `web/` and outputs `web/assets/manifest.json` with SHA-256 hashes. The HTTP handler serves the file statically.
+
+### 7.2 Static asset serving
+
+Extend the HTTP handler to serve files under `/assets/` from the `web/` directory (path traversal sanitised). This is the same small static file server described in the previous proposal revision, scoped to the `web/` subtree.
+
+### 7.3 New media helpers in `socket.c`
 
 ```c
 void ws_send_sfx(DESCRIPTOR_DATA *d, const char *url, float volume);
@@ -219,99 +292,92 @@ void ws_send_background(DESCRIPTOR_DATA *d, const char *url, float opacity);
 void ws_send_background_clear(DESCRIPTOR_DATA *d);
 ```
 
-These build the JSON messages described in §5 and call `write_websocket_frame()`.
+### 7.4 V2 Vitals and Inventory messages
 
-### 8.2 Static file serving
+New helpers:
+```c
+void ws_send_vitals(DESCRIPTOR_DATA *d, CHAR_DATA *ch);     /* socket.c */
+void ws_send_inventory(DESCRIPTOR_DATA *d, CHAR_DATA *ch);  /* socket.c */
+```
 
-The server's existing HTTP listener (on `--http-port`) currently handles only `/gsgp` and `/who`. We extend it to serve static files from the `web/` directory:
+`ws_send_vitals()` called from `send_prompt()` in `comm.c`.
+`ws_send_inventory()` called after any command that changes carried/worn items (`do_get`, `do_drop`, `do_wear`, `do_remove`, `do_inventory`, `do_equipment`).
 
-- Any request not matching `/gsgp` or `/who` is treated as a static file request.
-- The server resolves the URL path against the `web/` directory (relative to the `area/` working directory via `../web/`).
-- Path traversal (`../`) is sanitised before opening any file.
-- MIME type is inferred from file extension (`.html`, `.js`, `.css`, `.mp3`, `.mp4`, `.png`, `.jpg`, `.json`).
-- No directory listing is served — unknown paths return 404.
-
-This allows the client to be served by the game server itself without requiring a separate nginx instance, which simplifies development and small deployments. Production deployments can still put nginx in front for performance.
-
-### 8.3 Trigger points for new media messages
-
-Server code that triggers media events:
-- `send_area_music()` already exists and covers background music. No changes needed.
-- New SFX: combat hit/miss/death sounds can be emitted from `fight.c` for WebSocket clients.
-- New video: area intro videos can be triggered in `act_move.c` on first entry to a key room, or via a new wizard command `do_playvideo`.
-- New background: triggered by `send_area_music()` companion function `send_area_background()`, keyed on area name.
-
-### 8.4 Affected server files
+### 7.5 Affected server files
 
 | File | Change |
 |------|--------|
-| `src/socket.c` | Add `ws_send_sfx()`, `ws_send_video()`, `ws_send_video_stop()`, `ws_send_background()`, `ws_send_background_clear()` |
+| `src/socket.c` | Add `ws_send_sfx()`, `ws_send_video()`, `ws_send_video_stop()`, `ws_send_background()`, `ws_send_background_clear()`, `ws_send_vitals()`, `ws_send_inventory()` |
 | `src/headers/socket.h` | Declare new helpers |
-| `src/comm.c` | Extend HTTP handler to serve static files from `web/`; add `get_mime_type()` |
-| `src/fight.c` | Emit SFX for hit/miss/death on WebSocket clients (conditional) |
-| `src/act_move.c` | Emit background/video on area entry (conditional) |
+| `src/comm.c` | Extend HTTP handler for `/assets/` static serving and `/assets/manifest.json`; call `ws_send_vitals()` from `send_prompt()` |
+| `src/act_obj.c` | Call `ws_send_inventory()` after get/drop/wear/remove |
+| `src/act_info.c` | Call `ws_send_inventory()` after inventory/equipment commands |
+| `src/fight.c` | Emit SFX for hit/miss/death on WebSocket clients |
+| `src/act_move.c` | Emit background on area entry |
+| `src/tools/build_asset_manifest.py` | New script: walk `web/`, write `web/assets/manifest.json` |
 
 ---
 
-## 9. Connection Flow
-
-```
-Browser navigates to https://ackmud.com/
-    → Service worker serves index.html from cache (instant)
-    → index.html loads xterm.js, CSS, JS modules
-    → main.js reads server address from localStorage or URL param
-    → connection.js opens wss://ackmud.com:9891 (WSS port)
-    → Server sends HTTP 101 Switching Protocols
-    → Server sends greeting text and theme music JSON
-    → Client plays music, displays greeting in terminal
-    → Player enters name/password → enters game
-    → Server starts sending V2 Room + Map JSON + game text
-    → Client populates all three panels
-```
-
-The connection address is configurable (settings drawer) so the same client file can connect to any ACK!MUD instance.
-
----
-
-## 10. Trade-offs and Risks
+## 8. Trade-offs and Risks
 
 | Concern | Notes |
 |---------|-------|
-| **xterm.js dependency** | A third-party library adds maintenance burden if it breaks. Vendoring it (no CDN) avoids surprise breakage. Size: ~700KB minified. Justified by the complexity of correct ANSI rendering. |
-| **No build pipeline** | Plain ES modules work in all modern browsers. This avoids npm/Webpack complexity but means no tree-shaking. Acceptable at this scale. |
-| **iOS PWA limitations** | Safari does not support the full PWA install prompt; users must manually "Add to Home Screen". Push notifications are not available on iOS PWA. These are Apple platform limitations and cannot be fixed. |
-| **Static file serving in C** | Adding a basic static file server to `comm.c` is straightforward but adds surface area to the C code. Production deployments should use nginx; the built-in server is for development convenience. |
-| **Media asset hosting** | `web/mp3/`, `web/sfx/`, `web/video/` directories need to be populated with actual media files. The code scaffolding works without assets — audio/video simply doesn't play if files are absent. |
-| **WSS self-signed cert** | The auto-generated cert in `data/tls/` is self-signed. Browsers will warn or refuse to connect on `wss://` with a self-signed cert. Production deployments need a real cert (Let's Encrypt). This is a deployment concern, not a client code concern. |
-| **V2 protocol already implemented** | Room and Map panels require no new server work — the V2 protocol is already sending the right data. Only the media extensions (§8) require new server code. |
+| **Dart/Flutter learning curve** | Flutter uses Dart, which is not widely known. However, Dart is simple and Flutter's documentation is excellent. The existing C server team would be maintaining a new language. |
+| **App store review** | Apple and Google review native apps before publishing. Updates go through review (1–3 days for Apple, hours for Google). This is unavoidable for native app store distribution. |
+| **Flutter Web** | Flutter Web is available but the output is not a traditional website — it compiles to WebAssembly + Canvas. It will work in a browser but is heavier than a native web app. It is included as a convenience fallback, not a primary target. |
+| **Asset manifest script** | `build_asset_manifest.py` must be run whenever assets change. This should be automated via a Makefile rule or git hook. |
+| **Initial app size** | Bundling initial art/music will increase the app download size. Typical MUD UI assets (terrain tiles, SFX, one theme track) should stay under 50MB — acceptable for a store download. |
+| **Video file sizes** | Video cutscenes can be large. These should not be bundled — they should be download-on-demand assets. |
+| **Background downloads on mobile** | iOS restricts background network activity. Large asset downloads should be initiated while the app is foregrounded and use `WorkManager`/`BGTaskScheduler` for continuation. |
+| **Layout complexity** | A full dockable panel system is non-trivial to implement. A phased approach is sensible: ship fixed layouts first, add drag-to-rearrange in a later release. |
 
 ---
 
-## 11. Out of Scope
+## 9. Out of Scope
 
-- Capacitor wrapping for App Store / Google Play distribution (future phase)
-- Server-side rendering or SSR
+- The server binary itself — only the WebSocket protocol extensions and HTTP asset serving are in scope
+- In-game area editor or admin tools
 - Push notifications
-- In-client editor for area files or help entries
-- Any changes to telnet or TLS-telnet code paths
-- Video production or sound design (this proposal provides the infrastructure; assets are separate)
-- HTTPS serving (the built-in HTTP server is HTTP only; TLS for HTTPS requires a separate concern)
+- Account creation via the client (handled in-game via the existing login flow)
+- Multiplexed connections (connecting to more than one server at once)
 
 ---
 
-## 12. Implementation Order
+## 10. Implementation Order
 
-1. Create `web/client/` directory structure with placeholder files
-2. Build `index.html` + `client.css` layout (three panels, responsive)
-3. Integrate xterm.js — connect to WSS, render game text
-4. Wire V2 routing in `connection.js` — route Room/Map/Music messages
-5. Implement room panel (`room.js`)
-6. Implement canvas minimap (`map.js`)
-7. Implement audio (`audio.js`) — music already works, add SFX
-8. Add PWA files: `manifest.json`, `service-worker.js`, icons
-9. Server: extend HTTP handler for static file serving (`comm.c`)
-10. Server: add SFX helpers (`socket.c`) + fight.c hooks
-11. Server: add video/background helpers + area-entry hooks
-12. Populate `web/img/terrain/` with tile PNGs
-13. Write `web/README.md` with deployment instructions
-14. Run `make unit-tests` (server changes require unit test coverage for the static file path resolver)
+### Phase 1 — Core client (playable)
+1. New `acktng-client` Flutter project; all six platform targets configured
+2. Connection screen (server address, connect button)
+3. WebSocket connection + reconnect logic
+4. Terminal panel with ANSI color rendering
+5. Input bar with command history
+6. Fixed two-panel default layout (Terminal + Input)
+7. Music playback (existing server protocol)
+
+### Phase 2 — Structured panels
+8. V2 Room and Map message handling (server already sends these)
+9. Room panel implementation
+10. Minimap canvas implementation
+11. Stats panel + server `ws_send_vitals()`
+12. Inventory panel + server `ws_send_inventory()`
+
+### Phase 3 — Media and assets
+13. Asset manifest endpoint + `build_asset_manifest.py`
+14. Asset cache + downloader in client
+15. SFX playback + server `ws_send_sfx()` hooks in `fight.c`
+16. Background image support + server `ws_send_background()` hooks in `act_move.c`
+17. Video playback + server `ws_send_video()` + wizard command
+
+### Phase 4 — Configurable layout
+18. Layout engine (split/tab tree model)
+19. Layout persistence to local file
+20. Panel drag-to-rearrange (desktop)
+21. Mobile swipe-to-switch panel navigation
+22. Named layout presets (save/load/switch)
+
+### Phase 5 — Distribution
+23. Android: signed APK/AAB, Google Play listing
+24. iOS: provisioning profiles, App Store Connect submission
+25. Windows: MSIX package, Microsoft Store listing
+26. macOS: notarisation, Mac App Store submission
+27. Linux: `.deb`/`.rpm` packages and/or Flatpak
