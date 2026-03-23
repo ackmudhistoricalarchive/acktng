@@ -2,7 +2,7 @@
 
 **Date:** 2026-03-23
 **Status:** Open — pending discussion
-**Repos affected:** `acktng` (server media protocol extensions, asset manifest endpoint); new `acktng-client` repository (Flutter app)
+**Repos affected:** `acktng` (server media protocol extensions, asset manifest endpoint); `JBailes/tngclient` on GitHub (Flutter app)
 
 ---
 
@@ -220,10 +220,10 @@ These allow the Stats and Inventory panels to stay live without screen-scraping 
 
 ## 6. Repository Structure
 
-The client lives in a new repository `acktng-client` (separate from `acktng` to keep the C server repo clean and to allow independent versioning and CI):
+The client lives in `https://github.com/JBailes/tngclient` (separate from `acktng` to keep the C server repo clean and to allow independent versioning and CI):
 
 ```
-acktng-client/
+tngclient/   (https://github.com/JBailes/tngclient)
 ├── lib/
 │   ├── main.dart                   # Entry point
 │   ├── app.dart                    # MaterialApp / theme
@@ -346,7 +346,7 @@ void ws_send_inventory(DESCRIPTOR_DATA *d, CHAR_DATA *ch);  /* socket.c */
 ## 10. Implementation Order
 
 ### Phase 1 — Core client (playable)
-1. New `acktng-client` Flutter project; all six platform targets configured
+1. New Flutter project in `JBailes/tngclient`; all six platform targets configured
 2. Connection screen (server address, connect button)
 3. WebSocket connection + reconnect logic
 4. Terminal panel with ANSI color rendering
