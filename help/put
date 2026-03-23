@@ -1,6 +1,0 @@
-level 0
-keywords put
----
-Syntax: put <item> <container>
-
-Places an item into a container.

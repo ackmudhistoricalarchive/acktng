@@ -26,6 +26,9 @@
 #include "globals.h"
 #include "npc_dialogue.h"
 #include "lists.h"
+#ifdef HAVE_LIBPQ
+#include "db/db_help.h"
+#endif
 
 /* =========================================================================
  * Forward declarations for game functions used here.
@@ -943,6 +946,7 @@ static const char *accent_instructions[MAX_ACCENT] = {
  * Help/shelp context collection for KNOW_HELPS mobs.
  * ========================================================================= */
 
+#ifdef HAVE_LIBPQ
 /* Common English stop-words to skip when extracting search keywords. */
 static const char *help_stop_words[] = {"the",  "and", "is", "are", "you", "how", "what", "can",
                                         "does", "do",  "a",  "an",  "in",  "to",  "of",   "it",
@@ -957,18 +961,19 @@ static bool is_stop_word(const char *w)
          return TRUE;
    return FALSE;
 }
+#endif
 
 /*
- * Search first_help and first_shelp for entries whose keyword matches any
- * word in `message`.  Writes up to `cap` bytes of formatted context to `out`.
+ * Query help/shelp DB for entries whose keyword matches any word in `message`.
+ * Writes up to `cap` bytes of formatted context to `out`.
  */
 static void collect_help_context(const char *message, char *out, size_t cap)
 {
    char msg_copy[512];
    char word[64];
    const char *p;
-   HELP_DATA *pHelp;
-   HELP_DATA *matches[4];
+   /* Track matched keywords to deduplicate. */
+   char seen_kw[4][128];
    int match_count = 0;
    int i;
 
@@ -978,12 +983,17 @@ static void collect_help_context(const char *message, char *out, size_t cap)
    if (strncmp(message, "[GREET]", 7) == 0)
       return;
 
+#ifdef HAVE_LIBPQ
    snprintf(msg_copy, sizeof(msg_copy), "%s", message);
 
    p = msg_copy;
    while (*p != '\0' && match_count < 4)
    {
-      /* Extract next whitespace-delimited word */
+      char kw_buf[128];
+      char text_buf[512];
+      int lev_out = 0;
+      bool already;
+
       p = one_argument((char *)p, word);
 
       if (word[0] == '\0')
@@ -993,62 +1003,60 @@ static void collect_help_context(const char *message, char *out, size_t cap)
       if (is_stop_word(word))
          continue;
 
-      /* Search help then shelp */
-      for (pHelp = first_help; pHelp != NULL && match_count < 4; pHelp = pHelp->next)
+      /* Try help then shelp; use first hit. */
+      if (!db_help_lookup(word, 100, kw_buf, sizeof(kw_buf), text_buf, sizeof(text_buf), &lev_out))
       {
-         bool already = FALSE;
-         if (!str_prefix(word, pHelp->keyword))
-         {
-            for (i = 0; i < match_count; i++)
-               if (matches[i] == pHelp)
-               {
-                  already = TRUE;
-                  break;
-               }
-            if (!already)
-               matches[match_count++] = pHelp;
-         }
+         if (!db_shelp_lookup(word, 100, kw_buf, sizeof(kw_buf), text_buf, sizeof(text_buf),
+                              &lev_out))
+            continue;
       }
-      for (pHelp = first_shelp; pHelp != NULL && match_count < 4; pHelp = pHelp->next)
-      {
-         bool already = FALSE;
-         if (!str_prefix(word, pHelp->keyword))
+
+      /* Deduplicate by matched keyword. */
+      already = FALSE;
+      for (i = 0; i < match_count; i++)
+         if (!str_cmp(seen_kw[i], kw_buf))
          {
-            for (i = 0; i < match_count; i++)
-               if (matches[i] == pHelp)
-               {
-                  already = TRUE;
-                  break;
-               }
-            if (!already)
-               matches[match_count++] = pHelp;
+            already = TRUE;
+            break;
          }
+      if (already)
+         continue;
+
+      snprintf(seen_kw[match_count], sizeof(seen_kw[match_count]), "%s", kw_buf);
+      match_count++;
+
+      /* Append to output. */
+      {
+         char header[128];
+         char snippet[304];
+         size_t tlen;
+
+         snprintf(header, sizeof(header), "[HELP: %s]\n", kw_buf);
+         if (strlen(out) + strlen(header) + 1 >= cap)
+            break;
+         strncat(out, header, cap - strlen(out) - 1);
+
+         tlen = strlen(text_buf);
+         if (tlen > 300)
+            tlen = 300;
+         memcpy(snippet, text_buf, tlen);
+         snippet[tlen] = '\n';
+         snippet[tlen + 1] = '\0';
+
+         if (strlen(out) + strlen(snippet) + 1 >= cap)
+            break;
+         strncat(out, snippet, cap - strlen(out) - 1);
       }
    }
-
-   for (i = 0; i < match_count; i++)
-   {
-      char header[128];
-      char snippet[304];
-      size_t tlen;
-
-      snprintf(header, sizeof(header), "[HELP: %s]\n", matches[i]->keyword);
-      if (strlen(out) + strlen(header) + 1 >= cap)
-         break;
-      strncat(out, header, cap - strlen(out) - 1);
-
-      /* Truncate text to 300 chars */
-      tlen = strlen(matches[i]->text);
-      if (tlen > 300)
-         tlen = 300;
-      memcpy(snippet, matches[i]->text, tlen);
-      snippet[tlen] = '\n';
-      snippet[tlen + 1] = '\0';
-
-      if (strlen(out) + strlen(snippet) + 1 >= cap)
-         break;
-      strncat(out, snippet, cap - strlen(out) - 1);
-   }
+#else
+   /* No DB — nothing to inject. */
+   (void)msg_copy;
+   (void)word;
+   (void)p;
+   (void)seen_kw;
+   (void)match_count;
+   (void)i;
+#endif
 }
 
 #ifdef UNIT_TEST_NPC_DIALOGUE
@@ -1062,6 +1070,42 @@ void npc_dialogue_test_collect_help_context(const char *message, char *out, size
 /* =========================================================================
  * System prompt assembly.
  * ========================================================================= */
+
+#ifdef HAVE_LIBPQ
+/* Context struct and callback for lore injection into system prompt. */
+struct lore_inject_ctx
+{
+   char *buf;
+   size_t cap;
+   int count;
+};
+
+static void lore_inject_cb(const char *keyword, const char *body, void *ud)
+{
+   struct lore_inject_ctx *ctx = (struct lore_inject_ctx *)ud;
+   char lore_header[128];
+   size_t tlen;
+
+   if (ctx->count == 0)
+      safe_append(ctx->buf, ctx->cap, "LORE:\n\n");
+   snprintf(lore_header, sizeof(lore_header), "[LORE: %s]\n", keyword);
+   safe_append(ctx->buf, ctx->cap, lore_header);
+   tlen = strlen(body);
+   if (tlen > 1024)
+   {
+      char lore_chunk[1031];
+      memcpy(lore_chunk, body, 1024);
+      memcpy(lore_chunk + 1024, "[...]\n", 7);
+      safe_append(ctx->buf, ctx->cap, lore_chunk);
+   }
+   else
+   {
+      safe_append(ctx->buf, ctx->cap, body);
+   }
+   safe_append(ctx->buf, ctx->cap, "\n");
+   ctx->count++;
+}
+#endif
 
 static void build_system_prompt(char *buf, size_t cap, CHAR_DATA *npc, const char *help_context)
 {
@@ -1113,83 +1157,17 @@ static void build_system_prompt(char *buf, size_t cap, CHAR_DATA *npc, const cha
       }
    }
 
-   /* 4. Lore injection: up to 3 entries matching this NPC's lore_flags */
+/* 4. Lore injection: up to 3 entries matching this NPC's lore_flags */
+#ifdef HAVE_LIBPQ
    if (npc->lore_flags != 0)
    {
-      HELP_DATA *entry;
-      HELP_DATA *matches[3];
-      int match_count = 0;
-      int scores[3] = {0};
-
-      /* Collect entries whose flags are a strict subset of npc->lore_flags */
-      for (entry = first_lore; entry != NULL; entry = entry->next)
-      {
-         int score;
-
-         if (entry->flags == 0)
-            continue;
-         if ((entry->flags & npc->lore_flags) != entry->flags)
-            continue;
-
-         /* Score = popcount of matching flags */
-         score = 0;
-         {
-            long f = entry->flags & npc->lore_flags;
-            while (f)
-            {
-               score += (f & 1);
-               f >>= 1;
-            }
-         }
-
-         if (match_count < 3)
-         {
-            matches[match_count] = entry;
-            scores[match_count] = score;
-            match_count++;
-         }
-         else
-         {
-            /* Replace the lowest-scoring slot if this is better */
-            int worst = 0;
-            if (scores[1] < scores[worst])
-               worst = 1;
-            if (scores[2] < scores[worst])
-               worst = 2;
-            if (score > scores[worst])
-            {
-               matches[worst] = entry;
-               scores[worst] = score;
-            }
-         }
-      }
-
-      if (match_count > 0)
-      {
-         safe_append(buf, cap, "LORE:\n\n");
-         for (i = 0; i < match_count; i++)
-         {
-            char lore_header[128];
-            snprintf(lore_header, sizeof(lore_header), "[LORE: %s]\n", matches[i]->keyword);
-            safe_append(buf, cap, lore_header);
-
-            /* Cap each lore entry at 1024 bytes */
-            size_t tlen = strlen(matches[i]->text);
-            if (tlen > 1024)
-            {
-               char lore_chunk[1031]; /* 1024 bytes of text + "[...]\n" (6) + NUL (1) */
-               memcpy(lore_chunk, matches[i]->text, 1024);
-               memcpy(lore_chunk + 1024, "[...]\n", 7);
-               safe_append(buf, cap, lore_chunk);
-            }
-            else
-            {
-               safe_append(buf, cap, matches[i]->text);
-            }
-            safe_append(buf, cap, "\n");
-         }
-      }
+      struct lore_inject_ctx lctx;
+      lctx.buf = buf;
+      lctx.cap = cap;
+      lctx.count = 0;
+      db_lore_collect_by_flags(npc->lore_flags, 3, lore_inject_cb, &lctx);
    }
+#endif
 
    /* 5. Accent instruction */
    if (accent > ACCENT_NONE && accent < MAX_ACCENT && accent_instructions[accent] != NULL)

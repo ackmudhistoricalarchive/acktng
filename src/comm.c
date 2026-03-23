@@ -67,6 +67,7 @@
 #include "npc_dialogue.h"
 #ifdef HAVE_LIBPQ
 #include "db/db_worker.h"
+#include "db/db_help.h"
 #endif
 
 void trigger_happy_hour(void);
@@ -543,6 +544,7 @@ int main(int argc, char **argv)
    boot_db();
 #ifdef HAVE_LIBPQ
    db_worker_start(NULL);
+   db_help_open(".");
 #endif
    npc_dialogue_init();
    init_mssp_counts();
@@ -609,6 +611,7 @@ int main(int argc, char **argv)
    game_loop(control, control_ws, control_tls, control_sniff, control_http, control_wss);
 #ifdef HAVE_LIBPQ
    db_worker_stop();
+   db_help_close();
 #endif
    if (control >= 0)
       close(control);

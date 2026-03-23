@@ -1,7 +1,0 @@
-level 5
-keywords murder
----
-Syntax: murder <target>
-
-Initiates lethal combat against a player or mob.
-This command is level-gated to 5.

@@ -1,6 +1,0 @@
-level 0
-keywords compare
----
-Syntax: compare <item> <item>
-
-Compares two items and reports relative value/power.

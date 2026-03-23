@@ -1,6 +1,0 @@
-level 0
-keywords read
----
-Syntax: read <object|note>
-
-Reads readable objects such as notes/signs/books.

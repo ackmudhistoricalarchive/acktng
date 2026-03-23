@@ -1,7 +1,0 @@
-level -1
-keywords build_showmob
----
-BUILD HELP : SHOWMOB
---------------------
-SHOWMOB displays various details about a given mob.
-Sytntax:  SHOWMOB <mob-vnum>

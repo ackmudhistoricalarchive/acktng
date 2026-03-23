@@ -50,7 +50,6 @@ extern int top_affect;
 extern int top_area;
 extern int top_ed;
 extern int top_exit;
-extern int top_help;
 extern int top_mob_index;
 extern int top_obj_index;
 extern int top_reset;

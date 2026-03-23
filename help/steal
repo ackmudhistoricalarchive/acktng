@@ -1,6 +1,0 @@
-level 0
-keywords steal
----
-Syntax: steal <item> <target>
-
-Attempts to steal from another character.

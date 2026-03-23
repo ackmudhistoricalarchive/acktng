@@ -1,6 +1,0 @@
-level 0
-keywords lock
----
-Syntax: lock <object|door>
-
-Locks a door/container using an appropriate key.

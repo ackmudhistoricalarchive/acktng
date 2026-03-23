@@ -1,7 +1,0 @@
-level 86
-keywords finger
----
-Syntax: finger <player>
-
-Shows account/profile details about a player.
-This command is restricted to level 86+.

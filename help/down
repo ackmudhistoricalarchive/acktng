@@ -1,6 +1,0 @@
-level 0
-keywords down
----
-Syntax: down
-
-Moves one room down, if an exit exists.

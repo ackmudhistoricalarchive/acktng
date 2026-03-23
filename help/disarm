@@ -1,6 +1,0 @@
-level 0
-keywords disarm
----
-Syntax: disarm <target>
-
-Attempts to disarm an opponent in combat.

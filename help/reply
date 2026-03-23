@@ -1,6 +1,0 @@
-level 0
-keywords reply
----
-Syntax: reply <message>
-
-Replies to the last person who sent you a tell.

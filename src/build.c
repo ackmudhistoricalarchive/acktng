@@ -33,6 +33,7 @@
 #include "tables.h"
 #ifdef HAVE_LIBPQ
 #include "db/db_worker.h"
+#include "db/db_help.h"
 #endif
 
 /* This program provides the interpreting of building commands */
@@ -288,14 +289,12 @@ extern int top_affect;
 extern int top_area;
 extern int top_ed;
 extern int top_exit;
-extern int top_help;
 extern int top_mob_index;
 extern int top_obj_index;
 extern int top_reset;
 extern int top_room;
 extern int top_shop;
 
-extern HELP_DATA *help_last;
 extern AREA_DATA *area_last;
 extern AREA_DATA *area_first;
 extern SHOP_DATA *first_shop;
@@ -6060,16 +6059,16 @@ void build_umobs(CHAR_DATA *ch, char *argument)
    return;
 }
 
-/** Help Editor
-    We want to be able to edit ANY help, so 3.bank etc should work,
-    in case we have helps with the same keyword(s).
- **/
+/** Help Editor -- database-backed **/
+
+#ifdef HAVE_LIBPQ
+/* Pending help edit id for helpedit save callback. */
+static int pending_help_edit_id = 0;
+#endif
+
 void build_findhelp(CHAR_DATA *ch, char *argument)
 {
-   HELP_DATA *pHelp;
-   char buf[MAX_STRING_LENGTH];
    char arg[MAX_STRING_LENGTH];
-   int cnt = 0;
 
    one_argument(argument, arg);
 
@@ -6079,29 +6078,38 @@ void build_findhelp(CHAR_DATA *ch, char *argument)
       return;
    }
 
-   for (pHelp = first_help; pHelp != NULL; pHelp = pHelp->next)
+#ifdef HAVE_LIBPQ
    {
-      if (is_name(arg, pHelp->keyword))
+      int cnt = 0;
+      int i;
+      char kw_buf[256];
+      char body_buf[16384];
+      char buf[MAX_STRING_LENGTH];
+
+      while (
+          db_help_find_nth(arg, cnt + 1, NULL, kw_buf, sizeof(kw_buf), body_buf, sizeof(body_buf)))
       {
          cnt++;
-         sprintf(buf, "[%2d] <%s> \n\r%1.100s\n\r", cnt, pHelp->keyword, pHelp->text);
+         snprintf(buf, sizeof(buf), "[%2d] <%s> \n\r%1.100s\n\r", cnt, kw_buf, body_buf);
          send_to_char(buf, ch);
       }
+      if (cnt == 0)
+         send_to_char("Couldn't find that keyword.\n\r", ch);
    }
-   if (cnt == 0)
-      send_to_char("Couldn't find that keyword.\n\r", ch);
+#else
+   send_to_char("Help database not available.\n\r", ch);
+#endif
    return;
 }
 
 void build_helpedit(CHAR_DATA *ch, char *argument)
 {
-   HELP_DATA *pHelp;
-   char arg[MAX_STRING_LENGTH];
-   int number;
-   int count;
-
-   number = number_argument(argument, arg);
-   count = 0;
+   char arg[MAX_INPUT_LENGTH];
+#ifdef HAVE_LIBPQ
+   int number = number_argument(argument, arg);
+#else
+   number_argument(argument, arg);
+#endif
 
    if (arg[0] == '\0')
    {
@@ -6109,26 +6117,30 @@ void build_helpedit(CHAR_DATA *ch, char *argument)
       return;
    }
 
-   /** Now try and find the keyword **/
-
-   for (pHelp = first_help; pHelp != NULL; pHelp = pHelp->next)
-      if (is_name(arg, pHelp->keyword) && (++count == number))
-         break;
-
-   if (pHelp == NULL)
+#ifdef HAVE_LIBPQ
    {
-      send_to_char("Couldn't find that keyword.\n\r", ch);
-      return;
-   }
+      int id = 0;
+      char kw_buf[256];
+      static char body_buf[16384];
 
-   build_strdup(&pHelp->text, "$edit", TRUE, ch);
+      if (!db_help_find_nth(arg, number, &id, kw_buf, sizeof(kw_buf), body_buf, sizeof(body_buf)))
+      {
+         send_to_char("Couldn't find that keyword.\n\r", ch);
+         return;
+      }
+
+      pending_help_edit_id = id;
+      build_editstr((char **)&body_buf, body_buf, ch);
+   }
+#else
+   send_to_char("Help database not available.\n\r", ch);
+#endif
    return;
 }
 
 void build_addhelp(CHAR_DATA *ch, char *argument)
 {
-   HELP_DATA *pHelp;
-   char arg[MAX_STRING_LENGTH];
+   char arg[MAX_INPUT_LENGTH];
    int level;
    argument = one_argument(argument, arg);
 
@@ -6146,90 +6158,22 @@ void build_addhelp(CHAR_DATA *ch, char *argument)
       return;
    }
 
-   GET_FREE(pHelp, help_free);
-   pHelp->level = level;
-   pHelp->keyword = str_dup(argument);
-   pHelp->text = str_dup("NEW HELP.  DELETE THIS LINE FIRST!");
-
-   LINK(pHelp, first_help, last_help, next, prev);
-
-   top_help++;
-   send_to_char("Help added.  Use HELPEDIT <keyword> to edit it.\n\r", ch);
+#ifdef HAVE_LIBPQ
+   {
+      int new_id = db_help_insert(level, argument, "NEW HELP.  DELETE THIS LINE FIRST!");
+      if (new_id > 0)
+      {
+         top_help++;
+         send_to_char("Help added.  Use HELPEDIT <keyword> to edit it.\n\r", ch);
+      }
+      else
+         send_to_char("DB insert failed.\n\r", ch);
+   }
+#else
+   send_to_char("Help database not available.\n\r", ch);
+#endif
    return;
 }
-
-/*
-void do_all_help_save()
-{
-
-
-  FILE * fp;
-  char help_file_name[MAX_STRING_LENGTH];
-
-
-
-  if ( ( fp = fopen( help_file, "w" ) ) == NULL )
-  {
-    bug( "Save Help Table: fopen", 0 );
-    perror( "failed open of helpfile.dat in do_help_save" );
-  }
-  else
-  {
-
-  HELP_DATA *pHelp;
-  BUILD_SATA_LIST *Pointer;
-
-  for (pointer = first_help; pointer != NULL, pointer = pointer_next )
-  {
-    pHelp=Pointer->data;
-    fprintf( fp,"%i %s~\n",pHelp->level,pHelp->keyword);
-
-    if (isspace(pHelp->text[0]))
-       fprintf( fp,".%s~\n",pHelp->text);
-    else
-      fprintf(fp,"%s~\n",pHelp->text);
-
-  }
-  fflush( fp );
-  fclose( fp );
-  return;
-
-}
-
-void do_all_help_load()
-{
-
-
-    HELP_DATA *pHelp;
-    BUILD_DATA_LIST *pointer;
-    FILE * fp;
-    char help_file[MAX_STRING_LENGTH];
-
-
-  if ( ( fp = fopen( help_file, "r" ) ) == NULL )
-  {
-    bug( "Help Table: fopen", 0 );
-    perror( "failed open of helpfile.dat in do_help_load" );
-  }
-
-  for ( pointer = first_help; pointer != NULL; pointer = pointer_next )
-  {
-    GET_FREE(pHelp, help_free);
-    pHelp->level    = fread_number( fp );
-    pHelp->keyword  = fread_string( fp );
-    if ( pHelp->keyword[0] == '$' )
-     break;
-    pHelp->text     = fread_string( fp );
-
-    LINK(pHelp, first_help, last_help, next, prev);
-   top_help++;
-  }
-  fclose ( fp );
-  return;
-
-}
-  */
-/* NOTE--NEED TO MAKE SURE WE GET MOTD, TOO--I THINK IT WIL BE OKAY ZEN */
 
 void build_clone(CHAR_DATA *ch, char *argument)
 {

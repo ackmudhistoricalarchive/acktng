@@ -1,6 +1,0 @@
-level 0
-keywords bid
----
-Syntax: bid <amount>
-
-Places an auction bid on the current auction item.

@@ -1,6 +1,0 @@
-level 0
-keywords open
----
-Syntax: open <object|door>
-
-Opens a door or openable container.

@@ -1,6 +1,0 @@
-level 0
-keywords close
----
-Syntax: close <object|door>
-
-Closes a door or closeable container.

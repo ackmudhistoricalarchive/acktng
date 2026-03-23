@@ -1,6 +1,0 @@
-level 0
-keywords get
----
-Syntax: get <item>
-
-Picks up an item from the room or container.

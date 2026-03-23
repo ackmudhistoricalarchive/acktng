@@ -1,6 +1,0 @@
-level 0
-keywords drop
----
-Syntax: drop <item>
-
-Drops an item from inventory into the room.

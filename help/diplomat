@@ -1,7 +1,0 @@
-level -1
-keywords diplomat
----
-Syntax: diplomat <message>
-
-Clan diplomat communication channel.
-Only players with diplomat access in a clan may use this command.
