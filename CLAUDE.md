@@ -4,7 +4,7 @@
 
 For any implementation task that involves `src/` changes, you MUST first deliver a design document describing the proposed changes — including the problem, approach, affected files, and any trade-offs — and discuss it with the user. Do NOT begin implementation until the user has explicitly signed off on the design document. No code changes, no file creation, no prototyping until approval is given. Design documents should be placed in `docs/proposals/`.
 
-Changes that do not touch `src/` (e.g. lore files, area files, documentation, help files) do NOT require a design document and may be implemented directly. Bugfixes to `src/` also do NOT require a design document and may be implemented directly.
+Changes that do not touch `src/` (e.g. lore files, area files, documentation) do NOT require a design document and may be implemented directly. Bugfixes to `src/` also do NOT require a design document and may be implemented directly.
 
 Once a proposal has been fully implemented, move it from `docs/proposals/` to `docs/proposals/completed/`. Active proposals (pending discussion or implementation) live in `docs/proposals/`. Completed proposals (fully implemented) live in `docs/proposals/completed/`.
 
@@ -30,7 +30,7 @@ All build commands run from the `src/` directory:
 cd src
 make ack          # Build the server binary
 make clean        # Remove object files and binary
-make unit-tests   # Build and run all unit tests, then integration test
+make unit-tests   # Build and run all unit tests, then integration tests
 make integration-test  # Build server + run integration test (boot, login, crash check)
 make all          # Incremental: build changed files, run affected tests, integration test if anything changed (no-op if nothing changed)
 make lint         # Check all source files match the .clang-format style (fails if any differ)
@@ -38,9 +38,27 @@ make format       # Auto-apply .clang-format style to all source files
 ```
 
 - Compiler: GCC with `-O -g2 -Wall -DACK_43`
-- Links against `-lcrypt`
+- Always links: `-lcrypt -lpthread -lz`
+- Optional (auto-detected via pkg-config):
+  - OpenSSL (`-DHAVE_OPENSSL`) — enables TLS telnet and WSS support
+  - libpq (`-DHAVE_LIBPQ`) — enables PostgreSQL database backend for help/shelp/lore and integration tests
 - Every `.c` file depends on `ack.h` (the central header)
 - The binary is built as `src/ack`; it runs from `area/` (e.g., `cd area && ../src/ack 4000`)
+
+### Build Dependencies (Debian/Ubuntu)
+
+```sh
+apt-get install -y build-essential libcrypt-dev zlib1g-dev libssl-dev \
+    pkg-config libpq-dev postgresql postgresql-client clang-format python3
+```
+
+All dependencies are installed automatically by the parent `aicli` project's `setup.sh`.
+
+## Help, Shelp, and Lore System
+
+Help entries, staff help (shelp), and lore are stored in and served from the PostgreSQL database. The server queries the database on demand via `db_help_lookup()` (in `src/db/db_help.c`). The schema is in `area/schema.sql`.
+
+There are no flat `help/` or `shelp/` directories — all content lives in the database. The login greeting is also served from the database (`greeting1` through `greeting6` entries in `help_entries`).
 
 ## Testing
 
@@ -64,13 +82,16 @@ Test conventions:
 - Use `#define DEC_GLOBALS_H 1` before `#include "ack.h"` to skip globals when they cause link issues
 - Helper functions like `clear_character()` zero-initialize structs with `memset()`
 
-### Integration Test
+### Integration Tests
 
-`integration-test.sh` (runs from the repo root):
-- Builds the server, boots it on a random ephemeral port
-- Walks the full new-player login flow (name → password → sex → race → class → enter game)
-- Monitors for crashes for 8 seconds, then shuts down
-- Runs automatically at the end of `make unit-tests`
+`integration-tests.sh` (runs from the repo root) requires a running PostgreSQL server:
+- Creates an ephemeral test database from `fixtures/test_data.sql`
+- Builds the server and boots it on random ephemeral ports
+- Runs four tests in parallel: WebSocket, telnet, TLS telnet, and WSS login flows
+- Each test walks the full new-player login flow and validates existing-player login
+- Tears down the test database on exit
+
+`seed-test-player.py` creates pre-existing player files for the integration tests. It uses `ctypes` to call `libcrypt.so` directly (the Python `crypt` module was removed in Python 3.13).
 
 ### Running Tests
 
@@ -79,7 +100,9 @@ Always validate changes with:
 cd src && make unit-tests
 ```
 
-This runs all unit tests and the integration test. The CI workflow (`.github/workflows/validate-pr.yml`) runs this same command on every open PR.
+This runs all unit tests and all integration tests. The CI workflow runs this same command on every open PR.
+
+All tests must be run locally. Never run tests on remote systems or trigger remote CI — always validate locally before pushing.
 
 **Unit tests should always be written for changes where possible.** When modifying or adding functionality, add a corresponding unit test in `src/tests/` to cover the new or changed behavior.
 
@@ -91,7 +114,7 @@ This runs all unit tests and the integration test. The CI workflow (`.github/wor
 cd src
 make lint         # Code must be correctly formatted (fails if any file differs from .clang-format)
 make ack          # Build must succeed with zero errors
-make unit-tests   # All unit tests and both integration tests must pass
+make unit-tests   # All unit tests and all integration tests must pass
 ```
 
 Run these in order. Do not push if any step fails. Fix the failure first.
@@ -101,6 +124,8 @@ Run these in order. Do not push if any step fails. Fix the failure first.
 - Changes that break any unit test or integration test must not be pushed until fixed.
 
 The CI workflow enforces these same checks on every PR. A PR will not be merged if any check fails.
+
+**clang-format version mismatch warning:** CI runs clang-format 18 (Ubuntu 24.04). If your local system has a different version (e.g., 19), `make format` may produce output that passes locally but fails in CI. Only format files you actually changed — do not run `make format` across the entire codebase. If CI lint fails on files you didn't modify, the formatting difference is a version mismatch, not your problem. To match CI exactly, install `clang-format-18` and use it directly.
 
 ## Repository Structure
 
@@ -113,33 +138,45 @@ acktng/
 │   ├── globals.h     # Global variable declarations
 │   ├── comm.c        # Network/connection handling, main game loop
 │   ├── db.c          # Database loading (areas, objects, mobs, rooms)
+│   ├── db/           # PostgreSQL database layer (connection, help queries, worker)
 │   ├── handler.c     # Object/character handler utilities
 │   ├── fight.c       # Combat system
-│   ├── magic*.c      # Spell system (magic.c, magic2.c, magic3.c, magic4.c)
-│   ├── skills*.c     # Skills system (skills.c, skills_chi.c, skills_combo.c, etc.)
+│   ├── magic.c       # Spell system
+│   ├── skills.c      # Skills system (skills_chi.c, skills_combo.c, etc.)
+│   ├── skills/       # Individual skill implementations (do_*.c)
+│   ├── spells/       # Individual spell implementations (spell_*.c)
 │   ├── act_*.c       # Player command handlers (info, comm, move, obj, mob, wiz, clan)
-│   ├── save.c        # Player file save/load
+│   ├── save/         # Player/area/object save/load
 │   ├── update.c      # Periodic game tick updates
+│   ├── socket.c      # Socket handling, TLS, WebSocket, telnet negotiation
+│   ├── login.c       # Login flow and character creation
 │   ├── invasion.c    # Mob invasion event system
 │   ├── keep.c        # Player keep/chest system
+│   ├── quests/       # Quest system (crusade, cartography, templates)
+│   ├── ai/           # NPC AI special procedures
 │   ├── tests/        # Unit test files
 │   │   ├── test_*.c  # Test source files (one per module under test)
 │   │   └── test_is_fighting.c  # Shared stub linked into most test binaries
+│   ├── tools/        # DB migration/import utilities
 │   └── Makefile      # Build rules
 ├── area/             # Area data files (~52 .are files) + runtime data
 │   ├── area.lst      # Master list of areas to load at boot
+│   ├── schema.sql    # PostgreSQL database schema
 │   └── *.are         # Individual area files (rooms, mobs, objects, resets)
+├── fixtures/         # Test fixture data (test_data.sql for integration tests)
 ├── data/             # Runtime data files (bans, clans, socials, rulers, etc.)
-├── docs/             # Documentation (area file spec, data structures, licenses, testing)
-├── help/             # In-game help files
-├── shelp/            # Staff help files
+├── docs/             # Documentation (area file spec, data structures, lore, proposals)
 ├── player/           # Player save directory (subdirectories a-z)
 ├── log/              # Server log directory
 ├── reports/          # Report files
 ├── web/              # Game-generated web data output (see web/README.md)
-│   └── README.md         # Documents runtime output written to ~/web/data/
-├── integration-test.sh  # Integration test script
-└── .github/workflows/   # CI: validate-open-prs.yml
+├── integration-tests.sh   # Integration test runner (PostgreSQL, 4 parallel tests)
+├── integration-test.sh    # WebSocket login test
+├── integration-test-telnet.sh     # Telnet login test
+├── integration-test-telnet-tls.sh # TLS telnet login test
+├── integration-test-wss.sh        # WSS login test
+├── seed-test-player.py    # Creates test player files for integration tests
+└── .github/workflows/     # CI: validate-open-prs.yml
 ```
 
 ## Key Data Structures
@@ -178,19 +215,19 @@ The GitHub Actions workflow `.github/workflows/validate-open-prs.yml`:
 
 ## Spells, Skills, and Commands
 
-Whenever a new spell or skill is added, a corresponding detailed help entry MUST be added to the `shelp/` directory. The help file should cover:
+Whenever a new spell or skill is added, a corresponding detailed help entry MUST be added to the database. The help file should cover:
 - What the spell/skill does
 - How to use it (syntax, targets, etc.)
 - Any relevant mechanics (damage, duration, cooldown, mana cost, etc.)
 - Class/level availability if applicable
 
-Whenever a new player command is added, a corresponding detailed help entry MUST be added to the `help/` directory. The help file should cover:
+Whenever a new player command is added, a corresponding detailed help entry MUST be added to the database. The help file should cover:
 - What the command does
 - Full syntax and all options/arguments
 - Examples of usage
 - Any restrictions (level, class, position, etc.)
 
-Likewise, whenever a spell or skill is removed, its `shelp/` entry MUST also be removed. Whenever a command is removed, its `help/` entry MUST also be removed.
+Likewise, whenever a spell, skill, or command is removed, its help entry MUST also be removed from the database.
 
 These are hard requirements — no spell, skill, or command addition is complete without its help entry, and no removal is complete without also removing the corresponding help entry.
 
@@ -202,3 +239,5 @@ These are hard requirements — no spell, skill, or command addition is complete
 - When writing unit tests, use `#define DEC_GLOBALS_H 1` before including `ack.h` to avoid link errors from global arrays
 - The Makefile defines `O_FILES` twice (second definition wins) — be aware when adding new source files
 - Area files use a custom text format with tilde (`~`) delimiters — see `docs/area_file_spec.md`
+- OpenSSL and libpq are auto-detected at build time — if TLS or DB features aren't working, check that `libssl-dev` and `libpq-dev` are installed
+- Integration tests require a running PostgreSQL server with peer auth for the postgres user
