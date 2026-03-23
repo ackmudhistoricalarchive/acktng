@@ -136,6 +136,8 @@ The CI workflow enforces these same checks on every PR. A PR will not be merged 
 
 **All lint issues must be fixed before pushing** — not just those in files you changed. If `make lint` fails on any file, run `make format` to fix the entire codebase, then verify `make lint` passes cleanly. Do not push while any lint error exists regardless of which file contains it.
 
+`make lint` and `make format` use `clang-format-18` explicitly, matching the CI environment (Ubuntu 24.04). Do not use the bare `clang-format` command for formatting, as the default version on Debian/other systems may produce different output.
+
 ## Repository Structure
 
 ```
