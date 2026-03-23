@@ -73,8 +73,12 @@ int db_conn_open(const char *area_dir)
    int ver;
 
    connstr = read_db_conf(area_dir);
-   /* PQconnectdb falls back to PG env vars when connstr is "" or NULL */
-   boot_conn = PQconnectdb(connstr ? connstr : "");
+   if (!connstr)
+   {
+      /* data/db.conf absent — DB is disabled for this boot */
+      return -1;
+   }
+   boot_conn = PQconnectdb(connstr);
    free(connstr);
 
    if (PQstatus(boot_conn) != CONNECTION_OK)

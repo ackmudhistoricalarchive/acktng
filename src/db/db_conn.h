@@ -23,7 +23,10 @@
 /* Expected schema version compiled into this binary. */
 #define DB_SCHEMA_VERSION 2
 
-/* Open the boot connection.  Returns 1 on success, 0 on failure.
+/* Open the boot connection.
+ * Returns  1 on success,
+ *          0 on failure (db.conf present but connection/schema error),
+ *         -1 if db.conf is absent (DB disabled; caller should skip DB work).
  * On failure a descriptive message is printed to stderr. */
 int db_conn_open(const char *area_dir);
 
