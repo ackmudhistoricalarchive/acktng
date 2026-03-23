@@ -8,6 +8,7 @@ This document specifies the static quest file format currently used by ACK and c
 - Each loaded file is assigned a zero-based static quest ID (`file number - 1`).
 - The parser ignores blank lines, comment lines beginning with `#`, and leading/trailing whitespace around each significant line.
 - Repository snapshot: `105` quest files exist in `quests/`, all in the loadable range `1-105`.
+- Additional quest templates (IDs 106–158) are stored directly in the `quest_templates` database table and have no corresponding `.prop` files. They follow the same field semantics documented below.
 
 ## File format (`.prop`)
 
@@ -202,3 +203,64 @@ Common combinations used in quest reward items:
 | `103.prop` | 102 | Ghost of the last Ventspeaker: oracle ground cleared | -1 | 1 | `6212` | 0 | 140-170 | 3539 | 13000 gold, 10 qp + arms binding |
 | `104.prop` | 103 | Bellspine resonance locust suppression | -1 | 3 | `6198` | 6 | 135-165 | 4339 | 7000 gold, 6 qp |
 | `105.prop` | 104 | Cinderteeth entry zone: volcanic creature survey | -1 | 1 | `6134 6135 6136` | 0 | 120-155 | 4339 | 6500 gold, 5 qp |
+
+## Database-only quest templates (IDs 106–158)
+
+These templates have no `.prop` file. All fields use the same semantics as above.
+`—` in the Kill Needed column indicates a cartography quest (type 4).
+
+| Template ID | Title | Prereq ID | Type | Targets | Kill Needed | Level Range | Offerer | Rewards |
+|---:|---|---:|---:|---|---:|---|---:|---|
+| 106 | Saltglass Reach cartography survey: Mirror Flats | -1 | 1 | `6313 6315 6318` | 0 | 55-70 | 3779 | 4000 gold, 4 qp |
+| 107 | Saltglass Reach cartography survey: Glasswind to Tidemouth | 105 | 1 | `6332 6334 6373` | 0 | 60-75 | 3776 | 6000 gold, 5 qp + item |
+| 108 | Reach Warden toll restoration | -1 | 3 | `6318` | 8 | 55-70 | 3773 | 1266 gold, 4 qp + item |
+| 109 | Red Sand Outrider interdiction | -1 | 1 | `6350 6351 6352` | 0 | 60-75 | 3780 | 4500 gold, 5 qp |
+| 110 | Synod whisper cell disruption | -1 | 1 | `6337 6339 6338` | 0 | 58-72 | 3771 | 4000 gold, 4 qp |
+| 111 | Cairn scavenger expulsion | -1 | 3 | `6346` | 10 | 60-72 | 3875 | 3800 gold, 4 qp + item |
+| 112 | Sealed Route quarantine enforcement | 109 | 1 | `6364 6365 6361` | 0 | 65-78 | 3768 | 5500 gold, 5 qp + item |
+| 113 | Glassworm burrower queen extermination | -1 | 3 | `6345` | 1 | 62-75 | 3877 | 5000 gold, 5 qp + item |
+| 114 | Whisper Cell commandant elimination | 109 | 3 | `6364` | 1 | 68-78 | 3770 | 6000 gold, 6 qp + item |
+| 115 | Shoreward Revenant banishment | -1 | 3 | `6395` | 1 | 70-80 | 3888 | 7000 gold, 6 qp + item |
+| 116 | Toll-Marshal of the Three Routes: writ of dissolution | 114 | 3 | `6396` | 1 | 75-80 | 3887 | 1832 gold, 7 qp + item |
+| 117 | Arbiter of the Conversion: final jurisdictional reckoning | 115 | 3 | `6397` | 1 | 78-80 | 3903 | 11000 gold, 9 qp + item |
+| 118 | Cairn tablet recovery: forged precedents | -1 | 2 | `6405` | 0 | 60-75 | 3776 | 4500 gold, 5 qp |
+| 119 | Glass-field thermal anomaly investigation | -1 | 1 | `6340 6341 6342` | 0 | 65-78 | 3778 | 5500 gold, 5 qp |
+| 120 | Tidemouth jurisdiction enforcement sweep | -1 | 1 | `6377 6378 6379` | 0 | 60-72 | 3881 | 5000 gold, 5 qp |
+| 121 | Scorching Sands cartography survey: Three Spines to Cinder Gate | -1 | 1 | `5365 5357 5361` | 0 | 65-80 | 3875 | 7000 gold, 6 qp |
+| 122 | Burn Ledger recovery writ | -1 | 2 | `5381` | 0 | 66-82 | 3887 | 6200 gold, 5 qp |
+| 123 | Seal fraud interdiction | -1 | 3 | `5356` | 10 | 67-83 | 3874 | 6400 gold, 5 qp + item |
+| 124 | Cauterist re-firing disruption | 121 | 1 | `5368 5369 5371` | 0 | 70-84 | 3873 | 7200 gold, 6 qp + item |
+| 125 | The Crucible Regent dismantled | 123 | 3 | `5374` | 1 | 75-85 | 3884 | 2539 gold, 8 qp + item |
+| 126 | Channel casualty triage drill | -1 | 2 | `5382` | 0 | 66-81 | 3871 | 6100 gold, 5 qp |
+| 127 | Witness-stick cohort verification | -1 | 1 | `5359 5360 5361` | 0 | 67-82 | 3874 | 6500 gold, 5 qp |
+| 128 | Void Citadel cartography commission | -1 | 4 | `152` | — | 150-170 | 4690 | 500000 gold, 250 qp + item |
+| 129 | Withered Depths cartography commission | -1 | 4 | `400` | — | 80-100 | 3754 | 160000 gold, 110 qp + item |
+| 130 | Thornwood cartography commission | -1 | 4 | `550` | — | 50-80 | 3779 | 100000 gold, 75 qp + item |
+| 131 | Shadowmere cartography commission | -1 | 4 | `700` | — | 30-60 | 3671 | 55000 gold, 55 qp + item |
+| 132 | Sands of Akh'enet cartography commission | -1 | 4 | `950` | — | 70-90 | 3888 | 130000 gold, 95 qp + item |
+| 133 | Eccentric Woodland cartography commission | -1 | 4 | `1650` | — | 18-92 | 3679 | 140000 gold, 100 qp + item |
+| 134 | Eastern Desert cartography commission | -1 | 4 | `2050` | — | 30-100 | 3765 | 170000 gold, 115 qp + item |
+| 135 | Great Oasis cartography commission | -1 | 4 | `2150` | — | 40-60 | 3760 | 65000 gold, 60 qp + item |
+| 136 | Northern Oasis cartography commission | -1 | 4 | `2250` | — | 45-65 | 3756 | 80000 gold, 68 qp + item |
+| 137 | Kel'Shadra crypts cartography commission | -1 | 4 | `2450` | — | 150-170 | 4684 | 480000 gold, 240 qp + item |
+| 138 | Sunken Sanctum cartography commission | -1 | 4 | `2500` | — | 150 | 4689 | 450000 gold, 230 qp + item |
+| 139 | Public Dungeons cartography commission | -1 | 4 | `2551` | — | 5-35 | 3682 | 18000 gold, 22 qp + item |
+| 140 | Forest of Confusion cartography commission | -1 | 4 | `2600` | — | 10-60 | 3671 | 58000 gold, 56 qp + item |
+| 141 | Southern Oasis cartography commission | -1 | 4 | `2800` | — | 50-70 | 3764 | 90000 gold, 73 qp + item |
+| 142 | Verdant Depths cartography commission | -1 | 4 | `3000` | — | 75-95 | 4685 | 150000 gold, 105 qp + item |
+| 143 | Northern Pyramid cartography commission | -1 | 4 | `3150` | — | 100-120 | 3857 | 200000 gold, 140 qp + item |
+| 144 | Southern Pyramid cartography commission | -1 | 4 | `3450` | — | 120-140 | 3881 | 280000 gold, 175 qp + item |
+| 145 | Kiess city district survey | -1 | 4 | `3650` | — | 1-170 | 3660 | 8000 gold, 10 qp + item |
+| 146 | Kowloon city district survey | -1 | 4 | `3750` | — | 1-170 | 3753 | 8000 gold, 10 qp + item |
+| 147 | Mafdet city district survey | -1 | 4 | `3850` | — | 1-170 | 3856 | 8000 gold, 10 qp + item |
+| 148 | Great Northern Forest cartography commission | -1 | 4 | `4050` | — | 1-170 | 3683 | 180000 gold, 120 qp + item |
+| 149 | Rakuen city district survey | -1 | 4 | `4861` | — | 1-170 | 4682 | 8000 gold, 10 qp + item |
+| 150 | The Arroyo cartography commission | -1 | 4 | `4750` | — | 55-75 | 3878 | 95000 gold, 78 qp + item |
+| 151 | Whispering Forest Preserve cartography commission | -1 | 4 | `5000` | — | 1-10 | 3680 | 4000 gold, 6 qp + item |
+| 152 | Scorched Wastes cartography commission | -1 | 4 | `5250` | — | 65-85 | 3899 | 110000 gold, 88 qp + item |
+| 153 | Scorching Sands cartography commission | -1 | 4 | `5350` | — | 65-85 | 3903 | 110000 gold, 88 qp + item |
+| 154 | Sultan's Palace cartography commission | -1 | 4 | `5750` | — | 30-50 | 3855 | 42000 gold, 42 qp + item |
+| 155 | Lost City cartography commission | -1 | 4 | `5850` | — | 35-55 | 3888 | 52000 gold, 52 qp + item |
+| 156 | Ancient Pyramid cartography commission | -1 | 4 | `6050` | — | 90-100 | 3857 | 175000 gold, 125 qp + item |
+| 157 | Khardaan necropolis cartography commission | -1 | 4 | `6200` | — | 60-80 | 3888 | 105000 gold, 85 qp + item |
+| 158 | Saltglass Reach cartography commission | -1 | 4 | `6300` | — | 55-80 | 3887 | 105000 gold, 85 qp + item |
