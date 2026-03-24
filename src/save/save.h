@@ -103,5 +103,7 @@ void fread_obj args((CHAR_DATA * ch, FILE *fp));
 void fwrite_char args((CHAR_DATA * ch, FILE *fp));
 void fread_char args((CHAR_DATA * ch, FILE *fp));
 const char *skill_name_legacy(const char *old_name);
+void alloc_char_for_login(DESCRIPTOR_DATA *d, const char *name);
+bool load_char_from_raw(CHAR_DATA *ch, const char *raw);
 
 #endif /* SAVE_SAVE_H */

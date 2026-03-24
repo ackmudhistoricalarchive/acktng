@@ -21,7 +21,7 @@
 #include <libpq-fe.h>
 
 /* Expected schema version compiled into this binary. */
-#define DB_SCHEMA_VERSION 7
+#define DB_SCHEMA_VERSION 8
 
 /* Open the boot connection.
  * Returns  1 on success,
@@ -46,6 +46,10 @@ PGresult *db_query_params(const char *sql, int nParams, const char *const *param
 
 /* Log a PQ error and return 0 (convenience for error-path code). */
 int db_log_error(const char *context, PGresult *res);
+
+/* Return the connection string used for the boot connection.
+ * Valid after db_conn_open() succeeds.  NULL if not connected. */
+const char *db_conn_get_connstr(void);
 
 #endif /* HAVE_LIBPQ */
 

@@ -200,3 +200,35 @@ with open(player_file, 'w') as f:
     f.write(content)
 
 print(f"seed-test-player: created {player_file} (room={ROOM}, level={LEVEL})")
+
+# If ACK_DB_CONF is set, also insert the player into the database so that the
+# async DB login path can find the player.  The raw_save text is exactly the
+# same content written to the flat file.
+ack_db_conf = os.environ.get('ACK_DB_CONF')
+if ack_db_conf:
+    import subprocess
+
+    # Read the connection string from the conf file.
+    try:
+        with open(ack_db_conf) as f:
+            connstr = f.read().strip()
+    except OSError as e:
+        print(f"seed-test-player: warning: could not read ACK_DB_CONF ({ack_db_conf}): {e}")
+        sys.exit(0)
+
+    # Use dollar-quoting with a tag that will never appear in a player file.
+    sql = (
+        "INSERT INTO players (name, pwd_hash, raw_save) "
+        f"VALUES ('{name_canonical}', '{pwd_hash}', $PLAYERRAW${content}$PLAYERRAW$) "
+        "ON CONFLICT (name) DO UPDATE SET "
+        "pwd_hash = EXCLUDED.pwd_hash, raw_save = EXCLUDED.raw_save;\n"
+    )
+
+    result = subprocess.run(
+        ['psql', connstr, '-q', '-c', sql],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        print(f"seed-test-player: warning: DB insert failed: {result.stderr.strip()}")
+    else:
+        print(f"seed-test-player: inserted {name_canonical} into DB")

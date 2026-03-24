@@ -52,14 +52,19 @@ static int consecutive_failures = 0;
  * Internal helpers
  * ----------------------------------------------------------------------- */
 
-static void post_result(struct descriptor_data *d, struct char_data *ch, int error)
+static void post_result(struct descriptor_data *d, int error, int found, char *raw_save)
 {
    DB_PLAYER_RESULT *r = calloc(1, sizeof(DB_PLAYER_RESULT));
    if (!r)
+   {
+      free(raw_save);
       return;
+   }
    r->d = d;
-   r->ch = ch;
+   r->ch = NULL;
    r->error = error;
+   r->found = found;
+   r->raw_save = raw_save;
    r->next = NULL;
    pthread_mutex_lock(&res_mutex);
    r->next = res_head;
@@ -112,24 +117,40 @@ static int worker_exec(const char *sql, int nParams, const char *const *params)
    return ok;
 }
 
-/* DB_WRITE_PLAYER — buf is a NUL-terminated JSON blob.
- * Uses INSERT ... ON CONFLICT (name) DO UPDATE to upsert. */
+/* DB_WRITE_PLAYER — buf is the serialised player file text (same format as
+ * the flat player file).  Extracts pwd_hash from the Password line and
+ * upserts into players (name, pwd_hash, raw_save). */
 static int handle_write_player(DB_REQUEST *req)
 {
-   /* TODO: deserialise buf into individual columns and upsert.
-    * For now store the raw JSON as raw_save only, which serves as a
-    * transitional fallback until the full serialiser is implemented. */
-   const char *params[2];
+   const char *text = (const char *)req->buf;
+   const char *p;
+   char pwd[256] = "";
+   const char *params[3];
+   int i;
+
+   /* Extract password hash: line format is "Password     HASH~\n" */
+   p = strstr(text, "\nPassword     ");
+   if (p)
+   {
+      p += strlen("\nPassword     ");
+      for (i = 0; i < (int)sizeof(pwd) - 1 && *p && *p != '~' && *p != '\n'; i++)
+         pwd[i] = *p++;
+      pwd[i] = '\0';
+   }
+
    params[0] = req->name;
-   params[1] = (const char *)req->buf;
+   params[1] = pwd;
+   params[2] = text;
    return worker_exec("INSERT INTO players (name, pwd_hash, raw_save) "
-                      "VALUES ($1, '', $2) "
-                      "ON CONFLICT (name) DO UPDATE SET raw_save = EXCLUDED.raw_save",
-                      2, params);
+                      "VALUES ($1, $2, $3) "
+                      "ON CONFLICT (name) DO UPDATE SET "
+                      "pwd_hash = EXCLUDED.pwd_hash, "
+                      "raw_save = EXCLUDED.raw_save",
+                      3, params);
 }
 
-/* DB_READ_PLAYER — SELECT player row and reconstruct CHAR_DATA.
- * Posts result to the results queue when done. */
+/* DB_READ_PLAYER — SELECT player row and post raw_save back to game thread.
+ * The game thread hydrates the CHAR_DATA from raw_save in db_worker_poll_results. */
 static void handle_read_player(DB_REQUEST *req)
 {
    PGresult *res;
@@ -138,38 +159,37 @@ static void handle_read_player(DB_REQUEST *req)
 
    if (!ensure_connected())
    {
-      post_result(req->d, NULL, 1);
+      post_result(req->d, 1, 0, NULL);
       return;
    }
 
    params[0] = req->name;
-   res = PQexecParams(worker_conn,
-                      "SELECT name, pwd_hash, raw_save FROM players "
-                      "WHERE name = $1",
-                      1, NULL, params, NULL, NULL, 0);
+   res = PQexecParams(worker_conn, "SELECT raw_save FROM players WHERE name = $1", 1, NULL, params,
+                      NULL, NULL, 0);
 
    if (PQresultStatus(res) != PGRES_TUPLES_OK)
    {
       fprintf(stderr, "DB worker: read_player query failed: %s\n", PQresultErrorMessage(res));
       PQclear(res);
-      post_result(req->d, NULL, 1);
+      post_result(req->d, 1, 0, NULL);
       return;
    }
 
    nrows = PQntuples(res);
-   PQclear(res);
 
    if (nrows == 0)
    {
-      /* New player */
-      post_result(req->d, NULL, 0);
+      PQclear(res);
+      post_result(req->d, 0, 0, NULL); /* new player */
       return;
    }
 
-   /* TODO: hydrate CHAR_DATA from columns.
-    * For now signal "found" with a NULL ch; the poll handler will fall
-    * back to load_char_obj() from the flat file or raw_save. */
-   post_result(req->d, NULL, 0);
+   {
+      const char *raw = PQgetvalue(res, 0, 0);
+      char *raw_copy = (raw && raw[0]) ? strdup(raw) : NULL;
+      PQclear(res);
+      post_result(req->d, 0, 1, raw_copy);
+   }
 }
 
 /* -----------------------------------------------------------------------
@@ -2473,35 +2493,97 @@ void db_worker_poll_results(void)
    {
       next = r->next;
 
+      if (!r->d || r->d->connected != CON_LOADING_FROM_DB)
+      {
+         free(r->raw_save);
+         free(r);
+         continue;
+      }
+
       if (r->error)
       {
          /* DB error — tell the player to try again and close */
-         if (r->d && r->d->connected == CON_LOADING_FROM_DB)
+         write_to_buffer(r->d, "Database error \xe2\x80\x94 please try again later.\n\r", 0);
+         close_socket(r->d);
+      }
+      else if (r->found && r->raw_save)
+      {
+         /* Existing player: hydrate CHAR_DATA from raw_save on the game thread */
+         CHAR_DATA *ch = r->d->character;
+         if (load_char_from_raw(ch, r->raw_save))
          {
-            write_to_buffer(r->d, "Database error — please try again later.\n\r", 0);
+            finish_player_login(r->d, TRUE);
+         }
+         else
+         {
+            write_to_buffer(r->d, "Error loading character \xe2\x80\x94 please try again.\n\r", 0);
             close_socket(r->d);
          }
       }
-      else if (r->ch == NULL)
-      {
-         /* Row not found: new player — proceed to name confirmation */
-         if (r->d && r->d->connected == CON_LOADING_FROM_DB)
-            r->d->connected = CON_CONFIRM_NEW_NAME;
-      }
       else
       {
-         /* Existing player loaded */
-         if (r->d && r->d->connected == CON_LOADING_FROM_DB)
-         {
-            r->d->character = r->ch;
-            r->ch->desc = r->d;
-            r->d->connected = CON_GET_OLD_PASSWORD;
-            write_to_buffer(r->d, "Password: ", 0);
-         }
+         /* New player — character is already alloc'd and init'd; run post-load checks */
+         finish_player_login(r->d, FALSE);
       }
 
+      free(r->raw_save);
       free(r);
    }
+}
+
+char *db_worker_fetch_player_raw_save(const char *name)
+{
+   PGconn *conn;
+   PGresult *res;
+   const char *params[1];
+   char *result = NULL;
+   char connstr[512] = "";
+   FILE *fp;
+   const char *env_conf;
+   char path[512];
+
+   /* Read the same db.conf the boot connection uses. */
+   env_conf = getenv("ACK_DB_CONF");
+   if (env_conf && env_conf[0])
+      snprintf(path, sizeof(path), "%s", env_conf);
+   else
+      snprintf(path, sizeof(path), "../data/db.conf");
+
+   fp = fopen(path, "r");
+   if (fp)
+   {
+      size_t n = fread(connstr, 1, sizeof(connstr) - 1, fp);
+      fclose(fp);
+      connstr[n] = '\0';
+      /* Strip trailing whitespace */
+      while (n > 0 && (connstr[n - 1] == '\n' || connstr[n - 1] == '\r' || connstr[n - 1] == ' ' ||
+                       connstr[n - 1] == '\t'))
+         connstr[--n] = '\0';
+   }
+
+   conn = PQconnectdb(connstr);
+   if (PQstatus(conn) != CONNECTION_OK)
+   {
+      fprintf(stderr, "db_worker_fetch_player_raw_save: connect failed: %s\n",
+              PQerrorMessage(conn));
+      PQfinish(conn);
+      return NULL;
+   }
+
+   params[0] = name;
+   res = PQexecParams(conn, "SELECT raw_save FROM players WHERE name = $1", 1, NULL, params, NULL,
+                      NULL, 0);
+
+   if (PQresultStatus(res) == PGRES_TUPLES_OK && PQntuples(res) > 0)
+   {
+      const char *raw = PQgetvalue(res, 0, 0);
+      if (raw && raw[0])
+         result = strdup(raw);
+   }
+
+   PQclear(res);
+   PQfinish(conn);
+   return result;
 }
 
 #endif /* HAVE_LIBPQ */

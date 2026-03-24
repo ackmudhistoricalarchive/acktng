@@ -68,8 +68,10 @@ typedef enum
 typedef struct db_player_result
 {
    struct descriptor_data *d;
-   struct char_data *ch; /* NULL if not found or on error */
+   struct char_data *ch; /* NULL — character is always hydrated on the game thread */
    int error;            /* 1 if a DB error occurred */
+   int found;            /* 1 if the player row exists in the DB */
+   char *raw_save;       /* heap-allocated raw save text; NULL for new player */
    struct db_player_result *next;
 } DB_PLAYER_RESULT;
 
@@ -141,6 +143,12 @@ void db_worker_delete_obj(int vnum);
 
 /* Board save wrapper — replaces entire board (metadata + all messages). */
 void db_worker_save_board(struct board_data *board);
+
+/* Synchronous player raw_save fetch — opens a temporary connection, queries
+ * players.raw_save for the given name, and returns a heap-allocated string.
+ * Returns NULL if the player is not found or on error.  Caller must free().
+ * Only for use from non-game-loop contexts (hotreboot recovery, offline ops). */
+char *db_worker_fetch_player_raw_save(const char *name);
 
 #endif /* HAVE_LIBPQ */
 

@@ -66,6 +66,7 @@
 #include "prompt.h"
 #include "npc_dialogue.h"
 #ifdef HAVE_LIBPQ
+#include "db/db_conn.h"
 #include "db/db_worker.h"
 #include "db/db_help.h"
 #endif
@@ -554,7 +555,7 @@ int main(int argc, char **argv)
       abort_threshold = BOOT_DB_ABORT_THRESHOLD;
    boot_db();
 #ifdef HAVE_LIBPQ
-   db_worker_start(NULL);
+   db_worker_start(db_conn_get_connstr());
    db_help_open(".");
 #endif
    npc_dialogue_init();
