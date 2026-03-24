@@ -922,6 +922,202 @@ static int mud_UMAX(lua_State *L)
    return 1;
 }
 
+/* ---- Combat skills / commands -------------------------------------------- */
+
+/* mud.combo(ch, victim, sn) -> bool */
+static int mud_combo(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   CHAR_DATA *victim = lua_check_char(L, 2);
+   int sn = (int)luaL_checkinteger(L, 3);
+   lua_pushboolean(L, combo(ch, victim, sn));
+   return 1;
+}
+
+/* mud.backstab(ch, victim, is_backstab) */
+static int mud_backstab(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   CHAR_DATA *victim = lua_check_char(L, 2);
+   bool is_bs = lua_toboolean(L, 3);
+   backstab(ch, victim, is_bs);
+   return 0;
+}
+
+/* mud.stun(ch, victim) */
+static int mud_stun(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   CHAR_DATA *victim = lua_check_char(L, 2);
+   stun(ch, victim);
+   return 0;
+}
+
+/* mud.disarm(ch, victim) */
+static int mud_disarm(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   CHAR_DATA *victim = lua_check_char(L, 2);
+   disarm(ch, victim);
+   return 0;
+}
+
+/* mud.trip(ch, victim) */
+static int mud_trip(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   CHAR_DATA *victim = lua_check_char(L, 2);
+   trip(ch, victim);
+   return 0;
+}
+
+/* mud.do_poison(ch, arg, gsn) -> bool */
+static int mud_do_poison(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   const char *arg = luaL_optstring(L, 2, "");
+   int gsn = (int)luaL_checkinteger(L, 3);
+   lua_pushboolean(L, do_poison(ch, (char *)arg, gsn));
+   return 1;
+}
+
+/* mud.multi_hit(ch, victim, dt) */
+static int mud_multi_hit(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   CHAR_DATA *victim = lua_check_char(L, 2);
+   int dt = (int)luaL_checkinteger(L, 3);
+   multi_hit(ch, victim, dt);
+   return 0;
+}
+
+/* mud.can_see(ch, victim) -> bool */
+static int mud_can_see(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   CHAR_DATA *victim = lua_check_char(L, 2);
+   lua_pushboolean(L, can_see(ch, victim));
+   return 1;
+}
+
+/* mud.do_spell_heal(ch, victim, sn) */
+static int mud_do_spell_heal(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   CHAR_DATA *victim = lua_check_char(L, 2);
+   int sn = (int)luaL_checkinteger(L, 3);
+   do_spell_heal(ch, victim, sn);
+   return 0;
+}
+
+/* mud.room_is_private(room) -> bool */
+static int mud_room_is_private(lua_State *L)
+{
+   ROOM_INDEX_DATA *room = lua_check_room(L, 1);
+   lua_pushboolean(L, room_is_private(room));
+   return 1;
+}
+
+/* mud.set_hunt(ch, fch, victim, set_flags[, rem_flags]) -> bool */
+static int mud_set_hunt(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   CHAR_DATA *fch = lua_check_char(L, 2);
+   CHAR_DATA *victim = lua_check_char(L, 3);
+   int set_flags = (int)luaL_checkinteger(L, 4);
+   int rem_flags = (int)luaL_optinteger(L, 5, 0);
+   lua_pushboolean(L, set_hunt(ch, fch, victim, NULL, set_flags, rem_flags));
+   return 1;
+}
+
+/* mud.gain_exp(ch, amount) */
+static int mud_gain_exp(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   int amount = (int)luaL_checkinteger(L, 2);
+   gain_exp(ch, amount);
+   return 0;
+}
+
+/* mud.do_say(ch, msg) */
+static int mud_do_say(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   const char *msg = luaL_checkstring(L, 2);
+   do_say(ch, (char *)msg);
+   return 0;
+}
+
+/* mud.do_look(ch[, arg]) */
+static int mud_do_look(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   const char *arg = luaL_optstring(L, 2, "");
+   do_look(ch, (char *)arg);
+   return 0;
+}
+
+/* mud.do_sleep(ch[, arg]) */
+static int mud_do_sleep(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   const char *arg = luaL_optstring(L, 2, "");
+   do_sleep(ch, (char *)arg);
+   return 0;
+}
+
+/* mud.apply_necromancer_debuff(ch, victim, sn, dam[, obj]) */
+static int mud_apply_necromancer_debuff(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   CHAR_DATA *victim = lua_check_char(L, 2);
+   int sn = (int)luaL_checkinteger(L, 3);
+   int dam = (int)luaL_checkinteger(L, 4);
+   OBJ_DATA *obj = NULL;
+   if (!lua_isnil(L, 5))
+   {
+      void *ud = luaL_testudata(L, 5, "ack.obj");
+      if (ud)
+         obj = *(OBJ_DATA **)ud;
+   }
+   apply_necromancer_damage_debuff(ch, victim, sn, dam, obj);
+   return 0;
+}
+
+/* mud.cast_spell(sn, level, ch, victim_or_nil[, obj_or_nil]) -> bool
+ * Calls the C spell_fun directly (bypasses Lua dispatch — safe to call
+ * from within another Lua spell).  Returns false if no C impl. */
+static int mud_cast_spell(lua_State *L)
+{
+   int sn = (int)luaL_checkinteger(L, 1);
+   int level = (int)luaL_checkinteger(L, 2);
+   CHAR_DATA *ch = lua_check_char(L, 3);
+
+   void *vo = NULL;
+   if (!lua_isnil(L, 4))
+   {
+      void *ud = luaL_testudata(L, 4, "ack.char");
+      if (ud)
+         vo = *(CHAR_DATA **)ud;
+   }
+
+   OBJ_DATA *obj = NULL;
+   if (!lua_isnil(L, 5))
+   {
+      void *ud = luaL_testudata(L, 5, "ack.obj");
+      if (ud)
+         obj = *(OBJ_DATA **)ud;
+   }
+
+   if (sn < 0 || sn >= MAX_SKILL || !skill_table[sn].spell_fun)
+   {
+      lua_pushboolean(L, 0);
+      return 1;
+   }
+   lua_pushboolean(L, (*skill_table[sn].spell_fun)(sn, level, ch, vo, obj));
+   return 1;
+}
+
 /* ---- Dispatch table ------------------------------------------------------ */
 
 static const luaL_Reg mud_api[] = {
@@ -1001,6 +1197,24 @@ static const luaL_Reg mud_api[] = {
     {"get_chi", mud_get_chi},
     {"chi_skill_cost", mud_chi_skill_cost},
     {"pug_attack", mud_pug_attack},
+    /* Combat skills / commands */
+    {"combo", mud_combo},
+    {"backstab", mud_backstab},
+    {"stun", mud_stun},
+    {"disarm", mud_disarm},
+    {"trip", mud_trip},
+    {"do_poison", mud_do_poison},
+    {"multi_hit", mud_multi_hit},
+    {"can_see", mud_can_see},
+    {"do_spell_heal", mud_do_spell_heal},
+    {"room_is_private", mud_room_is_private},
+    {"set_hunt", mud_set_hunt},
+    {"gain_exp", mud_gain_exp},
+    {"do_say", mud_do_say},
+    {"do_look", mud_do_look},
+    {"do_sleep", mud_do_sleep},
+    {"apply_necromancer_debuff", mud_apply_necromancer_debuff},
+    {"cast_spell", mud_cast_spell},
     /* Randomness */
     {"dice", mud_dice},
     {"number_range", mud_number_range},
