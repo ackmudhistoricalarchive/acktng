@@ -38,6 +38,11 @@ NEED_LIBPQ := $(if $(LIBPQ_LIBS),,1)
 
 LUA_CFLAGS := $(shell pkg-config --cflags lua5.4 2>/dev/null)
 LUA_LIBS   := $(shell pkg-config --libs   lua5.4 2>/dev/null)
+ifeq ($(LUA_LIBS),)
+    LUA_CFLAGS := -I/usr/include/lua5.4
+    LUA_LIBS   := -llua5.4
+endif
+NEED_LUA := $(if $(shell $(CC) $(LUA_CFLAGS) -include lua.h -x c /dev/null -fsyntax-only 2>/dev/null && echo ok),,1)
 
 C_FLAGS = -O -g2 -Wall -DACK_43 -MMD -MP $(PROF) $(SOLARIS_FLAG) -Iheaders -Iai/headers -Itests/headers -Iquests
 L_FLAGS = -O -g2 -lcrypt -lpthread $(PROF) $(SOLARIS_LINK) -lz
@@ -50,10 +55,8 @@ endif
 C_FLAGS += $(LIBPQ_CFLAGS)
 L_FLAGS += $(LIBPQ_LIBS)
 
-ifneq ($(LUA_LIBS),)
-    C_FLAGS += $(LUA_CFLAGS)
-    L_FLAGS += $(LUA_LIBS)
-endif
+C_FLAGS += $(LUA_CFLAGS)
+L_FLAGS += $(LUA_LIBS)
 
 OBJDIR = build/obj
 STAMP_FILE = $(OBJDIR)/.all-stamp
@@ -216,7 +219,7 @@ O_FILES = affect.o ai.o act_clan.o act_comm.o act_info.o act_mob.o act_move.o ac
 # Source files for linting (all .c and .h excluding third-party sha256 and build artifacts)
 LINT_SOURCES = $(shell find . -name '*.c' -o -name '*.h' | grep -v sha256 | grep -v './build/' | sort)
 
-.PHONY: all clean purge unit-tests integration-tests integration-test integration-test-telnet integration-test-telnet-tls integration-test-wss lint format check-libpq
+.PHONY: all clean purge unit-tests integration-tests integration-test integration-test-telnet integration-test-telnet-tls integration-test-wss lint format check-libpq check-lua
 
 all: format lint ack $(UNIT_TEST_TARGETS)
 	@set -e; \
@@ -266,15 +269,21 @@ ifdef NEED_LIBPQ
 	@exit 1
 endif
 
+check-lua:
+ifdef NEED_LUA
+	@echo "Error: Lua 5.4 headers are required but were not found. Install liblua5.4-dev (Debian/Ubuntu)." >&2
+	@exit 1
+endif
+
 ifdef CYGWIN
-ack: check-libpq $(MAIN_OBJS)
+ack: check-libpq check-lua $(MAIN_OBJS)
 	rm -f ack.exe
 	$(CC) -o ack.exe $(MAIN_OBJS) $(L_FLAGS)
 	chmod g+w ack.exe
 	chmod a+x ack.exe
 	chmod g+w $(MAIN_OBJS)
 else
-ack: check-libpq $(MAIN_OBJS)
+ack: check-libpq check-lua $(MAIN_OBJS)
 	rm -f ack
 	$(CC) -o ack $(MAIN_OBJS) $(L_FLAGS)
 	chmod g+w ack
