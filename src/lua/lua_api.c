@@ -327,7 +327,9 @@ static int mud_interpret(lua_State *L)
    bool ok = FALSE;
    for (int i = 0; allowed[i]; i++)
    {
-      if (!str_cmp(allowed[i], cmd) || !strncmp(cmd, allowed[i], strlen(allowed[i])))
+      size_t len = strlen(allowed[i]);
+      if (strncasecmp(cmd, allowed[i], len) == 0 &&
+          (cmd[len] == '\0' || isspace((unsigned char)cmd[len])))
       {
          ok = TRUE;
          break;
@@ -434,22 +436,25 @@ static int mud_act(lua_State *L)
    CHAR_DATA *ch = lua_check_char(L, 2);
 
    /* arg1 / arg2 can be char or obj userdata, or nil */
-   CHAR_DATA *arg2_ch = NULL;
-   OBJ_DATA *arg1_obj = NULL;
+   void *arg1 = NULL;
+   void *arg2 = NULL;
 
    if (!lua_isnil(L, 3))
    {
-      /* Try obj first; if that fails try char */
-      void *ud3 = luaL_testudata(L, 3, "ack.obj");
-      if (ud3)
-         arg1_obj = *(OBJ_DATA **)ud3;
+      void *ud = luaL_testudata(L, 3, "ack.obj");
+      if (ud)
+         arg1 = *(OBJ_DATA **)ud;
+      else if ((ud = luaL_testudata(L, 3, "ack.char")))
+         arg1 = *(CHAR_DATA **)ud;
    }
 
    if (!lua_isnil(L, 4))
    {
-      void *ud4 = luaL_testudata(L, 4, "ack.char");
-      if (ud4)
-         arg2_ch = *(CHAR_DATA **)ud4;
+      void *ud = luaL_testudata(L, 4, "ack.char");
+      if (ud)
+         arg2 = *(CHAR_DATA **)ud;
+      else if ((ud = luaL_testudata(L, 4, "ack.obj")))
+         arg2 = *(OBJ_DATA **)ud;
    }
 
    const char *target_type = luaL_optstring(L, 5, "room");
@@ -461,7 +466,7 @@ static int mud_act(lua_State *L)
    else if (!str_cmp(target_type, "notchar"))
       to_type = TO_NOTVICT;
 
-   act(fmt, ch, arg1_obj, arg2_ch, to_type);
+   act(fmt, ch, arg1, arg2, to_type);
    return 0;
 }
 

@@ -238,18 +238,25 @@ void lua_load_all_skill_scripts(void)
    if (db)
    {
       PGresult *res = PQexec(db, "SELECT name, source FROM lua_libraries ORDER BY name");
-      if (PQresultStatus(res) == PGRES_TUPLES_OK)
+      if (!res)
       {
-         int rows = PQntuples(res);
-         for (int i = 0; i < rows; i++)
-         {
-            const char *lib_name = PQgetvalue(res, i, 0);
-            const char *lib_src = PQgetvalue(res, i, 1);
-            lua_cache_library(lib_name, lib_src);
-         }
-         log_f("Lua: loaded %d shared library module(s).", rows);
+         log_string("lua_load_all_skill_scripts: PQexec returned NULL for lua_libraries");
       }
-      PQclear(res);
+      else
+      {
+         if (PQresultStatus(res) == PGRES_TUPLES_OK)
+         {
+            int rows = PQntuples(res);
+            for (int i = 0; i < rows; i++)
+            {
+               const char *lib_name = PQgetvalue(res, i, 0);
+               const char *lib_src = PQgetvalue(res, i, 1);
+               lua_cache_library(lib_name, lib_src);
+            }
+            log_f("Lua: loaded %d shared library module(s).", rows);
+         }
+         PQclear(res);
+      }
    }
 
    /* Compile each skill/spell that has a Lua script. */
