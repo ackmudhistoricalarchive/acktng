@@ -32,7 +32,7 @@ This revised proposal replaces the effect-composition/JSONB approach with **embe
 
 1. Move skill/spell **metadata** (name, per-class levels, mana cost, beats, etc.) from compiled C tables into PostgreSQL — unchanged from the original proposal.
 
-2. Move skill/spell **logic** from compiled C functions into **Lua scripts** stored on disk (loaded at boot, reloadable at runtime). Each spell or skill that currently has a `spell_*.c` or `do_*.c` file gets a corresponding `.lua` script.
+2. Move skill/spell **logic** from compiled C functions into **Lua scripts stored in PostgreSQL** (loaded into the Lua VM at boot, reloadable at runtime). Each spell or skill that currently has a `spell_*.c` or `do_*.c` file gets a corresponding Lua script stored as a TEXT column in the `skills` table.
 
 3. Embed a **Lua 5.4 interpreter** in the game server, with a sandboxed C API that exposes game primitives (damage, healing, affects, object manipulation, character queries, etc.) to Lua scripts.
 
@@ -45,14 +45,21 @@ This revised proposal replaces the effect-composition/JSONB approach with **embe
 ## Architecture Overview
 
 ```
-                    +-----------------+
-                    |   PostgreSQL    |
-                    |  skills table   |  metadata (name, levels, mana, beats, etc.)
-                    +--------+--------+
-                             |
-                      boot_db() loads
-                             |
-                             v
+                    +-----------------------+
+                    |      PostgreSQL       |
+                    |    skills table       |
+                    |  - metadata (name,    |
+                    |    levels, mana, etc) |
+                    |  - script_source      |
+                    |    (Lua source TEXT)   |
+                    |  - lua_libraries      |
+                    |    (shared modules)    |
+                    +-----------+-----------+
+                                |
+                      boot_db() loads metadata
+                      + compiles Lua source
+                                |
+                                v
    +-------------------+    skill_table[]    +-------------------+
    |   magic.c         |  (runtime array)    |   skills.c        |
    |  cast/obj_cast    +---> lookup sn +---->+  can_use_skill    |
@@ -65,9 +72,10 @@ This revised proposal replaces the effect-composition/JSONB approach with **embe
    +----------------------------------------------------------+
    |                  Lua VM  (lua_State *)                    |
    |                                                           |
-   |  scripts/spells/fireball.lua    scripts/skills/bash.lua   |
-   |  scripts/spells/animate.lua     scripts/skills/chakra.lua |
-   |  ...                            ...                       |
+   |  [compiled bytecode cached per sn]                        |
+   |  fireball -> execute(ctx)    bash -> execute(ctx)         |
+   |  animate  -> execute(ctx)    chakra -> execute(ctx)       |
+   |  lib/common (shared module)  lib/damage_tables (shared)   |
    +---------------------+------------------------------------+
                           |
                  calls C API functions
@@ -89,7 +97,7 @@ This revised proposal replaces the effect-composition/JSONB approach with **embe
 
 1. `magic.c:do_cast()` resolves the spell name to `sn`, checks mana, resolves target — all unchanged.
 2. Instead of calling a compiled `spell_fireball()` C function, it calls `lua_spell_execute(sn, level, ch, vo, obj)`.
-3. The Lua dispatcher loads the precompiled bytecode for `scripts/spells/fireball.lua` and calls its `execute()` function, passing a Lua table with the spell context (sn, level, caster, victim, obj).
+3. The Lua dispatcher retrieves the precompiled bytecode for `sn` (loaded from `skills.script_source` at boot) and calls its `execute()` function, passing a Lua table with the spell context (sn, level, caster, victim, obj).
 4. The Lua script calls C API functions like `mud.damage()`, `mud.saves_spell()`, `mud.send()` which are thin wrappers around existing C engine functions.
 5. Control returns to `magic.c`, which deducts mana on success — unchanged.
 
@@ -109,7 +117,7 @@ This revised proposal replaces the effect-composition/JSONB approach with **embe
 | Expressiveness | Full language: loops, conditionals, tables, closures | Limited to predefined effect types | Full but overkill |
 | Sandboxing | Remove `io`, `os`, `loadfile`; whitelist API | Inherently sandboxed | Difficult to sandbox |
 | Learning curve | Simple syntax, well-documented, familiar to game designers | Custom, must be learned | Familiar but heavy |
-| Hot reload | `luaL_loadfile()` at runtime, no recompile | DB UPDATE + reload | Requires restart |
+| Hot reload | `UPDATE skills SET script_source=...` + `luareload` in-game, no recompile | DB UPDATE + reload | Requires restart |
 
 ---
 
@@ -136,13 +144,33 @@ CREATE TABLE skills (
     room_off      TEXT        NOT NULL DEFAULT '',
     growth        SMALLINT    NOT NULL DEFAULT 0,
     class_levels  JSONB       NOT NULL DEFAULT '{}', -- {"MAG": 5, "CLE": 10, ...}; absent = NO_USE
-    script_file   TEXT        NOT NULL DEFAULT ''     -- Lua script filename, e.g. "spells/fireball"
+    script_source TEXT        NOT NULL DEFAULT ''     -- Lua source code for this skill/spell
 );
 ```
 
-The `script_file` column names the Lua script that implements this skill/spell. The engine prepends `scripts/` and appends `.lua` to form the file path. An empty string means no script (skill is passive or uses a C fallback during migration).
+The `script_source` column contains the full Lua source code that implements this skill/spell. At boot, each non-empty `script_source` is compiled to bytecode and cached in the Lua VM. An empty string means no script (skill is passive or uses a C fallback during migration).
 
 The `skill_effects` table from the original proposal is **removed entirely** — Lua scripts replace effect composition.
+
+### `lua_libraries` table
+
+Shared Lua modules (common damage tables, utility functions, standard patterns) are stored in a separate table. Scripts access them via a controlled `require()` that only loads from this table.
+
+```sql
+CREATE TABLE lua_libraries (
+    name          TEXT        PRIMARY KEY,         -- module name, e.g. "common", "damage_tables"
+    source        TEXT        NOT NULL,            -- Lua source code
+    updated_at    TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+```
+
+Example usage in a spell script:
+```lua
+local common = require("common")        -- loads from lua_libraries where name='common'
+local tables = require("damage_tables")  -- loads from lua_libraries where name='damage_tables'
+```
+
+The controlled `require()` is registered in the Lua VM at init. It searches only `lua_libraries` — never the filesystem. This maintains sandboxing while enabling code reuse across scripts.
 
 ### No schema changes for cooldowns or learned percentages
 
@@ -363,7 +391,7 @@ bool spell_fireball(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj) {
 }
 ```
 
-Lua equivalent (`scripts/spells/fireball.lua`):
+Lua equivalent (stored in `skills.script_source` where `name = 'fireball'`):
 ```lua
 local dam_each = {
     [0]=0, 0, 0, 0, 0, 0, 0, 0, 0, 0,             -- 0-9
@@ -603,16 +631,14 @@ void lua_engine_shutdown(void) {
 
 ### Script Loading and Caching
 
-Scripts are loaded from `area/scripts/` at boot and compiled to bytecode. Compiled bytecode is cached in a Lua registry table keyed by script name, avoiding re-parsing on every cast.
+Scripts are loaded from PostgreSQL at boot. Each `skills.script_source` and `lua_libraries.source` is compiled to Lua bytecode and cached in a Lua registry table keyed by `sn` (for skills) or module name (for libraries), avoiding re-parsing on every cast.
 
 ```c
-// Load and compile a script, store bytecode in registry
-bool lua_load_script(const char *script_name) {
-    char path[MAX_STRING_LENGTH];
-    snprintf(path, sizeof(path), "scripts/%s.lua", script_name);
-
-    if (luaL_loadfile(L, path) != LUA_OK) {
-        log_string("Lua: failed to load %s: %s", path, lua_tostring(L, -1));
+// Load and compile a script from its DB source, store bytecode in registry
+bool lua_load_skill_script(int sn, const char *source, const char *name) {
+    // Compile the source string (not a file)
+    if (luaL_loadbuffer(L, source, strlen(source), name) != LUA_OK) {
+        log_string("Lua: compile error [%s]: %s", name, lua_tostring(L, -1));
         lua_pop(L, 1);
         return FALSE;
     }
@@ -626,14 +652,52 @@ bool lua_load_script(const char *script_name) {
     lua_setupvalue(L, -2, 1);              // set as chunk's _ENV
 
     if (lua_pcall(L, 0, 0, 0) != LUA_OK) {
-        log_string("Lua: error in %s: %s", path, lua_tostring(L, -1));
+        log_string("Lua: runtime error [%s]: %s", name, lua_tostring(L, -1));
         lua_pop(L, 1);
         return FALSE;
     }
 
-    // Store environment in registry[script_name]
+    // Store environment in registry keyed by sn
     // ... (registry storage code)
     return TRUE;
+}
+
+// Load all shared libraries from lua_libraries table
+void lua_load_libraries(void) {
+    // SELECT name, source FROM lua_libraries ORDER BY name
+    // For each row: luaL_loadbuffer + register as package
+}
+
+// Boot sequence: called from db_load_skill_table()
+void lua_load_all_skill_scripts(void) {
+    lua_load_libraries();  // shared modules first
+    for (int sn = 0; sn < MAX_SKILL; sn++) {
+        if (skill_table[sn].script_source[0] != '\0') {
+            lua_load_skill_script(sn, skill_table[sn].script_source,
+                                  skill_table[sn].name);
+        }
+    }
+}
+```
+
+### Controlled `require()` for shared libraries
+
+A custom `require()` is registered in the Lua VM that loads only from the `lua_libraries` cache — never from the filesystem:
+
+```c
+// Custom require: loads from lua_libraries cache only
+static int lua_custom_require(lua_State *L) {
+    const char *modname = luaL_checkstring(L, 1);
+
+    // Check if already loaded
+    luaL_getsubtable(L, LUA_REGISTRYINDEX, "_LOADED");
+    lua_getfield(L, -1, modname);
+    if (!lua_isnil(L, -1)) return 1;  // already loaded, return cached
+    lua_pop(L, 1);
+
+    // Look up in lua_libraries cache (populated at boot)
+    // ... compile and execute source, cache result in _LOADED
+    return 1;
 }
 ```
 
@@ -641,11 +705,11 @@ bool lua_load_script(const char *script_name) {
 
 ```c
 bool lua_spell_execute(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj) {
-    const char *script = skill_table[sn].script_file;
-    if (script[0] == '\0') return FALSE;  // no script — fall through to C
+    if (skill_table[sn].script_source[0] == '\0')
+        return FALSE;  // no script — fall through to C
 
-    // Push the script's execute() function from registry
-    lua_get_script_function(L, script, "execute");
+    // Push the script's execute() function from registry (keyed by sn)
+    lua_get_script_function(L, sn, "execute");
 
     // Build context table
     lua_newtable(L);
@@ -687,10 +751,9 @@ bool lua_spell_execute(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj
 
 ```c
 void lua_skill_execute(int sn, CHAR_DATA *ch, char *argument) {
-    const char *script = skill_table[sn].script_file;
-    if (script[0] == '\0') return;
+    if (skill_table[sn].script_source[0] == '\0') return;
 
-    lua_get_script_function(L, script, "execute");
+    lua_get_script_function(L, sn, "execute");
 
     lua_newtable(L);
     lua_pushinteger(L, sn);      lua_setfield(L, -2, "sn");
@@ -709,16 +772,25 @@ void lua_skill_execute(int sn, CHAR_DATA *ch, char *argument) {
 
 ### Hot Reload
 
-A staff command `luareload <script_name>` (or `luareload all`) reloads scripts at runtime without restarting the server:
+A staff command `luareload <skill_name>` (or `luareload all`) re-queries the database and recompiles scripts at runtime without restarting the server:
 
 ```c
 void do_luareload(CHAR_DATA *ch, char *argument) {
     if (argument[0] == '\0' || !str_cmp(argument, "all")) {
-        lua_load_all_scripts();
-        send_to_char("All Lua scripts reloaded.\n", ch);
+        // Re-query all skills + lua_libraries from DB, recompile all scripts
+        db_reload_skill_scripts();
+        lua_load_all_skill_scripts();
+        send_to_char("All Lua scripts and metadata reloaded from database.\n", ch);
     } else {
-        if (lua_load_script(argument)) {
-            send_to_char("Script reloaded.\n", ch);
+        int sn = skill_lookup(argument);
+        if (sn < 0) {
+            send_to_char("No such skill.\n", ch);
+            return;
+        }
+        // Re-query this skill's script_source from DB
+        if (db_reload_skill_script(sn) && lua_load_skill_script(sn,
+                skill_table[sn].script_source, skill_table[sn].name)) {
+            send_to_char("Script reloaded from database.\n", ch);
         } else {
             send_to_char("Failed to reload script. Check logs.\n", ch);
         }
@@ -726,7 +798,12 @@ void do_luareload(CHAR_DATA *ch, char *argument) {
 }
 ```
 
-This is one of the primary advantages over compiled C — tuning a spell's damage formula, adjusting a buff duration, or fixing a bug in a skill can be done by editing a `.lua` file and typing `luareload fireball` in-game. No compile, no reboot.
+The workflow for tuning a spell at runtime:
+1. `UPDATE skills SET script_source = '...' WHERE name = 'fireball';` (via psql, tngdb admin, or a future in-game editor)
+2. Type `luareload fireball` in-game.
+3. The updated script is live immediately — no compile, no reboot.
+
+`luareload all` also reloads skill metadata (name, mana cost, beats, class levels, etc.) from the `skills` table and shared modules from `lua_libraries`, making it a full hot-reload of the entire skill/spell system.
 
 ### Sandboxing and Safety
 
@@ -772,7 +849,7 @@ Additionally, `SPEECH_FUN *speech_fun` handles NPC responses to player speech, w
 
 A future phase would add:
 
-- `scripts/npc/<spec_name>.lua` — NPC behavior scripts with `on_tick(mob)`, `on_combat(mob)`, `on_speech(mob, player, message)` entry points.
+- NPC behavior scripts stored in a `npc_scripts` DB table with `on_tick(mob)`, `on_combat(mob)`, `on_speech(mob, player, message)` entry points.
 - A `spec_lua` C function that dispatches to the appropriate Lua script based on the mob's `spec_script` field.
 - The same `mud.*` and `char:*` APIs already built for spells/skills — no new API layer needed.
 - `SPEECH_FUN` handlers could also dispatch to Lua, coexisting with the existing LLM speech dispatch.
@@ -785,20 +862,22 @@ This is mentioned here to confirm that the Lua API surface designed for spells/s
 
 | Phase | What changes | Binary change? | Description |
 |---|---|---|---|
-| **1: Lua engine** | New `src/lua/` directory; Lua 5.4 linked into build | Yes | Embed Lua, register C API, sandboxing, error handling. No spells/skills moved yet. |
-| **2: Metadata to DB** | `skills` table in PostgreSQL; boot loads from DB | Yes | `skill_table[]` populated from DB instead of compiled arrays. Deletes `spell_table_data.c` + `skill_table_data.c`. |
-| **3: Spell scripts** | `area/scripts/spells/*.lua` | Yes | Migrate all 246 `spell_*.c` files to Lua scripts. `spell_fun` in `skill_table[]` points to `lua_spell_execute` for migrated spells. |
-| **4: Skill scripts** | `area/scripts/skills/*.lua` | Yes | Migrate all 109 `do_*.c` skill files to Lua scripts. Command table entries point to `lua_skill_execute` for migrated skills. |
-| **5: tngdb API** | `/skills` endpoints in tngdb | No | Expose skill metadata via REST API for web frontend. |
-| **6: NPC AI** (future) | `area/scripts/npc/*.lua` | Yes | Migrate `spec_*.c` to Lua. Out of scope for this proposal. |
+| **1: Lua engine** | New `src/lua/` directory; Lua 5.4 linked into build | Yes | Embed Lua 5.4, register C API, sandboxing, error handling. No spells/skills moved yet. |
+| **2: Metadata + scripts to DB** | `skills` and `lua_libraries` tables in PostgreSQL; boot loads from DB | Yes | `skill_table[]` populated from DB instead of compiled arrays. `script_source` column holds Lua source. Deletes `spell_table_data.c` + `skill_table_data.c`. |
+| **3: All spell scripts** | All 246 `spell_*.c` migrated to Lua in DB | Yes | Automated migration translates all spell C functions to Lua. All spell `script_source` populated. All `spell_*.c` files deleted. |
+| **4: All skill scripts** | All 109 `do_*.c` migrated to Lua in DB | Yes | Automated migration translates all skill C functions to Lua. All `do_*.c` files deleted. |
+| **5: tngdb API** | `/skills` endpoints in tngdb | No | Expose skill metadata and script source via REST API for web frontend. |
+| **6: NPC AI** (future) | NPC scripts in DB | Yes | Migrate `spec_*.c` to Lua. Out of scope for this proposal. |
 
 ### Phase details
 
 **Phase 1** is the foundation — it can be built and tested independently with a few test scripts before any real spells are migrated. It introduces the build dependency on Lua 5.4 (`liblua5.4-dev`).
 
-**Phase 2** is unchanged from the original proposal. The `skills` table schema gains only one new column (`script_file`) compared to the original.
+**Phase 2** creates the `skills` and `lua_libraries` tables. The migration script parses the compiled C table data and populates the DB. Shared Lua utility modules (common damage table lookups, standard save-or-halve patterns) are created in `lua_libraries`.
 
-**Phases 3 and 4** are the bulk of the migration work. Each spell/skill is migrated individually — the C function is kept alongside the Lua script during migration. A compile flag or runtime check determines which path is used, allowing side-by-side validation.
+**Phase 3** migrates **all** 246 spell C functions to Lua at once using automated tooling. The C spell files are run through the migration tool, which generates Lua source and inserts it into `skills.script_source`. The existing unit tests are run against the Lua path to validate equivalence. Once all tests pass, the `spell_*.c` files are deleted in a single commit.
+
+**Phase 4** follows the same pattern for all 109 skill C functions — automated migration, test validation, bulk deletion.
 
 **Phase 5** is unchanged from the original proposal.
 
@@ -812,7 +891,7 @@ This is mentioned here to confirm that the Lua API surface designed for spells/s
 
 | File | Description |
 |---|---|
-| `src/lua/lua_engine.c` | Lua VM lifecycle, script loading, caching, hot reload |
+| `src/lua/lua_engine.c` | Lua VM lifecycle, script loading from DB, caching, hot reload |
 | `src/lua/lua_engine.h` | Public declarations for lua_engine |
 | `src/lua/lua_api.c` | `mud.*` C API functions registered into Lua |
 | `src/lua/lua_api.h` | Public declarations for lua_api |
@@ -820,25 +899,24 @@ This is mentioned here to confirm that the Lua API surface designed for spells/s
 | `src/lua/lua_obj.c` | `obj` userdata metatables (object property access) |
 | `src/lua/lua_room.c` | `room` userdata metatables (room property access) |
 | `src/lua/lua_constants.c` | Constant registration (ELE, AFF, APPLY, POS, CLASS, etc.) |
-| `src/db/db_skills.c` | DB boot loader for `skill_table[]` from PostgreSQL |
+| `src/db/db_skills.c` | DB boot loader for `skill_table[]` and Lua scripts from PostgreSQL |
 | `src/db/db_skills.h` | Declarations for db_skills |
-| `area/scripts/spells/*.lua` | ~246 spell scripts (Phase 3) |
-| `area/scripts/skills/*.lua` | ~109 skill scripts (Phase 4) |
-| `tools/migrate_skills_to_db.py` | Migration: parse C tables, populate DB |
-| `tools/migrate_spells_to_lua.py` | Migration: translate `spell_*.c` to `.lua` (semi-automated) |
-| `tools/migrate_skills_to_lua.py` | Migration: translate `do_*.c` to `.lua` (semi-automated) |
+| `tools/migrate_skills_to_db.py` | Migration: parse C tables, populate DB metadata |
+| `tools/migrate_spells_to_lua.py` | Migration: translate `spell_*.c` to Lua, insert into `skills.script_source` |
+| `tools/migrate_skills_to_lua.py` | Migration: translate `do_*.c` to Lua, insert into `skills.script_source` |
 
 ### Modified files
 
 | File | Change |
 |---|---|
-| `area/schema.sql` | Add `skills` table |
-| `src/headers/ack.h` | Add `script_file` field to `SKILL_TYPE`; add Lua engine declarations |
+| `area/schema.sql` | Add `skills` and `lua_libraries` tables |
+| `src/headers/ack.h` | Add `script_source` field to `SKILL_TYPE`; add Lua engine declarations |
 | `src/db.c` | Call `lua_engine_init()` and `db_load_skill_table()` in `boot_db()` |
-| `src/magic.c` | In `do_cast()` / `obj_cast_spell()`: dispatch to `lua_spell_execute()` when `script_file` is set |
+| `src/magic.c` | In `do_cast()` / `obj_cast_spell()`: dispatch to `lua_spell_execute()` when `script_source` is set |
 | `src/interp.c` | For Lua-scripted skills: dispatch to `lua_skill_execute()` |
 | `src/comm.c` | Call `lua_engine_shutdown()` on server shutdown |
 | `src/Makefile` | Add `src/lua/` objects, link `-llua5.4`, add pkg-config for Lua |
+| `fixtures/test_data.sql` | Add skill table data and Lua scripts for integration tests |
 
 ### Deleted files (after migration)
 
@@ -858,9 +936,10 @@ This is mentioned here to confirm that the Lua API surface designed for spells/s
 | **New build dependency (Lua 5.4)** | Lua is a single `.a` / `.so` with zero transitive dependencies. `liblua5.4-dev` is available in all major distros. Added to `setup.sh` alongside existing deps. |
 | **SN stability** | Unchanged from original proposal — `sn` is PK, never reassigned. |
 | **Lua performance vs direct C** | Lua function call overhead is ~1 microsecond. Spell logic is dominated by the C API calls (damage calc, affect application), not by the Lua wrapper. Profiling needed but expected to be negligible. |
-| **Lua VM memory** | A single `lua_State` with ~400 cached script environments uses ~2-5 MB. Trivial compared to area data. |
+| **Lua VM memory** | A single `lua_State` with ~400 cached script environments uses ~2-5 MB. Trivial compared to area data. Scripts loaded from DB are compiled to bytecode once at boot, not re-parsed per cast. |
 | **Script errors in production** | Sandboxed execution with `lua_pcall` — errors are caught, logged, and the spell fizzles. Server continues. Staff see errors in-game. |
-| **Migration fidelity** | Semi-automated migration tools generate Lua scripts from C source. Each script is validated by running the existing unit tests against both C and Lua paths before the C version is deleted. |
+| **Migration fidelity** | Automated migration tools translate C source to Lua. All scripts are validated by running unit tests against the Lua path before the C files are deleted. Any script the tool cannot translate is flagged for manual review. |
+| **Scripts in DB vs filesystem** | DB storage means scripts are versioned alongside metadata, backed up with the database, and editable via tngdb admin UI. The trade-off is that editing requires a DB client or admin tool rather than a text editor + git. Migration tooling and `luareload` mitigate this. Scripts can also be exported to files for version control via a `tools/export_scripts.py` utility. |
 | **Instruction limit too low/high** | Configurable at boot via `area/startup.lua` or a config constant. Start at 100,000 (far more than any spell needs), adjust based on monitoring. |
 | **Stale char/obj userdata** | Userdata stores a pointer and a serial/generation number. API calls validate the pointer is still live before dereferencing. Returns nil/error if the character or object was extracted. |
 | **DB unavailable at boot** | `db_load_skill_table()` calls `exit()` on failure — same as all other DB boot connections. |
@@ -871,7 +950,7 @@ This is mentioned here to confirm that the Lua API surface designed for spells/s
 - `learned[]`, `cooldown[]`, `can_use_skill()`, `mana_cost()`, `raise_skill()` — all unchanged in C. Lua scripts call into these existing C functions via the API.
 - `skill_lookup()` still searches `skill_table[]` (now DB-loaded) — no change to call sites.
 - `war_attack()`, `combo()`, `calculate_damage()`, `sp_damage()` — remain in C. Lua scripts call them, they don't reimplement them.
-- The spell/skill dispatch in `magic.c` and `interp.c` is minimally changed — a single `if (script_file[0]) lua_*_execute(...)` check before the existing C path.
+- The spell/skill dispatch in `magic.c` and `interp.c` is minimally changed — a single `if (script_source[0]) lua_*_execute(...)` check before the existing C path.
 - NPC `skills`/`power_skills` bitfields — out of scope.
 - Player save format — unchanged. `learned[]` and `cooldown[]` are indexed by `sn` which is stable.
 
@@ -881,32 +960,32 @@ This is mentioned here to confirm that the Lua API surface designed for spells/s
 
 | Aspect | Original (JSONB effects) | Revised (Lua scripts) |
 |---|---|---|
-| **Spell logic storage** | JSONB blobs in `skill_effects` table rows | `.lua` files in `area/scripts/` |
+| **Spell logic storage** | JSONB blobs in `skill_effects` table rows | Lua source in `skills.script_source` column (PostgreSQL) |
 | **Expressiveness** | Fixed taxonomy of ~15 effect types | Full programming language |
 | **Complex spells** | Require `CUSTOM` C fallback (~8+ spells) | All spells expressible in Lua, no fallback needed |
 | **Formula language** | Custom DSL (`"5d8+level"`) parsed in C | Native Lua arithmetic (`dice(5,8) + level`) |
 | **Conditional logic** | Not supported (or JSONB `"conditions"` arrays) | Native `if/elseif/else` |
 | **Iteration** | Not supported (AOE hardcoded as effect type) | Native `for` loops |
-| **New DB tables** | `skills` + `skill_effects` | `skills` only (simpler schema) |
-| **Hot reload** | DB UPDATE + server reload command | Edit `.lua` file + `luareload` command |
+| **New DB tables** | `skills` + `skill_effects` | `skills` + `lua_libraries` |
+| **Hot reload** | DB UPDATE + server reload command | DB UPDATE + `luareload` command |
 | **NPC AI path** | Would need a separate system | Same Lua engine, same API |
 | **Testing** | Assert JSONB output matches expected | Run Lua scripts in test harness with mock API |
-| **Tooling for authors** | Edit JSONB in DB or via tngdb admin UI | Edit `.lua` files in any text editor |
+| **Tooling for authors** | Edit JSONB in DB or via tngdb admin UI | Edit Lua in DB via tngdb admin UI or psql; export to files for version control |
 
 ---
 
-## Open Questions for Discussion
+## Resolved Design Decisions
 
-1. **Lua version**: Lua 5.4 (stable, integer support, widely packaged) vs LuaJIT (faster, stuck at 5.1 semantics, less portable). Recommendation: Lua 5.4 for stability and integer math support.
+1. **Lua version**: **Lua 5.4.** Stable, native integer support (important for MUD integer math), widely packaged, no external dependencies.
 
-2. **Script file location**: `area/scripts/` (alongside area data, included in runtime directory) vs `scripts/` at repo root? The `area/` prefix keeps scripts next to the data they operate on and means the server finds them without path configuration.
+2. **Script storage**: **PostgreSQL, not flat files.** Lua source is stored in `skills.script_source` and `lua_libraries.source`. Scripts are loaded from DB at boot and compiled to bytecode in the Lua VM. No flat `.lua` files on disk. A `tools/export_scripts.py` utility can export scripts to files for version control if needed.
 
-3. **Migration tooling**: How automated should the C-to-Lua migration be? Options range from fully manual (human translates each spell) to semi-automated (tool generates Lua skeleton from C AST, human reviews) to AI-assisted (LLM translates each C function to Lua given the API spec).
+3. **Migration tooling**: **Fully automated.** Migration tools translate C source to Lua programmatically. Any script the tool cannot translate is flagged for manual attention, but the goal is zero manual intervention. The user will be prompted only if the migration tool encounters a case it cannot handle.
 
-4. **Phase 3 validation strategy**: Run both C and Lua paths in parallel during migration? Or migrate one spell at a time with unit test coverage gating the switchover?
+4. **Validation strategy**: **All at once per phase.** Phase 3 migrates all 246 spells in one batch; Phase 4 migrates all 109 skills in one batch. Unit tests are run against the complete Lua set to validate equivalence before deleting the C files.
 
-5. **Shared Lua libraries**: Should common patterns (level-based damage tables, standard save-or-halve logic) be extracted into shared Lua modules that spell scripts can call? E.g. `local common = require("spells.common")`. This would need a controlled `require()` that only loads from `scripts/lib/`.
+5. **Shared Lua libraries**: **Yes.** Common patterns (damage tables, save-or-halve, standard buff application) are extracted into shared modules in the `lua_libraries` table. A controlled `require()` loads only from this table — never from the filesystem.
 
-6. **tngdb API**: The `/skills` endpoint will be public read-only, consistent with existing endpoints — confirm?
+6. **tngdb API**: **Public read-only**, consistent with existing endpoints.
 
-7. **Hot reload scope**: Should `luareload` also support reloading skill metadata from the DB, or only Lua scripts? Metadata reload would require re-querying `skills` table and rebuilding `skill_table[]`.
+7. **Hot reload scope**: **Full reload.** `luareload all` reloads both skill metadata and Lua scripts from the database. `luareload <name>` reloads a single skill's script and metadata.
