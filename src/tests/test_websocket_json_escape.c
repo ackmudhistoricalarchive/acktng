@@ -4,8 +4,7 @@
 #include <string.h>
 
 /*
- * This is a copy of json_str_escape_raw() from socket.c.
- * It must be kept in sync with the production function.
+ * Copies of JSON helpers from socket.c — must be kept in sync.
  */
 static void json_append(char *buf, int *pos, int buf_size, const char *s)
 {
@@ -46,12 +45,36 @@ static void json_str_escape_raw(char *buf, int *pos, int buf_size, const char *s
    json_append(buf, pos, buf_size, "\"");
 }
 
+/* Copy of json_str_escape() from socket.c — must be kept in sync. */
+static void json_str_escape(char *buf, int *pos, int buf_size, const char *s)
+{
+   json_append(buf, pos, buf_size, "\"");
+   while (*s && *pos < buf_size - 3)
+   {
+      char c = *s++;
+      if (c == '"' || c == '\\')
+      {
+         buf[(*pos)++] = '\\';
+      }
+      buf[(*pos)++] = c;
+   }
+   buf[*pos] = '\0';
+   json_append(buf, pos, buf_size, "\"");
+}
+
 /* ---- helpers ---- */
 
 static void escape(const char *input, char *out, size_t out_cap)
 {
    int pos = 0;
    json_str_escape_raw(out, &pos, (int)out_cap, input, (int)strlen(input));
+   out[pos] = '\0';
+}
+
+static void escape_simple(const char *input, char *out, size_t out_cap)
+{
+   int pos = 0;
+   json_str_escape(out, &pos, (int)out_cap, input);
    out[pos] = '\0';
 }
 
@@ -143,6 +166,61 @@ static void test_buffer_does_not_overflow(void)
    assert(out[0] == '"');
 }
 
+/* ---- json_str_escape tests ---- */
+
+static void test_simple_escape_plain(void)
+{
+   char out[32];
+   escape_simple("hello", out, sizeof(out));
+   assert(strcmp(out, "\"hello\"") == 0);
+}
+
+static void test_simple_escape_quote(void)
+{
+   char out[32];
+   escape_simple("say \"hi\"", out, sizeof(out));
+   assert(strcmp(out, "\"say \\\"hi\\\"\"") == 0);
+}
+
+static void test_simple_escape_backslash(void)
+{
+   char out[32];
+   escape_simple("a\\b", out, sizeof(out));
+   assert(strcmp(out, "\"a\\\\b\"") == 0);
+}
+
+static void test_simple_escape_closing_quote_fits(void)
+{
+   /* Buffer exactly tight: opening " + content + closing " must all fit.
+    * "ab" → \"ab\" needs 6 bytes; use buf of 8 — closing quote must appear. */
+   char out[8];
+   int pos = 0;
+   json_str_escape(out, &pos, (int)sizeof(out), "ab");
+   assert(pos < (int)sizeof(out));
+   assert(out[pos] == '\0');
+   assert(out[0] == '"');
+   /* Last non-NUL byte must be the closing quote. */
+   assert(pos >= 2);
+   assert(out[pos - 1] == '"');
+}
+
+static void test_simple_escape_closing_quote_fits_at_escape_boundary(void)
+{
+   /* Regression: with the old -2 bound an escaped char at the boundary could
+    * leave the closing quote unwritten.  Verify the closing quote is always
+    * present even when an escape pair lands right at the buffer edge.
+    *
+    * Input: 3 chars "a\"b", needs \"a\\\"b\" = 8 bytes + NUL.
+    * Use buf of 9 so the escape pair just barely fits — closing quote must appear. */
+   char out[9];
+   int pos = 0;
+   json_str_escape(out, &pos, (int)sizeof(out), "a\"b");
+   assert(pos < (int)sizeof(out));
+   assert(out[pos] == '\0');
+   assert(out[0] == '"');
+   assert(out[pos - 1] == '"');
+}
+
 int main(void)
 {
    test_plain_ascii();
@@ -156,6 +234,12 @@ int main(void)
    test_del_char();
    test_empty_string();
    test_buffer_does_not_overflow();
+
+   test_simple_escape_plain();
+   test_simple_escape_quote();
+   test_simple_escape_backslash();
+   test_simple_escape_closing_quote_fits();
+   test_simple_escape_closing_quote_fits_at_escape_boundary();
 
    puts("test_websocket_json_escape: all tests passed");
    return 0;
