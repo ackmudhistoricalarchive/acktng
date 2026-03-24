@@ -84,20 +84,17 @@ variable to an absolute file path.
 
 ## 6. Ensure Required Directories Exist
 
-The server expects `player/a` through `player/z` and a `log/` directory. These
-should already exist in the repository, but verify:
+The server expects a `log/` directory. It should already exist in the
+repository, but verify:
 
 ```sh
-for letter in a b c d e f g h i j k l m n o p q r s t u v w x y z; do
-    mkdir -p player/$letter
-done
 mkdir -p log
 ```
 
 ## 7. Start the Server
 
 The server binary must run from the `area/` directory because it resolves
-`../data/`, `../player/`, and `../log/` relative to the working directory.
+`../data/` and `../log/` relative to the working directory.
 
 ```sh
 cd area
@@ -155,7 +152,7 @@ openssl req -x509 -newkey rsa:2048 -nodes \
 - Check that PostgreSQL is running and reachable.
 - Verify `data/db.conf` exists and contains a valid connection string.
 - Confirm the schema has been applied (`schema_version` table should contain a
-  row with `version = 7`).
+  row with `version = 8`).
 
 **"Port number must be above 1024"**
 - The plain telnet port must be between 1025 and 65534.
@@ -165,12 +162,13 @@ openssl req -x509 -newkey rsa:2048 -nodes \
   `greeting1` through `greeting6`). Make sure you loaded the fixture data.
 
 **Player cannot save**
-- The `player/<letter>/` subdirectories must exist before a character can be
-  saved. Re-run the `mkdir -p` loop from step 6.
+- Player data is stored in the PostgreSQL `players` table. Verify the database
+  is reachable and the schema has been applied (the `players` table must exist).
 
 **Schema version mismatch**
 - The server checks that the database schema version matches the compiled-in
-  `DB_SCHEMA_VERSION`. Re-apply `area/schema.sql` if you updated the codebase.
+  `DB_SCHEMA_VERSION` (currently 8). Re-apply `area/schema.sql` if you updated
+  the codebase.
 
 **Build fails with missing headers**
 - Ensure all packages from step 1 are installed. OpenSSL (`libssl-dev`) and
