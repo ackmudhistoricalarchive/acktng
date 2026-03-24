@@ -30,6 +30,7 @@
 #include <string.h>
 #include <time.h>
 #include "globals.h"
+#include "lua/lua_engine.h"
 #include "tables.h"
 #ifndef DEC_MAGIC_H
 #include "magic.h"
@@ -643,7 +644,9 @@ void do_cast(CHAR_DATA *ch, char *argument)
                               : "NONE"));
       monitor_chan(log_buf, MONITOR_MAGIC);
    }
-   if ((*skill_table[sn].spell_fun)(sn, best, ch, vo, NULL))
+   if ((skill_scripts[sn] && skill_scripts[sn][0] != '\0')
+           ? lua_spell_execute(sn, best, ch, vo, NULL)
+           : (*skill_table[sn].spell_fun)(sn, best, ch, vo, NULL))
    {
       if (is_arcane_spell(sn))
          ch->arcane_power++;
@@ -702,7 +705,9 @@ void do_cast(CHAR_DATA *ch, char *argument)
                                     : "NONE"));
             monitor_chan(log_buf, MONITOR_MAGIC);
          }
-         if ((*skill_table[sn].spell_fun)(sn, best, ch, vo, NULL))
+         if ((skill_scripts[sn] && skill_scripts[sn][0] != '\0')
+                 ? lua_spell_execute(sn, best, ch, vo, NULL)
+                 : (*skill_table[sn].spell_fun)(sn, best, ch, vo, NULL))
          {
             if (is_arcane_spell(sn))
                ch->arcane_power++;
@@ -764,7 +769,9 @@ void do_cast(CHAR_DATA *ch, char *argument)
                                     : "NONE"));
             monitor_chan(log_buf, MONITOR_MAGIC);
          }
-         if ((*skill_table[sn].spell_fun)(sn, best, ch, vo, NULL))
+         if ((skill_scripts[sn] && skill_scripts[sn][0] != '\0')
+                 ? lua_spell_execute(sn, best, ch, vo, NULL)
+                 : (*skill_table[sn].spell_fun)(sn, best, ch, vo, NULL))
          {
             if (is_arcane_spell(sn))
                ch->arcane_power++;
@@ -882,7 +889,10 @@ void obj_cast_spell(int sn, int level, CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DAT
 
    target_name = "";
 
-   (*skill_table[sn].spell_fun)(sn, level, ch, vo, obj);
+   if (skill_scripts[sn] && skill_scripts[sn][0] != '\0')
+      lua_spell_execute(sn, level, ch, vo, obj);
+   else
+      (*skill_table[sn].spell_fun)(sn, level, ch, vo, obj);
 
    if (skill_table[sn].target == TAR_CHAR_OFFENSIVE && (victim != NULL) && victim->master != ch)
    {

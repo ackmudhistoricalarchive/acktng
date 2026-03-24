@@ -276,6 +276,8 @@ extern const struct clan_type clan_table[MAX_CLAN];
 extern const struct cmd_type cmd_table[];
 
 extern const struct skill_type skill_table[MAX_SKILL];
+/* Lua script sources, indexed by sn; NULL means use the C spell_fun/do_fun. */
+extern char *skill_scripts[MAX_SKILL];
 extern struct pub_society_type
     pub_society_table[]; /* sized MAX_PUB_SOCIETY in const_pub_society.c */
 extern struct social_type *social_table;

@@ -56,7 +56,8 @@ UNIT_TEST_TARGETS = \
 	tests/unit-test-mssp \
 	tests/unit-test-gmcp \
 	tests/unit-test-mccp \
-	tests/unit-test-chan-history
+	tests/unit-test-chan-history \
+	tests/unit-test-lua-engine
 
 $(OBJDIR)/tests/%.o: tests/%.c headers/ack.h
 	@mkdir -p $(dir $@)
@@ -464,6 +465,14 @@ tests/unit-test-mccp: $(OBJDIR)/tests/test_mccp.o
 	rm -f $@
 	$(CC) -o $@ $^ $(L_FLAGS) -lz
 
+$(OBJDIR)/lua/lua_engine.unit-test.o: lua/lua_engine.c headers/ack.h
+	@mkdir -p $(OBJDIR)/lua
+	$(CC) -c $(C_FLAGS) -ffunction-sections -fdata-sections -o $@ lua/lua_engine.c
+
+tests/unit-test-lua-engine: $(OBJDIR)/tests/test_lua_engine.o $(OBJDIR)/lua/lua_engine.unit-test.o
+	rm -f $@
+	$(CC) -Wl,--gc-sections -o $@ $^ $(L_FLAGS)
+
 unit-tests: $(UNIT_TEST_TARGETS)
 	@for t in $(UNIT_TEST_TARGETS); do ./$$t || exit 1; done
 	$(MAKE) integration-tests
@@ -516,3 +525,4 @@ $(OBJDIR)/tests/test_skills.o:           skills.c
 $(OBJDIR)/tests/test_revenant.o:         revenant.c
 $(OBJDIR)/tests/test_caravan_travel.o:   act_move.c
 $(OBJDIR)/tests/test_weapon_bond.o:      weapon_bond.c
+$(OBJDIR)/tests/test_lua_engine.o:       lua/lua_engine.c

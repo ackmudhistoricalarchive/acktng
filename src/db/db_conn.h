@@ -18,7 +18,7 @@
 #include <libpq-fe.h>
 
 /* Expected schema version compiled into this binary. */
-#define DB_SCHEMA_VERSION 8
+#define DB_SCHEMA_VERSION 9
 
 /* Open the boot connection.
  * Returns  1 on success,

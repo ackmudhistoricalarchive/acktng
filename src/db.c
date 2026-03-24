@@ -49,7 +49,9 @@
 
 #include "db/db_conn.h"
 #include "db/db_load.h"
+#include "db/db_skills.h"
 #include "db/db_worker.h"
+#include "lua/lua_engine.h"
 
 #if !defined(macintosh)
 extern int _filbuf args((FILE *));
@@ -570,6 +572,9 @@ void boot_db(void)
       area_used[a] = NULL;
    }
 
+   /* Initialise Lua VM before any DB loading (scripts are compiled after areas). */
+   lua_engine_init();
+
    /*
     * Open DB connection.  Aborts if data/db.conf is absent or the connection
     * fails — the DB is required.
@@ -689,6 +694,8 @@ void boot_db(void)
       db_load_sysdata();
       log_f("DB: loading keep chests from database.");
       db_load_chests();
+      log_f("DB: loading Lua skill scripts from database.");
+      db_load_skill_scripts();
    }
    db_conn_close();
    auto_quest = TRUE;

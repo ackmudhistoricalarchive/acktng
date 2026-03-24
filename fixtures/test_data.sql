@@ -71,3 +71,6 @@ VALUES
 -- -----------------------------------------------------------------------
 INSERT INTO shelp_entries (filename, level, keywords, body)
 VALUES ('test_shelp', 104, 'TESTSTAFF', 'This is a test staff help entry.\n');
+
+-- skills and lua_libraries are empty in test fixtures; the server must boot
+-- cleanly with no Lua scripts loaded.

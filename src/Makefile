@@ -36,6 +36,9 @@ ifeq ($(LIBPQ_LIBS),)
 endif
 NEED_LIBPQ := $(if $(LIBPQ_LIBS),,1)
 
+LUA_CFLAGS := $(shell pkg-config --cflags lua5.4 2>/dev/null)
+LUA_LIBS   := $(shell pkg-config --libs   lua5.4 2>/dev/null)
+
 C_FLAGS = -O -g2 -Wall -DACK_43 -MMD -MP $(PROF) $(SOLARIS_FLAG) -Iheaders -Iai/headers -Itests/headers -Iquests
 L_FLAGS = -O -g2 -lcrypt -lpthread $(PROF) $(SOLARIS_LINK) -lz
 
@@ -46,6 +49,11 @@ endif
 
 C_FLAGS += $(LIBPQ_CFLAGS)
 L_FLAGS += $(LIBPQ_LIBS)
+
+ifneq ($(LUA_LIBS),)
+    C_FLAGS += $(LUA_CFLAGS)
+    L_FLAGS += $(LUA_LIBS)
+endif
 
 OBJDIR = build/obj
 STAMP_FILE = $(OBJDIR)/.all-stamp
@@ -191,7 +199,9 @@ SKILL_OBJS = \
 
 QUEST_OBJS = quests/template.o quests/state.o quests/cartography.o quests/notify.o quests/commands.o quests/crusade.o
 
-O_FILES = affect.o ai.o act_clan.o act_comm.o act_info.o act_mob.o act_move.o act_obj.o act_pub_society.o act_wiz.o npc_dialogue.o db/db_conn.o db/db_worker.o db/db_load.o db/db_help.o \
+LUA_OBJS = lua/lua_engine.o lua/lua_api.o lua/lua_char.o lua/lua_obj.o lua/lua_room.o lua/lua_constants.o
+
+O_FILES = affect.o ai.o act_clan.o act_comm.o act_info.o act_mob.o act_move.o act_obj.o act_pub_society.o act_wiz.o npc_dialogue.o db/db_conn.o db/db_worker.o db/db_load.o db/db_help.o db/db_skills.o \
 	  areachk.o board.o build.o buildare.o buildtab.o caravan.o clutch.o comm.o hotreboot.o login.o socket.o prompt.o \
 	  const.o const_color.o const_class.o const_race.o const_clan.o const_exp.o const_liq.o const_pub_society.o \
 	  damage.o cloak.o death.o db.o email.o enchant.o fight.o handler.o hash.o hunt.o \
@@ -201,7 +211,7 @@ O_FILES = affect.o ai.o act_clan.o act_comm.o act_info.o act_mob.o act_move.o ac
 	  save/save_area_files.o save/save_rulers.o save/save_socials.o save/save_sysdata.o save/save_notes.o \
 	  scheck.o skills.o skills_chi.o skills_combo.o skills_obj.o skills_poison.o special.o spell_dam.o spendqp.o ssm.o \
 	  skills_sentinel.o stance.o strfuns.o tables.o trigger.o update.o visibility.o weapon_bond.o wizutil.o \
-	  write.o $(AI_SPEC_SRCS) $(SPELL_OBJS) $(SKILL_OBJS)
+	  write.o $(AI_SPEC_SRCS) $(SPELL_OBJS) $(SKILL_OBJS) $(LUA_OBJS)
 
 # Source files for linting (all .c and .h excluding third-party sha256 and build artifacts)
 LINT_SOURCES = $(shell find . -name '*.c' -o -name '*.h' | grep -v sha256 | grep -v './build/' | sort)
