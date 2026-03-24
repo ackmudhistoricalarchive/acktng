@@ -26,9 +26,7 @@
 #include "globals.h"
 #include "npc_dialogue.h"
 #include "lists.h"
-#ifdef HAVE_LIBPQ
 #include "db/db_help.h"
-#endif
 
 /* =========================================================================
  * Forward declarations for game functions used here.
@@ -946,7 +944,6 @@ static const char *accent_instructions[MAX_ACCENT] = {
  * Help/shelp context collection for KNOW_HELPS mobs.
  * ========================================================================= */
 
-#ifdef HAVE_LIBPQ
 /* Common English stop-words to skip when extracting search keywords. */
 static const char *help_stop_words[] = {"the",  "and", "is", "are", "you", "how", "what", "can",
                                         "does", "do",  "a",  "an",  "in",  "to",  "of",   "it",
@@ -961,7 +958,6 @@ static bool is_stop_word(const char *w)
          return TRUE;
    return FALSE;
 }
-#endif
 
 /*
  * Query help/shelp DB for entries whose keyword matches any word in `message`.
@@ -983,7 +979,6 @@ static void collect_help_context(const char *message, char *out, size_t cap)
    if (strncmp(message, "[GREET]", 7) == 0)
       return;
 
-#ifdef HAVE_LIBPQ
    snprintf(msg_copy, sizeof(msg_copy), "%s", message);
 
    p = msg_copy;
@@ -1048,15 +1043,6 @@ static void collect_help_context(const char *message, char *out, size_t cap)
          strncat(out, snippet, cap - strlen(out) - 1);
       }
    }
-#else
-   /* No DB — nothing to inject. */
-   (void)msg_copy;
-   (void)word;
-   (void)p;
-   (void)seen_kw;
-   (void)match_count;
-   (void)i;
-#endif
 }
 
 #ifdef UNIT_TEST_NPC_DIALOGUE
@@ -1071,7 +1057,6 @@ void npc_dialogue_test_collect_help_context(const char *message, char *out, size
  * System prompt assembly.
  * ========================================================================= */
 
-#ifdef HAVE_LIBPQ
 /* Context struct and callback for lore injection into system prompt. */
 struct lore_inject_ctx
 {
@@ -1105,7 +1090,6 @@ static void lore_inject_cb(const char *keyword, const char *body, void *ud)
    safe_append(ctx->buf, ctx->cap, "\n");
    ctx->count++;
 }
-#endif
 
 static void build_system_prompt(char *buf, size_t cap, CHAR_DATA *npc, const char *help_context)
 {
@@ -1157,8 +1141,7 @@ static void build_system_prompt(char *buf, size_t cap, CHAR_DATA *npc, const cha
       }
    }
 
-/* 4. Lore injection: up to 3 entries matching this NPC's lore_flags */
-#ifdef HAVE_LIBPQ
+   /* 4. Lore injection: up to 3 entries matching this NPC's lore_flags */
    if (npc->lore_flags != 0)
    {
       struct lore_inject_ctx lctx;
@@ -1167,7 +1150,6 @@ static void build_system_prompt(char *buf, size_t cap, CHAR_DATA *npc, const cha
       lctx.count = 0;
       db_lore_collect_by_flags(npc->lore_flags, 3, lore_inject_cb, &lctx);
    }
-#endif
 
    /* 5. Accent instruction */
    if (accent > ACCENT_NONE && accent < MAX_ACCENT && accent_instructions[accent] != NULL)

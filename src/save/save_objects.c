@@ -37,9 +37,7 @@
  */
 
 #include "save.h"
-#ifdef HAVE_LIBPQ
 #include "../db/db_worker.h"
-#endif
 
 extern int top_obj_index;
 
@@ -939,9 +937,7 @@ void save_chest(OBJ_DATA *chest)
    fclose(fp);
 
    rename(temp_path, path);
-#ifdef HAVE_LIBPQ
    db_worker_save_chest(chest);
-#endif
 }
 
 /*

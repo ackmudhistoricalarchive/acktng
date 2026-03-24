@@ -4,7 +4,6 @@
 /* db_conn.h — PostgreSQL connection management for ACK!TNG.
  *
  * Compiled only when HAVE_LIBPQ is defined (libpq-dev is present).
- * All other code guards DB calls with #ifdef HAVE_LIBPQ.
  *
  * Boot path (synchronous):
  *   db_conn_open()  — open the connection, apply schema if needed,
@@ -15,8 +14,6 @@
  * Config file: $ACK_DB_CONF if set, otherwise <area_dir>/../data/db.conf.
  * DB is disabled if the file does not exist.
  */
-
-#ifdef HAVE_LIBPQ
 
 #include <libpq-fe.h>
 
@@ -50,7 +47,5 @@ int db_log_error(const char *context, PGresult *res);
 /* Return the connection string used for the boot connection.
  * Valid after db_conn_open() succeeds.  NULL if not connected. */
 const char *db_conn_get_connstr(void);
-
-#endif /* HAVE_LIBPQ */
 
 #endif /* DB_CONN_H */

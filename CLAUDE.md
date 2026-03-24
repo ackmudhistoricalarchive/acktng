@@ -43,10 +43,10 @@ make format       # Auto-apply .clang-format style to all source files
 ```
 
 - Compiler: GCC with `-O -g2 -Wall -DACK_43`
-- Always links: `-lcrypt -lpthread -lz`
+- Always links: `-lcrypt -lpthread -lz -lpq`
+- Required: libpq (`libpq-dev`) — PostgreSQL client library for all database operations. The build will fail if libpq is not found.
 - Optional (auto-detected via pkg-config):
   - OpenSSL (`-DHAVE_OPENSSL`) — enables TLS telnet and WSS support
-  - libpq (`-DHAVE_LIBPQ`) — enables PostgreSQL database backend for help/shelp/lore and integration tests
 - Every `.c` file depends on `ack.h` (the central header)
 - The binary is built as `src/ack`; it runs from `area/` (e.g., `cd area && ../src/ack 4000`)
 
@@ -179,7 +179,7 @@ acktng/
 ├── fixtures/         # Test fixture data (test_data.sql for integration tests)
 ├── data/             # Runtime data files (bans, clans, socials, rulers, etc.)
 ├── docs/             # Documentation (area file spec, data structures, lore, proposals)
-├── player/           # Player save directory (subdirectories a-z)
+├── player/           # Legacy player save directory (DB-backed since schema v8)
 ├── log/              # Server log directory
 ├── reports/          # Report files
 ├── web/              # Game-generated web data output (see web/README.md)
@@ -246,11 +246,11 @@ These are hard requirements — no spell, skill, or command addition is complete
 
 ## Common Pitfalls
 
-- The server binary must run from the `area/` directory (relative paths to area files, data, player dirs)
-- Player directories (`player/a` through `player/z`) must exist before players can save
+- The server binary must run from the `area/` directory (relative paths to area files, data, log dirs)
 - `ack.h` is the single include for most `.c` files — it pulls in typedefs, config, globals, lists, strfuns
 - When writing unit tests, use `#define DEC_GLOBALS_H 1` before including `ack.h` to avoid link errors from global arrays
 - The Makefile defines `O_FILES` twice (second definition wins) — be aware when adding new source files
 - Area files use a custom text format with tilde (`~`) delimiters — see `docs/area_file_spec.md`
-- OpenSSL and libpq are auto-detected at build time — if TLS or DB features aren't working, check that `libssl-dev` and `libpq-dev` are installed
+- libpq is required — the build fails without it. OpenSSL is auto-detected; if TLS features aren't working, check that `libssl-dev` is installed
+- The server refuses to boot if the PostgreSQL database connection fails (check `data/db.conf`)
 - Integration tests require a running PostgreSQL server with peer auth for the postgres user

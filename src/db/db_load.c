@@ -12,8 +12,6 @@
  * invariant expected by fix_exits(), check_resets(), and the OLC editor.
  */
 
-#ifdef HAVE_LIBPQ
-
 #include "globals.h"
 
 #include <dirent.h>
@@ -1521,5 +1519,3 @@ void db_load_quest_templates(void)
    log_f("DB: loaded %d quest template%s.", nrows, nrows == 1 ? "" : "s");
    PQclear(res);
 }
-
-#endif /* HAVE_LIBPQ */

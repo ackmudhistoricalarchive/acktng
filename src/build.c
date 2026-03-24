@@ -31,10 +31,8 @@
 #include <string.h>
 #include "globals.h"
 #include "tables.h"
-#ifdef HAVE_LIBPQ
 #include "db/db_worker.h"
 #include "db/db_help.h"
-#endif
 
 /* This program provides the interpreting of building commands */
 
@@ -3538,10 +3536,8 @@ void build_dig(CHAR_DATA *ch, char *argument)
       pRoomIndex->exit[RevDirs[dir]] = pExit;
    }
 
-#ifdef HAVE_LIBPQ
    db_worker_save_room(pRoomIndex);
    db_worker_save_room(pCurRoom);
-#endif
 
    return;
 }
@@ -3653,9 +3649,7 @@ void build_addmob(CHAR_DATA *ch, char *argument)
 
    top_mob_index++;
    kill_table[URANGE(0, pMobIndex->level, MAX_LEVEL - 1)].number++;
-#ifdef HAVE_LIBPQ
    db_worker_save_mob(pMobIndex);
-#endif
    return;
 }
 
@@ -3739,9 +3733,7 @@ void build_addobject(CHAR_DATA *ch, char *argument)
    LINK(pList, pArea->first_area_object, pArea->last_area_object, next, prev);
 
    top_obj_index++;
-#ifdef HAVE_LIBPQ
    db_worker_save_obj(pObjIndex);
-#endif
 
    return;
 }
@@ -4525,10 +4517,8 @@ void build_delroom(CHAR_DATA *ch, char *argument)
 
    top_room--;
 
-#ifdef HAVE_LIBPQ
    db_worker_delete_room(vnum);
    db_worker_save_resets(pArea);
-#endif
 
    send_to_char("Done.\n\r", ch);
    return;
@@ -4710,10 +4700,8 @@ void build_delobject(CHAR_DATA *ch, char *argument)
 
    top_obj_index--;
 
-#ifdef HAVE_LIBPQ
    db_worker_delete_obj(vnum);
    db_worker_save_resets(pArea);
-#endif
 
    send_to_char("Done.\n\r", ch);
    return;
@@ -4921,10 +4909,8 @@ void build_delmob(CHAR_DATA *ch, char *argument)
 
    top_mob_index--;
 
-#ifdef HAVE_LIBPQ
    db_worker_delete_mob(vnum);
    db_worker_save_resets(pArea);
-#endif
 
    send_to_char("Done.\n\r", ch);
    return;
@@ -6061,10 +6047,8 @@ void build_umobs(CHAR_DATA *ch, char *argument)
 
 /** Help Editor -- database-backed **/
 
-#ifdef HAVE_LIBPQ
 /* Pending help edit id for helpedit save callback. */
 static int pending_help_edit_id = 0;
-#endif
 
 void build_findhelp(CHAR_DATA *ch, char *argument)
 {
@@ -6078,7 +6062,6 @@ void build_findhelp(CHAR_DATA *ch, char *argument)
       return;
    }
 
-#ifdef HAVE_LIBPQ
    {
       int cnt = 0;
       int i;
@@ -6096,20 +6079,13 @@ void build_findhelp(CHAR_DATA *ch, char *argument)
       if (cnt == 0)
          send_to_char("Couldn't find that keyword.\n\r", ch);
    }
-#else
-   send_to_char("Help database not available.\n\r", ch);
-#endif
    return;
 }
 
 void build_helpedit(CHAR_DATA *ch, char *argument)
 {
    char arg[MAX_INPUT_LENGTH];
-#ifdef HAVE_LIBPQ
    int number = number_argument(argument, arg);
-#else
-   number_argument(argument, arg);
-#endif
 
    if (arg[0] == '\0')
    {
@@ -6117,7 +6093,6 @@ void build_helpedit(CHAR_DATA *ch, char *argument)
       return;
    }
 
-#ifdef HAVE_LIBPQ
    {
       int id = 0;
       char kw_buf[256];
@@ -6132,9 +6107,6 @@ void build_helpedit(CHAR_DATA *ch, char *argument)
       pending_help_edit_id = id;
       build_editstr((char **)&body_buf, body_buf, ch);
    }
-#else
-   send_to_char("Help database not available.\n\r", ch);
-#endif
    return;
 }
 
@@ -6158,7 +6130,6 @@ void build_addhelp(CHAR_DATA *ch, char *argument)
       return;
    }
 
-#ifdef HAVE_LIBPQ
    {
       int new_id = db_help_insert(level, argument, "NEW HELP.  DELETE THIS LINE FIRST!");
       if (new_id > 0)
@@ -6169,9 +6140,6 @@ void build_addhelp(CHAR_DATA *ch, char *argument)
       else
          send_to_char("DB insert failed.\n\r", ch);
    }
-#else
-   send_to_char("Help database not available.\n\r", ch);
-#endif
    return;
 }
 

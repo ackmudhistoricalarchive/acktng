@@ -21,8 +21,6 @@
  * Compiled only when HAVE_LIBPQ is defined.
  */
 
-#ifdef HAVE_LIBPQ
-
 /* Opaque forward declarations — db_worker.c includes ack.h for full types. */
 struct descriptor_data;
 struct char_data;
@@ -149,7 +147,5 @@ void db_worker_save_board(struct board_data *board);
  * Returns NULL if the player is not found or on error.  Caller must free().
  * Only for use from non-game-loop contexts (hotreboot recovery, offline ops). */
 char *db_worker_fetch_player_raw_save(const char *name);
-
-#endif /* HAVE_LIBPQ */
 
 #endif /* DB_WORKER_H */

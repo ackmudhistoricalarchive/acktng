@@ -9,8 +9,6 @@
  * functions directly instead of walking in-memory linked lists.
  */
 
-#ifdef HAVE_LIBPQ
-
 #include <stddef.h>
 
 /* Open the help runtime connection.  area_dir is the running directory
@@ -67,5 +65,4 @@ int db_lore_collect_by_flags(long npc_flags, int max_results,
                                                void *userdata),
                              void *userdata);
 
-#endif /* HAVE_LIBPQ */
 #endif /* DB_HELP_H */
