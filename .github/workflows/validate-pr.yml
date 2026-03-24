@@ -28,6 +28,7 @@ jobs:
             zlib1g-dev \
             libssl-dev \
             libpq-dev \
+            liblua5.4-dev \
             postgresql-client \
             clang-format-18
 

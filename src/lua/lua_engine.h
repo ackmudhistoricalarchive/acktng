@@ -9,7 +9,12 @@
 #ifndef DEC_LUA_ENGINE_H
 #define DEC_LUA_ENGINE_H 1
 
-#include <lua.h>
+/* Forward declaration — callers that need the full Lua API must include
+ * <lua.h> themselves.  This header only exposes the vm pointer for NULL
+ * checks (e.g. in unit tests) and game-function signatures.
+ * Compatible with Lua's own typedef struct lua_State lua_State in lua.h. */
+struct lua_State;
+typedef struct lua_State lua_State;
 
 /* Expose the global VM so that lua_api.c / lua_char.c etc. can access it
  * without a separate accessor function. */
