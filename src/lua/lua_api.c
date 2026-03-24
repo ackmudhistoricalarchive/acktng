@@ -109,35 +109,39 @@ static int mud_heal_move(lua_State *L)
 
 /* ---- Affects ------------------------------------------------------------- */
 
+/* Parse a Lua table at stack index into af.  Zeros af first. */
+static void lua_to_affect(lua_State *L, int index, AFFECT_DATA *af)
+{
+   memset(af, 0, sizeof(*af));
+   luaL_checktype(L, index, LUA_TTABLE);
+
+   lua_getfield(L, index, "type");
+   af->type = (short)luaL_optinteger(L, -1, 0);
+   lua_pop(L, 1);
+   lua_getfield(L, index, "duration");
+   af->duration = (short)luaL_optinteger(L, -1, 0);
+   lua_pop(L, 1);
+   lua_getfield(L, index, "location");
+   af->location = (short)luaL_optinteger(L, -1, 0);
+   lua_pop(L, 1);
+   lua_getfield(L, index, "modifier");
+   af->modifier = (short)luaL_optinteger(L, -1, 0);
+   lua_pop(L, 1);
+   lua_getfield(L, index, "bitvector");
+   af->bitvector = (int)luaL_optinteger(L, -1, 0);
+   lua_pop(L, 1);
+   lua_getfield(L, index, "duration_type");
+   af->duration_type = (short)luaL_optinteger(L, -1, DURATION_HOUR);
+   lua_pop(L, 1);
+}
+
 /* mud.apply_affect(victim, af_table)
  * af_table keys: type, duration, location, modifier, bitvector, duration_type */
 static int mud_apply_affect(lua_State *L)
 {
    CHAR_DATA *victim = lua_check_char(L, 1);
-   luaL_checktype(L, 2, LUA_TTABLE);
-
    AFFECT_DATA af;
-   memset(&af, 0, sizeof(af));
-
-   lua_getfield(L, 2, "type");
-   af.type = (short)luaL_optinteger(L, -1, 0);
-   lua_pop(L, 1);
-   lua_getfield(L, 2, "duration");
-   af.duration = (short)luaL_optinteger(L, -1, 0);
-   lua_pop(L, 1);
-   lua_getfield(L, 2, "location");
-   af.location = (short)luaL_optinteger(L, -1, 0);
-   lua_pop(L, 1);
-   lua_getfield(L, 2, "modifier");
-   af.modifier = (short)luaL_optinteger(L, -1, 0);
-   lua_pop(L, 1);
-   lua_getfield(L, 2, "bitvector");
-   af.bitvector = (int)luaL_optinteger(L, -1, 0);
-   lua_pop(L, 1);
-   lua_getfield(L, 2, "duration_type");
-   af.duration_type = (short)luaL_optinteger(L, -1, DURATION_HOUR);
-   lua_pop(L, 1);
-
+   lua_to_affect(L, 2, &af);
    affect_to_char(victim, &af);
    return 0;
 }
@@ -146,30 +150,8 @@ static int mud_apply_affect(lua_State *L)
 static int mud_affect_join(lua_State *L)
 {
    CHAR_DATA *victim = lua_check_char(L, 1);
-   luaL_checktype(L, 2, LUA_TTABLE);
-
    AFFECT_DATA af;
-   memset(&af, 0, sizeof(af));
-
-   lua_getfield(L, 2, "type");
-   af.type = (short)luaL_optinteger(L, -1, 0);
-   lua_pop(L, 1);
-   lua_getfield(L, 2, "duration");
-   af.duration = (short)luaL_optinteger(L, -1, 0);
-   lua_pop(L, 1);
-   lua_getfield(L, 2, "location");
-   af.location = (short)luaL_optinteger(L, -1, 0);
-   lua_pop(L, 1);
-   lua_getfield(L, 2, "modifier");
-   af.modifier = (short)luaL_optinteger(L, -1, 0);
-   lua_pop(L, 1);
-   lua_getfield(L, 2, "bitvector");
-   af.bitvector = (int)luaL_optinteger(L, -1, 0);
-   lua_pop(L, 1);
-   lua_getfield(L, 2, "duration_type");
-   af.duration_type = (short)luaL_optinteger(L, -1, DURATION_HOUR);
-   lua_pop(L, 1);
-
+   lua_to_affect(L, 2, &af);
    affect_join(victim, &af);
    return 0;
 }
