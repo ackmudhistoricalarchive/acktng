@@ -237,7 +237,9 @@ void save_char_obj(CHAR_DATA *ch)
          fclose(memfp);
          db_worker_enqueue_write(DB_WRITE_PLAYER, raw, rawlen, ch->name);
          free(raw);
-         /* DB is authoritative; skip the flat-file write. */
+         /* DB is authoritative; remove the temp flat file and return. */
+         if (tempstrsave[0])
+            remove(tempstrsave);
          return;
       }
    }
