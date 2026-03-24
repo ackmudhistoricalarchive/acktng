@@ -59,10 +59,8 @@
 #include <unistd.h> /* for execl */
 #include "globals.h"
 #include "cursor.h"
-#ifdef HAVE_LIBPQ
 #include "db/db_help.h"
 #include "db/db_worker.h"
-#endif
 
 bool command_has_wait_flag args((CHAR_DATA * ch, const char *argument));
 
@@ -383,7 +381,6 @@ void queue_login_greeting(DESCRIPTOR_DATA *d)
 
    sprintf(buf, "greeting%d", number_range(1, 6));
 
-#ifdef HAVE_LIBPQ
    {
       char kw_buf[256];
       char text_buf[16384];
@@ -396,7 +393,6 @@ void queue_login_greeting(DESCRIPTOR_DATA *d)
             write_to_buffer(d, text_buf, 0);
       }
    }
-#endif
 }
 
 static void get_request_path(const char *request, char *out, size_t outsz)
@@ -1094,10 +1090,8 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
                   show_string(d, d->incomm);
                else
                   interpret(d->character, d->incomm);
-#ifdef HAVE_LIBPQ
             else if (d->connected == CON_LOADING_FROM_DB)
                ; /* async DB load in progress — discard input until result arrives */
-#endif
             else
                nanny(d, d->incomm);
 
@@ -1108,10 +1102,8 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
       /*
        * Process completed async DB player loads before game motion.
        */
-#ifdef HAVE_LIBPQ
       if (!db_worker_failed)
          db_worker_poll_results();
-#endif
 
       /*
        * Autonomous game motion.

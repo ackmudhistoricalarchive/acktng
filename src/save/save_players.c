@@ -35,9 +35,7 @@
 
 #include "save.h"
 #include "weapon_bond.h"
-#ifdef HAVE_LIBPQ
 #include "../db/db_worker.h"
-#endif
 
 /*
  * skill_name_legacy -- maps a pre-rename skill name to its current name.
@@ -225,7 +223,6 @@ void save_char_obj(CHAR_DATA *ch)
     * Now make temp file the actual pfile...
     */
 
-#ifdef HAVE_LIBPQ
    {
       char *raw = NULL;
       size_t rawlen = 0;
@@ -244,7 +241,6 @@ void save_char_obj(CHAR_DATA *ch)
          return;
       }
    }
-#endif
 
    rename(tempstrsave, strsave);
 }
@@ -687,7 +683,6 @@ bool load_char_obj(DESCRIPTOR_DATA *d, char *name, bool system_call)
       fpReserve = NULL;
    }
 
-#ifdef HAVE_LIBPQ
    {
       char *raw = db_worker_fetch_player_raw_save(name);
       if (raw)
@@ -698,7 +693,6 @@ bool load_char_obj(DESCRIPTOR_DATA *d, char *name, bool system_call)
       }
       /* raw == NULL: player not in DB yet — fall through to flat file. */
    }
-#endif
 
    /*
     * parsed player file directories by Yaz of 4th Realm

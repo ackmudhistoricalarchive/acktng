@@ -16,8 +16,6 @@
 #ifndef DEC_DB_LOAD_H
 #define DEC_DB_LOAD_H 1
 
-#ifdef HAVE_LIBPQ
-
 /* World content -----------------------------------------------------------*/
 void db_load_areas_from_db(void);
 
@@ -33,7 +31,5 @@ void db_load_room_marks(void);
 void db_load_corpses(void);
 void db_load_chests(void);
 void db_load_quest_templates(void);
-
-#endif /* HAVE_LIBPQ */
 
 #endif /* DEC_DB_LOAD_H */

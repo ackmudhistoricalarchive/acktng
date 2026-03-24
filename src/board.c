@@ -38,9 +38,7 @@ include<types.h>
 #ifndef DEC_LISTS_H
 #include "lists.h"
 #endif
-#ifdef HAVE_LIBPQ
 #include "db/db_worker.h"
-#endif
 
 #define BOARD_DIR "boards"
 #define T2000 -1 /* Terminator for files... */
@@ -313,70 +311,8 @@ BOARD_DATA *load_board(OBJ_INDEX_DATA *pObj)
 
 void save_board(BOARD_DATA *board, CHAR_DATA *ch)
 {
-#ifdef HAVE_LIBPQ
    db_worker_save_board(board);
    return;
-#else
-   char buf[MAX_STRING_LENGTH];
-   FILE *board_file;
-   MESSAGE_DATA *message;
-
-   if (fpReserve != NULL)
-   {
-      fclose(fpReserve);
-      fpReserve = NULL;
-   }
-
-   sprintf(buf, "%s/board.%i", BOARD_DIR, board->vnum);
-   if ((board_file = fopen(buf, "w")) == NULL)
-   {
-      send_to_char("Cannot save board, please contact staff.\n\r", ch);
-      bug("Could not save file board.%i.", board->vnum);
-      return;
-   }
-
-   fprintf(board_file, "ExpiryTime  %i\n", board->expiry_time);
-   fprintf(board_file, "MinReadLev  %i\n", board->min_read_lev);
-   fprintf(board_file, "MaxWriteLev %i\n", board->min_write_lev);
-   fprintf(board_file, "Clan        %i\n", board->clan);
-
-   /*
-    * Now print messages
-    */
-   fprintf(board_file, "Messages\n");
-
-   for (message = board->first_message; message; message = message->next)
-   {
-      fprintf(board_file, "M%i\n", (int)(message->datetime));
-
-      strcpy(buf, message->author); /* Must do copy, not allowed to change string directly */
-      smash_tilde(buf);
-      fprintf(board_file, "%s~\n", buf);
-
-      strcpy(buf, message->title);
-      smash_tilde(buf);
-      fprintf(board_file, "%s~\n", buf);
-
-      strcpy(buf, message->message);
-      smash_tilde(buf);
-      fprintf(board_file, "%s~\n", buf);
-   }
-
-   fprintf(board_file, "S\n");
-
-   if (board_file != NULL)
-   {
-      fclose(board_file);
-      board_file = NULL;
-   }
-   if (fpReserve != NULL)
-   {
-      fclose(fpReserve);
-      fpReserve = NULL;
-   }
-
-   return;
-#endif /* HAVE_LIBPQ */
 }
 
 void do_delete(CHAR_DATA *ch, char *argument)

@@ -9,8 +9,6 @@
  * brief waits for infrequent staff/player commands.
  */
 
-#ifdef HAVE_LIBPQ
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -533,5 +531,3 @@ int db_help_insert(int level, const char *keywords, const char *body)
    PQclear(res);
    return new_id;
 }
-
-#endif /* HAVE_LIBPQ */

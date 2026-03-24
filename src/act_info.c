@@ -45,9 +45,7 @@
 #ifndef CONFIG_H
 #include "config.h"
 #endif
-#ifdef HAVE_LIBPQ
 #include "db/db_help.h"
-#endif
 
 extern bool deathmatch;
 
@@ -198,14 +196,12 @@ void do_rhelp(CHAR_DATA *ch, char *argument)
    send_to_char(buf, ch);
 
    {
-#ifdef HAVE_LIBPQ
       char kw_buf[256];
       char text_buf[16384];
       int lev_out;
       if (db_help_lookup(race_table[i].race_title, get_trust(ch), kw_buf, sizeof(kw_buf), text_buf,
                          sizeof(text_buf), &lev_out))
          send_to_char(text_buf[0] == '.' ? text_buf + 1 : text_buf, ch);
-#endif
    }
 
    strcpy(sendBuf, "");
@@ -2210,7 +2206,6 @@ void do_help(CHAR_DATA *ch, char *argument)
    if (argument[0] == '\0')
       argument = "summary";
 
-#ifdef HAVE_LIBPQ
    {
       char kw_buf[256];
       char text_buf[16384];
@@ -2235,9 +2230,6 @@ void do_help(CHAR_DATA *ch, char *argument)
       else
          send_to_char(text_buf, ch);
    }
-#else
-   send_to_char("No help on that word.\n\r", ch);
-#endif
    return;
 }
 
@@ -5247,7 +5239,6 @@ void do_shelp(CHAR_DATA *ch, char *argument)
    parse_shelp_query(argument, search_term, sizeof(search_term), full_argument,
                      sizeof(full_argument));
 
-#ifdef HAVE_LIBPQ
    {
       char kw_buf[256];
       char text_buf[16384];
@@ -5271,9 +5262,6 @@ void do_shelp(CHAR_DATA *ch, char *argument)
       else
          send_to_char(text_buf, ch);
    }
-#else
-   send_to_char("No help on that word.\n\r", ch);
-#endif
    return;
 }
 
@@ -5298,7 +5286,6 @@ void do_lore(CHAR_DATA *ch, char *argument)
    if (argument[0] == '\0')
       argument = "lore";
 
-#ifdef HAVE_LIBPQ
    {
       /* PCs always see only the default (unflagged) lore entry */
       long npc_flags = IS_NPC(ch) ? get_room_lore_flags(ch) : 0;
@@ -5312,7 +5299,6 @@ void do_lore(CHAR_DATA *ch, char *argument)
          return;
       }
    }
-#endif
 
    send_to_char("No lore on that subject.\n\r", ch);
    return;

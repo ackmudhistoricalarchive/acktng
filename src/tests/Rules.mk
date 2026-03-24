@@ -331,10 +331,10 @@ tests/unit-test-special: $(OBJDIR)/tests/test_special.o $(OBJDIR)/special.unit-t
 	$(CC) -Wl,--gc-sections -o $@ $^ $(L_FLAGS)
 
 $(OBJDIR)/npc_dialogue.unit-test.o: npc_dialogue.c headers/ack.h
-	$(CC) -c $(C_FLAGS) -DUNIT_TEST_NPC_DIALOGUE -DHAVE_LIBPQ -ffunction-sections -fdata-sections -o $(OBJDIR)/npc_dialogue.unit-test.o npc_dialogue.c
+	$(CC) -c $(C_FLAGS) -DUNIT_TEST_NPC_DIALOGUE -ffunction-sections -fdata-sections -o $(OBJDIR)/npc_dialogue.unit-test.o npc_dialogue.c
 
 $(OBJDIR)/tests/test_npc_dialogue_help.o: tests/test_npc_dialogue_help.c headers/ack.h
-	$(CC) -c $(C_FLAGS) -DHAVE_LIBPQ -ffunction-sections -fdata-sections -I. -Itests/headers -o $(OBJDIR)/tests/test_npc_dialogue_help.o tests/test_npc_dialogue_help.c
+	$(CC) -c $(C_FLAGS) -ffunction-sections -fdata-sections -I. -Itests/headers -o $(OBJDIR)/tests/test_npc_dialogue_help.o tests/test_npc_dialogue_help.c
 
 tests/unit-test-npc-dialogue-help: $(OBJDIR)/tests/test_npc_dialogue_help.o $(OBJDIR)/npc_dialogue.unit-test.o
 	rm -f $@

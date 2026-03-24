@@ -34,6 +34,7 @@ ifeq ($(LIBPQ_LIBS),)
         LIBPQ_CFLAGS := -I$(dir $(LIBPQ_HEADER))
     endif
 endif
+NEED_LIBPQ := $(if $(LIBPQ_LIBS),,1)
 
 C_FLAGS = -O -g2 -Wall -DACK_43 -MMD -MP $(PROF) $(SOLARIS_FLAG) -Iheaders -Iai/headers -Itests/headers -Iquests
 L_FLAGS = -O -g2 -lcrypt -lpthread $(PROF) $(SOLARIS_LINK) -lz
@@ -43,10 +44,8 @@ ifneq ($(OPENSSL_LIBS),)
     L_FLAGS += $(OPENSSL_LIBS)
 endif
 
-ifneq ($(LIBPQ_LIBS),)
-    C_FLAGS += -DHAVE_LIBPQ $(LIBPQ_CFLAGS)
-    L_FLAGS += $(LIBPQ_LIBS)
-endif
+C_FLAGS += $(LIBPQ_CFLAGS)
+L_FLAGS += $(LIBPQ_LIBS)
 
 OBJDIR = build/obj
 STAMP_FILE = $(OBJDIR)/.all-stamp
@@ -207,7 +206,7 @@ O_FILES = affect.o ai.o act_clan.o act_comm.o act_info.o act_mob.o act_move.o ac
 # Source files for linting (all .c and .h excluding third-party sha256 and build artifacts)
 LINT_SOURCES = $(shell find . -name '*.c' -o -name '*.h' | grep -v sha256 | grep -v './build/' | sort)
 
-.PHONY: all clean purge unit-tests integration-tests integration-test integration-test-telnet integration-test-telnet-tls integration-test-wss lint format
+.PHONY: all clean purge unit-tests integration-tests integration-test integration-test-telnet integration-test-telnet-tls integration-test-wss lint format check-libpq
 
 all: format lint ack $(UNIT_TEST_TARGETS)
 	@set -e; \
@@ -251,15 +250,21 @@ integration-test-wss: ack
 	cd .. && ./integration-test-wss.sh
 
 
+check-libpq:
+ifdef NEED_LIBPQ
+	@echo "Error: libpq is required but was not found. Install libpq-dev (Debian/Ubuntu) or libpq (other distros)." >&2
+	@exit 1
+endif
+
 ifdef CYGWIN
-ack: $(MAIN_OBJS)
+ack: check-libpq $(MAIN_OBJS)
 	rm -f ack.exe
 	$(CC) -o ack.exe $(MAIN_OBJS) $(L_FLAGS)
 	chmod g+w ack.exe
 	chmod a+x ack.exe
 	chmod g+w $(MAIN_OBJS)
 else
-ack: $(MAIN_OBJS)
+ack: check-libpq $(MAIN_OBJS)
 	rm -f ack
 	$(CC) -o ack $(MAIN_OBJS) $(L_FLAGS)
 	chmod g+w ack

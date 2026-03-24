@@ -47,11 +47,9 @@
 #include "act_mob.h"
 #endif
 
-#ifdef HAVE_LIBPQ
 #include "db/db_conn.h"
 #include "db/db_load.h"
 #include "db/db_worker.h"
-#endif
 
 #if !defined(macintosh)
 extern int _filbuf args((FILE *));
@@ -576,7 +574,6 @@ void boot_db(void)
     * Open DB connection.  Aborts if data/db.conf is absent or the connection
     * fails — the DB is required.
     */
-#ifdef HAVE_LIBPQ
    {
       int db_rc = db_conn_open(".");
       if (db_rc != 1)
@@ -586,7 +583,6 @@ void boot_db(void)
       }
       log_f("DB: connection established.");
    }
-#endif
 
    /*
     *   Read in clan data table

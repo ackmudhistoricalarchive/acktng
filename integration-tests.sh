@@ -166,6 +166,10 @@ printf 'host=localhost dbname=%s user=%s password=%s\n' \
     "$TEST_DB" "$DB_USER" "$DB_PASS" > "$TEST_DB_CONF"
 export ACK_DB_CONF="$TEST_DB_CONF"
 
+# Tell sub-tests to skip their own build step — we already built above, and
+# parallel `make ack` invocations race on the binary ("Text file busy").
+export ACK_SKIP_BUILD=1
+
 # ---------------------------------------------------------------------------
 # Step 5: run all four integration tests in parallel.
 # ---------------------------------------------------------------------------

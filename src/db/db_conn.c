@@ -1,5 +1,3 @@
-#ifdef HAVE_LIBPQ
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -209,5 +207,3 @@ int db_log_error(const char *context, PGresult *res)
    }
    return 0;
 }
-
-#endif /* HAVE_LIBPQ */

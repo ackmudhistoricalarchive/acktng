@@ -49,9 +49,7 @@
 #include "cursor.h"
 #include "socket.h"
 #include "prompt.h"
-#ifdef HAVE_LIBPQ
 #include "db/db_worker.h"
-#endif
 
 /* Forward declarations for functions defined later in this file. */
 bool check_parse_name(char *name);
@@ -489,14 +487,12 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
          return;
       }
 
-#ifdef HAVE_LIBPQ
       if (!db_worker_failed)
       {
          alloc_char_for_login(d, argument);
          db_worker_enqueue_load_player(d, argument);
          return;
       }
-#endif
       fOld = load_char_obj(d, argument, FALSE);
       finish_player_login(d, fOld);
       return;

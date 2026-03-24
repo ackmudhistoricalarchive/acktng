@@ -1,5 +1,3 @@
-#ifdef HAVE_LIBPQ
-
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -2585,5 +2583,3 @@ char *db_worker_fetch_player_raw_save(const char *name)
    PQfinish(conn);
    return result;
 }
-
-#endif /* HAVE_LIBPQ */
