@@ -1327,6 +1327,15 @@ struct social_type
 #define SF SPEC_FUN
 #define OF OBJ_FUN
 
+/* lua/lua_engine.c */
+void lua_engine_init(void);
+void lua_engine_shutdown(void);
+bool lua_load_skill_script(int sn, const char *source, const char *name);
+void lua_load_all_skill_scripts(void);
+bool lua_spell_execute(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj);
+void lua_skill_execute(int sn, CHAR_DATA *ch, char *argument);
+void do_luareload(CHAR_DATA *ch, char *argument);
+
 /* act_comm.c */
 bool is_note_to args((CHAR_DATA * ch, NOTE_DATA *pnote));
 void add_follower args((CHAR_DATA * ch, CHAR_DATA *master));

@@ -565,12 +565,33 @@ CREATE TABLE IF NOT EXISTS quest_templates (
 );
 
 -- -----------------------------------------------------------------------
--- 4.32 schema_version
+-- 4.32 skills (Lua scripting — Phase 2)
+-- -----------------------------------------------------------------------
+-- Stores per-skill Lua script sources.  sn is the index into skill_table[].
+-- script_source NULL or empty means the C spell_fun/do_fun is used instead.
+CREATE TABLE IF NOT EXISTS skills (
+    sn            INTEGER PRIMARY KEY,
+    name          TEXT    NOT NULL,
+    script_source TEXT
+);
+
+-- -----------------------------------------------------------------------
+-- 4.33 lua_libraries (Lua scripting — Phase 2)
+-- -----------------------------------------------------------------------
+-- Shared Lua library modules available to skill scripts via require().
+-- name is the module name passed to require(); source is the Lua source text.
+CREATE TABLE IF NOT EXISTS lua_libraries (
+    name   TEXT PRIMARY KEY,
+    source TEXT NOT NULL
+);
+
+-- -----------------------------------------------------------------------
+-- 4.34 schema_version
 -- -----------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS schema_version (
     version    INTEGER                  NOT NULL,
     applied_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
-INSERT INTO schema_version (version) VALUES (8);
+INSERT INTO schema_version (version) VALUES (9);
 
 COMMIT;

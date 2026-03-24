@@ -31,6 +31,7 @@
 #include <string.h>
 #include <time.h>
 #include "globals.h"
+#include "lua/lua_engine.h"
 
 #ifndef DEC_MAGIC_H
 #include "magic.h"
@@ -874,7 +875,13 @@ static void interpret_r(CHAR_DATA *ch, char *argument, int alias_depth)
       act("$n steps out of the Shadows!", ch, NULL, NULL, TO_ROOM);
    }
    comlog(ch, cmd, argument);
-   (*cmd_table[cmd].do_fun)(ch, argument);
+   {
+      int skill_sn = skill_lookup(cmd_table[cmd].name);
+      if (skill_sn >= 0 && skill_scripts[skill_sn] && skill_scripts[skill_sn][0] != '\0')
+         lua_skill_execute(skill_sn, ch, argument);
+      else
+         (*cmd_table[cmd].do_fun)(ch, argument);
+   }
 
    tail_chain();
 }

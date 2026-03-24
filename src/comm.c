@@ -62,6 +62,7 @@
 #include <unistd.h> /* for execl */
 #include "globals.h"
 #include "cursor.h"
+#include "lua/lua_engine.h"
 #include "socket.h"
 #include "prompt.h"
 #include "npc_dialogue.h"
@@ -636,6 +637,7 @@ int main(int argc, char **argv)
     * That's all, folks.
     */
    log_string("Normal termination of game.");
+   lua_engine_shutdown();
    exit(0);
    return 0;
 }
