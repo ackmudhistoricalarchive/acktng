@@ -2517,7 +2517,9 @@ static void json_append(char *buf, int *pos, int buf_size, const char *s)
 static void json_str_escape(char *buf, int *pos, int buf_size, const char *s)
 {
    json_append(buf, pos, buf_size, "\"");
-   while (*s && *pos < buf_size - 2)
+   /* Use buf_size - 3 so that an escaped pair (2 bytes) + closing quote (1 byte)
+    * always fits — with -2 the closing quote could be left out at the boundary. */
+   while (*s && *pos < buf_size - 3)
    {
       char c = *s++;
       if (c == '"' || c == '\\')
@@ -2975,7 +2977,9 @@ void ws_send_room(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
    for (obj = room->first_content; obj; obj = obj->next_in_room)
    {
       char id_str[32];
+      int saved_pos; /* checkpoint: rollback to here if this item overflows */
 
+      saved_pos = pos;
       if (!first)
          json_append(buf, &pos, sizeof(buf), ",");
       first = FALSE;
@@ -2990,6 +2994,15 @@ void ws_send_room(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
       json_append(buf, &pos, sizeof(buf), ",\"actions\":[\"look\",\"get\",\"examine\"],");
       ws_append_item_stats(buf, &pos, sizeof(buf), obj);
       json_append(buf, &pos, sizeof(buf), "}");
+
+      /* If writing this object pushed us near the buffer limit, roll back and
+       * stop — a truncated item would produce malformed JSON. */
+      if (pos >= (int)sizeof(buf) - 50)
+      {
+         pos = saved_pos;
+         buf[pos] = '\0';
+         break;
+      }
    }
    json_append(buf, &pos, sizeof(buf), "]");
 
@@ -3413,6 +3426,9 @@ void ws_send_inventory(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
    first = TRUE;
    for (obj = ch->first_carry; obj != NULL; obj = obj->next_in_carry_list)
    {
+      int saved_pos; /* checkpoint: rollback to here if this item overflows */
+
+      saved_pos = pos;
       if (!first)
          json_append(buf, &pos, sizeof(buf), ",");
       first = FALSE;
@@ -3425,6 +3441,15 @@ void ws_send_inventory(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
       json_append(buf, &pos, sizeof(buf), ",\"actions\":[\"look\",\"drop\",\"examine\"],");
       ws_append_item_stats(buf, &pos, sizeof(buf), obj);
       json_append(buf, &pos, sizeof(buf), "}");
+
+      /* If writing this item pushed us near the buffer limit, roll back and
+       * stop — a truncated item would produce malformed JSON. */
+      if (pos >= (int)sizeof(buf) - 50)
+      {
+         pos = saved_pos;
+         buf[pos] = '\0';
+         break;
+      }
    }
    json_append(buf, &pos, sizeof(buf), "]}");
    ws_v2_send(d, "Inventory", buf);
