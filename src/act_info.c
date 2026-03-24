@@ -2607,6 +2607,11 @@ void do_who(CHAR_DATA *ch, char *argument)
 
 void do_inventory(CHAR_DATA *ch, char *argument)
 {
+   if (!IS_NPC(ch) && ch->desc && ch->desc->websocket_active)
+   {
+      ws_send_inventory(ch->desc, ch);
+      return;
+   }
    send_to_char("You are carrying:\n\r", ch);
    show_list_to_char(ch->first_carry, ch, TRUE, TRUE);
    return;
