@@ -3276,7 +3276,7 @@ static void ws_append_item_stats(char *buf, int *pos, int buf_size, OBJ_DATA *ob
    bool first;
 
    json_append(buf, pos, buf_size, "\"short_descr\":");
-   json_str_strip_color(buf, pos, buf_size, obj->short_descr ? obj->short_descr : "");
+   json_str_escape(buf, pos, buf_size, obj->short_descr ? obj->short_descr : "");
    json_append(buf, pos, buf_size, ",\"type\":");
    json_str_escape(buf, pos, buf_size, item_type_name(obj));
    json_append(buf, pos, buf_size, ",\"item_class\":");
