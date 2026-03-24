@@ -229,10 +229,15 @@ These are thin wrappers around existing C functions. They do not introduce new g
 | `mud.create_object(vnum, level)` | `create_object()` | Create an object instance from index |
 | `mud.obj_to_room(obj, room)` | `obj_to_room()` | Place object in room |
 | `mud.obj_to_char(obj, ch)` | `obj_to_char()` | Give object to character |
+| `mud.obj_from_obj(obj)` | `obj_from_obj()` | Remove object from its containing object |
 | `mud.get_obj_carry(ch, name)` | `get_obj_carry()` | Find object in character's inventory |
+| `mud.get_obj_room(room, name)` | `get_obj_list()` on `room->contents` | Find object in a room by name |
+| `mud.get_obj_contents(container)` | iterate `container->first_content` | Return table of objects inside a container/corpse |
 | `mud.extract_obj(obj)` | `extract_obj()` | Remove object from world |
 | `mud.get_room(vnum)` | `get_room_index()` | Look up room by vnum |
 | `mud.transfer(ch, room)` | `char_from_room()` + `char_to_room()` | Move character to room |
+| `mud.chars_in_room(room)` | iterate `room->first_person` | Return table of all characters in a room |
+| `mud.interpret(ch, command)` | `interpret()` | Execute a game command as character (e.g. `"wear all"`) |
 
 #### Characters and Followers
 
@@ -613,7 +618,12 @@ void lua_engine_init(void) {
     // Remove dangerous globals
     lua_pushnil(L); lua_setglobal(L, "dofile");
     lua_pushnil(L); lua_setglobal(L, "loadfile");
-    lua_pushnil(L); lua_setglobal(L, "require");
+
+    // Replace Lua's built-in require() with a sandboxed version that
+    // loads ONLY from the lua_libraries DB table — never from the
+    // filesystem. See "Controlled require()" section below.
+    lua_pushcfunction(L, lua_custom_require);
+    lua_setglobal(L, "require");
 
     // Register C API modules
     lua_register_mud_api(L);       // mud.damage(), mud.heal(), etc.
@@ -809,7 +819,7 @@ The workflow for tuning a spell at runtime:
 
 The Lua VM is sandboxed to prevent scripts from:
 
-1. **File I/O** — `io`, `os`, `loadfile`, `dofile`, `require` are removed at init.
+1. **File I/O** — `io`, `os`, `loadfile`, `dofile` are removed at init. The built-in `require()` is replaced with a sandboxed version that loads only from the `lua_libraries` DB table (see "Controlled `require()`" above) — never from the filesystem.
 2. **Infinite loops** — A Lua debug hook counts instructions and aborts scripts exceeding a configurable limit (e.g. 100,000 instructions). This prevents a buggy script from hanging the game loop.
 3. **Stack overflow** — `lua_checkstack()` before deep operations.
 4. **Memory exhaustion** — A custom Lua allocator with a per-call byte ceiling.
