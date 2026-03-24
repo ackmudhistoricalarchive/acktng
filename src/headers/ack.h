@@ -269,6 +269,7 @@ struct descriptor_data
    bool websocket_handshake_complete;
    bool greeting_sent;
    const char *websocket_current_music; /* mirrors area->music last sent, NULL = theme */
+   unsigned int ws_score_checksum;      /* checksum of last Score push; 0 = never sent */
 
    /* TLS (native OpenSSL encryption) */
 #ifdef HAVE_OPENSSL
