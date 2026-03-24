@@ -64,12 +64,14 @@ cleanup() {
 trap cleanup EXIT
 
 # ---------------------------------------------------------------------------
-# Step 1: build
+# Step 1: build (skipped when ACK_SKIP_BUILD=1, e.g. called from integration-tests.sh)
 # ---------------------------------------------------------------------------
-echo "integration-test-telnet: building MUD..."
-if ! (cd "$SRC_DIR" && make ack); then
-    echo "integration-test-telnet: FAILED - build step failed"
-    exit 1
+if [ "${ACK_SKIP_BUILD:-0}" != "1" ]; then
+    echo "integration-test-telnet: building MUD..."
+    if ! (cd "$SRC_DIR" && make ack); then
+        echo "integration-test-telnet: FAILED - build step failed"
+        exit 1
+    fi
 fi
 
 # ---------------------------------------------------------------------------
