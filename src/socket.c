@@ -3265,10 +3265,78 @@ static void ws_strip_where_name(char *out, size_t out_size, const char *wn)
    out[len] = '\0';
 }
 
+/*
+ * Write item stat fields into buf (no outer braces; caller opens and closes).
+ * Used by ws_send_equipment (inline per slot) and ws_send_appraise.
+ */
+static void ws_append_item_stats(char *buf, int *pos, int buf_size, OBJ_DATA *obj)
+{
+   char tmp[64];
+   AFFECT_DATA *paf;
+   bool first;
+
+   json_append(buf, pos, buf_size, "\"short_descr\":");
+   json_str_strip_color(buf, pos, buf_size, obj->short_descr ? obj->short_descr : "");
+   json_append(buf, pos, buf_size, ",\"type\":");
+   json_str_escape(buf, pos, buf_size, item_type_name(obj));
+   json_append(buf, pos, buf_size, ",\"item_class\":");
+   json_str_escape(buf, pos, buf_size, get_item_class(obj));
+   snprintf(tmp, sizeof(tmp), "%d", obj->weight);
+   json_append(buf, pos, buf_size, ",\"weight\":");
+   json_append(buf, pos, buf_size, tmp);
+   snprintf(tmp, sizeof(tmp), "%d", obj->cost);
+   json_append(buf, pos, buf_size, ",\"cost\":");
+   json_append(buf, pos, buf_size, tmp);
+   snprintf(tmp, sizeof(tmp), "%d", obj->level);
+   json_append(buf, pos, buf_size, ",\"level\":");
+   json_append(buf, pos, buf_size, tmp);
+
+   switch (obj->item_type)
+   {
+   case ITEM_WEAPON:
+      snprintf(tmp, sizeof(tmp), "%d", obj->value[1]);
+      json_append(buf, pos, buf_size, ",\"damage_min\":");
+      json_append(buf, pos, buf_size, tmp);
+      snprintf(tmp, sizeof(tmp), "%d", obj->value[2]);
+      json_append(buf, pos, buf_size, ",\"damage_max\":");
+      json_append(buf, pos, buf_size, tmp);
+      snprintf(tmp, sizeof(tmp), "%d", (obj->value[1] + obj->value[2]) / 2);
+      json_append(buf, pos, buf_size, ",\"damage_avg\":");
+      json_append(buf, pos, buf_size, tmp);
+      break;
+   case ITEM_ARMOR:
+      snprintf(tmp, sizeof(tmp), "%d", obj->value[0]);
+      json_append(buf, pos, buf_size, ",\"armor_class\":");
+      json_append(buf, pos, buf_size, tmp);
+      break;
+   default:
+      break;
+   }
+
+   json_append(buf, pos, buf_size, ",\"affects\":[");
+   first = TRUE;
+   for (paf = obj->first_apply; paf != NULL; paf = paf->next)
+   {
+      if (paf->location != APPLY_NONE && paf->modifier != 0)
+      {
+         if (!first)
+            json_append(buf, pos, buf_size, ",");
+         first = FALSE;
+         json_append(buf, pos, buf_size, "{\"stat\":");
+         json_str_escape(buf, pos, buf_size, affect_loc_name(paf->location));
+         snprintf(tmp, sizeof(tmp), "%d", paf->modifier);
+         json_append(buf, pos, buf_size, ",\"modifier\":");
+         json_append(buf, pos, buf_size, tmp);
+         json_append(buf, pos, buf_size, "}");
+      }
+   }
+   json_append(buf, pos, buf_size, "]");
+}
+
 void ws_send_equipment(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
 {
    extern char *const where_name[];
-   char buf[4096];
+   char buf[16384];
    int pos = 0;
    int location;
    bool first = TRUE;
@@ -3307,8 +3375,8 @@ void ws_send_equipment(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
       worn = get_eq_char(ch, location);
       if (worn != NULL)
       {
-         json_append(buf, &pos, sizeof(buf), ",\"item\":{\"short_descr\":");
-         json_str_escape(buf, &pos, sizeof(buf), worn->short_descr ? worn->short_descr : "");
+         json_append(buf, &pos, sizeof(buf), ",\"item\":{");
+         ws_append_item_stats(buf, &pos, sizeof(buf), worn);
          json_append(buf, &pos, sizeof(buf), "}}");
       }
       else
@@ -3467,9 +3535,36 @@ void ws_send_score(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
 }
 
 /* Push Score to all WS clients — called every game pulse alongside msdp_update. */
+static unsigned int ws_compute_score_checksum(CHAR_DATA *ch)
+{
+   unsigned int h = 0x12345678u;
+   h = h * 31u + (unsigned int)ch->hit;
+   h = h * 31u + (unsigned int)ch->mana;
+   h = h * 31u + (unsigned int)ch->move;
+   h = h * 31u + (unsigned int)get_max_hp(ch);
+   h = h * 31u + (unsigned int)get_max_mana(ch);
+   h = h * 31u + (unsigned int)get_max_move(ch);
+   h = h * 31u + (unsigned int)ch->exp;
+   h = h * 31u + (unsigned int)ch->gold;
+   h = h * 31u + (unsigned int)ch->quest_points;
+   h = h * 31u + (unsigned int)ch->pcdata->invasion_points;
+   h = h * 31u + (unsigned int)ch->practice;
+   h = h * 31u + (unsigned int)ch->position;
+   h = h * 31u + (unsigned int)ch->stance;
+   h = h * 31u + (unsigned int)get_curr_str(ch);
+   h = h * 31u + (unsigned int)get_curr_int(ch);
+   h = h * 31u + (unsigned int)get_curr_wis(ch);
+   h = h * 31u + (unsigned int)get_curr_dex(ch);
+   h = h * 31u + (unsigned int)get_curr_con(ch);
+   h = h * 31u + (unsigned int)ch->carry_number;
+   h = h * 31u + (unsigned int)ch->wimpy;
+   return h;
+}
+
 void ws_score_update(void)
 {
    DESCRIPTOR_DATA *d;
+   unsigned int chk;
 
    for (d = first_desc; d != NULL; d = d->next)
    {
@@ -3477,6 +3572,10 @@ void ws_score_update(void)
          continue;
       if (d->character == NULL || IS_NPC(d->character))
          continue;
+      chk = ws_compute_score_checksum(d->character);
+      if (chk == d->ws_score_checksum)
+         continue;
+      d->ws_score_checksum = chk;
       ws_send_score(d, d->character);
    }
 }
@@ -3491,71 +3590,13 @@ void ws_send_appraise(DESCRIPTOR_DATA *d, CHAR_DATA *ch, OBJ_DATA *obj)
 {
    char buf[4096];
    int pos = 0;
-   char tmp[64];
-   AFFECT_DATA *paf;
-   bool first;
 
    if (!d || !d->websocket_active || !ch || !obj)
       return;
 
    json_append(buf, &pos, sizeof(buf), "{");
-   json_append(buf, &pos, sizeof(buf), "\"name\":");
-   json_str_escape(buf, &pos, sizeof(buf), obj->short_descr ? obj->short_descr : "");
-   json_append(buf, &pos, sizeof(buf), ",\"type\":");
-   json_str_escape(buf, &pos, sizeof(buf), item_type_name(obj));
-   json_append(buf, &pos, sizeof(buf), ",\"item_class\":");
-   json_str_escape(buf, &pos, sizeof(buf), get_item_class(obj));
-   snprintf(tmp, sizeof(tmp), "%d", obj->weight);
-   json_append(buf, &pos, sizeof(buf), ",\"weight\":");
-   json_append(buf, &pos, sizeof(buf), tmp);
-   snprintf(tmp, sizeof(tmp), "%d", obj->cost);
-   json_append(buf, &pos, sizeof(buf), ",\"cost\":");
-   json_append(buf, &pos, sizeof(buf), tmp);
-   snprintf(tmp, sizeof(tmp), "%d", obj->level);
-   json_append(buf, &pos, sizeof(buf), ",\"level\":");
-   json_append(buf, &pos, sizeof(buf), tmp);
-
-   switch (obj->item_type)
-   {
-   case ITEM_WEAPON:
-      snprintf(tmp, sizeof(tmp), "%d", obj->value[1]);
-      json_append(buf, &pos, sizeof(buf), ",\"damage_min\":");
-      json_append(buf, &pos, sizeof(buf), tmp);
-      snprintf(tmp, sizeof(tmp), "%d", obj->value[2]);
-      json_append(buf, &pos, sizeof(buf), ",\"damage_max\":");
-      json_append(buf, &pos, sizeof(buf), tmp);
-      snprintf(tmp, sizeof(tmp), "%d", (obj->value[1] + obj->value[2]) / 2);
-      json_append(buf, &pos, sizeof(buf), ",\"damage_avg\":");
-      json_append(buf, &pos, sizeof(buf), tmp);
-      break;
-   case ITEM_ARMOR:
-      snprintf(tmp, sizeof(tmp), "%d", obj->value[0]);
-      json_append(buf, &pos, sizeof(buf), ",\"armor_class\":");
-      json_append(buf, &pos, sizeof(buf), tmp);
-      break;
-   default:
-      break;
-   }
-
-   json_append(buf, &pos, sizeof(buf), ",\"affects\":[");
-   first = TRUE;
-   for (paf = obj->first_apply; paf != NULL; paf = paf->next)
-   {
-      if (paf->location != APPLY_NONE && paf->modifier != 0)
-      {
-         if (!first)
-            json_append(buf, &pos, sizeof(buf), ",");
-         first = FALSE;
-         json_append(buf, &pos, sizeof(buf), "{\"stat\":");
-         json_str_escape(buf, &pos, sizeof(buf), affect_loc_name(paf->location));
-         snprintf(tmp, sizeof(tmp), "%d", paf->modifier);
-         json_append(buf, &pos, sizeof(buf), ",\"modifier\":");
-         json_append(buf, &pos, sizeof(buf), tmp);
-         json_append(buf, &pos, sizeof(buf), "}");
-      }
-   }
-   json_append(buf, &pos, sizeof(buf), "]}");
-
+   ws_append_item_stats(buf, &pos, sizeof(buf), obj);
+   json_append(buf, &pos, sizeof(buf), "}");
    ws_v2_send(d, "Appraise", buf);
 }
 
