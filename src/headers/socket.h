@@ -73,6 +73,7 @@ void ws_send_map(DESCRIPTOR_DATA *d, CHAR_DATA *ch);
 void ws_send_map_scan(DESCRIPTOR_DATA *d, CHAR_DATA *ch);
 void ws_send_map_scout(DESCRIPTOR_DATA *d, CHAR_DATA *ch);
 void ws_send_equipment(DESCRIPTOR_DATA *d, CHAR_DATA *ch);
+void ws_send_inventory(DESCRIPTOR_DATA *d, CHAR_DATA *ch);
 void ws_send_score(DESCRIPTOR_DATA *d, CHAR_DATA *ch);
 void ws_send_appraise(DESCRIPTOR_DATA *d, CHAR_DATA *ch, OBJ_DATA *obj);
 void ws_score_update(void);

@@ -2889,10 +2889,13 @@ static void ws_v2_send(DESCRIPTOR_DATA *d, const char *tag, const char *data_jso
    free(buf);
 }
 
+/* Forward declaration — defined in the Equipment section below. */
+static void ws_append_item_stats(char *buf, int *pos, int buf_size, OBJ_DATA *obj);
+
 void ws_send_room(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
 {
    static const char *const dir_name[] = {"north", "east", "south", "west", "up", "down"};
-   char buf[16384];
+   char buf[32768];
    int pos = 0;
    ROOM_INDEX_DATA *room;
    CHAR_DATA *person;
@@ -2984,7 +2987,9 @@ void ws_send_room(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
       json_str_strip_color(buf, &pos, sizeof(buf), obj->short_descr ? obj->short_descr : "");
       json_append(buf, &pos, sizeof(buf), ",\"keyword\":");
       json_first_keyword(buf, &pos, sizeof(buf), obj->name);
-      json_append(buf, &pos, sizeof(buf), ",\"actions\":[\"look\",\"get\",\"examine\"]}");
+      json_append(buf, &pos, sizeof(buf), ",\"actions\":[\"look\",\"get\",\"examine\"],");
+      ws_append_item_stats(buf, &pos, sizeof(buf), obj);
+      json_append(buf, &pos, sizeof(buf), "}");
    }
    json_append(buf, &pos, sizeof(buf), "]");
 
@@ -3389,6 +3394,44 @@ void ws_send_equipment(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
 
 /*
  * =========================================================================
+ * WS v2 — Inventory panel
+ * =========================================================================
+ */
+
+void ws_send_inventory(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
+{
+   char buf[32768];
+   int pos = 0;
+   OBJ_DATA *obj;
+   bool first;
+   char id_str[32];
+
+   if (!d || !d->websocket_active || !ch || IS_NPC(ch))
+      return;
+
+   json_append(buf, &pos, sizeof(buf), "{\"items\":[");
+   first = TRUE;
+   for (obj = ch->first_carry; obj != NULL; obj = obj->next_in_carry_list)
+   {
+      if (!first)
+         json_append(buf, &pos, sizeof(buf), ",");
+      first = FALSE;
+
+      snprintf(id_str, sizeof(id_str), "%lu", (unsigned long)(uintptr_t)obj);
+      json_append(buf, &pos, sizeof(buf), "{\"id\":");
+      json_append(buf, &pos, sizeof(buf), id_str);
+      json_append(buf, &pos, sizeof(buf), ",\"keyword\":");
+      json_first_keyword(buf, &pos, sizeof(buf), obj->name);
+      json_append(buf, &pos, sizeof(buf), ",\"actions\":[\"look\",\"drop\",\"examine\"],");
+      ws_append_item_stats(buf, &pos, sizeof(buf), obj);
+      json_append(buf, &pos, sizeof(buf), "}");
+   }
+   json_append(buf, &pos, sizeof(buf), "]}");
+   ws_v2_send(d, "Inventory", buf);
+}
+
+/*
+ * =========================================================================
  * WS v2 — Score panel
  * =========================================================================
  */
@@ -3398,7 +3441,7 @@ void ws_send_score(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
    static const char *const pos_name[] = {"dead",     "mortally wounded", "incapacitated",
                                           "stunned",  "sleeping",         "resting",
                                           "fighting", "standing"};
-   char buf[8192];
+   char buf[12288];
    int pos = 0;
    char tmp[64];
    int cnt;
@@ -3530,6 +3573,36 @@ void ws_send_score(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
    json_append(buf, &pos, sizeof(buf), ",\"killed_by_player\":");
    json_append(buf, &pos, sizeof(buf), tmp);
 
+   snprintf(tmp, sizeof(tmp), "%d", ch->alignment);
+   json_append(buf, &pos, sizeof(buf), ",\"alignment\":");
+   json_append(buf, &pos, sizeof(buf), tmp);
+   json_append(buf, &pos, sizeof(buf), ",\"alignment_label\":");
+   json_str_escape(buf, &pos, sizeof(buf),
+                   ch->alignment >= 350    ? "Good"
+                   : ch->alignment >= -349 ? "Neutral"
+                                           : "Evil");
+
+   snprintf(tmp, sizeof(tmp), "%d", get_hitroll(ch));
+   json_append(buf, &pos, sizeof(buf), ",\"hitroll\":");
+   json_append(buf, &pos, sizeof(buf), tmp);
+   snprintf(tmp, sizeof(tmp), "%d", get_damroll(ch));
+   json_append(buf, &pos, sizeof(buf), ",\"damroll\":");
+   json_append(buf, &pos, sizeof(buf), tmp);
+   snprintf(tmp, sizeof(tmp), "%d", ch->armor);
+   json_append(buf, &pos, sizeof(buf), ",\"ac\":");
+   json_append(buf, &pos, sizeof(buf), tmp);
+   snprintf(tmp, sizeof(tmp), "%d", ch->saving_throw);
+   json_append(buf, &pos, sizeof(buf), ",\"saving_throw\":");
+   json_append(buf, &pos, sizeof(buf), tmp);
+
+   snprintf(tmp, sizeof(tmp), "%d", get_age(ch));
+   json_append(buf, &pos, sizeof(buf), ",\"age\":");
+   json_append(buf, &pos, sizeof(buf), tmp);
+
+   snprintf(tmp, sizeof(tmp), "%d", ch->balance);
+   json_append(buf, &pos, sizeof(buf), ",\"bank_gold\":");
+   json_append(buf, &pos, sizeof(buf), tmp);
+
    json_append(buf, &pos, sizeof(buf), "}");
    ws_v2_send(d, "Score", buf);
 }
@@ -3558,6 +3631,13 @@ static unsigned int ws_compute_score_checksum(CHAR_DATA *ch)
    h = h * 31u + (unsigned int)get_curr_con(ch);
    h = h * 31u + (unsigned int)ch->carry_number;
    h = h * 31u + (unsigned int)ch->wimpy;
+   h = h * 31u + (unsigned int)ch->alignment;
+   h = h * 31u + (unsigned int)get_hitroll(ch);
+   h = h * 31u + (unsigned int)get_damroll(ch);
+   h = h * 31u + (unsigned int)ch->armor;
+   h = h * 31u + (unsigned int)ch->saving_throw;
+   h = h * 31u + (unsigned int)get_age(ch);
+   h = h * 31u + (unsigned int)ch->balance;
    return h;
 }
 
