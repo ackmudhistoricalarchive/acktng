@@ -205,7 +205,7 @@ void make_corpse(CHAR_DATA *ch, char *argument)
           (leave_corpse))
          obj_to_room(corpse, ch->in_room);
       else
-         obj_to_room(corpse, get_room_index(ROOM_VNUM_MORGUE));
+         obj_to_room(corpse, get_room_index(ROOM_VNUM_MORIBUND));
       {
          CORPSE_DATA *this_corpse;
          GET_FREE(this_corpse, corpse_free);
