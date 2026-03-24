@@ -1857,7 +1857,10 @@ void do_wear(CHAR_DATA *ch, char *argument)
       }
 
       if (!IS_NPC(ch) && ch->desc && ch->desc->websocket_active)
+      {
          ws_send_equipment(ch->desc, ch);
+         ws_send_inventory(ch->desc, ch);
+      }
       return;
    }
    else
@@ -1875,7 +1878,10 @@ void do_wear(CHAR_DATA *ch, char *argument)
 
       wear_obj(ch, obj, TRUE);
       if (!IS_NPC(ch) && ch->desc && ch->desc->websocket_active)
+      {
          ws_send_equipment(ch->desc, ch);
+         ws_send_inventory(ch->desc, ch);
+      }
    }
 }
 
@@ -1907,7 +1913,10 @@ void do_remove(CHAR_DATA *ch, char *argument)
    {
       remove_all(ch);
       if (!IS_NPC(ch) && ch->desc && ch->desc->websocket_active)
+      {
          ws_send_equipment(ch->desc, ch);
+         ws_send_inventory(ch->desc, ch);
+      }
       return;
    }
 
@@ -1919,7 +1928,10 @@ void do_remove(CHAR_DATA *ch, char *argument)
 
    remove_obj(ch, obj->wear_loc, TRUE);
    if (!IS_NPC(ch) && ch->desc && ch->desc->websocket_active)
+   {
       ws_send_equipment(ch->desc, ch);
+      ws_send_inventory(ch->desc, ch);
+   }
    return;
 }
 
