@@ -206,6 +206,48 @@ static int ch_cooldown(lua_State *L)
    return 1;
 }
 
+/* ch:has_aff(bit) -- IS_AFFECTED check on affected_by bitvector */
+static int ch_has_aff(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   int bit = (int)luaL_checkinteger(L, 2);
+   lua_pushboolean(L, (ch->affected_by & bit) != 0);
+   return 1;
+}
+
+static int ch_get_sex(lua_State *L)
+{
+   lua_pushinteger(L, lua_check_char(L, 1)->sex);
+   return 1;
+}
+
+static int ch_set_sex(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   ch->sex = (short)luaL_checkinteger(L, 2);
+   return 0;
+}
+
+/* ch:get_master() -> char | nil */
+static int ch_get_master(lua_State *L)
+{
+   lua_push_char(L, lua_check_char(L, 1)->master);
+   return 1;
+}
+
+static int ch_get_extract_timer(lua_State *L)
+{
+   lua_pushinteger(L, lua_check_char(L, 1)->extract_timer);
+   return 1;
+}
+
+static int ch_set_extract_timer(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   ch->extract_timer = (short)luaL_checkinteger(L, 2);
+   return 0;
+}
+
 /* ---- mutable setters ---------------------------------------------------- */
 
 static int ch_set_hp(lua_State *L)
@@ -276,14 +318,20 @@ static const luaL_Reg char_methods[] = {{"get_hp", ch_get_hp},
                                         {"get_chi", ch_get_chi},
                                         {"is_npc", ch_is_npc},
                                         {"is_affected", ch_is_affected},
+                                        {"has_aff", ch_has_aff},
                                         {"learned", ch_learned},
                                         {"cooldown", ch_cooldown},
+                                        {"get_sex", ch_get_sex},
+                                        {"get_master", ch_get_master},
+                                        {"get_extract_timer", ch_get_extract_timer},
                                         {"set_hp", ch_set_hp},
                                         {"set_mana", ch_set_mana},
                                         {"set_move", ch_set_move},
                                         {"set_alignment", ch_set_alignment},
                                         {"set_gold", ch_set_gold},
                                         {"set_position", ch_set_position},
+                                        {"set_sex", ch_set_sex},
+                                        {"set_extract_timer", ch_set_extract_timer},
                                         {NULL, NULL}};
 
 void lua_register_char_metatable(lua_State *L)

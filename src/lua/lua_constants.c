@@ -62,16 +62,19 @@ void lua_register_constants(lua_State *L)
 
    /* APPLY — affect location codes (from config.h) */
    {
-      static const char *keys[] = {"NONE",    "STR",     "DEX",   "INT",       "WIS",    "CON",
-                                   "SEX",     "CLASS",   "LEVEL", "AGE",       "HEIGHT", "WEIGHT",
-                                   "MANA",    "HIT",     "MOVE",  "GOLD",      "EXP",    "AC",
-                                   "HITROLL", "DAMROLL", "DOT",   "SPELLPOWER"};
+      static const char *keys[] = {
+          "NONE",       "STR",         "DEX",        "INT",          "WIS",     "CON",     "SEX",
+          "CLASS",      "LEVEL",       "AGE",        "HEIGHT",       "WEIGHT",  "MANA",    "HIT",
+          "MOVE",       "GOLD",        "EXP",        "AC",           "HITROLL", "DAMROLL", "DOT",
+          "SPELLPOWER", "SAVING_PARA", "SAVING_ROD", "SAVING_SPELL", "SPEED"};
       static const int vals[] = {
-          APPLY_NONE,    APPLY_STR,     APPLY_DEX,   APPLY_INT,       APPLY_WIS,    APPLY_CON,
-          APPLY_SEX,     APPLY_CLASS,   APPLY_LEVEL, APPLY_AGE,       APPLY_HEIGHT, APPLY_WEIGHT,
-          APPLY_MANA,    APPLY_HIT,     APPLY_MOVE,  APPLY_GOLD,      APPLY_EXP,    APPLY_AC,
-          APPLY_HITROLL, APPLY_DAMROLL, APPLY_DOT,   APPLY_SPELLPOWER};
-      push_const_table(L, "APPLY", keys, vals, 22);
+          APPLY_NONE,   APPLY_STR,        APPLY_DEX,         APPLY_INT,        APPLY_WIS,
+          APPLY_CON,    APPLY_SEX,        APPLY_CLASS,       APPLY_LEVEL,      APPLY_AGE,
+          APPLY_HEIGHT, APPLY_WEIGHT,     APPLY_MANA,        APPLY_HIT,        APPLY_MOVE,
+          APPLY_GOLD,   APPLY_EXP,        APPLY_AC,          APPLY_HITROLL,    APPLY_DAMROLL,
+          APPLY_DOT,    APPLY_SPELLPOWER, APPLY_SAVING_PARA, APPLY_SAVING_ROD, APPLY_SAVING_SPELL,
+          APPLY_SPEED};
+      push_const_table(L, "APPLY", keys, vals, 26);
    }
 
    /* POS — position values (from config.h) */
@@ -111,5 +114,42 @@ void lua_register_constants(lua_State *L)
       static const char *keys[] = {"HOUR", "ROUND"};
       static const int vals[] = {DURATION_HOUR, DURATION_ROUND};
       push_const_table(L, "DURATION", keys, vals, 2);
+   }
+
+   /* FLAGS — element modifier flags (from magic.h) */
+   {
+      static const char *keys[] = {"NO_REFLECT", "NO_ABSORB"};
+      static const int vals[] = {NO_REFLECT, NO_ABSORB};
+      push_const_table(L, "FLAGS", keys, vals, 2);
+   }
+
+   /* AOE — area-of-effect flags (from magic.h) */
+   {
+      static const char *keys[] = {"SAVES", "SKIP_GROUP"};
+      static const int vals[] = {AOE_SAVES, AOE_SKIP_GROUP};
+      push_const_table(L, "AOE", keys, vals, 2);
+   }
+
+   /* CLOAK — cloak affect bitvectors (from config.h) */
+   {
+      static const char *keys[] = {"REFLECTION", "FLAMING", "ABSORPTION", "ADEPT"};
+      static const int vals[] = {AFF_CLOAK_REFLECTION, AFF_CLOAK_FLAMING, AFF_CLOAK_ABSORPTION,
+                                 AFF_CLOAK_ADEPT};
+      push_const_table(L, "CLOAK", keys, vals, 4);
+   }
+
+   /* ITEM_APPLY — item equipment passive apply bits (from config.h) */
+   {
+      static const char *keys[] = {"NONE",       "INFRA",      "INV",       "DET_INV",    "SANC",
+                                   "SNEAK",      "HIDE",       "PROT",      "ENHANCED",   "DET_MAG",
+                                   "DET_HID",    "DET_EVIL",   "PASS_DOOR", "DET_POISON", "FLY",
+                                   "KNOW_ALIGN", "DET_UNDEAD", "HEATED"};
+      static const int vals[] = {ITEM_APPLY_NONE,       ITEM_APPLY_INFRA,      ITEM_APPLY_INV,
+                                 ITEM_APPLY_DET_INV,    ITEM_APPLY_SANC,       ITEM_APPLY_SNEAK,
+                                 ITEM_APPLY_HIDE,       ITEM_APPLY_PROT,       ITEM_APPLY_ENHANCED,
+                                 ITEM_APPLY_DET_MAG,    ITEM_APPLY_DET_HID,    ITEM_APPLY_DET_EVIL,
+                                 ITEM_APPLY_PASS_DOOR,  ITEM_APPLY_DET_POISON, ITEM_APPLY_FLY,
+                                 ITEM_APPLY_KNOW_ALIGN, ITEM_APPLY_DET_UNDEAD, ITEM_APPLY_HEATED};
+      push_const_table(L, "ITEM_APPLY", keys, vals, 18);
    }
 }
