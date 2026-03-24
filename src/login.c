@@ -49,6 +49,9 @@
 #include "cursor.h"
 #include "socket.h"
 #include "prompt.h"
+#ifdef HAVE_LIBPQ
+#include "db/db_worker.h"
+#endif
 
 /* Forward declarations for functions defined later in this file. */
 bool check_parse_name(char *name);
@@ -336,6 +339,112 @@ void show_cmenu_to(DESCRIPTOR_DATA *d)
 }
 
 /*
+ * finish_player_login -- post-load state machine advancement.
+ * Called after a character has been loaded (synchronously or via DB async path).
+ * fOld: TRUE if an existing player was loaded, FALSE for a new character.
+ */
+void finish_player_login(DESCRIPTOR_DATA *d, bool fOld)
+{
+   CHAR_DATA *ch = d->character;
+   BAN_DATA *pban;
+
+   if (IS_SET(ch->act, PLR_DENY))
+   {
+      sprintf(log_buf, "Denying access to %s@%s.", ch->name, d->host);
+      log_string(log_buf);
+      monitor_chan(log_buf, MONITOR_CONNECT);
+      write_to_buffer(d, "You are denied access.\n\r", 0);
+      close_socket(d);
+      return;
+   }
+
+   /* TEMP FIX ZEN */
+   if (IS_SET(ch->config, CONFIG_JUSTIFY))
+      REMOVE_BIT(ch->config, CONFIG_JUSTIFY);
+
+   if (check_reconnect(d, ch->name, FALSE))
+   {
+      fOld = TRUE;
+   }
+   else
+   {
+      if (wizlock && !IS_HERO(ch) && !ch->wizbit && !is_name(ch->name, sysdata.playtesters))
+      {
+         write_to_buffer(d, "\n\r             " mudnamenocolor " IS CURRENTLY WIZLOCKED.\n\r", 0);
+         write_to_buffer(d, "Please Try Connecting Again In A Little While, When Any Problems\n\r",
+                         0);
+         write_to_buffer(d, "       We Are Working On Have Been Solved.  Thank You.\n\r", 0);
+         close_socket(d);
+         return;
+      }
+      if (deathmatch && !IS_HERO(ch) && !ch->wizbit)
+      {
+         write_to_buffer(d, "\n\r             " mudnamenocolor " IS CURRENTLY WIZLOCKED.\n\r", 0);
+         write_to_buffer(
+             d, "Sorry, The Players Connected At This Time Are Currently Participating\n\r", 0);
+         write_to_buffer(d, "     In A DEATHMATCH Murder-Fest.  Please try later!\n\r", 0);
+         write_to_buffer(d, "  Deathmatches are usually held on Thursdays and Sundays.  They\n\r",
+                         0);
+         write_to_buffer(d, " normally last about 30 minutes.  Please be patient!\n\r", 0);
+         close_socket(d);
+         return;
+      }
+      if (check_playing(d, ch->name))
+         return;
+   }
+
+   if (fOld)
+   {
+      for (pban = first_ban; pban != NULL; pban = pban->next)
+      {
+         if (!str_prefix(pban->name, d->host) && (pban->newbie == FALSE))
+         {
+            char buf[MAX_STRING_LENGTH];
+            sprintf(buf, "Denying access to banned site %s", d->host);
+            monitor_chan(buf, MONITOR_CONNECT);
+            write_to_descriptor(d, "Your site has been banned from this Mud.  BYE BYE!\n\r", 0);
+            d->connected = CON_QUITTING;
+            close_socket(d);
+            return;
+         }
+      }
+
+      /* Old player */
+      write_to_buffer(d, "Password: ", 0);
+      write_to_buffer(d, echo_off_str, 0);
+      d->connected = CON_GET_OLD_PASSWORD;
+   }
+   else
+   {
+      /* New player */
+      /* New characters with same name fix by Salem's Lot */
+      if (check_playing(d, ch->name))
+         return;
+
+      for (pban = first_ban; pban != NULL; pban = pban->next)
+      {
+         if (!str_prefix(pban->name, d->host))
+         {
+            char buf[MAX_STRING_LENGTH];
+            sprintf(buf, "Denying access to banned site %s", d->host);
+            monitor_chan(buf, MONITOR_CONNECT);
+            write_to_descriptor(d, "Your site has been banned from this Mud.  BYE BYE!\n\r", 0);
+            d->connected = CON_QUITTING;
+            close_socket(d);
+            return;
+         }
+      }
+
+      {
+         char buf[MAX_STRING_LENGTH];
+         sprintf(buf, "Did I get that right, %s (Y/N)? ", ch->name);
+         write_to_buffer(d, buf, 0);
+      }
+      d->connected = CON_CONFIRM_NEW_NAME;
+   }
+}
+
+/*
  * Deal with sockets that haven't logged in yet.
  */
 void nanny(DESCRIPTOR_DATA *d, char *argument)
@@ -380,112 +489,17 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
          return;
       }
 
+#ifdef HAVE_LIBPQ
+      if (!db_worker_failed)
+      {
+         alloc_char_for_login(d, argument);
+         db_worker_enqueue_load_player(d, argument);
+         return;
+      }
+#endif
       fOld = load_char_obj(d, argument, FALSE);
-      ch = d->character;
-
-      if (IS_SET(ch->act, PLR_DENY))
-      {
-         sprintf(log_buf, "Denying access to %s@%s.", argument, d->host);
-         log_string(log_buf);
-         monitor_chan(log_buf, MONITOR_CONNECT);
-         write_to_buffer(d, "You are denied access.\n\r", 0);
-         close_socket(d);
-         return;
-      }
-      /* TEMP FIX ZEN */
-      if (IS_SET(ch->config, CONFIG_JUSTIFY))
-         REMOVE_BIT(ch->config, CONFIG_JUSTIFY);
-      if (check_reconnect(d, argument, FALSE))
-      {
-         fOld = TRUE;
-      }
-      else
-      {
-         if (wizlock && !IS_HERO(ch) && !ch->wizbit && !is_name(argument, sysdata.playtesters))
-         {
-            write_to_buffer(d, "\n\r             " mudnamenocolor " IS CURRENTLY WIZLOCKED.\n\r",
-                            0);
-            write_to_buffer(
-                d, "Please Try Connecting Again In A Little While, When Any Problems\n\r", 0);
-            write_to_buffer(d, "       We Are Working On Have Been Solved.  Thank You.\n\r", 0);
-            close_socket(d);
-            return;
-         }
-         if (deathmatch && !IS_HERO(ch) && !ch->wizbit)
-         {
-            write_to_buffer(d, "\n\r             " mudnamenocolor " IS CURRENTLY WIZLOCKED.\n\r",
-                            0);
-            write_to_buffer(
-                d, "Sorry, The Players Connected At This Time Are Currently Participating\n\r", 0);
-            write_to_buffer(d, "     In A DEATHMATCH Murder-Fest.  Please try later!\n\r", 0);
-            write_to_buffer(
-                d, "  Deathmatches are usually held on Thursdays and Sundays.  They\n\r", 0);
-            write_to_buffer(d, " normally last about 30 minutes.  Please be patient!\n\r", 0);
-            close_socket(d);
-            return;
-         }
-         if (check_playing(d, ch->name))
-            return;
-      }
-
-      if (fOld)
-      {
-         BAN_DATA *pban;
-
-         for (pban = first_ban; pban != NULL; pban = pban->next)
-         {
-            if (!str_prefix(pban->name, d->host) && (pban->newbie == FALSE))
-            {
-               char buf[MAX_STRING_LENGTH];
-               sprintf(buf, "Denying access to banned site %s", d->host);
-               monitor_chan(buf, MONITOR_CONNECT);
-               write_to_descriptor(d, "Your site has been banned from this Mud.  BYE BYE!\n\r", 0);
-               d->connected = CON_QUITTING;
-               close_socket(d);
-               return;
-            }
-         }
-
-         /*
-          * Old player
-          */
-         write_to_buffer(d, "Password: ", 0);
-         write_to_buffer(d, echo_off_str, 0);
-         d->connected = CON_GET_OLD_PASSWORD;
-         return;
-      }
-      else
-      {
-         BAN_DATA *pban;
-         /*
-          * New player
-          */
-         /*
-          * New characters with same name fix by Salem's Lot
-          */
-         if (check_playing(d, ch->name))
-            return;
-
-         for (pban = first_ban; pban != NULL; pban = pban->next)
-         {
-            if (!str_prefix(pban->name, d->host))
-
-            {
-               char buf[MAX_STRING_LENGTH];
-               sprintf(buf, "Denying access to banned site %s", d->host);
-               monitor_chan(buf, MONITOR_CONNECT);
-               write_to_descriptor(d, "Your site has been banned from this Mud.  BYE BYE!\n\r", 0);
-               d->connected = CON_QUITTING;
-               close_socket(d);
-               return;
-            }
-         }
-
-         sprintf(buf, "Did I get that right, %s (Y/N)? ", argument);
-         write_to_buffer(d, buf, 0);
-         d->connected = CON_CONFIRM_NEW_NAME;
-         return;
-      }
+      finish_player_login(d, fOld);
+      return;
    }
 
    if (d->connected == CON_GET_OLD_PASSWORD)

@@ -9,6 +9,7 @@
 #include "db_conn.h"
 
 static PGconn *boot_conn = NULL;
+static char saved_connstr[512] = "";
 
 /* Read the connection string from a db config file.
  * If the ACK_DB_CONF environment variable is set, its value is used as the
@@ -87,6 +88,7 @@ int db_conn_open(const char *area_dir)
       /* data/db.conf absent — DB is disabled for this boot */
       return -1;
    }
+   strncpy(saved_connstr, connstr, sizeof(saved_connstr) - 1);
    boot_conn = PQconnectdb(connstr);
    free(connstr);
 
@@ -141,6 +143,11 @@ int db_conn_open(const char *area_dir)
 PGconn *db_conn_get(void)
 {
    return boot_conn;
+}
+
+const char *db_conn_get_connstr(void)
+{
+   return saved_connstr[0] ? saved_connstr : NULL;
 }
 
 void db_conn_close(void)

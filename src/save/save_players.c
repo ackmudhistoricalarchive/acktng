@@ -35,6 +35,9 @@
 
 #include "save.h"
 #include "weapon_bond.h"
+#ifdef HAVE_LIBPQ
+#include "../db/db_worker.h"
+#endif
 
 /*
  * skill_name_legacy -- maps a pre-rename skill name to its current name.
@@ -221,6 +224,27 @@ void save_char_obj(CHAR_DATA *ch)
    /*
     * Now make temp file the actual pfile...
     */
+
+#ifdef HAVE_LIBPQ
+   {
+      char *raw = NULL;
+      size_t rawlen = 0;
+      FILE *memfp = open_memstream(&raw, &rawlen);
+      if (memfp != NULL)
+      {
+         fwrite_char(ch, memfp);
+         loop_counter = 0;
+         if (ch->first_carry != NULL)
+            fwrite_obj(ch, ch->first_carry, memfp, 0);
+         fprintf(memfp, "#END\n");
+         fclose(memfp);
+         db_worker_enqueue_write(DB_WRITE_PLAYER, raw, rawlen, ch->name);
+         free(raw);
+         /* DB is authoritative; skip the flat-file write. */
+         return;
+      }
+   }
+#endif
 
    rename(tempstrsave, strsave);
 }
@@ -501,28 +525,16 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp)
 }
 
 /*
- * Load a char and inventory into a new ch structure.
+ * alloc_char_for_login -- allocate and zero-initialise a CHAR_DATA/PC_DATA
+ * for a freshly connecting player.  Sets d->character.
+ * Called from both load_char_obj() (synchronous path) and
+ * db_worker_poll_results() (async DB login path).
  */
-
-bool load_char_obj(DESCRIPTOR_DATA *d, char *name, bool system_call)
+void alloc_char_for_login(DESCRIPTOR_DATA *d, const char *name)
 {
-   int cnt;
    static PC_DATA pcdata_zero;
-   char strsave[MAX_INPUT_LENGTH];
-   char tempstrsave[MAX_INPUT_LENGTH];
    CHAR_DATA *ch;
-   char buf[MAX_STRING_LENGTH];
-   FILE *fp;
-   bool found;
-   int foo;
-
-   init_changed_vnum_hash();
-
-   if (d == NULL)
-   {
-      bug("Load_char_obj: NULL descriptor.", 0);
-      return FALSE;
-   }
+   int cnt, foo;
 
    GET_FREE(ch, char_free);
    clear_char(ch);
@@ -642,6 +654,31 @@ bool load_char_obj(DESCRIPTOR_DATA *d, char *name, bool system_call)
    ch->carry_weight = 0.0;
    ch->carry_number = 0;
    ch->ngroup = NULL;
+}
+
+/*
+ * Load a char and inventory into a new ch structure.
+ */
+
+bool load_char_obj(DESCRIPTOR_DATA *d, char *name, bool system_call)
+{
+   char strsave[MAX_INPUT_LENGTH];
+   char tempstrsave[MAX_INPUT_LENGTH];
+   char buf[MAX_STRING_LENGTH];
+   FILE *fp;
+   bool found;
+   CHAR_DATA *ch;
+
+   init_changed_vnum_hash();
+
+   if (d == NULL)
+   {
+      bug("Load_char_obj: NULL descriptor.", 0);
+      return FALSE;
+   }
+
+   alloc_char_for_login(d, name);
+   ch = d->character;
 
    found = FALSE;
    if (fpReserve != NULL)
@@ -649,6 +686,19 @@ bool load_char_obj(DESCRIPTOR_DATA *d, char *name, bool system_call)
       fclose(fpReserve);
       fpReserve = NULL;
    }
+
+#ifdef HAVE_LIBPQ
+   {
+      char *raw = db_worker_fetch_player_raw_save(name);
+      if (raw)
+      {
+         found = load_char_from_raw(ch, raw);
+         free(raw);
+         return found;
+      }
+      /* raw == NULL: player not in DB yet — fall through to flat file. */
+   }
+#endif
 
    /*
     * parsed player file directories by Yaz of 4th Realm
@@ -740,6 +790,76 @@ bool load_char_obj(DESCRIPTOR_DATA *d, char *name, bool system_call)
    {
       char buf[MAX_STRING_LENGTH];
       snprintf(buf, sizeof(buf), "load_char_obj: %s had invalid race %d, resetting to Human.",
+               ch->name ? ch->name : "(unknown)", ch->race);
+      monitor_chan(buf, MONITOR_BAD);
+      ch->race = 0;
+   }
+
+   return found;
+}
+
+/*
+ * load_char_from_raw -- parse a raw_save text blob into an already-allocated
+ * and initialised CHAR_DATA.  Returns TRUE if the parse succeeded.
+ * Used by the async DB login path (db_worker_poll_results) and Phase 3's
+ * synchronous DB load path.
+ */
+bool load_char_from_raw(CHAR_DATA *ch, const char *raw)
+{
+   int iNest;
+   FILE *fp;
+   bool found = FALSE;
+
+   if (!raw || !raw[0])
+      return FALSE;
+
+   fp = fmemopen((void *)raw, strlen(raw), "r");
+   if (!fp)
+      return FALSE;
+
+   for (iNest = 0; iNest < MAX_NEST; iNest++)
+      rgObjNest[iNest] = NULL;
+
+   found = TRUE;
+   for (;;)
+   {
+      char letter;
+      char *word;
+
+      letter = fread_letter(fp);
+      if (letter == '*')
+      {
+         fread_to_eol(fp);
+         continue;
+      }
+
+      if (letter != '#')
+      {
+         monitor_chan("load_char_from_raw: # not found.", MONITOR_BAD);
+         found = FALSE;
+         break;
+      }
+
+      word = fread_word(fp);
+      if (!str_cmp(word, "PLAYER"))
+         fread_char(ch, fp);
+      else if (!str_cmp(word, "OBJECT"))
+         fread_obj(ch, fp);
+      else if (!str_cmp(word, "END"))
+         break;
+      else
+      {
+         monitor_chan("load_char_from_raw: bad section.", MONITOR_BAD);
+         found = FALSE;
+         break;
+      }
+   }
+   fclose(fp);
+
+   if (found && (ch->race < 0 || ch->race >= MAX_RACE))
+   {
+      char buf[MAX_STRING_LENGTH];
+      snprintf(buf, sizeof(buf), "load_char_from_raw: %s had invalid race %d, resetting to Human.",
                ch->name ? ch->name : "(unknown)", ch->race);
       monitor_chan(buf, MONITOR_BAD);
       ch->race = 0;

@@ -61,6 +61,7 @@
 #include "cursor.h"
 #ifdef HAVE_LIBPQ
 #include "db/db_help.h"
+#include "db/db_worker.h"
 #endif
 
 bool command_has_wait_flag args((CHAR_DATA * ch, const char *argument));
@@ -1093,12 +1094,24 @@ void game_loop(int control, int control_ws, int control_tls, int control_sniff, 
                   show_string(d, d->incomm);
                else
                   interpret(d->character, d->incomm);
+#ifdef HAVE_LIBPQ
+            else if (d->connected == CON_LOADING_FROM_DB)
+               ; /* async DB load in progress — discard input until result arrives */
+#endif
             else
                nanny(d, d->incomm);
 
             d->incomm[0] = '\0';
          }
       }
+
+      /*
+       * Process completed async DB player loads before game motion.
+       */
+#ifdef HAVE_LIBPQ
+      if (!db_worker_failed)
+         db_worker_poll_results();
+#endif
 
       /*
        * Autonomous game motion.

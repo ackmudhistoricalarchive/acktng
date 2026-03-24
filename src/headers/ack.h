@@ -1649,6 +1649,9 @@ void crusade_dialogue_dispatch args((CHAR_DATA * npc, CHAR_DATA *ch, const char 
 \*------*/
 void save_char_obj args((CHAR_DATA * ch));
 bool load_char_obj args((DESCRIPTOR_DATA * d, char *name, bool system_call));
+void alloc_char_for_login args((DESCRIPTOR_DATA * d, const char *name));
+bool load_char_from_raw args((CHAR_DATA * ch, const char *raw));
+void finish_player_login args((DESCRIPTOR_DATA * d, bool fOld));
 void save_corpses args((void));
 void load_corpses args((void));
 void save_chest args((OBJ_DATA * chest));
