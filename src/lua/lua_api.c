@@ -922,6 +922,17 @@ static int mud_UMAX(lua_State *L)
    return 1;
 }
 
+/* ---- World queries ------------------------------------------------------- */
+
+/* mud.get_char_world(ch, name) -> char | nil */
+static int mud_get_char_world(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   const char *name = luaL_checkstring(L, 2);
+   lua_push_char(L, get_char_world(ch, (char *)name));
+   return 1;
+}
+
 /* ---- Combat skills / commands -------------------------------------------- */
 
 /* mud.combo(ch, victim, sn) -> bool */
@@ -1167,6 +1178,7 @@ static const luaL_Reg mud_api[] = {
     {"get_pseudo_level", mud_get_pseudo_level},
     {"is_fighting", mud_is_fighting},
     {"get_char_room", mud_get_char_room},
+    {"get_char_world", mud_get_char_world},
     {"is_same_group", mud_is_same_group},
     {"item_has_apply", mud_item_has_apply},
     /* Characters / followers */

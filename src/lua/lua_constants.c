@@ -152,4 +152,11 @@ void lua_register_constants(lua_State *L)
                                  ITEM_APPLY_KNOW_ALIGN, ITEM_APPLY_DET_UNDEAD, ITEM_APPLY_HEATED};
       push_const_table(L, "ITEM_APPLY", keys, vals, 18);
    }
+
+   /* HUNT — hunt system flags (from config.h) */
+   {
+      static const char *keys[] = {"MERC", "CR"};
+      static const int vals[] = {HUNT_MERC, HUNT_CR};
+      push_const_table(L, "HUNT", keys, vals, 2);
+   }
 }
