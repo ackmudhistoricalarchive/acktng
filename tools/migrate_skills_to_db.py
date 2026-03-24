@@ -98,44 +98,37 @@ def extract_all_skills(repo_root):
 # SQL generation / execution
 # ---------------------------------------------------------------------------
 
-def build_sql(entries):
-    rows = []
-    for sn, name in entries:
-        escaped = name.replace("'", "''")
-        rows.append(f"({sn}, '{escaped}', NULL)")
-    values = ",\n    ".join(rows)
-    return (
-        "INSERT INTO skills (sn, name, script_source)\nVALUES\n    "
-        + values
-        + "\nON CONFLICT (sn) DO NOTHING;"
-    )
-
-
 def run(args, repo_root):
     entries = extract_all_skills(repo_root)
     print(f"Parsed {len(entries)} skill/spell entries.", file=sys.stderr)
 
-    sql = build_sql(entries)
-
     if args.dry_run:
-        print(sql)
+        for sn, name in entries:
+            print(f"  sn={sn!r}  name={name!r}")
         return
 
     try:
         import psycopg2  # type: ignore
+        import psycopg2.extras  # type: ignore
     except ImportError:
         sys.exit("error: psycopg2 not installed — run: pip install psycopg2-binary")
 
     dsn = args.dsn or read_db_conf(repo_root)
-    conn = psycopg2.connect(dsn)
+    conn = None
     try:
+        conn = psycopg2.connect(dsn)
         with conn:
             with conn.cursor() as cur:
-                cur.execute(sql)
+                psycopg2.extras.execute_values(
+                    cur,
+                    "INSERT INTO skills (sn, name, script_source) VALUES %s ON CONFLICT (sn) DO NOTHING",
+                    [(sn, name, None) for sn, name in entries],
+                )
                 count = cur.rowcount
         print(f"Inserted {count} new rows into skills table.")
     finally:
-        conn.close()
+        if conn is not None:
+            conn.close()
 
 
 # ---------------------------------------------------------------------------
