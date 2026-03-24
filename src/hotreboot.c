@@ -47,6 +47,9 @@
 #include <arpa/telnet.h>
 #include "globals.h"
 #include "socket.h"
+#ifdef HAVE_LIBPQ
+#include "db/db_worker.h"
+#endif
 
 extern int port, control;
 extern int control_ws, control_wss;
@@ -269,6 +272,13 @@ void do_hotreboot(CHAR_DATA *ch, char *argument)
          }
       }
    }
+
+   /* Flush all async DB writes before exec() replaces the process image.
+    * save_char_obj() only enqueues to the DB worker; without this the worker
+    * thread (which does not survive execl) would drop every pending save. */
+#ifdef HAVE_LIBPQ
+   db_worker_stop();
+#endif
 
    /* Resolve the absolute path of the running binary via /proc/self/exe so
     * hotreboot works regardless of how or from where the server was started.
