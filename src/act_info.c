@@ -5095,7 +5095,7 @@ void do_worth(CHAR_DATA *ch, char *argument)
       }
    }
 
-   for (cnt = 0; cnt < MAX_CLASS; cnt++)
+   for (cnt = 0; cnt < MAX_TOTAL_CLASS; cnt++)
    {
       if (IS_MORTAL_CLASS(cnt) && ch->class_level[cnt] != -1 && ch->class_level[cnt] < MAX_MORTAL)
       {
