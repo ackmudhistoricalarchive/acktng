@@ -503,22 +503,33 @@ Return ONLY the Lua execute(ctx) script, no markdown, no explanation.
 
 
 # ---------------------------------------------------------------------------
-# Claude translation via `claude -p` subprocess (no API key required)
+# Claude translation
+#
+# Two backends, selected automatically:
+#   1. Anthropic SDK  — when ANTHROPIC_API_KEY is set in the environment.
+#                       Requires: pip install anthropic
+#   2. claude -p CLI  — fallback when no API key is present; requires the
+#                       Claude Code CLI to be installed and authenticated.
 # ---------------------------------------------------------------------------
 
-def translate_with_claude(client, model, kind, skill_name, c_source):
-    """Call `claude -p` subprocess and return the Lua script string.
+def _strip_fences(text):
+    text = re.sub(r"^```(?:lua)?\n?", "", text.strip())
+    text = re.sub(r"\n?```$", "", text)
+    return text.strip()
 
-    `client` and `model` are kept in the signature for interface compatibility;
-    model is passed to --model; client is unused (pass None).
-    """
-    user_msg = TRANSLATE_PROMPT.format(
-        kind=kind,
-        skill_name=skill_name,
-        c_source=c_source,
+
+def _translate_via_sdk(client, model, full_prompt):
+    """Translate using the Anthropic Python SDK (requires ANTHROPIC_API_KEY)."""
+    response = client.messages.create(
+        model=model,
+        max_tokens=4096,
+        messages=[{"role": "user", "content": full_prompt}],
     )
-    full_prompt = LUA_API_REFERENCE + "\n\n" + user_msg
+    return _strip_fences(response.content[0].text)
 
+
+def _translate_via_cli(model, full_prompt):
+    """Translate using the `claude -p` CLI subprocess."""
     result = subprocess.run(
         [
             "claude", "-p",
@@ -533,12 +544,25 @@ def translate_with_claude(client, model, kind, skill_name, c_source):
     )
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or f"claude exited {result.returncode}")
+    return _strip_fences(result.stdout)
 
-    text = result.stdout.strip()
-    # Strip markdown code fences if the model wrapped anyway.
-    text = re.sub(r"^```(?:lua)?\n?", "", text)
-    text = re.sub(r"\n?```$", "", text)
-    return text.strip()
+
+def translate_with_claude(client, model, kind, skill_name, c_source):
+    """Translate a C spell/skill to Lua.
+
+    Uses the Anthropic SDK when `client` is not None (ANTHROPIC_API_KEY set),
+    otherwise falls back to the `claude -p` CLI.
+    """
+    user_msg = TRANSLATE_PROMPT.format(
+        kind=kind,
+        skill_name=skill_name,
+        c_source=c_source,
+    )
+    full_prompt = LUA_API_REFERENCE + "\n\n" + user_msg
+
+    if client is not None:
+        return _translate_via_sdk(client, model, full_prompt)
+    return _translate_via_cli(model, full_prompt)
 
 
 # ---------------------------------------------------------------------------
@@ -645,10 +669,26 @@ def main():
     fn_to_sn = build_fn_to_sn(repo_root)
     print(f"Loaded {len(fn_to_sn)} spell/skill function mappings.", file=sys.stderr)
 
-    # Verify `claude` CLI is available (used for translation via -p mode).
-    if subprocess.run(["which", "claude"], capture_output=True).returncode != 0:
-        sys.exit("error: 'claude' CLI not found in PATH")
-    client = None  # unused; kept for interface compatibility
+    # Set up translation backend.
+    # Prefer Anthropic SDK (ANTHROPIC_API_KEY); fall back to `claude -p` CLI.
+    client = None
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if api_key:
+        try:
+            import anthropic  # type: ignore
+            client = anthropic.Anthropic(api_key=api_key)
+            print("Using Anthropic SDK (ANTHROPIC_API_KEY).", file=sys.stderr)
+        except ImportError:
+            sys.exit("error: ANTHROPIC_API_KEY set but anthropic not installed — "
+                     "pip install anthropic")
+    else:
+        if subprocess.run(["which", "claude"], capture_output=True).returncode != 0:
+            sys.exit(
+                "error: no ANTHROPIC_API_KEY set and 'claude' CLI not found in PATH.\n"
+                "Either set ANTHROPIC_API_KEY and install the anthropic package, "
+                "or install the Claude Code CLI."
+            )
+        print("Using claude -p CLI (no ANTHROPIC_API_KEY set).", file=sys.stderr)
 
     # Determine files to process.
     if args.file:
