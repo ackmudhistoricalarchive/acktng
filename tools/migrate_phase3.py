@@ -324,7 +324,7 @@ mud.char_to_room(ch, room)
 mud.get_room(vnum)                   -- returns room or nil
 mud.get_char_room(ch, name)         -- returns char or nil
 mud.get_char_world(ch, name)        -- returns char or nil
-mud.chars_in_room(room)             -- returns iterator of chars
+mud.chars_in_room(room)             -- returns TABLE (array) of chars, NOT an iterator
 mud.transfer(ch, room)
 mud.room_is_private(room)           -- returns bool
 mud.set_hunt(ch, fch, victim, set_flags[, rem_flags]) -- returns bool
@@ -476,7 +476,8 @@ HUNT.MERC  HUNT.CR
     mob->max_hit = N → mud.set_mob_max_hp(mob, N) then mob:set_hp(mob:get_max_hp())
 
 19. For loops over room characters (for vch in ch->in_room->people...):
-    for vch in mud.chars_in_room(ch:get_room()) do ... end
+    for _, vch in ipairs(mud.chars_in_room(ch:get_room())) do ... end
+    (mud.chars_in_room returns a table, NOT an iterator — always use ipairs)
 
 20. str_cmp(s1, s2) == 0 → s1 == s2  (case-insensitive equal)
 
