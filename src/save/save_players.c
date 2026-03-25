@@ -262,13 +262,6 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp)
    int sn;
    int foo;
 
-   /*
-    * Really cool fix for m/c prob.. *laugh*
-    */
-   for (cnt = 0; cnt < MAX_CLASS; cnt++)
-      if (ch->class_level[cnt] < 0 || ch->class_level[cnt] == 0)
-         ch->class_level[cnt] = -1;
-
    fprintf(fp, "#%s\n", IS_NPC(ch) ? "MOB" : "PLAYER");
 
    fprintf(fp, "Revision     %d\n", SAVE_REVISION);
@@ -286,25 +279,27 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp)
    fprintf(fp, "Invis        %d\n", ch->invis);
    fprintf(fp, "Incog		 %d\n", ch->incog);
 
-   fprintf(fp, "m/c          ");
-   for (cnt = 0; cnt < MAX_CLASS; cnt++)
-      fprintf(fp, "%2d ", ch->class_level[cnt]);
+   fprintf(fp, "MortalClass  ");
+   for (cnt = 0; cnt < 4; cnt++)
+      fprintf(fp, "%2d ", ch->mortal_class[cnt]);
    fprintf(fp, "\n");
 
-   fprintf(fp, "Remort       ");
-   for (cnt = CLASS_SOR; cnt < CLASS_SOR + MAX_REMORT; cnt++)
-      fprintf(fp, "%2d ", ch->class_level[cnt]);
+   fprintf(fp, "MortalLevel  ");
+   for (cnt = 0; cnt < 4; cnt++)
+      fprintf(fp, "%2d ", ch->mortal_level[cnt]);
    fprintf(fp, "\n");
 
-   fprintf(fp, "Adept       ");
-   for (cnt = CLASS_GMA; cnt < CLASS_GMA + MAX_CLASS; cnt++)
-      fprintf(fp, "%2d ", ch->class_level[cnt]);
+   fprintf(fp, "RemortClass  ");
+   for (cnt = 0; cnt < 2; cnt++)
+      fprintf(fp, "%2d ", ch->remort_class[cnt]);
    fprintf(fp, "\n");
 
-   fprintf(fp, "Druidlevels  ");
-   for (cnt = CLASS_DRU; cnt <= CLASS_HIE; cnt++)
-      fprintf(fp, "%2d ", ch->class_level[cnt]);
+   fprintf(fp, "RemortLevel  ");
+   for (cnt = 0; cnt < 2; cnt++)
+      fprintf(fp, "%2d ", ch->remort_level[cnt]);
    fprintf(fp, "\n");
+
+   fprintf(fp, "AdeptClass   %2d\n", ch->adept_class);
 
    fprintf(fp, "Druidreinc   ");
    for (cnt = CLASS_DRU; cnt <= CLASS_HIE; cnt++)
@@ -609,19 +604,24 @@ void alloc_char_for_login(DESCRIPTOR_DATA *d, const char *name)
          ch->pcdata->completed_quests[foo] = FALSE;
       for (foo = 0; foo < MAX_SUPERBOSS; foo++)
          ch->pcdata->superboss_kills[foo] = FALSE;
-      for (foo = CLASS_SOR; foo < CLASS_SOR + MAX_REMORT; foo++)
-         ch->class_level[foo] = -1;
-      for (foo = CLASS_GMA; foo < CLASS_GMA + MAX_CLASS; foo++)
-         ch->class_level[foo] = -1;
-      for (foo = CLASS_DRU; foo <= CLASS_HIE; foo++)
-         ch->class_level[foo] = -1;
+      for (foo = 0; foo < 4; foo++)
+      {
+         ch->mortal_class[foo] = -1;
+         ch->mortal_level[foo] = 0;
+      }
+      for (foo = 0; foo < 2; foo++)
+      {
+         ch->remort_class[foo] = -1;
+         ch->remort_level[foo] = 0;
+      }
+      ch->adept_class = -1;
       for (foo = CLASS_DRU; foo <= CLASS_HIE; foo++)
          ch->pcdata->reincarnations[foo] = 0;
       ch->overgrowth = 0;
       ch->pcdata->reincarnate_race = -1;
       ch->pcdata->reincarnate_class = -1;
       ch->pcdata->reincarnate_confirm = FALSE;
-      ch->adept_level = -1;
+      ch->adept_level = 0;
       for (cnt = 0; cnt < MAX_ALIASES; cnt++)
       {
          ch->pcdata->alias_name[cnt] = str_dup("<none>");
@@ -898,26 +898,90 @@ int quest_static_done_cap_true_count_for_test(int saved_cap)
 }
 #endif
 
+/*
+ * Migrate an old class_level[] array (revision <= 15) into the new explicit
+ * mortal_class/remort_class/adept_class fields.
+ */
+static void migrate_legacy_class_levels(CHAR_DATA *ch, const int *cl)
+{
+   int i, slot;
+
+   /* Mortal classes: prime first, then remaining chosen ones (cl[i] >= 0) in index order. */
+   slot = 0;
+   /* Prime class is canonical; put it first regardless of level. */
+   if (ch->class >= 0 && cl[ch->class] >= 0 && slot < 4)
+   {
+      ch->mortal_class[slot] = ch->class;
+      ch->mortal_level[slot] = cl[ch->class];
+      slot++;
+   }
+   for (i = 0; i < MAX_TOTAL_CLASS && slot < 4; i++)
+   {
+      if (!IS_MORTAL_CLASS(i) || i == ch->class)
+         continue;
+      if (cl[i] >= 0)
+      {
+         ch->mortal_class[slot] = i;
+         ch->mortal_level[slot] = cl[i];
+         slot++;
+      }
+   }
+
+   /* Remort classes: up to 2, in index order. */
+   slot = 0;
+   for (i = 0; i < MAX_TOTAL_CLASS && slot < 2; i++)
+   {
+      if (!IS_REMORT_CLASS(i))
+         continue;
+      if (cl[i] > 0)
+      {
+         ch->remort_class[slot] = i;
+         ch->remort_level[slot] = cl[i];
+         slot++;
+      }
+   }
+
+   /* Adept class: whichever one has a positive level. */
+   ch->adept_class = -1;
+   for (i = 0; i < MAX_TOTAL_CLASS; i++)
+   {
+      if (!IS_ADEPT_CLASS(i))
+         continue;
+      if (cl[i] > 0)
+      {
+         ch->adept_class = i;
+         /* adept_level already set from "Adeptlevel" keyword */
+         break;
+      }
+   }
+}
+
 void fread_char(CHAR_DATA *ch, FILE *fp)
 {
    char buf[MAX_STRING_LENGTH];
    char *word;
    bool fMatch;
    int cnt;
-   /*
-    * Save revision control:
-    */
+   int legacy_class_level[MAX_TOTAL_CLASS];
+   bool legacy_loaded = FALSE;
 
-   /*
-    * Ugly fix for pfiles with no balance value
-    */
+   for (cnt = 0; cnt < MAX_TOTAL_CLASS; cnt++)
+      legacy_class_level[cnt] = -1;
+
+   /* Initialise new class fields so they are safe if keywords are absent. */
+   for (cnt = 0; cnt < 4; cnt++)
+   {
+      ch->mortal_class[cnt] = -1;
+      ch->mortal_level[cnt] = 0;
+   }
+   for (cnt = 0; cnt < 2; cnt++)
+   {
+      ch->remort_class[cnt] = -1;
+      ch->remort_level[cnt] = 0;
+   }
+   ch->adept_class = -1;
+
    ch->balance = 0;
-   /*
-    * Another fix for m/c levels.. this is getting to be a habit...
-    */
-
-   for (cnt = 0; cnt < MAX_CLASS; cnt++)
-      ch->class_level[cnt] = -1; /* -1 means no-use of that class */
 
    for (;;)
    {
@@ -933,10 +997,18 @@ void fread_char(CHAR_DATA *ch, FILE *fp)
 
       case 'A':
          KEY("Act", ch->act, fread_number(fp));
+         if (!str_cmp(word, "AdeptClass"))
+         {
+            ch->adept_class = fread_number(fp);
+            fMatch = TRUE;
+            break;
+         }
          if (!str_cmp(word, "Adept"))
          {
+            /* Legacy rev <= 15: adept class levels by index. */
             for (cnt = CLASS_GMA; cnt < CLASS_GMA + MAX_CLASS; cnt++)
-               ch->class_level[cnt] = fread_number(fp);
+               legacy_class_level[cnt] = fread_number(fp);
+            legacy_loaded = TRUE;
             fMatch = TRUE;
             break;
          }
@@ -1153,8 +1225,10 @@ void fread_char(CHAR_DATA *ch, FILE *fp)
 
          if (!str_cmp(word, "Druidlevels"))
          {
+            /* Legacy rev <= 15. */
             for (cnt = CLASS_DRU; cnt <= CLASS_HIE; cnt++)
-               ch->class_level[cnt] = fread_number(fp);
+               legacy_class_level[cnt] = fread_number(fp);
+            legacy_loaded = TRUE;
             fMatch = TRUE;
             break;
          }
@@ -1174,6 +1248,11 @@ void fread_char(CHAR_DATA *ch, FILE *fp)
          {
             if (ch->login_sex < 0)
                ch->login_sex = ch->sex;
+            if (legacy_loaded)
+               migrate_legacy_class_levels(ch, legacy_class_level);
+            /* Keep ch->class in sync with the prime mortal class. */
+            if (!IS_NPC(ch) && ch->mortal_class[0] >= 0)
+               ch->class = (sh_int)ch->mortal_class[0];
             return;
          }
          KEY("Exp", ch->exp, fread_number(fp));
@@ -1280,15 +1359,26 @@ void fread_char(CHAR_DATA *ch, FILE *fp)
             KEY("Mkilled", ch->pcdata->mkilled, fread_number(fp));
             KEY("Monitor", ch->pcdata->monitor, fread_number(fp));
          }
+         if (!str_cmp(word, "MortalClass"))
+         {
+            for (cnt = 0; cnt < 4; cnt++)
+               ch->mortal_class[cnt] = fread_number(fp);
+            fMatch = TRUE;
+            break;
+         }
+         if (!str_cmp(word, "MortalLevel"))
+         {
+            for (cnt = 0; cnt < 4; cnt++)
+               ch->mortal_level[cnt] = fread_number(fp);
+            fMatch = TRUE;
+            break;
+         }
          if (!str_cmp(word, "m/c"))
          {
-            switch (cur_revision)
-            {
-            default:
-               for (cnt = 0; cnt < MAX_CLASS; cnt++)
-                  ch->class_level[cnt] = fread_number(fp);
-               break;
-            }
+            /* Legacy rev <= 15: 6 standard mortal class levels. */
+            for (cnt = 0; cnt < MAX_CLASS; cnt++)
+               legacy_class_level[cnt] = fread_number(fp);
+            legacy_loaded = TRUE;
             fMatch = TRUE;
          }
          break;
@@ -1549,10 +1639,26 @@ void fread_char(CHAR_DATA *ch, FILE *fp)
          SKEY("Roomexit", ch->pcdata->room_exit, fread_string(fp));
          KEY("RulerRank", ch->pcdata->ruler_rank, fread_number(fp));
 
+         if (!str_cmp(word, "RemortClass"))
+         {
+            for (cnt = 0; cnt < 2; cnt++)
+               ch->remort_class[cnt] = fread_number(fp);
+            fMatch = TRUE;
+            break;
+         }
+         if (!str_cmp(word, "RemortLevel"))
+         {
+            for (cnt = 0; cnt < 2; cnt++)
+               ch->remort_level[cnt] = fread_number(fp);
+            fMatch = TRUE;
+            break;
+         }
          if (!str_cmp(word, "Remort"))
          {
+            /* Legacy rev <= 15: 12 standard remort class levels. */
             for (cnt = CLASS_SOR; cnt < CLASS_SOR + MAX_REMORT; cnt++)
-               ch->class_level[cnt] = fread_number(fp);
+               legacy_class_level[cnt] = fread_number(fp);
+            legacy_loaded = TRUE;
             fMatch = TRUE;
             break;
          }

@@ -18,13 +18,13 @@ bool spell_cognitive_disruption(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_
       return FALSE;
    }
 
-   dam = dice(ch->class_level[CLASS_KIN] + ch->class_level[CLASS_EGO], 8);
+   dam = dice(char_class_level(ch, CLASS_KIN) + char_class_level(ch, CLASS_EGO), 8);
 
    af.type = sn;
-   af.duration = 1 + ch->class_level[CLASS_KIN] / 10;
+   af.duration = 1 + char_class_level(ch, CLASS_KIN) / 10;
    af.duration_type = DURATION_ROUND;
    af.location = APPLY_SAVING_SPELL;
-   af.modifier = ch->class_level[CLASS_KIN] * 3;
+   af.modifier = char_class_level(ch, CLASS_KIN) * 3;
    af.bitvector = 0;
    af.caster = ch;
    affect_to_char(victim, &af);

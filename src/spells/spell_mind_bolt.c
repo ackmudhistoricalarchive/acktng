@@ -45,7 +45,7 @@ bool spell_mind_bolt(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
       if (number_percent() < 30)
          continue;
 
-      dam += number_range(12, 30) + (ch->class_level[CLASS_PSI] * 5 / 4);
+      dam += number_range(12, 30) + (char_class_level(ch, CLASS_PSI) * 5 / 4);
    }
 
    if (dam <= 0)

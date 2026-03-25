@@ -18,21 +18,21 @@ bool spell_momentum_drain(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *
    }
 
    af.type = sn;
-   af.duration = 3 + ch->class_level[CLASS_KIN] / 5;
+   af.duration = 3 + char_class_level(ch, CLASS_KIN) / 5;
    af.duration_type = DURATION_ROUND;
    af.location = APPLY_HITROLL;
-   af.modifier =
-       -(ch->class_level[CLASS_KIN] * 2 + ch->class_level[CLASS_NEC] + ch->class_level[CLASS_EGO]);
+   af.modifier = -(char_class_level(ch, CLASS_KIN) * 2 + char_class_level(ch, CLASS_NEC) +
+                   char_class_level(ch, CLASS_EGO));
    af.bitvector = 0;
    af.caster = ch;
    affect_to_char(victim, &af);
 
    af.type = sn;
-   af.duration = 3 + ch->class_level[CLASS_KIN] / 5;
+   af.duration = 3 + char_class_level(ch, CLASS_KIN) / 5;
    af.duration_type = DURATION_ROUND;
    af.location = APPLY_DAMROLL;
-   af.modifier =
-       -(ch->class_level[CLASS_KIN] * 2 + ch->class_level[CLASS_NEC] + ch->class_level[CLASS_EGO]);
+   af.modifier = -(char_class_level(ch, CLASS_KIN) * 2 + char_class_level(ch, CLASS_NEC) +
+                   char_class_level(ch, CLASS_EGO));
    af.bitvector = 0;
    af.caster = ch;
    affect_to_char(victim, &af);

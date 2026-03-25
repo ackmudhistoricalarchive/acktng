@@ -44,7 +44,7 @@ bool spell_refuge(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
    af.location = APPLY_SPEED;
    af.duration_type = DURATION_ROUND;
    af.modifier = 1;
-   if (ch->class_level[CLASS_TEM] > 0)
+   if (char_class_level(ch, CLASS_TEM) > 0)
       af.modifier = 2;
    af.bitvector = 0;
    af.caster = ch;

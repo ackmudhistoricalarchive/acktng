@@ -40,10 +40,15 @@ void do_rescue(CHAR_DATA *ch, char *argument)
 
    if (!IS_NPC(ch))
    {
-      for (cnt = 0; cnt < MAX_CLASS; cnt++)
-         if (ch->class_level[cnt] >= skill_table[gsn_rescue].skill_level[cnt] &&
-             ch->class_level[cnt] >= best)
-            best = cnt;
+      for (cnt = 0; cnt < 4; cnt++)
+      {
+         int cl = ch->mortal_class[cnt];
+         if (cl < 0)
+            continue;
+         if (ch->mortal_level[cnt] >= skill_table[gsn_rescue].skill_level[cl] &&
+             ch->mortal_level[cnt] >= best)
+            best = cl;
+      }
    }
    else
       best = ch->level;

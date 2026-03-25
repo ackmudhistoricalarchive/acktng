@@ -326,34 +326,35 @@ void multi_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt)
    else
    {
       // Remort hits
-      if (ch->class_level[CLASS_PAL] > 0)
+      if (char_class_level(ch, CLASS_PAL) > 0)
          hits++;
-      if (ch->class_level[CLASS_ASS] > 0)
+      if (char_class_level(ch, CLASS_ASS) > 0)
          hits++;
-      if (ch->class_level[CLASS_WLK] > 0)
+      if (char_class_level(ch, CLASS_WLK) > 0)
          hits++;
-      if (ch->class_level[CLASS_KNI] > 0)
+      if (char_class_level(ch, CLASS_KNI) > 0)
          hits++;
-      if (ch->class_level[CLASS_SWO] > 0)
+      if (char_class_level(ch, CLASS_SWO) > 0)
          hits++;
 
-      if (ch->class_level[CLASS_NIG] > 0)
+      if (char_class_level(ch, CLASS_NIG) > 0)
          hits++;
-      if (ch->class_level[CLASS_TEM] > 0)
+      if (char_class_level(ch, CLASS_TEM) > 0)
          hits++;
-      if (ch->class_level[CLASS_MAR] > 0)
+      if (char_class_level(ch, CLASS_MAR) > 0)
          hits++;
-      if (ch->class_level[CLASS_CRU] > 0)
+      if (char_class_level(ch, CLASS_CRU) > 0)
          hits++;
 
       // Mort hits
-      for (int i = 0; i < MAX_CLASS; i++)
+      for (int i = 0; i < 4; i++)
       {
-         if (!IS_MORTAL_CLASS(i))
+         if (ch->mortal_class[i] < 0)
             continue;
-         if (gclass_table[i].attr_prime == APPLY_INT || gclass_table[i].attr_prime == APPLY_WIS)
+         if (gclass_table[ch->mortal_class[i]].attr_prime == APPLY_INT ||
+             gclass_table[ch->mortal_class[i]].attr_prime == APPLY_WIS)
             continue;
-         if (ch->class_level[i] > 10)
+         if (ch->mortal_level[i] > 10)
             hits++;
       }
    }
@@ -468,7 +469,7 @@ void one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt)
 
       if (!IS_NPC(ch) && can_use_skill(ch, gsn_martial_arts))
       {
-         if (number_percent() < (ch->class_level[CLASS_PUG] / 2) + 40)
+         if (number_percent() < (char_class_level(ch, CLASS_PUG) / 2) + 40)
             dt = TYPE_MARTIAL;
       }
    }
@@ -566,9 +567,9 @@ void one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt)
          {
             if (wield != NULL)
                dam_bonus += number_range(wield->value[1], wield->value[2]);
-            dam_bonus += dam_bonus * ch->class_level[CLASS_MON] / 75;
-            dam_bonus += dam_bonus * ch->class_level[CLASS_BRA] / 75 * 0.75;
-            dam_bonus += dam_bonus * ch->class_level[CLASS_MAR] / 50;
+            dam_bonus += dam_bonus * char_class_level(ch, CLASS_MON) / 75;
+            dam_bonus += dam_bonus * char_class_level(ch, CLASS_BRA) / 75 * 0.75;
+            dam_bonus += dam_bonus * char_class_level(ch, CLASS_MAR) / 50;
 
             dam += number_range(get_psuedo_level(ch) / 3, get_psuedo_level(ch) / 2) + dam_bonus;
          }
@@ -1285,10 +1286,10 @@ int get_counter(CHAR_DATA *ch)
        IS_SET(get_eq_char(ch, WEAR_HOLD_HAND_R)->extra_flags, ITEM_FIST))
       fists++;
 
-   if (ch->class_level[CLASS_MON] > 0 || ch->class_level[CLASS_BRA] > 0)
+   if (char_class_level(ch, CLASS_MON) > 0 || char_class_level(ch, CLASS_BRA) > 0)
       chance += fists * 3;
 
-   if (ch->class_level[CLASS_MAR] > 0)
+   if (char_class_level(ch, CLASS_MAR) > 0)
       chance += fists * 3;
 
    chance += get_speed(ch) * 5;

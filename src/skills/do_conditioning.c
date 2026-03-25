@@ -53,7 +53,7 @@ void do_conditioning(CHAR_DATA *ch, char *argument)
    af.type = gsn_conditioning;
    af.duration = -1;
    af.location = APPLY_HIT;
-   af.modifier = ch->class_level[CLASS_PUG] / 2 + 5;
+   af.modifier = char_class_level(ch, CLASS_PUG) / 2 + 5;
    af.bitvector = 0;
    affect_to_char(ch, &af);
 

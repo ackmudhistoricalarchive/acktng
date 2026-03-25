@@ -998,10 +998,10 @@ bool cast_wizard_elemental_dot_spell(int sn, int level, CHAR_DATA *ch, CHAR_DATA
 
    if (obj == NULL)
    {
-      int base = ch->class_level[CLASS_WIZ];
+      int base = char_class_level(ch, CLASS_WIZ);
 
-      if (ch->class_level[CLASS_SOR] > base)
-         base = ch->class_level[CLASS_SOR];
+      if (char_class_level(ch, CLASS_SOR) > base)
+         base = char_class_level(ch, CLASS_SOR);
 
       base_damage = 150 + dice(base / 2, 20);
       act(cast_msg, ch, NULL, NULL, TO_ROOM);

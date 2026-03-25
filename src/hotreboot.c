@@ -153,7 +153,8 @@ void do_hotreboot(CHAR_DATA *ch, char *argument)
                             "save....you have been advanced!\n\r",
                             0);
             och->level = 2;
-            och->class_level[och->class] = 2;
+            if (char_mortal_slot(och, och->class) >= 0)
+               och->mortal_level[char_mortal_slot(och, och->class)] = 2;
          }
          och->hit = och->max_hit;
          och->mana = och->max_mana;

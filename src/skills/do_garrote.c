@@ -89,7 +89,7 @@ void do_garrote(CHAR_DATA *ch, char *argument)
    affect_to_char(victim, &af);
 
    /* Deal damage */
-   damage(ch, victim, dice(2, ch->class_level[CLASS_CIP] / 3 + 1), gsn_garrote);
+   damage(ch, victim, dice(2, char_class_level(ch, CLASS_CIP) / 3 + 1), gsn_garrote);
 
    act("You slip a garrote around $N's throat!", ch, NULL, victim, TO_CHAR);
    act("$n slips a garrote around $N's throat!", ch, NULL, victim, TO_NOTVICT);

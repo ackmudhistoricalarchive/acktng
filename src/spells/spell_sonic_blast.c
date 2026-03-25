@@ -37,7 +37,7 @@ bool spell_sonic_blast(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj
    CHAR_DATA *victim = (CHAR_DATA *)vo;
    AFFECT_DATA af;
    int dam;
-   dam = 150 + dice(ch->class_level[CLASS_EGO] / 2, 20);
+   dam = 150 + dice(char_class_level(ch, CLASS_EGO) / 2, 20);
    if (sp_damage(obj, ch, victim, dam, ELEMENT_AIR | NO_REFLECT | NO_ABSORB, sn, TRUE))
    {
       if (is_affected(ch, sn))

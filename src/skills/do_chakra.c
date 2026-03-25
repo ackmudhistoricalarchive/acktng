@@ -60,17 +60,17 @@ void do_chakra(CHAR_DATA *ch, char *argument)
 
    int base_heal = 5;
 
-   if (ch->class_level[CLASS_MAR] > 0)
+   if (char_class_level(ch, CLASS_MAR) > 0)
       base_heal = 7;
 
    int heal = class_heal_character(
-       ch, ch, (ch->class_level[CLASS_MON] + ch->class_level[CLASS_MAR]) * base_heal, gsn_chakra,
-       CLASS_MON, FALSE);
+       ch, ch, (char_class_level(ch, CLASS_MON) + char_class_level(ch, CLASS_MAR)) * base_heal,
+       gsn_chakra, CLASS_MON, FALSE);
 
    heal_character(ch, ch, heal, gsn_chakra, FALSE);
 
    int dur = 1;
-   if (ch->class_level[CLASS_MAR] > 0)
+   if (char_class_level(ch, CLASS_MAR) > 0)
       dur = 2;
 
    AFFECT_DATA af;
@@ -79,7 +79,7 @@ void do_chakra(CHAR_DATA *ch, char *argument)
    af.duration = dur;
    af.duration_type = DURATION_ROUND;
    af.location = APPLY_DAMROLL;
-   af.modifier = ch->class_level[CLASS_MON] * 5 + ch->class_level[CLASS_MAR] * 5;
+   af.modifier = char_class_level(ch, CLASS_MON) * 5 + char_class_level(ch, CLASS_MAR) * 5;
    af.bitvector = 0;
    affect_to_char(ch, &af);
 }

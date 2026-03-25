@@ -40,19 +40,19 @@ bool spell_wraith_touch(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *ob
 
    if (obj == NULL)
    {
-      dam = 150 + dice(ch->class_level[CLASS_NEC] / 2, 20);
+      dam = 150 + dice(char_class_level(ch, CLASS_NEC) / 2, 20);
       act("@@RA @@dwraithlike hand @@Rleaps forth from $n!@@N", ch, NULL, NULL, TO_ROOM);
       send_to_char("@@RA @@dwraithlike hand @@Rleaps forth from your hands!@@N\n\r", ch);
    }
    else
    {
-      dam = 150 + dice(ch->class_level[CLASS_NEC] / 2, 20);
+      dam = 150 + dice(char_class_level(ch, CLASS_NEC) / 2, 20);
       act("@@RA @@dwraithlike hand @@Rleaps forth from $p!@@N", ch, obj, NULL, TO_ROOM);
       act("@@RA @@dwraithlike hand @@Rleaps forth from $p!@@N", ch, obj, NULL, TO_CHAR);
    }
    act("@@R$n is struck by the @@dwraithlike hand @@R!!@@N", victim, NULL, NULL, TO_ROOM);
    send_to_char("@@RYou are struck by a @@dwraithlike hand @@R!!@@N\n\r", victim);
-   drain_mod = ch->class_level[CLASS_NEC] * dam / 130;
+   drain_mod = char_class_level(ch, CLASS_NEC) * dam / 130;
    if (sp_damage(obj, ch, victim, dam, ELEMENT_SHADOW | NO_REFLECT | NO_ABSORB, sn, TRUE))
    {
       ch->hit = UMIN(get_max_hp(ch), (ch->hit + drain_mod));

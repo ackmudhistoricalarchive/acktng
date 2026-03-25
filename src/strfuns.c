@@ -652,13 +652,10 @@ char *get_adept_name(CHAR_DATA *ch)
    int dominant_class = -1;
    int dominant_level = 0;
 
-   for (int cnt = 0; cnt < MAX_TOTAL_CLASS; cnt++)
+   if (ch->adept_class >= 0 && ch->adept_level > dominant_level)
    {
-      if (IS_ADEPT_CLASS(cnt) && ch->class_level[cnt] > dominant_level)
-      {
-         dominant_level = ch->class_level[cnt];
-         dominant_class = cnt - CLASS_GMA; /* 0-5 index into adept_titles */
-      }
+      dominant_level = ch->adept_level;
+      dominant_class = ch->adept_class - CLASS_GMA; /* 0-5 index into adept_titles */
    }
 
    if (dominant_class < 0 || dominant_level < 1)

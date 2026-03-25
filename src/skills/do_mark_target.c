@@ -74,7 +74,7 @@ void do_mark_target(CHAR_DATA *ch, char *argument)
    af.type = gsn_mark_target;
    af.duration = 10;
    af.location = APPLY_HITROLL;
-   af.modifier = ch->class_level[CLASS_CIP] / 5;
+   af.modifier = char_class_level(ch, CLASS_CIP) / 5;
    af.bitvector = 0;
    affect_to_char(ch, &af);
 

@@ -39,9 +39,9 @@ bool spell_cone_cold(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
 
    if (obj == NULL)
    {
-      int base = ch->class_level[CLASS_SOR];
-      if (ch->class_level[CLASS_WIZ] > base)
-         base = ch->class_level[CLASS_WIZ];
+      int base = char_class_level(ch, CLASS_SOR);
+      if (char_class_level(ch, CLASS_WIZ) > base)
+         base = char_class_level(ch, CLASS_WIZ);
 
       dam = 150 + dice(base / 2, 20);
       act("@@gA cone of @@acold@@g bursts forth from $n's hands!@@N", ch, NULL, NULL, TO_ROOM);

@@ -55,12 +55,12 @@ void do_rend(CHAR_DATA *ch, char *argument)
    af.type = gsn_rend;
    af.duration = 24;
    af.location = APPLY_AC;
-   af.modifier = ch->class_level[CLASS_WAR] / 4;
+   af.modifier = char_class_level(ch, CLASS_WAR) / 4;
    af.bitvector = 0;
    affect_to_char(victim, &af);
 
    /* Deal a small amount of damage */
-   damage(ch, victim, dice(2, ch->class_level[CLASS_WAR] / 4 + 1), gsn_rend);
+   damage(ch, victim, dice(2, char_class_level(ch, CLASS_WAR) / 4 + 1), gsn_rend);
 
    act("You rend through $N's defenses!", ch, NULL, victim, TO_CHAR);
    act("$n rends through $N's defenses!", ch, NULL, victim, TO_NOTVICT);

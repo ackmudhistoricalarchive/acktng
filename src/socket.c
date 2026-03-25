@@ -3545,20 +3545,45 @@ void ws_send_score(DESCRIPTOR_DATA *d, CHAR_DATA *ch)
 
    json_append(buf, &pos, sizeof(buf), ",\"classes\":[");
    first = TRUE;
-   for (cnt = 0; cnt < MAX_TOTAL_CLASS; cnt++)
+   for (cnt = 0; cnt < 4; cnt++)
    {
-      if (ch->class_level[cnt] > 0)
-      {
-         if (!first)
-            json_append(buf, &pos, sizeof(buf), ",");
-         first = FALSE;
-         json_append(buf, &pos, sizeof(buf), "{\"name\":");
-         json_str_escape(buf, &pos, sizeof(buf), gclass_table[cnt].who_name);
-         snprintf(tmp, sizeof(tmp), "%d", ch->class_level[cnt]);
-         json_append(buf, &pos, sizeof(buf), ",\"level\":");
-         json_append(buf, &pos, sizeof(buf), tmp);
-         json_append(buf, &pos, sizeof(buf), "}");
-      }
+      if (ch->mortal_class[cnt] < 0 || ch->mortal_level[cnt] <= 0)
+         continue;
+      if (!first)
+         json_append(buf, &pos, sizeof(buf), ",");
+      first = FALSE;
+      json_append(buf, &pos, sizeof(buf), "{\"name\":");
+      json_str_escape(buf, &pos, sizeof(buf), gclass_table[ch->mortal_class[cnt]].who_name);
+      snprintf(tmp, sizeof(tmp), "%d", ch->mortal_level[cnt]);
+      json_append(buf, &pos, sizeof(buf), ",\"level\":");
+      json_append(buf, &pos, sizeof(buf), tmp);
+      json_append(buf, &pos, sizeof(buf), "}");
+   }
+   for (cnt = 0; cnt < 2; cnt++)
+   {
+      if (ch->remort_class[cnt] < 0 || ch->remort_level[cnt] <= 0)
+         continue;
+      if (!first)
+         json_append(buf, &pos, sizeof(buf), ",");
+      first = FALSE;
+      json_append(buf, &pos, sizeof(buf), "{\"name\":");
+      json_str_escape(buf, &pos, sizeof(buf), gclass_table[ch->remort_class[cnt]].who_name);
+      snprintf(tmp, sizeof(tmp), "%d", ch->remort_level[cnt]);
+      json_append(buf, &pos, sizeof(buf), ",\"level\":");
+      json_append(buf, &pos, sizeof(buf), tmp);
+      json_append(buf, &pos, sizeof(buf), "}");
+   }
+   if (ch->adept_class >= 0 && ch->adept_level > 0)
+   {
+      if (!first)
+         json_append(buf, &pos, sizeof(buf), ",");
+      first = FALSE;
+      json_append(buf, &pos, sizeof(buf), "{\"name\":");
+      json_str_escape(buf, &pos, sizeof(buf), gclass_table[ch->adept_class].who_name);
+      snprintf(tmp, sizeof(tmp), "%d", ch->adept_level);
+      json_append(buf, &pos, sizeof(buf), ",\"level\":");
+      json_append(buf, &pos, sizeof(buf), tmp);
+      json_append(buf, &pos, sizeof(buf), "}");
    }
    json_append(buf, &pos, sizeof(buf), "]");
 

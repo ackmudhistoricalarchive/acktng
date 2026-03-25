@@ -31,11 +31,11 @@ void do_shadow_reading(CHAR_DATA *ch, char *argument)
    ch->cooldown[gsn_shadow_reading] = 15;
 
    af.type = gsn_shadow_reading;
-   af.duration = 4 + ch->class_level[CLASS_NIG] / 4;
+   af.duration = 4 + char_class_level(ch, CLASS_NIG) / 4;
    af.duration_type = DURATION_ROUND;
    af.location = APPLY_HITROLL;
-   af.modifier = ch->class_level[CLASS_NIG] * 3 + ch->class_level[CLASS_ASS] * 2 +
-                 ch->class_level[CLASS_WLK] * 2;
+   af.modifier = char_class_level(ch, CLASS_NIG) * 3 + char_class_level(ch, CLASS_ASS) * 2 +
+                 char_class_level(ch, CLASS_WLK) * 2;
    af.bitvector = 0;
    affect_to_char(ch, &af);
 

@@ -41,34 +41,32 @@ void reset_gain_stats(CHAR_DATA *ch)
    ch->pcdata->hp_from_gain = 25;
    ch->pcdata->move_from_gain = 100;
 
-   for (int i = 0; i < MAX_CLASS; i++)
+   for (int i = 0; i < 4; i++)
    {
-      curr = ch->class_level[i];
-      ch->class_level[i] = -1;
+      if (ch->mortal_class[i] < 0)
+         continue;
+      curr = ch->mortal_level[i];
+      ch->mortal_level[i] = 0;
       for (int j = 0; j < curr; j++)
-      {
-         advance_level(ch, i, FALSE);
-      }
+         advance_level(ch, ch->mortal_class[i], FALSE);
    }
 
-   for (int i = CLASS_SOR; i < CLASS_SOR + MAX_REMORT; i++)
+   for (int i = 0; i < 2; i++)
    {
-      curr = ch->class_level[i];
-      ch->class_level[i] = -1;
+      if (ch->remort_class[i] < 0)
+         continue;
+      curr = ch->remort_level[i];
+      ch->remort_level[i] = 0;
       for (int j = 0; j < curr; j++)
-      {
-         advance_level_remort(ch, i, FALSE);
-      }
+         advance_level_remort(ch, ch->remort_class[i], FALSE);
    }
 
-   for (int i = CLASS_GMA; i < CLASS_GMA + MAX_CLASS; i++)
+   if (ch->adept_class >= 0)
    {
-      curr = ch->class_level[i];
-      ch->class_level[i] = -1;
+      curr = ch->adept_level;
+      ch->adept_level = 0;
       for (int j = 0; j < curr; j++)
-      {
-         advance_level_adept(ch, i, FALSE);
-      }
+         advance_level_adept(ch, ch->adept_class, FALSE);
    }
 
    ch->max_hit = ch->pcdata->hp_from_gain;
@@ -87,9 +85,9 @@ sh_int get_remort_level(CHAR_DATA *ch)
    if (!is_remort(ch))
       return 0;
 
-   for (index = CLASS_SOR; index < CLASS_SOR + MAX_REMORT; index++)
-      if (ch->class_level[index] > max_remort_level)
-         max_remort_level = ch->class_level[index];
+   for (index = 0; index < 2; index++)
+      if (ch->remort_class[index] >= 0 && ch->remort_level[index] > max_remort_level)
+         max_remort_level = ch->remort_level[index];
    return max_remort_level;
 }
 
@@ -104,11 +102,9 @@ sh_int get_psuedo_level(CHAR_DATA *ch)
    else
    {
 
-      for (index = CLASS_SOR; index < CLASS_SOR + MAX_REMORT; index++)
-
-         if (ch->class_level[index] > 0)
-
-            total_remort_level += ch->class_level[index];
+      for (index = 0; index < 2; index++)
+         if (ch->remort_class[index] >= 0 && ch->remort_level[index] > 0)
+            total_remort_level += ch->remort_level[index];
 
       psuedo_level = (ch->level + (total_remort_level / 4));
    }
@@ -163,14 +159,9 @@ bool check_level_use(CHAR_DATA *ch, int level)
 long exp_to_level_adept(CHAR_DATA *ch)
 {
    long exp;
-   int i;
    int max = 0;
 
-   for (i = CLASS_GMA; i < CLASS_GMA + MAX_CLASS; i++)
-   {
-      if (ch->class_level[i] > max)
-         max = ch->class_level[i];
-   }
+   max = ch->adept_level;
 
    if (!max)
       return 6969;
@@ -194,7 +185,7 @@ long exp_to_level_remort(CHAR_DATA *ch, int index)
    if (IS_NPC(ch))
       return 69;
 
-   if (ch->class_level[index] <= 0)
+   if (char_class_level(ch, index) <= 0)
       return 0;
 
    cost = get_cost_to_level_remort(ch, index);
@@ -217,13 +208,13 @@ long exp_to_level(CHAR_DATA *ch, int index)
 
    cost = get_cost_to_level(ch, index);
 
-   for (int i = 0; i < MAX_CLASS; i++)
+   for (int i = 0; i < 4; i++)
    {
-      if (ch->class_level[i] > diff)
-         diff = ch->class_level[i];
+      if (ch->mortal_level[i] > diff)
+         diff = ch->mortal_level[i];
    }
 
-   diff = (diff - ch->class_level[index]);
+   diff = (diff - char_class_level(ch, index));
 
    if (diff > 10)
       cost += cost * diff / 10;
@@ -425,24 +416,30 @@ int skill_table_lookup(CHAR_DATA *ch, int sn, int return_type)
       switch (skill_get_tier(sn))
       {
       case MORTAL:
-         for (cnt = 0; cnt < MAX_CLASS; cnt++)
+         for (cnt = 0; cnt < 4; cnt++)
          {
-            if (ch->class_level[cnt] >= skill_table[sn].skill_level[cnt] &&
-                ch->class_level[cnt] > best_level)
+            int cl = ch->mortal_class[cnt];
+            if (cl < 0)
+               continue;
+            if (ch->mortal_level[cnt] >= skill_table[sn].skill_level[cl] &&
+                ch->mortal_level[cnt] > best_level)
             {
-               best_level = ch->class_level[cnt];
-               best_class = cnt;
+               best_level = ch->mortal_level[cnt];
+               best_class = cl;
             }
          }
          break;
       case REMORT:
-         for (cnt = CLASS_SOR; cnt < CLASS_SOR + MAX_REMORT; cnt++)
+         for (cnt = 0; cnt < 2; cnt++)
          {
-            if (ch->class_level[cnt] >= skill_table[sn].skill_level[cnt] &&
-                ch->class_level[cnt] > best_level)
+            int cl = ch->remort_class[cnt];
+            if (cl < 0)
+               continue;
+            if (ch->remort_level[cnt] >= skill_table[sn].skill_level[cl] &&
+                ch->remort_level[cnt] > best_level)
             {
-               best_level = ch->class_level[cnt];
-               best_class = cnt;
+               best_level = ch->remort_level[cnt];
+               best_class = cl;
             }
          }
          break;
@@ -469,9 +466,9 @@ bool is_remort(CHAR_DATA *ch)
    if (IS_NPC(ch))
       return FALSE;
 
-   for (int i = CLASS_SOR; i < CLASS_SOR + MAX_REMORT; i++)
+   for (int i = 0; i < 2; i++)
    {
-      if (ch->class_level[i] > 0)
+      if (ch->remort_class[i] >= 0 && ch->remort_level[i] > 0)
          return TRUE;
    }
 
@@ -483,26 +480,12 @@ bool is_adept(CHAR_DATA *ch)
    if (IS_NPC(ch))
       return FALSE;
 
-   for (int i = CLASS_GMA; i < CLASS_GMA + MAX_CLASS; i++)
-   {
-      if (ch->class_level[i] > 0)
-         return TRUE;
-   }
-
-   return FALSE;
+   return ch->adept_class >= 0 && ch->adept_level > 0;
 }
 
 int get_adept_level(CHAR_DATA *ch)
 {
-   int max = 0;
-
-   for (int i = CLASS_GMA; i < CLASS_GMA + MAX_CLASS; i++)
-   {
-      if (ch->class_level[i] > max)
-         max = ch->class_level[i];
-   }
-
-   return max;
+   return ch->adept_level;
 }
 
 int get_item_value(OBJ_DATA *obj)

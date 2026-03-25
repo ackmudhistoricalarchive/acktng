@@ -211,12 +211,15 @@ long get_cost_to_level_remort(CHAR_DATA *ch, int class)
    if (class < CLASS_SOR || class > CLASS_BRA)
       return -69;
 
-   base = ch->class_level[class] * ch->class_level[class];
+   {
+      int lv = char_class_level(ch, class);
+      base = lv * lv;
+   }
 
    // Gotta check if double remort
    for (i = CLASS_SOR; i < CLASS_SOR + MAX_REMORT; i++)
    {
-      if (i != class && ch->class_level[i] > 0)
+      if (i != class && char_class_level(ch, i) > 0)
       {
          double_remort = TRUE;
       }
@@ -241,7 +244,10 @@ long get_cost_to_level(CHAR_DATA *ch, int class)
    if (class > MAX_CLASS)
       return -69;
 
-   base = ch->class_level[class] * ch->class_level[class];
+   {
+      int lv = char_class_level(ch, class);
+      base = lv * lv;
+   }
 
    base *= 600;
 
@@ -380,17 +386,16 @@ int get_max_stat(CHAR_DATA *ch, int apply_type)
    if (!IS_NPC(ch) && gclass_table[ch->class].attr_prime == apply_type)
       max++;
 
-   for (int i = CLASS_SOR; i < CLASS_SOR + MAX_REMORT; i++)
+   for (int i = 0; i < 2; i++)
    {
-      if (ch->class_level[i] > 0 && gclass_table[i].attr_prime == apply_type)
+      if (ch->remort_class[i] >= 0 && ch->remort_level[i] > 0 &&
+          gclass_table[ch->remort_class[i]].attr_prime == apply_type)
          max++;
    }
 
-   for (int i = CLASS_GMA; i < CLASS_GMA + MAX_CLASS; i++)
-   {
-      if (ch->class_level[i] > 0 && gclass_table[i].attr_prime == apply_type)
-         max++;
-   }
+   if (ch->adept_class >= 0 && ch->adept_level > 0 &&
+       gclass_table[ch->adept_class].attr_prime == apply_type)
+      max++;
 
    max += get_stat_reinc_bonus(ch, apply_type);
    return UMIN(max, STAT_MAX);
@@ -581,9 +586,9 @@ int get_spell_crit(CHAR_DATA *ch)
 
    crit += get_stat(ch, APPLY_SPELL_CRIT);
 
-   crit += ch->class_level[CLASS_SOR] / 10;
-   crit += ch->class_level[CLASS_WIZ] / 10;
-   crit += ch->class_level[CLASS_WLK] / 10 * .75;
+   crit += char_class_level(ch, CLASS_SOR) / 10;
+   crit += char_class_level(ch, CLASS_WIZ) / 10;
+   crit += char_class_level(ch, CLASS_WLK) / 10 * .75;
 
    crit += ch->spell_crit_mod;
 
@@ -602,11 +607,11 @@ int get_spell_crit_mult(CHAR_DATA *ch)
       crit += get_curr_wis(ch) * 2;
    }
 
-   crit += ch->class_level[CLASS_PRI] * get_curr_wis(ch) / 50;
+   crit += char_class_level(ch, CLASS_PRI) * get_curr_wis(ch) / 50;
 
-   crit += ch->class_level[CLASS_PAL] * .75 * get_curr_wis(ch) / 50;
+   crit += char_class_level(ch, CLASS_PAL) * .75 * get_curr_wis(ch) / 50;
 
-   crit += ch->class_level[CLASS_TEM] * get_curr_wis(ch) / 25;
+   crit += char_class_level(ch, CLASS_TEM) * get_curr_wis(ch) / 25;
 
    crit += ch->spell_mult_mod;
 
@@ -631,15 +636,15 @@ int get_crit(CHAR_DATA *ch)
       crit += 1;
    }
 
-   crit += ch->class_level[CLASS_ASS] / 20;
-   crit += ch->class_level[CLASS_WLK] / 20 * .75;
+   crit += char_class_level(ch, CLASS_ASS) / 20;
+   crit += char_class_level(ch, CLASS_WLK) / 20 * .75;
 
-   crit += ch->class_level[CLASS_NIG] / 4;
+   crit += char_class_level(ch, CLASS_NIG) / 4;
 
    if (!IS_NPC(ch) && wield && wield->value[3] == 3 &&
        can_use_skill(ch, gsn_enhanced_sword_critical))
    {
-      crit += ch->class_level[CLASS_SWO] / 20;
+      crit += char_class_level(ch, CLASS_SWO) / 20;
    }
 
    crit += get_stat(ch, APPLY_CRIT);
@@ -665,15 +670,15 @@ int get_crit_mult(CHAR_DATA *ch)
       crit += get_curr_dex(ch) * 2;
    }
 
-   crit += ch->class_level[CLASS_ASS] / 5;
-   crit += ch->class_level[CLASS_WLK] / 5 * .75;
+   crit += char_class_level(ch, CLASS_ASS) / 5;
+   crit += char_class_level(ch, CLASS_WLK) / 5 * .75;
 
-   crit += ch->class_level[CLASS_NIG] / 2;
+   crit += char_class_level(ch, CLASS_NIG) / 2;
 
    if (!IS_NPC(ch) && wield && wield->value[3] == 3 &&
        can_use_skill(ch, gsn_enhanced_sword_critical))
    {
-      crit += ch->class_level[CLASS_SWO] / 5;
+      crit += char_class_level(ch, CLASS_SWO) / 5;
    }
 
    crit += get_stat(ch, APPLY_CRIT_MULT);
@@ -870,6 +875,64 @@ char *class_order(int race)
            gclass_table[race_table[race].limit[5]].who_name);
 
    return buf;
+}
+
+/*
+ * Return the slot index (0-3) of class_idx in ch->mortal_class[], or -1.
+ */
+int char_mortal_slot(const CHAR_DATA *ch, int class_idx)
+{
+   for (int i = 0; i < 4; i++)
+      if (ch->mortal_class[i] == class_idx)
+         return i;
+   return -1;
+}
+
+/*
+ * Return the slot index (0-1) of class_idx in ch->remort_class[], or -1.
+ */
+int char_remort_slot(const CHAR_DATA *ch, int class_idx)
+{
+   for (int i = 0; i < 2; i++)
+      if (ch->remort_class[i] == class_idx)
+         return i;
+   return -1;
+}
+
+bool char_has_mortal_class(const CHAR_DATA *ch, int class_idx)
+{
+   return char_mortal_slot(ch, class_idx) >= 0;
+}
+
+bool char_has_remort_class(const CHAR_DATA *ch, int class_idx)
+{
+   return char_remort_slot(ch, class_idx) >= 0;
+}
+
+/*
+ * Return the character's level in the given class index.
+ * Returns 0 if the class is not chosen or has no levels yet.
+ * Works for mortal, remort, and adept classes.
+ */
+int char_class_level(const CHAR_DATA *ch, int class_idx)
+{
+   int slot;
+
+   if (IS_NPC(ch))
+      return (ch->class == class_idx) ? ch->level : 0;
+
+   slot = char_mortal_slot(ch, class_idx);
+   if (slot >= 0)
+      return ch->mortal_level[slot];
+
+   slot = char_remort_slot(ch, class_idx);
+   if (slot >= 0)
+      return ch->remort_level[slot];
+
+   if (ch->adept_class == class_idx)
+      return ch->adept_level;
+
+   return 0;
 }
 
 int get_wear_weight(CHAR_DATA *ch)
@@ -2015,8 +2078,18 @@ CHAR_DATA *switch_char(CHAR_DATA *victim, int mvnum, int poly_level)
       mob->level = victim->level;
       mob->gold = victim->gold;
       mob->exp = victim->exp;
-      for (foo = 0; foo < MAX_CLASS; foo++)
-         mob->class_level[foo] = victim->class_level[foo];
+      for (foo = 0; foo < 4; foo++)
+      {
+         mob->mortal_class[foo] = victim->mortal_class[foo];
+         mob->mortal_level[foo] = victim->mortal_level[foo];
+      }
+      for (foo = 0; foo < 2; foo++)
+      {
+         mob->remort_class[foo] = victim->remort_class[foo];
+         mob->remort_level[foo] = victim->remort_level[foo];
+      }
+      mob->adept_class = victim->adept_class;
+      mob->adept_level = victim->adept_level;
       mob->practice = victim->practice;
 
    case 2: /* Level 2 */
@@ -2089,8 +2162,18 @@ CHAR_DATA *unswitch_char(CHAR_DATA *victim)
       original->level = victim->level;
       original->exp = victim->exp;
       original->gold = victim->gold;
-      for (foo = 0; foo < MAX_CLASS; foo++)
-         original->class_level[foo] = victim->class_level[foo];
+      for (foo = 0; foo < 4; foo++)
+      {
+         original->mortal_class[foo] = victim->mortal_class[foo];
+         original->mortal_level[foo] = victim->mortal_level[foo];
+      }
+      for (foo = 0; foo < 2; foo++)
+      {
+         original->remort_class[foo] = victim->remort_class[foo];
+         original->remort_level[foo] = victim->remort_level[foo];
+      }
+      original->adept_class = victim->adept_class;
+      original->adept_level = victim->adept_level;
 
    case 2:
       while ((eq = victim->first_carry) != NULL)

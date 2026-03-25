@@ -130,6 +130,9 @@ static bool summon_special_casts_in_combat(CHAR_DATA *ch, int index)
 static void clear_character(CHAR_DATA *ch)
 {
    memset(ch, 0, sizeof(*ch));
+   ch->mortal_class[0] = ch->mortal_class[1] = ch->mortal_class[2] = ch->mortal_class[3] = -1;
+   ch->remort_class[0] = ch->remort_class[1] = -1;
+   ch->adept_class = -1;
 }
 
 static void initialize_spell_table(void)

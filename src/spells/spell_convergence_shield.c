@@ -20,7 +20,7 @@ bool spell_convergence_shield(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DA
    af.duration = level / 8;
    af.duration_type = DURATION_HOUR;
    af.location = APPLY_AC;
-   af.modifier = -(ch->class_level[CLASS_GMA] * 5 + get_curr_int(ch) / 2);
+   af.modifier = -(char_class_level(ch, CLASS_GMA) * 5 + get_curr_int(ch) / 2);
    af.bitvector = 0;
    affect_to_char(ch, &af);
 

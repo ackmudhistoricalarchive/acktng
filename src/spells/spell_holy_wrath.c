@@ -39,9 +39,9 @@ bool spell_holy_wrath(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
 
    if (obj == NULL)
    {
-      int base = ch->class_level[CLASS_PRI];
-      if (ch->class_level[CLASS_PAL] > base)
-         base = ch->class_level[CLASS_PAL];
+      int base = char_class_level(ch, CLASS_PRI);
+      if (char_class_level(ch, CLASS_PAL) > base)
+         base = char_class_level(ch, CLASS_PAL);
 
       dam = 150 + dice(base / 2, 20);
       act("@@gA coruscating sphere of @@ylight@@g bursts forth from $n's hands!@@N", ch, NULL, NULL,

@@ -60,7 +60,7 @@ void do_choke_hold(CHAR_DATA *ch, char *argument)
    affect_to_char(victim, &af);
 
    /* Deal small damage */
-   damage(ch, victim, dice(1, ch->class_level[CLASS_PUG] / 4 + 1), gsn_choke_hold);
+   damage(ch, victim, dice(1, char_class_level(ch, CLASS_PUG) / 4 + 1), gsn_choke_hold);
 
    act("You seize $N's throat in an iron grip!", ch, NULL, victim, TO_CHAR);
    act("$n seizes $N's throat in an iron grip!", ch, NULL, victim, TO_NOTVICT);

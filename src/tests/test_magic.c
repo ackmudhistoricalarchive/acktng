@@ -86,6 +86,9 @@ static bool dummy_spell(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *ob
 static void clear_character(CHAR_DATA *ch)
 {
    memset(ch, 0, sizeof(*ch));
+   ch->mortal_class[0] = ch->mortal_class[1] = ch->mortal_class[2] = ch->mortal_class[3] = -1;
+   ch->remort_class[0] = ch->remort_class[1] = -1;
+   ch->adept_class = -1;
 }
 
 static void make_npc(CHAR_DATA *ch)

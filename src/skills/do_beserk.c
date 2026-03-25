@@ -73,20 +73,20 @@ void do_beserk(CHAR_DATA *ch, char *argument)
    af.type = gsn_beserk;
    af.duration = -1;
    af.location = APPLY_AC;
-   af.modifier = ch->class_level[CLASS_WAR] / 2;
+   af.modifier = char_class_level(ch, CLASS_WAR) / 2;
    af.bitvector = 0;
    affect_to_char(ch, &af);
 
    af.location = APPLY_HITROLL;
-   af.modifier = ch->class_level[CLASS_WAR] / 5;
+   af.modifier = char_class_level(ch, CLASS_WAR) / 5;
    affect_to_char(ch, &af);
 
    af.location = APPLY_DAMROLL;
-   af.modifier = ch->class_level[CLASS_WAR] / 5;
+   af.modifier = char_class_level(ch, CLASS_WAR) / 5;
    affect_to_char(ch, &af);
 
    af.location = APPLY_SAVING_SPELL;
-   af.modifier = ch->class_level[CLASS_WAR] / -10;
+   af.modifier = char_class_level(ch, CLASS_WAR) / -10;
    affect_to_char(ch, &af);
 
    act("$n calls on the Dark Powers, who answer!!!", ch, NULL, NULL, TO_ROOM);

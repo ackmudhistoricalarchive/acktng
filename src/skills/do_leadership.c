@@ -33,10 +33,10 @@ void do_leadership(CHAR_DATA *ch, char *argument)
    AFFECT_DATA af;
    CHAR_DATA *gch;
 
-   int stat = ch->class_level[CLASS_KNI];
+   int stat = char_class_level(ch, CLASS_KNI);
 
-   if (ch->class_level[CLASS_PAL] > stat)
-      stat = ch->class_level[CLASS_PAL];
+   if (char_class_level(ch, CLASS_PAL) > stat)
+      stat = char_class_level(ch, CLASS_PAL);
 
    if (!can_use_skill_message(ch, gsn_leadership))
       return;

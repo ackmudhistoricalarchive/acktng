@@ -384,7 +384,7 @@ static void bond_weapon(CHAR_DATA *ch, char *argument)
       return;
 
    /* Must be a swordsman */
-   if (ch->class_level[CLASS_SWO] <= 0)
+   if (char_class_level(ch, CLASS_SWO) <= 0)
    {
       send_to_char("Only swordsmen can forge a weapon bond.\n\r", ch);
       return;
@@ -926,7 +926,7 @@ void do_bond(CHAR_DATA *ch, char *argument)
       return;
 
    /* Must be a swordsman */
-   if (ch->class_level[CLASS_SWO] <= 0)
+   if (char_class_level(ch, CLASS_SWO) <= 0)
    {
       send_to_char("Only swordsmen can forge weapon bonds.\n\r", ch);
       return;

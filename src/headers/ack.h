@@ -637,12 +637,18 @@ struct char_data
    char *old_prompt; /* used to hold prompt when writing */
    sh_int sex;
    sh_int login_sex;
-   sh_int class;
-   sh_int clan; /* need to convert from pcdata to this */
+   sh_int class; /* prime mortal class (mortal_class[0] for PCs; single class for NPCs) */
+   sh_int clan;  /* need to convert from pcdata to this */
    sh_int race;
-   sh_int level;                     /* For m/c this = max of levels */
-   int class_level[MAX_TOTAL_CLASS]; /* Unified class levels (mortal 0-5, remort 6-17, adept 18-23)
-                                      */
+   sh_int level; /* For m/c this = max of levels */
+
+   /* PC multi-class fields (unused / zero-initialised for NPCs) */
+   int mortal_class[4]; /* gclass_table indices of chosen mortal classes, in order.
+                           mortal_class[0] is prime (== ch->class).  -1 = unused slot. */
+   int mortal_level[4]; /* level in mortal_class[i].  0 = not yet levelled. */
+   int remort_class[2]; /* gclass_table index of each chosen remort class. -1 = none. */
+   int remort_level[2]; /* level in remort_class[i]. */
+   int adept_class;     /* gclass_table index of the adept class.  -1 = none. */
    int adept_level;
    int combo[MAX_COMBO];
    int holy_power;
@@ -1528,6 +1534,11 @@ void shortfight_emit_autoattack_summary args((CHAR_DATA * ch, CHAR_DATA *victim)
 int get_racial_penalty_to_level args((int base, int race, int class));
 int get_adept_level args((CHAR_DATA * ch));
 bool is_adept args((CHAR_DATA * ch));
+int char_class_level args((const CHAR_DATA *ch, int class_idx));
+bool char_has_mortal_class args((const CHAR_DATA *ch, int class_idx));
+bool char_has_remort_class args((const CHAR_DATA *ch, int class_idx));
+int char_mortal_slot args((const CHAR_DATA *ch, int class_idx));
+int char_remort_slot args((const CHAR_DATA *ch, int class_idx));
 int get_hitroll args((CHAR_DATA * ch));
 int get_damroll args((CHAR_DATA * ch));
 int get_stat args((CHAR_DATA * ch, int stat));

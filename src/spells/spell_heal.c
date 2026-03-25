@@ -38,7 +38,7 @@ bool spell_heal(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
 
    do_spell_heal(ch, victim, sn);
 
-   if (ch->class_level[CLASS_TEM] > 0)
+   if (char_class_level(ch, CLASS_TEM) > 0)
    {
       spell_cure_blindness(sn, level, ch, vo, obj);
       spell_remove_curse(sn, level, ch, vo, obj);

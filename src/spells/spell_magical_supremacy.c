@@ -47,10 +47,10 @@ bool spell_magical_supremacy(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DAT
    if (is_affected(ch, skill_lookup("magical supremacy")))
       return FALSE;
 
-   if (ch->class_level[CLASS_EGO] > 0)
-      buff = ch->class_level[CLASS_EGO] * 1.5;
-   else if (ch->class_level[CLASS_WIZ] > 0)
-      buff = ch->class_level[CLASS_WIZ] * 1.5;
+   if (char_class_level(ch, CLASS_EGO) > 0)
+      buff = char_class_level(ch, CLASS_EGO) * 1.5;
+   else if (char_class_level(ch, CLASS_WIZ) > 0)
+      buff = char_class_level(ch, CLASS_WIZ) * 1.5;
    else
       buff = 20;
 

@@ -13,8 +13,8 @@ bool spell_sacred_ward(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj
    AFFECT_DATA af;
    int heal_mod;
 
-   heal_mod =
-       ch->class_level[CLASS_TEM] * 3 + ch->class_level[CLASS_PAL] + ch->class_level[CLASS_PRI];
+   heal_mod = char_class_level(ch, CLASS_TEM) * 3 + char_class_level(ch, CLASS_PAL) +
+              char_class_level(ch, CLASS_PRI);
 
    act("@@a$n calls forth a sacred ward, blessing the ground with holy power!@@N", ch, NULL, NULL,
        TO_ROOM);
@@ -27,7 +27,7 @@ bool spell_sacred_ward(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj
       if (!IS_NPC(vch) && is_same_group(ch, vch) && !is_affected(vch, sn))
       {
          af.type = sn;
-         af.duration = 6 + ch->class_level[CLASS_TEM] / 4;
+         af.duration = 6 + char_class_level(ch, CLASS_TEM) / 4;
          af.duration_type = DURATION_ROUND;
          af.location = APPLY_HOT;
          af.modifier = heal_mod;

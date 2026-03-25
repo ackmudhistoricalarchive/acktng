@@ -49,7 +49,7 @@ void do_overwhelming_assault(CHAR_DATA *ch, char *argument)
    if (dam < 1)
       dam = 1;
 
-   dam = dam * mult * (10 + ch->class_level[CLASS_CRU]) / 10;
+   dam = dam * mult * (10 + char_class_level(ch, CLASS_CRU)) / 10;
 
    if (IS_NPC(ch))
       dam /= 2;

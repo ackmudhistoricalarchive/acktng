@@ -18,13 +18,13 @@
  * ======================================================================== */
 static int druid_level(CHAR_DATA *ch)
 {
-   int best = ch->class_level[CLASS_DRU];
-   if (ch->class_level[CLASS_THO] > best)
-      best = ch->class_level[CLASS_THO];
-   if (ch->class_level[CLASS_WIL] > best)
-      best = ch->class_level[CLASS_WIL];
-   if (ch->class_level[CLASS_HIE] > best)
-      best = ch->class_level[CLASS_HIE];
+   int best = char_class_level(ch, CLASS_DRU);
+   if (char_class_level(ch, CLASS_THO) > best)
+      best = char_class_level(ch, CLASS_THO);
+   if (char_class_level(ch, CLASS_WIL) > best)
+      best = char_class_level(ch, CLASS_WIL);
+   if (char_class_level(ch, CLASS_HIE) > best)
+      best = char_class_level(ch, CLASS_HIE);
    return UMAX(best, 1);
 }
 

@@ -36,10 +36,10 @@ bool spell_ice_bolt(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
 {
    CHAR_DATA *victim = (CHAR_DATA *)vo;
    int dam;
-   int base = ch->class_level[CLASS_SOR];
+   int base = char_class_level(ch, CLASS_SOR);
 
-   if (ch->class_level[CLASS_WIZ] > base)
-      base = ch->class_level[CLASS_WIZ];
+   if (char_class_level(ch, CLASS_WIZ) > base)
+      base = char_class_level(ch, CLASS_WIZ);
 
    dam = 150 + dice(base / 2, 20);
    if (saves_spell(level, victim))

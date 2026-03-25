@@ -48,7 +48,7 @@ extern int _filbuf args((FILE *));
 #endif
 
 /* Current save-file revision written by fwrite_char. */
-#define SAVE_REVISION 15
+#define SAVE_REVISION 16
 
 /* Vnum used as a placeholder when the real object vnum is missing. */
 #define TEMP_VNUM 1006

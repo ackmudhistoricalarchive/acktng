@@ -39,7 +39,7 @@ bool spell_thought_vise(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *ob
 
    if (obj == NULL)
    {
-      int base = ch->class_level[CLASS_EGO];
+      int base = char_class_level(ch, CLASS_EGO);
       dam = 250 + dice(base / 2, 20);
       act("@@rA crushing weight brushes your mind, then is gone.@@N", ch, NULL, NULL, TO_ROOM);
       send_to_char("@@rYou clench your mind, crushing the thoughts of your foe.\n\r@@N", ch);

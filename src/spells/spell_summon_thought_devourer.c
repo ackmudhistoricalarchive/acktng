@@ -34,7 +34,8 @@
 
 bool spell_summon_thought_devourer(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
 {
-   CHAR_DATA *summoned = player_summon(ch, 100 + ch->class_level[CLASS_MON] / 4, THOUGHT_DEVOURER);
+   CHAR_DATA *summoned =
+       player_summon(ch, 100 + char_class_level(ch, CLASS_MON) / 4, THOUGHT_DEVOURER);
 
    act("@@N$n draws in the fractured echoes of @@rthought@@N!", ch, obj, NULL, TO_ROOM);
    act("@@NYou draw in the fractured echoes of @@rthought@@N.", ch, obj, NULL, TO_CHAR);

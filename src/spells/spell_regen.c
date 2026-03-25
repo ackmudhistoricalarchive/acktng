@@ -37,13 +37,14 @@ bool spell_regen(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
    CHAR_DATA *victim = (CHAR_DATA *)vo;
    AFFECT_DATA af;
 
-   int base_heal = spell_regen_base_heal(ch->class_level[CLASS_MAG], ch->class_level[CLASS_SOR],
-                                         ch->class_level[CLASS_WIZ], get_spellpower(ch));
+   int base_heal =
+       spell_regen_base_heal(char_class_level(ch, CLASS_MAG), char_class_level(ch, CLASS_SOR),
+                             char_class_level(ch, CLASS_WIZ), get_spellpower(ch));
 
    if (is_affected(ch, sn) || is_affected(ch, skill_lookup("regen")))
       return FALSE;
    af.type = sn;
-   af.duration = 15 + ch->class_level[CLASS_MAG] / 4;
+   af.duration = 15 + char_class_level(ch, CLASS_MAG) / 4;
    af.location = APPLY_HOT;
    af.duration_type = DURATION_ROUND;
    af.modifier = class_heal_character(ch, victim, base_heal, sn, INDEX_MAG, TRUE);

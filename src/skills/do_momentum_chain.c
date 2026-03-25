@@ -31,11 +31,11 @@ void do_momentum_chain(CHAR_DATA *ch, char *argument)
    ch->cooldown[gsn_momentum_chain] = 20;
 
    af.type = gsn_momentum_chain;
-   af.duration = 5 + ch->class_level[CLASS_CRU] / 4;
+   af.duration = 5 + char_class_level(ch, CLASS_CRU) / 4;
    af.duration_type = DURATION_ROUND;
    af.location = APPLY_DAMROLL;
-   af.modifier = ch->class_level[CLASS_CRU] * 3 + ch->class_level[CLASS_KNI] * 2 +
-                 ch->class_level[CLASS_SWO] * 2;
+   af.modifier = char_class_level(ch, CLASS_CRU) * 3 + char_class_level(ch, CLASS_KNI) * 2 +
+                 char_class_level(ch, CLASS_SWO) * 2;
    af.bitvector = 0;
    affect_to_char(ch, &af);
 

@@ -53,7 +53,7 @@ void do_iron_skin(CHAR_DATA *ch, char *argument)
    af.type = gsn_iron_skin;
    af.duration = 240;
    af.location = APPLY_AC;
-   af.modifier = -(ch->class_level[CLASS_PUG] / 3);
+   af.modifier = -(char_class_level(ch, CLASS_PUG) / 3);
    af.bitvector = 0;
    affect_to_char(ch, &af);
 

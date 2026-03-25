@@ -236,25 +236,21 @@ void do_reincarnate(CHAR_DATA *ch, char *argument)
          ch->class = ch->pcdata->reincarnate_class;
          ch->level = 1;
          send_to_char("Done\n\r", ch);
-         for (int i = CLASS_GMA; i < CLASS_GMA + MAX_CLASS; i++)
+         if (ch->adept_class >= 0 && ch->adept_level > 0)
+            ch->pcdata->reincarnations[ch->adept_class]++;
+         for (int i = 0; i < 2; i++)
          {
-            if (ch->class_level[i] > 0)
-               ch->pcdata->reincarnations[i]++;
+            if (ch->remort_class[i] >= 0 && ch->remort_level[i] > 0)
+               ch->pcdata->reincarnations[ch->remort_class[i]]++;
          }
-         for (int i = CLASS_SOR; i < CLASS_SOR + MAX_REMORT; i++)
-         {
-            if (ch->class_level[i] > 0)
-               ch->pcdata->reincarnations[i]++;
-         }
-         for (int i = 0; i < MAX_CLASS; i++)
-         {
-            ch->class_level[i] = 0;
-            ch->class_level[CLASS_GMA + i] = 0;
-            ch->class_level[CLASS_SOR + i] = 0;
-            ch->class_level[CLASS_SOR + MAX_CLASS + i] = 0;
-         }
+         for (int i = 0; i < 4; i++)
+            ch->mortal_level[i] = 0;
+         for (int i = 0; i < 2; i++)
+            ch->remort_level[i] = 0;
+         ch->adept_level = 0;
          ch->level = 1;
-         ch->class_level[ch->class] = 1;
+         ch->mortal_class[0] = ch->class;
+         ch->mortal_level[0] = 1;
          reset_gain_stats(ch);
          advance_level(ch, ch->class, TRUE);
 
