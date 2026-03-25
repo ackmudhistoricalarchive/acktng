@@ -15,6 +15,17 @@ bool are_clans_hostile(int victim_clan, int killer_clan, const POL_DATA *politic
 /*
  * Make a corpse out of a character.
  */
+static OBJ_DATA *safe_create_object(int vnum, int level)
+{
+   OBJ_INDEX_DATA *idx = get_obj_index(vnum);
+   if (idx == NULL)
+   {
+      bugf("make_corpse: object vnum %d not found", vnum);
+      return NULL;
+   }
+   return create_object(idx, level);
+}
+
 void make_corpse(CHAR_DATA *ch, char *argument)
 {
    char buf[MAX_STRING_LENGTH];
@@ -43,15 +54,9 @@ void make_corpse(CHAR_DATA *ch, char *argument)
          ROOM_INDEX_DATA *room;
          ROOM_AFFECT_DATA *raf;
          ROOM_AFFECT_DATA *raf_next;
-         {
-            OBJ_INDEX_DATA *soul_idx = get_obj_index(OBJ_VNUM_CAPTURED_SOUL);
-            if (soul_idx == NULL)
-            {
-               bug("make_corpse: OBJ_VNUM_CAPTURED_SOUL %d not found", OBJ_VNUM_CAPTURED_SOUL);
-               return;
-            }
-            corpse = create_object(soul_idx, ch->level);
-         }
+         corpse = safe_create_object(OBJ_VNUM_CAPTURED_SOUL, ch->level);
+         if (corpse == NULL)
+            return;
          corpse->level = ch->level;
          obj_to_room(corpse, ch->in_room);
          OREF(obj_next, OBJ_NEXTCONTENT);
@@ -82,15 +87,9 @@ void make_corpse(CHAR_DATA *ch, char *argument)
          time_t lifetime;
 
          name = ch->short_descr;
-         {
-            OBJ_INDEX_DATA *corpse_idx = get_obj_index(OBJ_VNUM_CORPSE_NPC);
-            if (corpse_idx == NULL)
-            {
-               bug("make_corpse: OBJ_VNUM_CORPSE_NPC %d not found", OBJ_VNUM_CORPSE_NPC);
-               return;
-            }
-            corpse = create_object(corpse_idx, 0);
-         }
+         corpse = safe_create_object(OBJ_VNUM_CORPSE_NPC, 0);
+         if (corpse == NULL)
+            return;
          corpse->timer = number_range(3, 6);
          corpse->level = ch->level; /* for animate/revenant spell */
          if (arg[0] != '\0')
@@ -124,15 +123,9 @@ void make_corpse(CHAR_DATA *ch, char *argument)
    else /* player */
    {
       name = ch->name;
-      {
-         OBJ_INDEX_DATA *corpse_idx = get_obj_index(OBJ_VNUM_CORPSE_PC);
-         if (corpse_idx == NULL)
-         {
-            bug("make_corpse: OBJ_VNUM_CORPSE_PC %d not found", OBJ_VNUM_CORPSE_PC);
-            return;
-         }
-         corpse = create_object(corpse_idx, 0);
-      }
+      corpse = safe_create_object(OBJ_VNUM_CORPSE_PC, 0);
+      if (corpse == NULL)
+         return;
       corpse->timer = number_range(20, 30);
 
       sprintf(buf, "%s", ch->name);
