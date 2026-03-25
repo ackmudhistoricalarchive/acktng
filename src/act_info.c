@@ -4535,9 +4535,12 @@ void do_gain(CHAR_DATA *ch, char *argument)
       {
          if (IS_MORTAL_CLASS(cnt))
          {
-            any = TRUE;
-            c = cnt;
             found = TRUE;
+            if (ch->class_level[cnt] != -1)
+            {
+               any = TRUE;
+               c = cnt;
+            }
          }
          else if (IS_REMORT_CLASS(cnt))
          {
@@ -5094,7 +5097,7 @@ void do_worth(CHAR_DATA *ch, char *argument)
 
    for (cnt = 0; cnt < MAX_CLASS; cnt++)
    {
-      if (IS_MORTAL_CLASS(cnt) && ch->class_level[cnt] < MAX_MORTAL)
+      if (IS_MORTAL_CLASS(cnt) && ch->class_level[cnt] != -1 && ch->class_level[cnt] < MAX_MORTAL)
       {
          any = TRUE;
          cost = exp_to_level(ch, cnt);
