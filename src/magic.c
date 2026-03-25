@@ -433,6 +433,8 @@ void do_cast(CHAR_DATA *ch, char *argument)
       return;
    }
 
+   best = (int)get_psuedo_level(ch);
+
    if (ch->position < skill_table[sn].minimum_position)
    {
       send_to_char("You can't concentrate enough.\n\r", ch);
