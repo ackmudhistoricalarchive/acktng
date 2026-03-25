@@ -44,15 +44,30 @@ void send_to_char(const char *msg, CHAR_DATA *ch)
    (void)ch;
 }
 
+int char_class_level(const CHAR_DATA *ch, int class_idx)
+{
+   if (ch->act & ACT_IS_NPC)
+      return (ch->class == class_idx) ? ch->level : 0;
+   for (int i = 0; i < 4; i++)
+      if (ch->mortal_class[i] == class_idx)
+         return ch->mortal_level[i];
+   for (int i = 0; i < 2; i++)
+      if (ch->remort_class[i] == class_idx)
+         return ch->remort_level[i];
+   if (ch->adept_class == class_idx)
+      return ch->adept_level;
+   return 0;
+}
+
 /* Include sentinel.c functions under test */
 bool is_sentinel_class(CHAR_DATA *ch)
 {
-   return ch->class_level[CLASS_SEN] > 0;
+   return char_class_level(ch, CLASS_SEN) > 0;
 }
 
 int get_sentinel_level(CHAR_DATA *ch)
 {
-   return ch->class_level[CLASS_SEN];
+   return char_class_level(ch, CLASS_SEN);
 }
 
 void set_testimony_target(CHAR_DATA *ch, CHAR_DATA *victim)
@@ -82,6 +97,9 @@ void add_testimony(CHAR_DATA *ch, int amount)
 static void clear_character(CHAR_DATA *ch)
 {
    memset(ch, 0, sizeof(*ch));
+   ch->mortal_class[0] = ch->mortal_class[1] = ch->mortal_class[2] = ch->mortal_class[3] = -1;
+   ch->remort_class[0] = ch->remort_class[1] = -1;
+   ch->adept_class = -1;
 }
 
 /* ======== Tests ======== */
@@ -93,7 +111,8 @@ static void test_is_sentinel_class(void)
 
    assert(!is_sentinel_class(&ch));
 
-   ch.class_level[CLASS_SEN] = 10;
+   ch.mortal_class[0] = CLASS_SEN;
+   ch.mortal_level[0] = 10;
    assert(is_sentinel_class(&ch));
 
    printf("  PASS: is_sentinel_class\n");
@@ -204,7 +223,8 @@ static void test_passive_testimony_interval(void)
    clear_character(&ch);
    clear_character(&target);
 
-   ch.class_level[CLASS_SEN] = 20;
+   ch.mortal_class[0] = CLASS_SEN;
+   ch.mortal_level[0] = 20;
    ch.testimony_target = &target;
    ch.fighting = &target;
 
@@ -231,7 +251,8 @@ static void test_testimony_target_switch_resets(void)
    clear_character(&target1);
    clear_character(&target2);
 
-   ch.class_level[CLASS_SEN] = 20;
+   ch.mortal_class[0] = CLASS_SEN;
+   ch.mortal_level[0] = 20;
    set_testimony_target(&ch, &target1);
    ch.testimony = 5;
 

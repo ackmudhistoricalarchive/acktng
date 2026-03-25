@@ -46,10 +46,10 @@ void do_reflex_disruption(CHAR_DATA *ch, char *argument)
    ch->cooldown[gsn_reflex_disruption] = 20;
 
    af.type = gsn_reflex_disruption;
-   af.duration = 2 + ch->class_level[CLASS_NIG] / 5;
+   af.duration = 2 + char_class_level(ch, CLASS_NIG) / 5;
    af.duration_type = DURATION_ROUND;
    af.location = APPLY_HITROLL;
-   af.modifier = -(ch->class_level[CLASS_NIG] * 3 + ch->class_level[CLASS_ASS] * 2);
+   af.modifier = -(char_class_level(ch, CLASS_NIG) * 3 + char_class_level(ch, CLASS_ASS) * 2);
    af.bitvector = 0;
    af.caster = ch;
    affect_to_char(victim, &af);

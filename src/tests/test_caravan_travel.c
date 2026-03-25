@@ -99,6 +99,9 @@ void do_caravan(CHAR_DATA *ch, char *argument);
 static void clear_character(CHAR_DATA *ch, PC_DATA *pcdata)
 {
    memset(ch, 0, sizeof(*ch));
+   ch->mortal_class[0] = ch->mortal_class[1] = ch->mortal_class[2] = ch->mortal_class[3] = -1;
+   ch->remort_class[0] = ch->remort_class[1] = -1;
+   ch->adept_class = -1;
    memset(pcdata, 0, sizeof(*pcdata));
    ch->pcdata = pcdata;
    ch->in_room = &midgaard_room;

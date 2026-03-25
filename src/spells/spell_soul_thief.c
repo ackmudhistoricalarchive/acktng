@@ -34,7 +34,7 @@
 
 bool spell_soul_thief(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
 {
-   CHAR_DATA *summoned = player_summon(ch, 100 + ch->class_level[CLASS_NEC] / 4, SOUL_THIEF);
+   CHAR_DATA *summoned = player_summon(ch, 100 + char_class_level(ch, CLASS_NEC) / 4, SOUL_THIEF);
 
    act("$n calls upon the @@dNegative Plane@@N!", ch, obj, NULL, TO_ROOM);
    act("You call upon the @@dNegative Plane@@N.", ch, obj, NULL, TO_CHAR);

@@ -48,7 +48,7 @@ void do_read_intent(CHAR_DATA *ch, char *argument)
       return;
    }
 
-   level = ch->class_level[CLASS_CIP];
+   level = char_class_level(ch, CLASS_CIP);
 
    WAIT_STATE(ch, skill_table[gsn_read_intent].beats);
    raise_skill(ch, gsn_read_intent);

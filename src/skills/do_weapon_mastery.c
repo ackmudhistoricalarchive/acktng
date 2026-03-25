@@ -48,7 +48,7 @@ void do_weapon_mastery(CHAR_DATA *ch, char *argument)
       return;
    }
 
-   level = ch->class_level[CLASS_WAR];
+   level = char_class_level(ch, CLASS_WAR);
 
    WAIT_STATE(ch, skill_table[gsn_weapon_mastery].beats);
    raise_skill(ch, gsn_weapon_mastery);

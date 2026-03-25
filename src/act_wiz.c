@@ -834,10 +834,22 @@ void do_mstat(CHAR_DATA *ch, char *argument)
 
    if (!IS_NPC(victim))
    {
-      sprintf(buf, "Mag: %d Cle: %d Thi:%d War:%d Psi:%d\n\r", victim->class_level[0],
-              victim->class_level[1], victim->class_level[2], victim->class_level[3],
-              victim->class_level[4]);
-      strcat(buf1, buf);
+      {
+         char class_buf[256];
+         class_buf[0] = '\0';
+         for (int ci = 0; ci < 4; ci++)
+         {
+            if (victim->mortal_class[ci] >= 0)
+            {
+               char tmp[32];
+               sprintf(tmp, "%s:%d ", gclass_table[victim->mortal_class[ci]].who_name,
+                       victim->mortal_level[ci]);
+               strcat(class_buf, tmp);
+            }
+         }
+         sprintf(buf, "Mortal: %s\n\r", class_buf);
+         strcat(buf1, buf);
+      }
 
       sprintf(buf, "Age: ");
       my_get_age(victim, buf);
@@ -848,11 +860,11 @@ void do_mstat(CHAR_DATA *ch, char *argument)
       {
          char class_buf[256];
          class_buf[0] = '\0';
-         for (int ci = 0; ci < MAX_CLASS; ci++)
+         for (int ci = 0; ci < 4; ci++)
          {
-            if (IS_MORTAL_CLASS(ci) && victim->class_level[ci] >= 0)
+            if (victim->mortal_class[ci] >= 0)
             {
-               strcat(class_buf, gclass_table[ci].who_name);
+               strcat(class_buf, gclass_table[victim->mortal_class[ci]].who_name);
                strcat(class_buf, " ");
             }
          }
@@ -3908,59 +3920,66 @@ void do_setclass(CHAR_DATA *ch, char *argument)
     *   -- Swiftest
     */
 
-   if (value == (remort ? victim->class_level[class] : victim->class_level[class]))
    {
-      send_to_char("That wouldn't accomplish much!\n\r", ch);
-      return;
-   }
-   if (value < (remort ? victim->class_level[class] : victim->class_level[class]))
-   {
-      send_to_char("Lowering a player's level!\n\r", ch);
-      send_to_char("**** OOOOHHHHHHHHHH  NNNNOOOO ****\n\r", victim);
+      int cur_level = char_class_level(victim, class);
+      int slot;
+
+      if (value == cur_level)
+      {
+         send_to_char("That wouldn't accomplish much!\n\r", ch);
+         return;
+      }
+
+      if (value < cur_level)
+      {
+         send_to_char("Lowering a player's level!\n\r", ch);
+         send_to_char("**** OOOOHHHHHHHHHH  NNNNOOOO ****\n\r", victim);
+      }
+      else
+      {
+         send_to_char("Raising a player's level!\n\r", ch);
+         send_to_char("**** OOOOHHHHHHHHHH  YYYYEEEESSS ****\n\r", victim);
+      }
 
       if (remort)
       {
-         if (value != -1)
-            victim->class_level[class] = value;
-         else
-            victim->class_level[class] = -1;
+         slot = char_remort_slot(victim, class);
+         if (slot < 0)
+         {
+            send_to_char("That class is not in the player's remort slots.\n\r", ch);
+            return;
+         }
+         victim->remort_level[slot] = (value < 0) ? 0 : value;
       }
-      else if (value < 1)
-         victim->class_level[class] = -1;
       else
-         victim->class_level[class] = value;
-      victim->exp = 0;
-   }
-   else
-   {
-      send_to_char("Raising a player's level!\n\r", ch);
-      send_to_char("**** OOOOHHHHHHHHHH  YYYYEEEESSS ****\n\r", victim);
+      {
+         slot = char_mortal_slot(victim, class);
+         if (slot < 0)
+         {
+            send_to_char("That class is not in the player's mortal slots.\n\r", ch);
+            return;
+         }
+         victim->mortal_level[slot] = (value < 1) ? 0 : value;
+      }
+
+      sprintf(buf, "You are now level %d in your %s class.\n\r", value,
+              gclass_table[class].class_name);
+      send_to_char(buf, victim);
    }
 
-   if (value != -1 && !remort)
-   {
-      sprintf(buf, "You are now level %d in your %s class.\n\r", value,
-              gclass_table[class].class_name);
-      send_to_char(buf, victim);
-      victim->class_level[class] = value;
-   }
-   if (remort)
-   {
-      sprintf(buf, "You are now level %d in your %s class.\n\r", value,
-              gclass_table[class].class_name);
-      send_to_char(buf, victim);
-      victim->class_level[class] = value;
-   }
    victim->exp = 0;
    victim->trust = 0;
 
    /*
-    * Make sure that ch->level holds vicitm's max level
+    * Make sure that ch->level holds victim's max level
     */
    victim->level = 0;
-   for (cnt = 0; cnt < MAX_TOTAL_CLASS; cnt++)
-      if (victim->class_level[cnt] > victim->level)
-         victim->level = victim->class_level[cnt];
+   for (cnt = 0; cnt < 4; cnt++)
+      if (victim->mortal_level[cnt] > victim->level)
+         victim->level = victim->mortal_level[cnt];
+   for (cnt = 0; cnt < 2; cnt++)
+      if (victim->remort_level[cnt] > victim->level)
+         victim->level = victim->remort_level[cnt];
 
    reset_gain_stats(victim);
 

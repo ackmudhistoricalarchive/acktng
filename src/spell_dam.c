@@ -179,41 +179,41 @@ int get_best_level(CHAR_DATA *ch, int gsn)
 
    if (skill_get_tier(gsn) == MORTAL)
    {
-      for (int i = 0; i < MAX_CLASS; i++)
+      for (int i = 0; i < 4; i++)
       {
-         int required_level = skill_table[gsn].skill_level[i];
-
+         int cl = ch->mortal_class[i];
+         int lv = ch->mortal_level[i];
+         if (cl < 0)
+            continue;
+         int required_level = skill_table[gsn].skill_level[cl];
          if (required_level < 0)
             continue;
-
-         if (ch->class_level[i] >= required_level && ch->class_level[i] > best)
-            best = ch->class_level[i];
+         if (lv >= required_level && lv > best)
+            best = lv;
       }
    }
    else if (skill_get_tier(gsn) == REMORT)
    {
-      for (int i = CLASS_SOR; i < CLASS_SOR + MAX_REMORT; i++)
+      for (int i = 0; i < 2; i++)
       {
-         int required_level = skill_table[gsn].skill_level[i];
-
+         int cl = ch->remort_class[i];
+         int lv = ch->remort_level[i];
+         if (cl < 0)
+            continue;
+         int required_level = skill_table[gsn].skill_level[cl];
          if (required_level < 0)
             continue;
-
-         if (ch->class_level[i] >= required_level && ch->class_level[i] > best)
-            best = ch->class_level[i];
+         if (lv >= required_level && lv > best)
+            best = lv;
       }
    }
    else if (skill_get_tier(gsn) == ADEPT)
    {
-      for (int i = CLASS_GMA; i < CLASS_GMA + MAX_CLASS; i++)
+      if (ch->adept_class >= 0)
       {
-         int required_level = skill_table[gsn].skill_level[i];
-
-         if (required_level < 0)
-            continue;
-
-         if (ch->class_level[i] >= required_level && ch->class_level[i] > best)
-            best = ch->class_level[i];
+         int required_level = skill_table[gsn].skill_level[ch->adept_class];
+         if (required_level >= 0 && ch->adept_level >= required_level && ch->adept_level > best)
+            best = ch->adept_level;
       }
    }
 
@@ -322,14 +322,14 @@ int class_heal_character(CHAR_DATA *ch, CHAR_DATA *victim, int base_heal, int sn
 
       if (sn != skill_lookup("psionic recovery"))
       {
-         heal += heal * ch->class_level[CLASS_MAG] / 50;
-         heal += heal * ch->class_level[CLASS_SOR] / 50;
-         heal += heal * ch->class_level[CLASS_WIZ] / 50;
+         heal += heal * char_class_level(ch, CLASS_MAG) / 50;
+         heal += heal * char_class_level(ch, CLASS_SOR) / 50;
+         heal += heal * char_class_level(ch, CLASS_WIZ) / 50;
       }
       else
       {
-         heal += heal * ch->class_level[CLASS_PSI] / 100;
-         heal += heal * ch->class_level[CLASS_EGO] / 50;
+         heal += heal * char_class_level(ch, CLASS_PSI) / 100;
+         heal += heal * char_class_level(ch, CLASS_EGO) / 50;
       }
    }
    else if (gclass_table[class_index].attr_prime == APPLY_WIS)
@@ -337,19 +337,19 @@ int class_heal_character(CHAR_DATA *ch, CHAR_DATA *victim, int base_heal, int sn
       int wis = (get_curr_wis(ch) - 13) * 5;
 
       heal += heal * wis / 100;
-      heal += heal * ch->class_level[CLASS_CLE] / 50;
+      heal += heal * char_class_level(ch, CLASS_CLE) / 50;
    }
    else if (gclass_table[class_index].attr_prime == APPLY_CON)
    {
       int wis = (get_curr_wis(ch) - 13) * 5;
 
       heal += heal * wis / 100;
-      heal += heal * ch->class_level[CLASS_MAR] / 25;
+      heal += heal * char_class_level(ch, CLASS_MAR) / 25;
    }
 
-   heal += heal * ch->class_level[CLASS_PRI] / 50;
-   heal += heal * ch->class_level[CLASS_PAL] / 50 * 0.75;
-   heal += heal * ch->class_level[CLASS_TEM] / 25;
+   heal += heal * char_class_level(ch, CLASS_PRI) / 50;
+   heal += heal * char_class_level(ch, CLASS_PAL) / 50 * 0.75;
+   heal += heal * char_class_level(ch, CLASS_TEM) / 25;
 
    if (!IS_NPC(ch))
       heal += heal * ch->pcdata->reincarnations[MAX_CLASS + MAX_REMORT + CLASS_TEM] / 100;

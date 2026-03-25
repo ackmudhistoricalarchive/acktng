@@ -20,7 +20,7 @@ bool spell_entropic_shield(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA 
    af.duration = level / 8;
    af.duration_type = DURATION_HOUR;
    af.location = APPLY_AC;
-   af.modifier = -(ch->class_level[CLASS_KIN] * 4 + get_curr_int(ch) / 3);
+   af.modifier = -(char_class_level(ch, CLASS_KIN) * 4 + get_curr_int(ch) / 3);
    af.bitvector = 0;
    affect_to_char(ch, &af);
 

@@ -52,11 +52,11 @@ void do_veterans_cadence(CHAR_DATA *ch, char *argument)
    ch->cooldown[gsn_veterans_cadence] = 12;
 
    af.type = gsn_veterans_cadence;
-   af.duration = 6 + ch->class_level[CLASS_CRU] / 4;
+   af.duration = 6 + char_class_level(ch, CLASS_CRU) / 4;
    af.duration_type = DURATION_ROUND;
    af.location = APPLY_DAMROLL;
-   af.modifier =
-       4 + ch->class_level[CLASS_CRU] + ch->class_level[CLASS_KNI] + ch->class_level[CLASS_SWO];
+   af.modifier = 4 + char_class_level(ch, CLASS_CRU) + char_class_level(ch, CLASS_KNI) +
+                 char_class_level(ch, CLASS_SWO);
    af.bitvector = 0;
    affect_to_char(ch, &af);
 

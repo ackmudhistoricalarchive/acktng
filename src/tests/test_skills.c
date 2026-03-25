@@ -95,11 +95,29 @@ int skill_lookup(const char *name)
    return -1;
 }
 
+int char_class_level(const CHAR_DATA *ch, int class_idx)
+{
+   if (ch->act & ACT_IS_NPC)
+      return (ch->class == class_idx) ? ch->level : 0;
+   for (int i = 0; i < 4; i++)
+      if (ch->mortal_class[i] == class_idx)
+         return ch->mortal_level[i];
+   for (int i = 0; i < 2; i++)
+      if (ch->remort_class[i] == class_idx)
+         return ch->remort_level[i];
+   if (ch->adept_class == class_idx)
+      return ch->adept_level;
+   return 0;
+}
+
 /* ── helpers ──────────────────────────────────────────────────────── */
 
 static void clear_character(CHAR_DATA *ch)
 {
    memset(ch, 0, sizeof *ch);
+   ch->mortal_class[0] = ch->mortal_class[1] = ch->mortal_class[2] = ch->mortal_class[3] = -1;
+   ch->remort_class[0] = ch->remort_class[1] = -1;
+   ch->adept_class = -1;
 }
 
 static void clear_pcdata(PC_DATA *pcdata)
@@ -204,7 +222,8 @@ static void test_raise_skill_sends_level_message(void)
    skill_table[gsn].name = "slash";
    /* Give the PC the skill at the relevant class level */
    skill_table[gsn].skill_level[CLASS_WAR] = 1;
-   ch.class_level[CLASS_WAR] = 5;
+   ch.mortal_class[0] = CLASS_WAR;
+   ch.mortal_level[0] = 5;
 
    /* Set learned to LEVEL_ONE - 1 so raise_skill will hit LEVEL_ONE */
    pcdata.learned[gsn] = LEVEL_ONE - 1;
@@ -228,7 +247,8 @@ static void test_raise_skill_master_message(void)
    int gsn = 15;
    skill_table[gsn].name = "slash";
    skill_table[gsn].skill_level[CLASS_WAR] = 1;
-   ch.class_level[CLASS_WAR] = 5;
+   ch.mortal_class[0] = CLASS_WAR;
+   ch.mortal_level[0] = 5;
 
    pcdata.learned[gsn] = LEVEL_MASTER - 1;
    send_count = 0;

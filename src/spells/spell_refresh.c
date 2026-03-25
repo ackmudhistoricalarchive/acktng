@@ -41,7 +41,7 @@ bool spell_refresh(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
       return FALSE;
    }
 
-   int move = ch->class_level[CLASS_CLE] + 50;
+   int move = char_class_level(ch, CLASS_CLE) + 50;
 
    if (obj == NULL && victim->fighting != NULL)
       move = -1;

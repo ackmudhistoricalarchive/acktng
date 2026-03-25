@@ -48,11 +48,11 @@ void do_mindoverbody(CHAR_DATA *ch, char *argument)
 
    ch->cooldown[gsn_mindoverbody] = 15;
 
-   int base_heal = ch->class_level[CLASS_PUG];
+   int base_heal = char_class_level(ch, CLASS_PUG);
 
-   base_heal += ch->class_level[CLASS_MON] * 2;
-   base_heal += ch->class_level[CLASS_BRA] * 2;
-   base_heal += ch->class_level[CLASS_MAR] * 5;
+   base_heal += char_class_level(ch, CLASS_MON) * 2;
+   base_heal += char_class_level(ch, CLASS_BRA) * 2;
+   base_heal += char_class_level(ch, CLASS_MAR) * 5;
 
    if (chi_should_block_mindoverbody(is_affected(ch, gsn_mindoverbody),
                                      is_affected(ch, skill_lookup("mindoverbody"))))

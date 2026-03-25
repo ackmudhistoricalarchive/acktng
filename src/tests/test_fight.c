@@ -45,10 +45,25 @@ int get_curr_wis(CHAR_DATA *ch)
    return ch->armor;
 }
 
+int char_class_level(const CHAR_DATA *ch, int class_idx)
+{
+   if (ch->act & ACT_IS_NPC)
+      return (ch->class == class_idx) ? ch->level : 0;
+   for (int i = 0; i < 4; i++)
+      if (ch->mortal_class[i] == class_idx)
+         return ch->mortal_level[i];
+   for (int i = 0; i < 2; i++)
+      if (ch->remort_class[i] == class_idx)
+         return ch->remort_level[i];
+   if (ch->adept_class == class_idx)
+      return ch->adept_level;
+   return 0;
+}
+
 /* Sentinel stubs for fight.c */
 bool is_sentinel_class(CHAR_DATA *ch)
 {
-   return ch->class_level[CLASS_SEN] > 0;
+   return char_class_level(ch, CLASS_SEN) > 0;
 }
 void set_testimony_target(CHAR_DATA *ch, CHAR_DATA *victim)
 {
@@ -136,6 +151,9 @@ int get_level_scaled_avoidance_baseline(CHAR_DATA *ch, CHAR_DATA *victim, int ba
 static void clear_character(CHAR_DATA *ch)
 {
    memset(ch, 0, sizeof(*ch));
+   ch->mortal_class[0] = ch->mortal_class[1] = ch->mortal_class[2] = ch->mortal_class[3] = -1;
+   ch->remort_class[0] = ch->remort_class[1] = -1;
+   ch->adept_class = -1;
    memset(&default_pcdata, 0, sizeof(default_pcdata));
    ch->pcdata = &default_pcdata;
    ch->position = POS_STANDING;
@@ -348,11 +366,10 @@ static void test_get_counter_applies_modifiers(void)
    ch.act = ACT_IS_NPC | ACT_SOLO;
    ch.skills = MOB_COUNTER;
    ch.level = 62;
+   ch.class = CLASS_MON; /* NPC has single class; gives fist bonus via MON/BRA check */
    ch.hitroll = 25;
    ch.wait = 2;
    ch.affected_by = AFF_CLOAK_ADEPT;
-   ch.class_level[CLASS_MON] = 1;
-   ch.class_level[CLASS_MAR] = 1;
 
    memset(&fist_left, 0, sizeof(fist_left));
    memset(&fist_right, 0, sizeof(fist_right));
@@ -362,7 +379,7 @@ static void test_get_counter_applies_modifiers(void)
    left_hand = &fist_left;
    right_hand = &fist_right;
 
-   assert(get_counter(&ch) == 72);
+   assert(get_counter(&ch) == 66); /* 20+10 base + 15 solo + 6 fist(MON) + 10 speed + 5 cloak */
 
    reset_equipment();
 }

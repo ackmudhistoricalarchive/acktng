@@ -67,7 +67,7 @@ void do_field_patch(CHAR_DATA *ch, char *argument)
    WAIT_STATE(ch, 60);
    raise_skill(ch, gsn_field_patch);
 
-   heal_amount = dice(3, ch->class_level[CLASS_WAR]) + 10;
+   heal_amount = dice(3, char_class_level(ch, CLASS_WAR)) + 10;
    victim->hit = UMIN(victim->hit + heal_amount, victim->max_hit);
 
    if (victim == ch)

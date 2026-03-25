@@ -49,7 +49,7 @@ bool spell_black_hand(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
       af.type = sn;
       af.duration = 3;
       af.location = APPLY_DOT;
-      af.modifier = 50 + ch->class_level[CLASS_NEC];
+      af.modifier = 50 + char_class_level(ch, CLASS_NEC);
       af.bitvector = 0;
       af.caster = ch;
       affect_to_char(victim, &af);
@@ -60,7 +60,7 @@ bool spell_black_hand(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
 
    if (obj == NULL)
    {
-      dam = 150 + dice(ch->class_level[CLASS_NEC] / 2, 20);
+      dam = 150 + dice(char_class_level(ch, CLASS_NEC) / 2, 20);
       act("@@dA black hand @@Rleaps forth from $n!@@N", ch, NULL, NULL, TO_ROOM);
       send_to_char("@@dA @@dblack hand @@Rleaps forth from your hands!@@N\n\r", ch);
    }

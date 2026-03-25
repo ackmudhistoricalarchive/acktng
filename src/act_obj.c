@@ -2416,7 +2416,7 @@ void do_steal(CHAR_DATA *ch, char *argument)
    if ((!IS_NPC(ch) && !IS_NPC(victim)) && (victim->adept_level > 0) && (ch->adept_level <= 0))
       chance = chance - 25;
    if (!IS_NPC(ch))
-      chance += ch->class_level[CLASS_ASS] / 4;
+      chance += char_class_level(ch, CLASS_ASS) / 4;
    if (get_psuedo_level(ch) > (get_psuedo_level(victim) + 30))
    {
       send_to_char("Coward!!! Trying to steal from the weak..\n\r", ch);

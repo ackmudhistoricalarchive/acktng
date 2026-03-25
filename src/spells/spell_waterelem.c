@@ -34,7 +34,8 @@
 
 bool spell_waterelem(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
 {
-   CHAR_DATA *summoned = player_summon(ch, 100 + ch->class_level[CLASS_SOR] / 4, WATER_ELEMENTAL);
+   CHAR_DATA *summoned =
+       player_summon(ch, 100 + char_class_level(ch, CLASS_SOR) / 4, WATER_ELEMENTAL);
 
    act("$n calls upon the elemental forces of @@lwater@@N!", ch, obj, NULL, TO_ROOM);
    act("You call upon the elemental forces of @@lwater@@N.", ch, obj, NULL, TO_CHAR);

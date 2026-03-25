@@ -9,12 +9,12 @@
 
 bool is_sentinel_class(CHAR_DATA *ch)
 {
-   return ch->class_level[CLASS_SEN] > 0;
+   return char_class_level(ch, CLASS_SEN) > 0;
 }
 
 int get_sentinel_level(CHAR_DATA *ch)
 {
-   return ch->class_level[CLASS_SEN];
+   return char_class_level(ch, CLASS_SEN);
 }
 
 void set_testimony_target(CHAR_DATA *ch, CHAR_DATA *victim)

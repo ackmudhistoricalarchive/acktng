@@ -46,10 +46,10 @@ void do_hex_ward(CHAR_DATA *ch, char *argument)
    ch->cooldown[gsn_hex_ward] = 20;
 
    af.type = gsn_hex_ward;
-   af.duration = 3 + ch->class_level[CLASS_NIG] / 5;
+   af.duration = 3 + char_class_level(ch, CLASS_NIG) / 5;
    af.duration_type = DURATION_ROUND;
    af.location = APPLY_AC;
-   af.modifier = ch->class_level[CLASS_NIG] * 4 + ch->class_level[CLASS_WLK] * 2;
+   af.modifier = char_class_level(ch, CLASS_NIG) * 4 + char_class_level(ch, CLASS_WLK) * 2;
    af.bitvector = 0;
    af.caster = ch;
    affect_to_char(victim, &af);

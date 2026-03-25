@@ -86,7 +86,7 @@ static int ch_get_class_level(lua_State *L)
    int cls = (int)luaL_checkinteger(L, 2);
    if (cls < 0 || cls >= MAX_TOTAL_CLASS)
       luaL_error(L, "class index out of range");
-   lua_pushinteger(L, ch->class_level[cls]);
+   lua_pushinteger(L, char_class_level(ch, cls));
    return 1;
 }
 

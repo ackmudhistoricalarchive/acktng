@@ -31,10 +31,10 @@ void do_iron_resolve(CHAR_DATA *ch, char *argument)
    ch->cooldown[gsn_iron_resolve] = 15;
 
    af.type = gsn_iron_resolve;
-   af.duration = 3 + ch->class_level[CLASS_CRU] / 5;
+   af.duration = 3 + char_class_level(ch, CLASS_CRU) / 5;
    af.duration_type = DURATION_ROUND;
    af.location = APPLY_AC;
-   af.modifier = -(ch->class_level[CLASS_CRU] * 3);
+   af.modifier = -(char_class_level(ch, CLASS_CRU) * 3);
    af.bitvector = 0;
    affect_to_char(ch, &af);
 

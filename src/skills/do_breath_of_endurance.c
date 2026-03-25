@@ -37,11 +37,11 @@ void do_breath_of_endurance(CHAR_DATA *ch, char *argument)
 
    ch->cooldown[gsn_breath_of_endurance] = 15;
 
-   int base_heal =
-       ch->class_level[CLASS_MON] + ch->class_level[CLASS_BRA] + ch->class_level[CLASS_MAR] * 3;
+   int base_heal = char_class_level(ch, CLASS_MON) + char_class_level(ch, CLASS_BRA) +
+                   char_class_level(ch, CLASS_MAR) * 3;
 
    af.type = gsn_breath_of_endurance;
-   af.duration = 2 + ch->class_level[CLASS_MAR] / 5;
+   af.duration = 2 + char_class_level(ch, CLASS_MAR) / 5;
    af.duration_type = DURATION_ROUND;
    af.location = APPLY_HOT;
    af.modifier = base_heal;
@@ -50,10 +50,10 @@ void do_breath_of_endurance(CHAR_DATA *ch, char *argument)
    affect_to_char(ch, &af);
 
    af.type = gsn_breath_of_endurance;
-   af.duration = 2 + ch->class_level[CLASS_MAR] / 5;
+   af.duration = 2 + char_class_level(ch, CLASS_MAR) / 5;
    af.duration_type = DURATION_ROUND;
    af.location = APPLY_AC;
-   af.modifier = -(ch->class_level[CLASS_MAR] * 5 + ch->class_level[CLASS_MON] * 2);
+   af.modifier = -(char_class_level(ch, CLASS_MAR) * 5 + char_class_level(ch, CLASS_MON) * 2);
    af.bitvector = 0;
    af.caster = ch;
    affect_to_char(ch, &af);

@@ -43,6 +43,9 @@ const struct class_type gclass_table[MAX_TOTAL_CLASS] = {
 static void clear_character(CHAR_DATA *ch)
 {
    memset(ch, 0, sizeof *ch);
+   ch->mortal_class[0] = ch->mortal_class[1] = ch->mortal_class[2] = ch->mortal_class[3] = -1;
+   ch->remort_class[0] = ch->remort_class[1] = -1;
+   ch->adept_class = -1;
 }
 
 static void clear_pcdata(PC_DATA *pcdata)

@@ -145,36 +145,20 @@ static int count_playing_players(void)
 
 static void normalize_login_class(CHAR_DATA *ch)
 {
-   int cnt;
-
    if (ch == NULL || IS_NPC(ch))
       return;
 
-   if (ch->class >= 0 && IS_MORTAL_CLASS(ch->class))
-      return;
-
-   /* Find the mortal class with the highest level — that is the primary class */
+   /* Ensure ch->class mirrors the prime mortal class slot. */
+   if (ch->mortal_class[0] >= 0)
    {
-      int best_level = -1;
-      int best_class = -1;
-      for (cnt = 0; cnt < MAX_TOTAL_CLASS; cnt++)
-      {
-         if (IS_MORTAL_CLASS(cnt) && ch->class_level[cnt] > best_level)
-         {
-            best_level = ch->class_level[cnt];
-            best_class = cnt;
-         }
-      }
-      if (best_class >= 0)
-      {
-         ch->class = best_class;
-         return;
-      }
+      ch->class = (sh_int)ch->mortal_class[0];
+      return;
    }
 
+   /* Fallback for characters with no mortal_class set (very old or corrupt save). */
    ch->class = 0;
-   for (cnt = 0; cnt < MAX_CLASS; cnt++)
-      ch->class_level[cnt] = (cnt == 0) ? UMAX(ch->level, 1) : 0;
+   ch->mortal_class[0] = 0;
+   ch->mortal_level[0] = UMAX(ch->level, 1);
 }
 
 void show_menu_to(DESCRIPTOR_DATA *d)
@@ -203,11 +187,11 @@ void show_menu_to(DESCRIPTOR_DATA *d)
       int fubar;
       sprintf(buf, "\n\r        ");
       strcat(menu, buf);
-      for (fubar = 0; fubar < MAX_CLASS; fubar++)
+      for (fubar = 0; fubar < 4; fubar++)
       {
-         if (IS_MORTAL_CLASS(fubar) && ch->class_level[fubar] >= 0)
+         if (ch->mortal_class[fubar] >= 0)
          {
-            strcat(menu, gclass_table[fubar].who_name);
+            strcat(menu, gclass_table[ch->mortal_class[fubar]].who_name);
             strcat(menu, ". ");
          }
       }
@@ -532,8 +516,9 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
 
       normalize_login_class(ch);
 
-      if (ch->class_level[ch->class] == -1)
-         ch->class_level[ch->class] = ch->level;
+      /* Ensure the prime mortal slot has at least level 1 on old saves. */
+      if (ch->mortal_class[0] >= 0 && ch->mortal_level[0] < 1)
+         ch->mortal_level[0] = UMAX(ch->level, 1);
 
       if (IS_HERO(ch))
       {
@@ -724,41 +709,81 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
    if (d->connected == CON_GET_NEW_CLASS)
    {
       char arg[MAX_STRING_LENGTH];
+      char *rest;
       int cnt;
-      int foo = -1;
+      int chosen[4];
+      int num_chosen = 0;
+      bool dup;
 
-      /*
-       * Resetting class list
-       */
-      for (cnt = 0; cnt < MAX_CLASS; cnt++)
-         ch->class_level[cnt] = -1;
-
-      one_argument(argument, arg);
-      if (arg[0] != '\0')
+      /* Reset class fields. */
+      for (cnt = 0; cnt < 4; cnt++)
       {
+         ch->mortal_class[cnt] = -1;
+         ch->mortal_level[cnt] = 0;
+      }
+
+      /* Parse up to 4 class names from the input line. */
+      rest = argument;
+      while (num_chosen < 4 && rest[0] != '\0')
+      {
+         int match = -1;
+         rest = one_argument(rest, arg);
+         if (arg[0] == '\0')
+            break;
          for (cnt = 0; cnt < MAX_TOTAL_CLASS; cnt++)
          {
             if (IS_MORTAL_CLASS(cnt) && (!str_cmp(arg, gclass_table[cnt].who_name) ||
                                          !str_cmp(arg, gclass_table[cnt].class_name)))
             {
-               foo = cnt;
+               match = cnt;
                break;
             }
          }
+         if (match == -1)
+         {
+            char errbuf[MAX_STRING_LENGTH];
+            sprintf(errbuf,
+                    "'%s' is not a valid class. Please try again.\n\r"
+                    "Enter 4 class names in order, e.g. psi mag cle cip.\n\r",
+                    arg);
+            write_to_buffer(d, errbuf, 0);
+            show_cmenu_to(d);
+            return;
+         }
+         /* Check for duplicates in what we have so far. */
+         dup = FALSE;
+         for (cnt = 0; cnt < num_chosen; cnt++)
+            if (chosen[cnt] == match)
+            {
+               dup = TRUE;
+               break;
+            }
+         if (dup)
+         {
+            char errbuf[MAX_STRING_LENGTH];
+            sprintf(errbuf, "You listed %s more than once. Please try again.\n\r",
+                    gclass_table[match].class_name);
+            write_to_buffer(d, errbuf, 0);
+            show_cmenu_to(d);
+            return;
+         }
+         chosen[num_chosen++] = match;
       }
 
-      if (foo == -1)
+      if (num_chosen < 4)
       {
-         write_to_buffer(d,
-                         "Invalid class. Please try again. Enter a class by abbreviation or full "
-                         "name, such as CLE or Cleric.\n\r",
+         write_to_buffer(d, "Please choose exactly 4 classes in order, e.g. psi mag cle cip.\n\r",
                          0);
          show_cmenu_to(d);
          return;
       }
 
-      ch->class = foo;
-      ch->class_level[foo] = 1;
+      for (cnt = 0; cnt < 4; cnt++)
+         ch->mortal_class[cnt] = chosen[cnt];
+      /* Prime class gets level 1; others start at 0. */
+      ch->mortal_level[0] = 1;
+      ch->class = (sh_int)ch->mortal_class[0];
+
       d->connected = CON_MENU;
       if (!IS_SET(d->check, CHECK_CLASS))
          SET_BIT(d->check, CHECK_CLASS);
@@ -800,12 +825,9 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
    if (d->connected == CON_READ_MOTD)
    {
       /*
-       * Prime level idea dropped.  Give ch 1 level in their best class
+       * Prime level idea dropped.  Give ch 1 level in their prime class.
+       * mortal_level[0] is already set to 1 from CON_GET_NEW_CLASS for new chars.
        */
-      if (ch->level == 0)
-      {
-         ch->class_level[ch->class] = 1;
-      }
 
       LINK(ch, first_char, last_char, next, prev);
       d->connected = CON_PLAYING;
@@ -846,18 +868,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
          }
 
          ch->level = 1;
-
-         /*
-          * FIXME: this temp fix for m/c stuff
-          */
-         /*
-          * All Races get 5 classes now..
-          */
-
-         ch->class_level[ch->class] = 1;
-         for (cnt = 0; cnt < MAX_CLASS; cnt++)
-            if (cnt != ch->class)
-               ch->class_level[cnt] = 0;
+         /* mortal_class[] and mortal_level[0]=1 already set in CON_GET_NEW_CLASS. */
 
          ch->exp = 0;
          ch->hit = ch->max_hit;

@@ -222,14 +222,22 @@ void advance_level(CHAR_DATA *ch, int class, bool show)
    int add_mana;
    int add_move;
 
-   if (ch->class_level[class] < 0)
-      ch->class_level[class] = 1;
-   else if (ch->class_level[class] < MAX_LEVEL)
-      ch->class_level[class] += 1;
-   else
    {
-      send_to_char("Trying to advance_level past MAX_LEVEL, error!\n\r", ch);
-      return;
+      int slot = char_mortal_slot(ch, class);
+      if (slot < 0)
+      {
+         send_to_char("advance_level: class not in mortal_class[], error!\n\r", ch);
+         return;
+      }
+      if (ch->mortal_level[slot] < 1)
+         ch->mortal_level[slot] = 1;
+      else if (ch->mortal_level[slot] < MAX_LEVEL)
+         ch->mortal_level[slot] += 1;
+      else
+      {
+         send_to_char("Trying to advance_level past MAX_LEVEL, error!\n\r", ch);
+         return;
+      }
    }
    add_hp = gclass_table[class].hp_gain;
    add_hp += get_curr_con(ch) / 8;
@@ -271,14 +279,22 @@ void advance_level_remort(CHAR_DATA *ch, int class, bool show)
    int add_mana;
    int add_move;
 
-   if (ch->class_level[class] < 0)
-      ch->class_level[class] = 1;
-   else if (ch->class_level[class] < MAX_LEVEL)
-      ch->class_level[class] += 1;
-   else
    {
-      send_to_char("Trying to advance_level_remort past MAX_LEVEL, error!\n\r", ch);
-      return;
+      int slot = char_remort_slot(ch, class);
+      if (slot < 0)
+      {
+         send_to_char("advance_level_remort: class not in remort_class[], error!\n\r", ch);
+         return;
+      }
+      if (ch->remort_level[slot] < 1)
+         ch->remort_level[slot] = 1;
+      else if (ch->remort_level[slot] < MAX_LEVEL)
+         ch->remort_level[slot] += 1;
+      else
+      {
+         send_to_char("Trying to advance_level_remort past MAX_LEVEL, error!\n\r", ch);
+         return;
+      }
    }
    add_hp = gclass_table[class].hp_gain;
    add_hp += get_curr_con(ch) / 4;
@@ -319,13 +335,13 @@ void advance_level_adept(CHAR_DATA *ch, int class, bool show)
    int add_mana;
    int add_move;
 
-   if (ch->class_level[class] < 1)
+   if (ch->adept_level < 1)
    {
       ch->exp /= 1000;
-      ch->class_level[class] = 1;
+      ch->adept_level = 1;
    }
-   else if (ch->class_level[class] < MAX_ADEPT)
-      ch->class_level[class] += 1;
+   else if (ch->adept_level < MAX_ADEPT)
+      ch->adept_level += 1;
    else
    {
       send_to_char("Trying to advance_level_adept past MAX_ADEPT, error!\n\r", ch);

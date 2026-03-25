@@ -54,10 +54,10 @@ void do_oathshield(CHAR_DATA *ch, char *argument)
    ch->cooldown[gsn_oathshield] = 20;
 
    af.type = gsn_oathshield;
-   af.duration = 3 + ch->class_level[CLASS_TEM] / 5;
+   af.duration = 3 + char_class_level(ch, CLASS_TEM) / 5;
    af.duration_type = DURATION_ROUND;
    af.location = APPLY_AC;
-   af.modifier = -(ch->class_level[CLASS_TEM] * 4 + ch->class_level[CLASS_PAL] * 2);
+   af.modifier = -(char_class_level(ch, CLASS_TEM) * 4 + char_class_level(ch, CLASS_PAL) * 2);
    af.bitvector = 0;
    af.caster = ch;
    affect_to_char(victim, &af);

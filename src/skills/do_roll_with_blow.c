@@ -48,7 +48,7 @@ void do_roll_with_blow(CHAR_DATA *ch, char *argument)
       return;
    }
 
-   level = ch->class_level[CLASS_PUG];
+   level = char_class_level(ch, CLASS_PUG);
 
    WAIT_STATE(ch, skill_table[gsn_roll_with_blow].beats);
    raise_skill(ch, gsn_roll_with_blow);

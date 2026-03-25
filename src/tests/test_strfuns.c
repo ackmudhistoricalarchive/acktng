@@ -18,6 +18,9 @@ const struct class_type gclass_table[MAX_TOTAL_CLASS] = {
 static void clear_character(CHAR_DATA *ch)
 {
    memset(ch, 0, sizeof(*ch));
+   ch->mortal_class[0] = ch->mortal_class[1] = ch->mortal_class[2] = ch->mortal_class[3] = -1;
+   ch->remort_class[0] = ch->remort_class[1] = -1;
+   ch->adept_class = -1;
 }
 
 static void test_nocol_strlen_strips_color_codes(void)
@@ -45,7 +48,8 @@ static void test_get_adept_name_realm_lord_centered_is_18_visible(void)
    CHAR_DATA ch;
    clear_character(&ch);
    /* Set a level beyond MAX_ADEPT to trigger "Realm Lord" return */
-   ch.class_level[CLASS_GMA] = MAX_ADEPT + 1;
+   ch.adept_class = CLASS_GMA;
+   ch.adept_level = MAX_ADEPT + 1;
    char *name = get_adept_name(&ch);
    int visible = nocol_strlen(center_text(name, 18));
    if (visible != 18)
@@ -61,7 +65,8 @@ static void test_get_adept_name_all_titles_centered_are_18_visible(void)
       for (int level = 1; level <= MAX_ADEPT; level++)
       {
          clear_character(&ch);
-         ch.class_level[CLASS_GMA + cls] = level;
+         ch.adept_class = CLASS_GMA + cls;
+         ch.adept_level = level;
          char *name = get_adept_name(&ch);
          /* Raw title should be shorter than 18 so center_text can pad it */
          int raw_visible = nocol_strlen(name);

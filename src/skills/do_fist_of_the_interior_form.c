@@ -50,7 +50,7 @@ void do_fist_of_the_interior_form(CHAR_DATA *ch, char *argument)
    if (dam < 1)
       dam = 1;
 
-   dam = dam * 20 * (10 + ch->class_level[CLASS_MAR]) / 10;
+   dam = dam * 20 * (10 + char_class_level(ch, CLASS_MAR)) / 10;
 
    if (IS_NPC(ch))
       dam /= 2;

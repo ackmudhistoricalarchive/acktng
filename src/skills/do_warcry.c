@@ -39,7 +39,7 @@ void do_warcry(CHAR_DATA *ch, char *argument)
    if (IS_NPC(ch))
       return;
 
-   level = ch->class_level[CLASS_WAR];
+   level = char_class_level(ch, CLASS_WAR);
 
    if (!is_fighting(ch))
    {

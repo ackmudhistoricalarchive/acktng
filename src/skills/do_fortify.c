@@ -50,7 +50,7 @@ void do_fortify(CHAR_DATA *ch, char *argument)
       return;
    }
 
-   level = ch->class_level[CLASS_WAR];
+   level = char_class_level(ch, CLASS_WAR);
 
    WAIT_STATE(ch, skill_table[gsn_fortify].beats);
    raise_skill(ch, gsn_fortify);

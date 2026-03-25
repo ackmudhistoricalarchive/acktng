@@ -238,7 +238,7 @@ bool can_use_skill(CHAR_DATA *ch, int gsn)
       if (!skill_requirement_is_usable(required_level))
          continue;
 
-      if (ch->class_level[i] >= required_level)
+      if (char_class_level(ch, i) >= required_level)
          return TRUE;
       if (IS_MORTAL_CLASS(i) && ch->pcdata->reincarnations[i] >= 20)
          return TRUE;

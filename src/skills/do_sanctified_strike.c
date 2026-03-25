@@ -43,7 +43,7 @@ void do_sanctified_strike(CHAR_DATA *ch, char *argument)
    dam = number_range(get_psuedo_level(ch) * get_curr_str(ch) / 5,
                       get_psuedo_level(ch) * get_curr_str(ch) / 4);
 
-   dam = dam * (10 + ch->class_level[CLASS_TEM]) / 10;
+   dam = dam * (10 + char_class_level(ch, CLASS_TEM)) / 10;
 
    if (IS_NPC(ch))
       dam /= 2;

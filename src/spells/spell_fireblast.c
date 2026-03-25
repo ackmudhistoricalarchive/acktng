@@ -39,11 +39,11 @@ bool spell_fireblast(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj)
 
    if (obj == NULL)
    {
-      int base = ch->class_level[CLASS_SOR];
-      if (ch->class_level[CLASS_WIZ] > base)
-         base = ch->class_level[CLASS_WIZ];
-      if (ch->class_level[CLASS_NEC] > base)
-         base = ch->class_level[CLASS_NEC];
+      int base = char_class_level(ch, CLASS_SOR);
+      if (char_class_level(ch, CLASS_WIZ) > base)
+         base = char_class_level(ch, CLASS_WIZ);
+      if (char_class_level(ch, CLASS_NEC) > base)
+         base = char_class_level(ch, CLASS_NEC);
       dam = 150 + dice(base / 2, 20);
       act("@@gA blast of @@efire@@g flies from $n's hands!@@N", ch, NULL, NULL, TO_ROOM);
       send_to_char("@@gA blast of @@efire@@g flies from your hands!@@N\n\r", ch);

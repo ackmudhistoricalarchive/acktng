@@ -49,7 +49,7 @@ void do_feint(CHAR_DATA *ch, char *argument)
       return;
    }
 
-   level = ch->class_level[CLASS_PUG];
+   level = char_class_level(ch, CLASS_PUG);
 
    /* Sacrifice this attack round */
    WAIT_STATE(ch, PULSE_VIOLENCE);

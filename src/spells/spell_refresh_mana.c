@@ -36,7 +36,7 @@ bool spell_refresh_mana(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *ob
 {
    CHAR_DATA *victim = (CHAR_DATA *)vo;
 
-   int move = ch->class_level[CLASS_CLE] + 50;
+   int move = char_class_level(ch, CLASS_CLE) + 50;
 
    victim->mana = UMIN(victim->mana + move, get_max_mana(victim));
    send_to_char("You feel refreshed.\n\r", victim);

@@ -24,7 +24,7 @@ int get_chi(CHAR_DATA *ch)
 {
    int max_chi = 0;
 
-   if (ch->class_level[CLASS_PUG] > 0)
+   if (char_class_level(ch, CLASS_PUG) > 0)
       max_chi = 15;
 
    if (!IS_NPC(ch) && ch->pcdata->reincarnations[CLASS_PUG] >= 20)
@@ -33,7 +33,7 @@ int get_chi(CHAR_DATA *ch)
    if (max_chi == 0)
       return max_chi;
 
-   if (ch->class_level[CLASS_MON] > 0 || ch->class_level[CLASS_BRA] > 0)
+   if (char_class_level(ch, CLASS_MON) > 0 || char_class_level(ch, CLASS_BRA) > 0)
       max_chi = 20;
 
    if (!IS_NPC(ch) && (ch->pcdata->reincarnations[MAX_CLASS + CLASS_MON] +
@@ -41,7 +41,7 @@ int get_chi(CHAR_DATA *ch)
                        20))
       max_chi = 20;
 
-   if (ch->class_level[CLASS_MAR] > 0)
+   if (char_class_level(ch, CLASS_MAR) > 0)
       max_chi = 25;
 
    if (!IS_NPC(ch) && ch->pcdata->reincarnations[MAX_CLASS + MAX_REMORT + CLASS_MAR] >= 20)

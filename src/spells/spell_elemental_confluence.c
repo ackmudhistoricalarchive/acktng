@@ -10,12 +10,12 @@ bool spell_elemental_confluence(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_
 {
    CHAR_DATA *victim = (CHAR_DATA *)vo;
    int dam;
-   int base = ch->class_level[CLASS_GMA];
+   int base = char_class_level(ch, CLASS_GMA);
 
-   if (ch->class_level[CLASS_SOR] > base)
-      base = ch->class_level[CLASS_SOR];
-   if (ch->class_level[CLASS_WIZ] > base)
-      base = ch->class_level[CLASS_WIZ];
+   if (char_class_level(ch, CLASS_SOR) > base)
+      base = char_class_level(ch, CLASS_SOR);
+   if (char_class_level(ch, CLASS_WIZ) > base)
+      base = char_class_level(ch, CLASS_WIZ);
 
    dam = 300 + dice(base, 25);
 
