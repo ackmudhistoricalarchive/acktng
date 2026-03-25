@@ -272,6 +272,9 @@ int calculate_damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt, int elem
    dam = scale_damage(ch, victim, element, dam, dt);
 
    if (!IS_SET(element, ELE_PHYSICAL))
+      dam *= 2;
+
+   if (!IS_SET(element, ELE_PHYSICAL))
    {
       if (!no_stat_bonus)
       {
