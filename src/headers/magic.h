@@ -75,6 +75,7 @@ bool cast_wizard_elemental_dot_spell(int sn, int level, CHAR_DATA *ch, CHAR_DATA
 #define ELE_FIRE BIT_7
 #define ELE_SHADOW BIT_8
 #define ELE_POISON BIT_9
+#define NO_STAT_BONUS BIT_10
 
 #define MAX_ELEMENT 9
 #define MAX_REALM MAX_ELEMENT
