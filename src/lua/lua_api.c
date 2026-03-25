@@ -40,7 +40,6 @@ static int mud_damage(lua_State *L)
 static int mud_damage_from_obj(lua_State *L)
 {
    OBJ_DATA *obj = NULL;
-   if (!lua_isnil(L, 1))
    {
       void *ud = luaL_testudata(L, 1, "ack.obj");
       if (ud)
@@ -62,7 +61,10 @@ static int mud_war_attack(lua_State *L)
    CHAR_DATA *ch = lua_check_char(L, 1);
    const char *argument = luaL_checkstring(L, 2);
    int gsn = (int)luaL_checkinteger(L, 3);
-   war_attack(ch, (char *)argument, gsn);
+   char arg_buf[MAX_INPUT_LENGTH];
+   strncpy(arg_buf, argument, sizeof(arg_buf) - 1);
+   arg_buf[sizeof(arg_buf) - 1] = '\0';
+   war_attack(ch, arg_buf, gsn);
    return 0;
 }
 
@@ -147,7 +149,6 @@ static void lua_to_affect(lua_State *L, int index, AFFECT_DATA *af)
    af->level = (int)luaL_optinteger(L, -1, 0);
    lua_pop(L, 1);
    lua_getfield(L, index, "caster");
-   if (!lua_isnil(L, -1))
    {
       void *ud = luaL_testudata(L, -1, "ack.char");
       if (ud)
@@ -251,7 +252,10 @@ static int mud_get_obj_carry(lua_State *L)
 {
    CHAR_DATA *ch = lua_check_char(L, 1);
    const char *name = luaL_checkstring(L, 2);
-   lua_push_obj(L, get_obj_carry(ch, (char *)name));
+   char name_buf[MAX_INPUT_LENGTH];
+   strncpy(name_buf, name, sizeof(name_buf) - 1);
+   name_buf[sizeof(name_buf) - 1] = '\0';
+   lua_push_obj(L, get_obj_carry(ch, name_buf));
    return 1;
 }
 
@@ -344,7 +348,10 @@ static int mud_interpret(lua_State *L)
       lua_error(L);
       return 0;
    }
-   interpret(ch, (char *)cmd);
+   char cmd_buf[MAX_INPUT_LENGTH];
+   strncpy(cmd_buf, cmd, sizeof(cmd_buf) - 1);
+   cmd_buf[sizeof(cmd_buf) - 1] = '\0';
+   interpret(ch, cmd_buf);
    return 0;
 }
 
@@ -442,7 +449,6 @@ static int mud_act(lua_State *L)
    void *arg1 = NULL;
    void *arg2 = NULL;
 
-   if (!lua_isnil(L, 3))
    {
       void *ud = luaL_testudata(L, 3, "ack.obj");
       if (ud)
@@ -451,7 +457,6 @@ static int mud_act(lua_State *L)
          arg1 = *(CHAR_DATA **)ud;
    }
 
-   if (!lua_isnil(L, 4))
    {
       void *ud = luaL_testudata(L, 4, "ack.char");
       if (ud)
@@ -478,7 +483,10 @@ static int mud_echo_room(lua_State *L)
 {
    ROOM_INDEX_DATA *room = lua_check_room(L, 1);
    const char *text = luaL_checkstring(L, 2);
-   send_to_room((char *)text, room);
+   char text_buf[MAX_INPUT_LENGTH];
+   strncpy(text_buf, text, sizeof(text_buf) - 1);
+   text_buf[sizeof(text_buf) - 1] = '\0';
+   send_to_room(text_buf, room);
    return 0;
 }
 
@@ -572,7 +580,10 @@ static int mud_get_char_room(lua_State *L)
 {
    CHAR_DATA *ch = lua_check_char(L, 1);
    const char *name = luaL_checkstring(L, 2);
-   lua_push_char(L, get_char_room(ch, (char *)name));
+   char name_buf[MAX_INPUT_LENGTH];
+   strncpy(name_buf, name, sizeof(name_buf) - 1);
+   name_buf[sizeof(name_buf) - 1] = '\0';
+   lua_push_char(L, get_char_room(ch, name_buf));
    return 1;
 }
 
@@ -679,7 +690,6 @@ static int mud_aoe_damage(lua_State *L)
    int flags = (int)luaL_optinteger(L, 7, 0);
 
    OBJ_DATA *obj = NULL;
-   if (!lua_isnil(L, 8))
    {
       void *ud = luaL_testudata(L, 8, "ack.obj");
       if (ud)
@@ -766,7 +776,10 @@ static int mud_pug_attack(lua_State *L)
    CHAR_DATA *ch = lua_check_char(L, 1);
    const char *argument = luaL_checkstring(L, 2);
    int gsn = (int)luaL_checkinteger(L, 3);
-   pug_attack(ch, (char *)argument, gsn);
+   char arg_buf[MAX_INPUT_LENGTH];
+   strncpy(arg_buf, argument, sizeof(arg_buf) - 1);
+   arg_buf[sizeof(arg_buf) - 1] = '\0';
+   pug_attack(ch, arg_buf, gsn);
    return 0;
 }
 
@@ -811,7 +824,6 @@ static int mud_affect_to_room(lua_State *L)
    raf.bitvector = (int)luaL_optinteger(L, -1, 0);
    lua_pop(L, 1);
    lua_getfield(L, 2, "caster");
-   if (!lua_isnil(L, -1))
    {
       void *ud = luaL_testudata(L, -1, "ack.char");
       if (ud)
@@ -834,7 +846,6 @@ static int mud_cast_wizard_elemental_dot_spell(lua_State *L)
    CHAR_DATA *ch = lua_check_char(L, 3);
    CHAR_DATA *victim = lua_check_char(L, 4);
    OBJ_DATA *obj = NULL;
-   if (!lua_isnil(L, 5))
    {
       void *ud = luaL_testudata(L, 5, "ack.obj");
       if (ud)
@@ -854,7 +865,6 @@ static int mud_trigger_elemental_spell_combo(lua_State *L)
    CHAR_DATA *ch = lua_check_char(L, 1);
    CHAR_DATA *victim = lua_check_char(L, 2);
    OBJ_DATA *obj = NULL;
-   if (!lua_isnil(L, 3))
    {
       void *ud = luaL_testudata(L, 3, "ack.obj");
       if (ud)
@@ -929,7 +939,10 @@ static int mud_get_char_world(lua_State *L)
 {
    CHAR_DATA *ch = lua_check_char(L, 1);
    const char *name = luaL_checkstring(L, 2);
-   lua_push_char(L, get_char_world(ch, (char *)name));
+   char name_buf[MAX_INPUT_LENGTH];
+   strncpy(name_buf, name, sizeof(name_buf) - 1);
+   name_buf[sizeof(name_buf) - 1] = '\0';
+   lua_push_char(L, get_char_world(ch, name_buf));
    return 1;
 }
 
@@ -1055,7 +1068,10 @@ static int mud_do_say(lua_State *L)
 {
    CHAR_DATA *ch = lua_check_char(L, 1);
    const char *msg = luaL_checkstring(L, 2);
-   do_say(ch, (char *)msg);
+   char msg_buf[MAX_INPUT_LENGTH];
+   strncpy(msg_buf, msg, sizeof(msg_buf) - 1);
+   msg_buf[sizeof(msg_buf) - 1] = '\0';
+   do_say(ch, msg_buf);
    return 0;
 }
 
@@ -1064,7 +1080,10 @@ static int mud_do_look(lua_State *L)
 {
    CHAR_DATA *ch = lua_check_char(L, 1);
    const char *arg = luaL_optstring(L, 2, "");
-   do_look(ch, (char *)arg);
+   char arg_buf[MAX_INPUT_LENGTH];
+   strncpy(arg_buf, arg, sizeof(arg_buf) - 1);
+   arg_buf[sizeof(arg_buf) - 1] = '\0';
+   do_look(ch, arg_buf);
    return 0;
 }
 
@@ -1073,7 +1092,10 @@ static int mud_do_sleep(lua_State *L)
 {
    CHAR_DATA *ch = lua_check_char(L, 1);
    const char *arg = luaL_optstring(L, 2, "");
-   do_sleep(ch, (char *)arg);
+   char arg_buf[MAX_INPUT_LENGTH];
+   strncpy(arg_buf, arg, sizeof(arg_buf) - 1);
+   arg_buf[sizeof(arg_buf) - 1] = '\0';
+   do_sleep(ch, arg_buf);
    return 0;
 }
 
@@ -1085,7 +1107,6 @@ static int mud_apply_necromancer_debuff(lua_State *L)
    int sn = (int)luaL_checkinteger(L, 3);
    int dam = (int)luaL_checkinteger(L, 4);
    OBJ_DATA *obj = NULL;
-   if (!lua_isnil(L, 5))
    {
       void *ud = luaL_testudata(L, 5, "ack.obj");
       if (ud)
@@ -1105,7 +1126,6 @@ static int mud_cast_spell(lua_State *L)
    CHAR_DATA *ch = lua_check_char(L, 3);
 
    void *vo = NULL;
-   if (!lua_isnil(L, 4))
    {
       void *ud = luaL_testudata(L, 4, "ack.char");
       if (ud)
@@ -1113,7 +1133,6 @@ static int mud_cast_spell(lua_State *L)
    }
 
    OBJ_DATA *obj = NULL;
-   if (!lua_isnil(L, 5))
    {
       void *ud = luaL_testudata(L, 5, "ack.obj");
       if (ud)
