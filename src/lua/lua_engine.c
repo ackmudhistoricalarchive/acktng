@@ -318,6 +318,12 @@ bool lua_spell_execute(int sn, int level, CHAR_DATA *ch, void *vo, OBJ_DATA *obj
       lua_push_obj(lua_L, (OBJ_DATA *)vo);
       lua_setfield(lua_L, -2, "obj_target");
    }
+   else if (skill_table[sn].target == TAR_IGNORE)
+   {
+      /* Pass target_name so TAR_IGNORE spells can find their target. */
+      lua_pushstring(lua_L, target_name ? target_name : "");
+      lua_setfield(lua_L, -2, "target_name");
+   }
    if (obj)
    {
       lua_push_obj(lua_L, obj);
