@@ -293,15 +293,9 @@ void show_cmenu_to(DESCRIPTOR_DATA *d)
    char buf[MAX_STRING_LENGTH];
    int iClass;
 
-   sprintf(menu, "Character Creation: Class Order.\n\r\n\r");
-   strcat(menu, "This option allows you to select the order of your classes.\n\r");
-   strcat(menu, "Being a MultiClass Mud, this order is very important, as it\n\r");
-   strcat(menu, "will determine how easily you progress in each class, and\n\r");
-   strcat(menu, "how well you can use the skills/spells of each class.\n\r");
-   strcat(menu, "There are eight classes.  Please list, in order of best to\n\r");
-   strcat(menu, "worst, the order your 4 classes will be.\n\r");
-   strcat(menu, "(The 1st you pick will be your prime class, gaining a +1 bonus.\n\r");
-   strcat(menu, "For example, psi mag cle cip.\n\r");
+   sprintf(menu, "Character Creation: Starting Class.\n\r\n\r");
+   strcat(menu, "Choose your starting class. You may gain up to three more\n\r");
+   strcat(menu, "in game by visiting a trainer and using the 'gain' command.\n\r\n\r");
    strcat(menu, "Abr    Atr    Name\n\r");
    strcat(menu, "---    ---    ----------\n\r");
 
@@ -315,7 +309,7 @@ void show_cmenu_to(DESCRIPTOR_DATA *d)
                                   gclass_table[iClass].class_name);
       strcat(menu, buf);
    }
-   strcat(menu, "\n\rOrder: ");
+   strcat(menu, "\n\rStarting class: ");
    write_to_buffer(d, menu, 0);
    return;
 }
@@ -709,11 +703,8 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
    if (d->connected == CON_GET_NEW_CLASS)
    {
       char arg[MAX_STRING_LENGTH];
-      char *rest;
       int cnt;
-      int chosen[4];
-      int num_chosen = 0;
-      bool dup;
+      int match = -1;
 
       /* Reset class fields. */
       for (cnt = 0; cnt < 4; cnt++)
@@ -722,14 +713,10 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
          ch->mortal_level[cnt] = 0;
       }
 
-      /* Parse up to 4 class names from the input line. */
-      rest = argument;
-      while (num_chosen < 4 && rest[0] != '\0')
+      one_argument(argument, arg);
+
+      if (arg[0] != '\0')
       {
-         int match = -1;
-         rest = one_argument(rest, arg);
-         if (arg[0] == '\0')
-            break;
          for (cnt = 0; cnt < MAX_TOTAL_CLASS; cnt++)
          {
             if (IS_MORTAL_CLASS(cnt) && (!str_cmp(arg, gclass_table[cnt].who_name) ||
@@ -739,48 +726,18 @@ void nanny(DESCRIPTOR_DATA *d, char *argument)
                break;
             }
          }
-         if (match == -1)
-         {
-            char errbuf[MAX_STRING_LENGTH];
-            sprintf(errbuf,
-                    "'%s' is not a valid class. Please try again.\n\r"
-                    "Enter 4 class names in order, e.g. psi mag cle cip.\n\r",
-                    arg);
-            write_to_buffer(d, errbuf, 0);
-            show_cmenu_to(d);
-            return;
-         }
-         /* Check for duplicates in what we have so far. */
-         dup = FALSE;
-         for (cnt = 0; cnt < num_chosen; cnt++)
-            if (chosen[cnt] == match)
-            {
-               dup = TRUE;
-               break;
-            }
-         if (dup)
-         {
-            char errbuf[MAX_STRING_LENGTH];
-            sprintf(errbuf, "You listed %s more than once. Please try again.\n\r",
-                    gclass_table[match].class_name);
-            write_to_buffer(d, errbuf, 0);
-            show_cmenu_to(d);
-            return;
-         }
-         chosen[num_chosen++] = match;
       }
 
-      if (num_chosen < 4)
+      if (match == -1)
       {
-         write_to_buffer(d, "Please choose exactly 4 classes in order, e.g. psi mag cle cip.\n\r",
-                         0);
+         char errbuf[MAX_STRING_LENGTH];
+         sprintf(errbuf, "'%s' is not a valid class. Please try again.\n\r", arg);
+         write_to_buffer(d, errbuf, 0);
          show_cmenu_to(d);
          return;
       }
 
-      for (cnt = 0; cnt < 4; cnt++)
-         ch->mortal_class[cnt] = chosen[cnt];
-      /* Prime class gets level 1; others start at 0. */
+      ch->mortal_class[0] = match;
       ch->mortal_level[0] = 1;
       ch->class = (sh_int)ch->mortal_class[0];
 

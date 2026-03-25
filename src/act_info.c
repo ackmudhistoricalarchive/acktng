@@ -4456,6 +4456,7 @@ void do_gain(CHAR_DATA *ch, char *argument)
    int c; /* The class to gain in */
    bool remort = FALSE;
    bool adept = FALSE;
+   bool new_mortal_class = FALSE;
    sh_int morts_at_max = 0;
    sh_int remorts_at_max = 0;
    sh_int num_remorts = 0;
@@ -4536,6 +4537,20 @@ void do_gain(CHAR_DATA *ch, char *argument)
             {
                any = TRUE;
                c = cnt;
+            }
+            else
+            {
+               /* Allow gaining a new mortal class if fewer than 4 slots are filled. */
+               int nmortal = 0, fi;
+               for (fi = 0; fi < 4; fi++)
+                  if (ch->mortal_class[fi] >= 0)
+                     nmortal++;
+               if (nmortal < 4)
+               {
+                  any = TRUE;
+                  new_mortal_class = TRUE;
+                  c = cnt;
+               }
             }
          }
          else if (IS_REMORT_CLASS(cnt))
@@ -4626,6 +4641,10 @@ void do_gain(CHAR_DATA *ch, char *argument)
       else
          cost = exp_to_level_adept(ch);
    }
+   else if (new_mortal_class)
+   {
+      cost = 100;
+   }
    else
    {
       cost = exp_to_level(ch, c);
@@ -4656,6 +4675,24 @@ void do_gain(CHAR_DATA *ch, char *argument)
       send_to_char("@@aYou peer down upon all the hapless mortals, knowing that you have reached "
                    "the final step upon the stairway of Wisdom.@@N\n\r",
                    ch);
+      return;
+   }
+
+   if (new_mortal_class)
+   {
+      int slot;
+      for (slot = 0; slot < 4; slot++)
+         if (ch->mortal_class[slot] < 0)
+            break;
+      ch->mortal_class[slot] = c;
+      ch->mortal_level[slot] = 1;
+      ch->exp -= cost;
+      sprintf(buf, "You have gained %s as a new class!\n\r", gclass_table[c].class_name);
+      send_to_char(buf, ch);
+      sprintf(buf, "%s has gained %s as a new class!", ch->name, gclass_table[c].class_name);
+      info(buf, 1);
+      advance_level(ch, c, TRUE);
+      do_save(ch, "");
       return;
    }
 

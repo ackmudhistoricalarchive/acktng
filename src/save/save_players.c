@@ -906,7 +906,7 @@ static void migrate_legacy_class_levels(CHAR_DATA *ch, const int *cl)
 {
    int i, slot;
 
-   /* Mortal classes: prime first, then remaining chosen ones (cl[i] >= 0) in index order. */
+   /* Mortal classes: prime first, then remaining in descending level order. */
    slot = 0;
    /* Prime class is canonical; put it first regardless of level. */
    if (ch->class >= 0 && cl[ch->class] >= 0 && slot < 4)
@@ -915,15 +915,39 @@ static void migrate_legacy_class_levels(CHAR_DATA *ch, const int *cl)
       ch->mortal_level[slot] = cl[ch->class];
       slot++;
    }
-   for (i = 0; i < MAX_TOTAL_CLASS && slot < 4; i++)
+   /* Collect non-prime mortal classes that have a recorded level. */
    {
-      if (!IS_MORTAL_CLASS(i) || i == ch->class)
-         continue;
-      if (cl[i] >= 0)
+      int cand_class[MAX_TOTAL_CLASS];
+      int cand_level[MAX_TOTAL_CLASS];
+      int ncand = 0, a, b, tmp;
+      for (i = 0; i < MAX_TOTAL_CLASS; i++)
       {
-         ch->mortal_class[slot] = i;
-         ch->mortal_level[slot] = cl[i];
-         slot++;
+         if (!IS_MORTAL_CLASS(i) || i == ch->class)
+            continue;
+         if (cl[i] >= 0)
+         {
+            cand_class[ncand] = i;
+            cand_level[ncand] = cl[i];
+            ncand++;
+         }
+      }
+      /* Sort descending by level (insertion sort; small array). */
+      for (a = 1; a < ncand; a++)
+      {
+         for (b = a; b > 0 && cand_level[b] > cand_level[b - 1]; b--)
+         {
+            tmp = cand_level[b];
+            cand_level[b] = cand_level[b - 1];
+            cand_level[b - 1] = tmp;
+            tmp = cand_class[b];
+            cand_class[b] = cand_class[b - 1];
+            cand_class[b - 1] = tmp;
+         }
+      }
+      for (a = 0; a < ncand && slot < 4; a++, slot++)
+      {
+         ch->mortal_class[slot] = cand_class[a];
+         ch->mortal_level[slot] = cand_level[a];
       }
    }
 
