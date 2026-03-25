@@ -400,6 +400,12 @@ void fwrite_corpse(OBJ_DATA *obj, FILE *fp, int iNest)
    if (obj->in_room == NULL && obj->in_obj == NULL)
       obj->in_room = get_room_index(ROOM_VNUM_LIMBO);
 
+   if (obj->pIndexData == NULL)
+   {
+      bug("fwrite_corpse: obj '%s' has NULL pIndexData, skipping", (int)obj->name);
+      return;
+   }
+
    fprintf(fp, "#OBJECT\n");
    fprintf(fp, "WhereVnum    %d\n", where_vnum);
 
