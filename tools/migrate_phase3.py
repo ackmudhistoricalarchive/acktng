@@ -481,17 +481,20 @@ HUNT.MERC  HUNT.CR
 
 20. str_cmp(s1, s2) == 0 → s1 == s2  (case-insensitive equal)
 
-21. Integer division: Lua / always returns a float. C integer division truncates.
-    Use // (floor division) for ALL integer math that was / in C:
-      dam / 2       -> dam // 2
-      base / 2      -> base // 2
-      level / 4     -> level // 4
-      (2 * x) / 3  -> (2 * x) // 3
-      func() / N   -> func() // N
-    Use math.floor(x / N) ONLY when x is itself a float expression.
+21. Integer division: Lua's / operator returns a float. C's integer division truncates
+    towards zero (e.g. -5 / 2 is -2). For scripts, integer results are often required.
+    - For non-negative values, use // (floor division), which matches C's behavior:
+        dam / 2       -> dam // 2
+        level / 4     -> level // 4
+        (2 * x) / 3  -> (2 * x) // 3
+        func() / N   -> func() // N
+    - For values that may be negative, C's truncation-towards-zero is matched by
+      math.trunc(a / b) in Lua 5.3+. Lua's // is floor division and differs for
+      negatives (e.g. -5 // 2 is -3, but C gives -2).
     mud.number_range, mud.dice, mud.damage_from_obj, and all other API functions
     use luaL_checkinteger internally -- passing a non-integer float (e.g. 17.5) raises
-    a Lua error that silently kills the spell. Always use // for integer division.
+    a Lua error that silently kills the spell. Always use // or math.trunc() to produce
+    an integer result.
 
 === OUTPUT FORMAT ===
 
