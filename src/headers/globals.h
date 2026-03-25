@@ -204,6 +204,32 @@ extern sh_int gsn_measured_response;
 extern sh_int gsn_condemn;
 extern sh_int gsn_seal_testimony;
 
+/* Justicar skills */
+extern sh_int gsn_formal_sentencing;
+extern sh_int gsn_executioners_strike;
+extern sh_int gsn_second_hearing;
+extern sh_int gsn_severity_escalation;
+extern sh_int gsn_writ_of_execution;
+extern sh_int gsn_read_weakness;
+extern sh_int gsn_inevitable_verdict;
+
+/* Arbiter skills */
+extern sh_int gsn_procedural_authority;
+extern sh_int gsn_sustained_objection;
+extern sh_int gsn_cross_examination;
+extern sh_int gsn_judicial_immunity;
+extern sh_int gsn_appellate_review;
+extern sh_int gsn_suppression_order;
+extern sh_int gsn_contempt_of_court;
+
+/* Inquisitor skills */
+extern sh_int gsn_full_tribunal;
+extern sh_int gsn_inquisition;
+extern sh_int gsn_absolute_verdict;
+extern sh_int gsn_precedent;
+extern sh_int gsn_sovereign_authority;
+extern sh_int gsn_seal_of_the_tribunal;
+
 /* Public society skills */
 extern sh_int gsn_patrol_sense;
 extern sh_int gsn_field_mend;
@@ -773,6 +799,26 @@ DECLARE_DO_FUN(do_binding_strike);
 DECLARE_DO_FUN(do_ninth_descent);
 DECLARE_DO_FUN(do_condemn);
 DECLARE_DO_FUN(do_seal_testimony);
+
+/* Justicar skills */
+DECLARE_DO_FUN(do_formal_sentencing);
+DECLARE_DO_FUN(do_executioners_strike);
+DECLARE_DO_FUN(do_writ_of_execution);
+DECLARE_DO_FUN(do_read_weakness);
+
+/* Arbiter skills */
+DECLARE_DO_FUN(do_procedural_authority);
+DECLARE_DO_FUN(do_sustained_objection);
+DECLARE_DO_FUN(do_judicial_immunity);
+DECLARE_DO_FUN(do_appellate_review);
+DECLARE_DO_FUN(do_suppression_order);
+
+/* Inquisitor skills */
+DECLARE_DO_FUN(do_inquisition);
+DECLARE_DO_FUN(do_absolute_verdict);
+DECLARE_DO_FUN(do_sovereign_authority);
+DECLARE_DO_FUN(do_seal_of_the_tribunal);
+
 DECLARE_DO_FUN(do_stance);
 DECLARE_DO_FUN(do_enchant);
 

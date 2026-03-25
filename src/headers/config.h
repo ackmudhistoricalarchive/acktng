@@ -149,9 +149,12 @@
 #define CLASS_HIE 27
 /* Sentinel lineage (appended) */
 #define CLASS_SEN 28
+#define CLASS_JUS 29
+#define CLASS_ARB 30
+#define CLASS_INQ 31
 
 /* Total class count across all tiers */
-#define MAX_TOTAL_CLASS 29
+#define MAX_TOTAL_CLASS 32
 
 /* IS_MORTAL_CLASS, IS_REMORT_CLASS, IS_ADEPT_CLASS, CLASS_TIER are
  * implemented as static inline functions in inlines_globals.h. */
@@ -193,7 +196,7 @@
 
 #define MAX_TRADE 5
 
-#define MAX_STANCE 25
+#define MAX_STANCE 33
 
 /* Stance specials */
 #define STANCE_DUAL_CAST BIT_1

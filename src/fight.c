@@ -438,6 +438,26 @@ void one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt)
    if (victim->position == POS_DEAD || ch->in_room != victim->in_room)
       return;
 
+   /* Arbiter: contempt of court — gain testimony when testimony target attacks allies */
+   if (!IS_NPC(victim) && victim->in_room != NULL)
+   {
+      CHAR_DATA *arb;
+      for (arb = victim->in_room->first_person; arb != NULL; arb = arb->next_in_room)
+      {
+         if (arb == victim || arb == ch || IS_NPC(arb))
+            continue;
+         if (!can_use_skill(arb, gsn_contempt_of_court))
+            continue;
+         if (arb->testimony_target != ch)
+            continue;
+         if (!is_same_group(arb, victim) || arb == victim)
+            continue;
+         /* ch is attacking victim, and arb has testimony on ch */
+         add_testimony(arb, 2);
+         break;
+      }
+   }
+
    /*
     * Figure out the type of damage message.
     */
@@ -970,7 +990,15 @@ bool check_avoidance(CHAR_DATA *ch, CHAR_DATA *victim)
       {
          if (victim->testimony_target != ch)
          {
-            victim->testimony = 0;
+            /* Seal of the Tribunal: testimony cannot be lost */
+            if (!is_affected(victim, gsn_seal_of_the_tribunal))
+            {
+               /* Seal testimony: lose 2 instead of all on target switch */
+               if (is_affected(victim, gsn_seal_testimony))
+                  victim->testimony = UMAX(victim->testimony - 2, 0);
+               else
+                  victim->testimony = 0;
+            }
             set_testimony_target(victim, ch);
          }
          add_testimony(victim, 1);
@@ -983,6 +1011,24 @@ bool check_avoidance(CHAR_DATA *ch, CHAR_DATA *victim)
          one_hit(victim, ch, gsn_measured_response);
          if (is_sentinel_class(victim) && victim->fighting == ch)
             add_testimony(victim, 1);
+      }
+
+      /* Arbiter: cross-examination — chance to delay attacker's next skill on parry */
+      if (can_use_skill(victim, gsn_cross_examination) &&
+          number_percent() < get_curr_wis(victim) * 2)
+      {
+         if (!is_affected(ch, gsn_cross_examination))
+         {
+            AFFECT_DATA xaf;
+            xaf.type = gsn_cross_examination;
+            xaf.duration = 1;
+            xaf.duration_type = DURATION_ROUND;
+            xaf.location = APPLY_NONE;
+            xaf.modifier = 0;
+            xaf.bitvector = 0;
+            affect_to_char(ch, &xaf);
+            act("@@y$N's counter-positioning disrupts your timing!@@N", ch, NULL, victim, TO_CHAR);
+         }
       }
 
       return TRUE;
@@ -1025,7 +1071,13 @@ bool check_avoidance(CHAR_DATA *ch, CHAR_DATA *victim)
       {
          if (victim->testimony_target != ch)
          {
-            victim->testimony = 0;
+            if (!is_affected(victim, gsn_seal_of_the_tribunal))
+            {
+               if (is_affected(victim, gsn_seal_testimony))
+                  victim->testimony = UMAX(victim->testimony - 2, 0);
+               else
+                  victim->testimony = 0;
+            }
             set_testimony_target(victim, ch);
          }
          add_testimony(victim, 1);
@@ -1070,7 +1122,13 @@ bool check_avoidance(CHAR_DATA *ch, CHAR_DATA *victim)
       {
          if (victim->testimony_target != ch)
          {
-            victim->testimony = 0;
+            if (!is_affected(victim, gsn_seal_of_the_tribunal))
+            {
+               if (is_affected(victim, gsn_seal_testimony))
+                  victim->testimony = UMAX(victim->testimony - 2, 0);
+               else
+                  victim->testimony = 0;
+            }
             set_testimony_target(victim, ch);
          }
          add_testimony(victim, 1);
@@ -1083,6 +1141,24 @@ bool check_avoidance(CHAR_DATA *ch, CHAR_DATA *victim)
          one_hit(victim, ch, gsn_measured_response);
          if (is_sentinel_class(victim) && victim->fighting == ch)
             add_testimony(victim, 1);
+      }
+
+      /* Arbiter: cross-examination — chance to delay attacker's next skill on dodge */
+      if (can_use_skill(victim, gsn_cross_examination) &&
+          number_percent() < get_curr_wis(victim) * 2)
+      {
+         if (!is_affected(ch, gsn_cross_examination))
+         {
+            AFFECT_DATA xaf;
+            xaf.type = gsn_cross_examination;
+            xaf.duration = 1;
+            xaf.duration_type = DURATION_ROUND;
+            xaf.location = APPLY_NONE;
+            xaf.modifier = 0;
+            xaf.bitvector = 0;
+            affect_to_char(ch, &xaf);
+            act("@@y$N's evasive movement disrupts your timing!@@N", ch, NULL, victim, TO_CHAR);
+         }
       }
 
       return TRUE;

@@ -213,7 +213,7 @@ O_FILES = affect.o ai.o act_clan.o act_comm.o act_info.o act_mob.o act_move.o ac
 	  save/save.o save/save_players.o save/save_objects.o save/save_mobs.o save/save_areas.o \
 	  save/save_area_files.o save/save_rulers.o save/save_socials.o save/save_sysdata.o save/save_notes.o \
 	  scheck.o skills.o skills_chi.o skills_combo.o skills_obj.o skills_poison.o special.o spell_dam.o spendqp.o ssm.o \
-	  skills_sentinel.o stance.o strfuns.o tables.o trigger.o update.o visibility.o weapon_bond.o wizutil.o \
+	  skills_sentinel.o skills_justicar.o skills_arbiter.o skills_inquisitor.o stance.o strfuns.o tables.o trigger.o update.o visibility.o weapon_bond.o wizutil.o \
 	  write.o $(AI_SPEC_SRCS) $(SPELL_OBJS) $(SKILL_OBJS) $(LUA_OBJS)
 
 # Source files for linting (all .c and .h excluding third-party sha256 and build artifacts)

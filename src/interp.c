@@ -357,6 +357,35 @@ const struct cmd_type cmd_table[] = {
     {CMD_WAIT("condemn", do_condemn, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION, C_SHOW_SKILL)},
     {CMD_WAIT("seal testimony", do_seal_testimony, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION,
               C_SHOW_SKILL)},
+    /* Justicar skills */
+    {CMD_WAIT("sentence", do_formal_sentencing, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION,
+              C_SHOW_SKILL)},
+    {CMD_WAIT("execute", do_executioners_strike, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION,
+              C_SHOW_SKILL)},
+    {CMD_WAIT("writ", do_writ_of_execution, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION,
+              C_SHOW_SKILL)},
+    {CMD_WAIT("weakness", do_read_weakness, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION,
+              C_SHOW_SKILL)},
+    /* Arbiter skills */
+    {CMD_WAIT("authority", do_procedural_authority, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION,
+              C_SHOW_SKILL)},
+    {CMD_WAIT("objection", do_sustained_objection, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION,
+              C_SHOW_SKILL)},
+    {CMD_WAIT("immunity", do_judicial_immunity, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION,
+              C_SHOW_SKILL)},
+    {CMD_WAIT("appeal", do_appellate_review, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION,
+              C_SHOW_SKILL)},
+    {CMD_WAIT("suppress", do_suppression_order, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION,
+              C_SHOW_SKILL)},
+    /* Inquisitor skills */
+    {CMD_WAIT("inquisition", do_inquisition, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION,
+              C_SHOW_SKILL)},
+    {CMD_WAIT("absolute", do_absolute_verdict, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION,
+              C_SHOW_SKILL)},
+    {CMD_WAIT("sovereign", do_sovereign_authority, POS_FIGHTING, 0, LOG_NORMAL, C_TYPE_ACTION,
+              C_SHOW_SKILL)},
+    {CMD_WAIT("seal of the tribunal", do_seal_of_the_tribunal, POS_FIGHTING, 0, LOG_NORMAL,
+              C_TYPE_ACTION, C_SHOW_SKILL)},
 
     /*
      * Object manipulation commands.
