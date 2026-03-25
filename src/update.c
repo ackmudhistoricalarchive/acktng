@@ -434,7 +434,10 @@ void round_char_update(CHAR_DATA *ch)
        ch->fighting == ch->testimony_target)
    {
       ch->testimony_combat_rounds++;
-      if (ch->testimony_combat_rounds % TESTIMONY_PASSIVE_INTERVAL == 0)
+      /* Inevitable verdict: passive tick every 2 rounds instead of 3 */
+      int tick_interval =
+          can_use_skill(ch, gsn_inevitable_verdict) ? 2 : TESTIMONY_PASSIVE_INTERVAL;
+      if (ch->testimony_combat_rounds % tick_interval == 0)
          add_testimony(ch, 1);
    }
 

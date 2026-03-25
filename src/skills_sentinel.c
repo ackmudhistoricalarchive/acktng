@@ -9,12 +9,23 @@
 
 bool is_sentinel_class(CHAR_DATA *ch)
 {
-   return char_class_level(ch, CLASS_SEN) > 0;
+   return char_class_level(ch, CLASS_SEN) > 0 || char_class_level(ch, CLASS_JUS) > 0 ||
+          char_class_level(ch, CLASS_ARB) > 0 || char_class_level(ch, CLASS_INQ) > 0;
 }
 
 int get_sentinel_level(CHAR_DATA *ch)
 {
-   return char_class_level(ch, CLASS_SEN);
+   int best = char_class_level(ch, CLASS_SEN);
+   int jus = char_class_level(ch, CLASS_JUS);
+   int arb = char_class_level(ch, CLASS_ARB);
+   int inq = char_class_level(ch, CLASS_INQ);
+   if (jus > best)
+      best = jus;
+   if (arb > best)
+      best = arb;
+   if (inq > best)
+      best = inq;
+   return best;
 }
 
 void set_testimony_target(CHAR_DATA *ch, CHAR_DATA *victim)
@@ -38,8 +49,16 @@ void add_testimony(CHAR_DATA *ch, int amount)
    if (ch->testimony_cooldown > 0)
       return;
 
+   /* Seal of the Tribunal: +2 base on avoidance */
+   if (is_affected(ch, gsn_seal_of_the_tribunal) && amount == 1)
+      amount = 2;
+
    /* Apply ninth descent doubling */
    if (is_affected(ch, gsn_ninth_descent))
+      amount *= 2;
+
+   /* Inquisition: testimony gain doubled (stacks with ninth descent) */
+   if (is_affected(ch, gsn_inquisition))
       amount *= 2;
 
    ch->testimony = UMIN(ch->testimony + amount, MAX_TESTIMONY);
@@ -97,8 +116,21 @@ void do_verdict(CHAR_DATA *ch, char *argument)
    /* Base damage from a normal hit */
    dam = number_range(ch->level * 2, ch->level * 4);
 
+   /* Severity escalation: reduce thresholds by 1 */
+   int rebuke_max = 2;
+   int censure_max = 4;
+   int binding_max = 6;
+   int sealing_max = 8;
+   if (can_use_skill(ch, gsn_severity_escalation))
+   {
+      rebuke_max = 1;
+      censure_max = 3;
+      binding_max = 5;
+      sealing_max = 7;
+   }
+
    /* Scale by verdict tier */
-   if (marks <= 2)
+   if (marks <= rebuke_max)
    {
       /* Rebuke: 1.5x */
       dam = dam * 3 / 2 + wis_bonus;
@@ -107,7 +139,7 @@ void do_verdict(CHAR_DATA *ch, char *argument)
       act("@@e$n delivers a stern rebuke against you!@@N", ch, NULL, victim, TO_VICT);
       act("@@e$n delivers a rebuke against $N!@@N", ch, NULL, victim, TO_NOTVICT);
    }
-   else if (marks <= 4)
+   else if (marks <= censure_max)
    {
       AFFECT_DATA af;
       /* Censure: 2.5x + HR debuff */
@@ -125,7 +157,7 @@ void do_verdict(CHAR_DATA *ch, char *argument)
       af.bitvector = 0;
       affect_to_char(victim, &af);
    }
-   else if (marks <= 6)
+   else if (marks <= binding_max)
    {
       AFFECT_DATA af;
       /* Binding Verdict: 4x + speed debuff */
@@ -147,7 +179,7 @@ void do_verdict(CHAR_DATA *ch, char *argument)
       af.modifier = -3;
       affect_to_char(victim, &af);
    }
-   else if (marks <= 8)
+   else if (marks <= sealing_max)
    {
       AFFECT_DATA af;
       /* Sealing Verdict: 6x + silence + all above */
@@ -202,12 +234,30 @@ void do_verdict(CHAR_DATA *ch, char *argument)
       WAIT_STATE(victim, 24);
    }
 
+   /* Formal sentencing bonus: +25% verdict damage */
+   if (is_affected(victim, gsn_formal_sentencing))
+      dam = dam * 5 / 4;
+
+   /* Inquisition bonus: +15% damage from all sources */
+   if (is_affected(victim, gsn_inquisition))
+      dam = dam * 115 / 100;
+
    /* Deal the damage */
    sp_damage(NULL, ch, victim, dam, ELE_PHYSICAL, gsn_verdict, TRUE);
 
-   /* Reset testimony and start cooldown */
-   ch->testimony = 0;
-   ch->testimony_cooldown = VERDICT_COOLDOWN_ROUNDS;
+   /* Retain testimony based on passives */
+   int retain = 0;
+   if (can_use_skill(ch, gsn_full_tribunal))
+      retain = 3;
+   else if (can_use_skill(ch, gsn_second_hearing))
+      retain = 2;
+   ch->testimony = UMIN(retain, MAX_TESTIMONY);
+
+   /* Seal of the Tribunal: reduced cooldown */
+   int cd = VERDICT_COOLDOWN_ROUNDS;
+   if (is_affected(ch, gsn_seal_of_the_tribunal))
+      cd = 1;
+   ch->testimony_cooldown = cd;
 }
 
 /*
@@ -251,7 +301,9 @@ void do_read_opponent(CHAR_DATA *ch, char *argument)
       set_testimony_target(ch, victim);
    }
 
-   add_testimony(ch, 2);
+   /* Inevitable verdict: +3 instead of +2 */
+   int gain = can_use_skill(ch, gsn_inevitable_verdict) ? 3 : 2;
+   add_testimony(ch, gain);
 
    act("@@yYou study $N's stance, breath, and movement, building your case.@@N", ch, NULL, victim,
        TO_CHAR);

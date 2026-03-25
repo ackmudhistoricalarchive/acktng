@@ -260,6 +260,32 @@ sh_int gsn_measured_response;
 sh_int gsn_condemn;
 sh_int gsn_seal_testimony;
 
+/* Justicar skills */
+sh_int gsn_formal_sentencing;
+sh_int gsn_executioners_strike;
+sh_int gsn_second_hearing;
+sh_int gsn_severity_escalation;
+sh_int gsn_writ_of_execution;
+sh_int gsn_read_weakness;
+sh_int gsn_inevitable_verdict;
+
+/* Arbiter skills */
+sh_int gsn_procedural_authority;
+sh_int gsn_sustained_objection;
+sh_int gsn_cross_examination;
+sh_int gsn_judicial_immunity;
+sh_int gsn_appellate_review;
+sh_int gsn_suppression_order;
+sh_int gsn_contempt_of_court;
+
+/* Inquisitor skills */
+sh_int gsn_full_tribunal;
+sh_int gsn_inquisition;
+sh_int gsn_absolute_verdict;
+sh_int gsn_precedent;
+sh_int gsn_sovereign_authority;
+sh_int gsn_seal_of_the_tribunal;
+
 /* Druid skills */
 sh_int gsn_substrate_piercing;
 

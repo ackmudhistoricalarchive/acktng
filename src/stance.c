@@ -48,6 +48,15 @@ const struct stance_app_type stance_app[MAX_STANCE] = {
     {"Nightblade", -3, 5, 5, 3, 0, 3, STANCE_DUAL_BACKSTAB, ADEPT, CLASS_NIG, 1, -1, -1, -1},
     {"Crusader", -3, 3, 3, 3, 0, 0, 0, ADEPT, CLASS_CRU, 1, -1, -1, -1},
     {"Martial", -1, 5, 5, 5, 0, 0, 0, ADEPT, CLASS_MAR, 1, -1, -1, -1},
+    /* Sentinel lineage stances */
+    {"Silence-Court Vigil", -1, 0, 1, 0, 0, 0, 0, MORTAL, CLASS_SEN, 60, -1, -1, CLASS_SEN},
+    {"Root Posture", 0, 1, 0, 0, 1, 0, 0, MORTAL, CLASS_DRU, 60, -1, -1, CLASS_DRU},
+    {"Sentencing Form", -2, 2, 3, 1, 0, 0, 0, REMORT, CLASS_JUS, 1, -1, -1, -1},
+    {"Record-Keeper's Guard", -3, 1, 1, 1, 2, 0, 0, REMORT, CLASS_ARB, 1, -1, -1, -1},
+    {"Thorn Boundary", -2, 3, 2, 1, 0, 0, 0, REMORT, CLASS_THO, 1, -1, -1, -1},
+    {"Wild Resonance", -1, 0, 1, 1, 3, 0, 0, REMORT, CLASS_WIL, 1, -1, -1, -1},
+    {"Full Tribunal", -2, 3, 3, 3, 2, 0, 0, ADEPT, CLASS_INQ, 1, -1, -1, -1},
+    {"Substrate Ascendance", -1, 3, 2, 2, 4, 0, 0, ADEPT, CLASS_HIE, 1, -1, -1, -1},
 };
 
 void do_stance(CHAR_DATA *ch, char *argument)
