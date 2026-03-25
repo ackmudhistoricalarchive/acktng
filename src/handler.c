@@ -491,6 +491,8 @@ int get_spellpower(CHAR_DATA *ch)
    if (IS_NPC(ch))
       spellpower += ch->spellpower_mod;
 
+   spellpower += get_psuedo_level(ch) / 3;
+
    return spellpower;
 }
 

@@ -32,6 +32,7 @@ static int mud_damage(lua_State *L)
    int sn = (int)luaL_checkinteger(L, 4);
    int element = (int)luaL_checkinteger(L, 5);
    bool show = lua_toboolean(L, 6);
+   element |= NO_STAT_BONUS;
    lua_pushboolean(L, sp_damage(NULL, ch, victim, dam, element, sn, show));
    return 1;
 }
@@ -51,7 +52,24 @@ static int mud_damage_from_obj(lua_State *L)
    int element = (int)luaL_checkinteger(L, 5);
    int sn = (int)luaL_checkinteger(L, 6);
    bool show = lua_toboolean(L, 7);
+   element |= NO_STAT_BONUS;
    lua_pushboolean(L, sp_damage(obj, ch, victim, dam, element, sn, show));
+   return 1;
+}
+
+/* mud.get_spellpower(ch) -> int */
+static int mud_get_spellpower(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   lua_pushinteger(L, get_spellpower(ch));
+   return 1;
+}
+
+/* mud.get_damroll(ch) -> int */
+static int mud_get_damroll(lua_State *L)
+{
+   CHAR_DATA *ch = lua_check_char(L, 1);
+   lua_pushinteger(L, get_damroll(ch));
    return 1;
 }
 
@@ -1165,6 +1183,8 @@ static const luaL_Reg mud_api[] = {
     {"basic_damage", mud_basic_damage},
     {"one_hit", mud_one_hit},
     {"aoe_damage", mud_aoe_damage},
+    {"get_spellpower", mud_get_spellpower},
+    {"get_damroll", mud_get_damroll},
     {"breath_damage", mud_breath_damage},
     {"cast_wizard_elemental_dot_spell", mud_cast_wizard_elemental_dot_spell},
     {"trigger_elemental_spell_combo", mud_trigger_elemental_spell_combo},

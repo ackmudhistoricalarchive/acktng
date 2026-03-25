@@ -496,6 +496,22 @@ HUNT.MERC  HUNT.CR
     a Lua error that silently kills the spell. Always use // or math.trunc() to produce
     an integer result.
 
+22. Damage stat bonuses must be added explicitly in Lua scripts. The C pipeline no
+    longer auto-adds spellpower or damroll when mud.damage or mud.damage_from_obj is
+    called (they set NO_STAT_BONUS internally).
+
+    For spell scripts (non-physical damage), add spellpower before the damage call:
+        dam = dam + mud.get_spellpower(ctx.ch)
+        mud.damage_from_obj(ctx.cast_obj, ctx.ch, victim, dam, ELE.FIRE, ctx.sn, true)
+
+    For skill scripts (ELE.PHYSICAL damage), add damroll/2 before the damage call:
+        dam = dam + mud.get_damroll(ctx.ch) // 2
+        mud.damage(ctx.ch, victim, dam, ctx.sn, ELE.PHYSICAL, true)
+
+    Always compute dam as a local variable first so the bonus line is clean.
+    mud.war_attack and mud.aoe_damage are NOT affected -- they handle bonuses
+    internally and must NOT have explicit bonuses added.
+
 === OUTPUT FORMAT ===
 
 Return ONLY the Lua code, no explanations, no markdown fences.

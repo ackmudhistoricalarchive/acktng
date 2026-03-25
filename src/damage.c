@@ -258,6 +258,9 @@ int calculate_damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt, int elem
    {
       REMOVE_BIT(element, NO_ABSORB);
    }
+   bool no_stat_bonus = IS_SET(element, NO_STAT_BONUS);
+   if (no_stat_bonus)
+      REMOVE_BIT(element, NO_STAT_BONUS);
    if (can_reflect && cloak_handle_spell_defense(ch, victim, dt, element, dam))
       return FALSE;
 
@@ -270,33 +273,36 @@ int calculate_damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt, int elem
 
    if (!IS_SET(element, ELE_PHYSICAL))
    {
-      if (IS_SET(element, SIXTH_DIVISOR))
+      if (!no_stat_bonus)
       {
-         dam += get_spellpower(ch) / 6;
-         REMOVE_BIT(element, SIXTH_DIVISOR);
+         if (IS_SET(element, SIXTH_DIVISOR))
+         {
+            dam += get_spellpower(ch) / 6;
+            REMOVE_BIT(element, SIXTH_DIVISOR);
+         }
+         else if (IS_SET(element, FIFTH_DIVISOR))
+         {
+            dam += get_spellpower(ch) / 5;
+            REMOVE_BIT(element, FIFTH_DIVISOR);
+         }
+         else if (IS_SET(element, FOURTH_DIVISOR))
+         {
+            dam += get_spellpower(ch) / 4;
+            REMOVE_BIT(element, FOURTH_DIVISOR);
+         }
+         else if (IS_SET(element, THIRD_DIVISOR))
+         {
+            dam += get_spellpower(ch) / 3;
+            REMOVE_BIT(element, THIRD_DIVISOR);
+         }
+         else if (IS_SET(element, SECOND_DIVISOR))
+         {
+            dam += get_spellpower(ch) / 2;
+            REMOVE_BIT(element, SECOND_DIVISOR);
+         }
+         else
+            dam += get_spellpower(ch);
       }
-      else if (IS_SET(element, FIFTH_DIVISOR))
-      {
-         dam += get_spellpower(ch) / 5;
-         REMOVE_BIT(element, FIFTH_DIVISOR);
-      }
-      else if (IS_SET(element, FOURTH_DIVISOR))
-      {
-         dam += get_spellpower(ch) / 4;
-         REMOVE_BIT(element, FOURTH_DIVISOR);
-      }
-      else if (IS_SET(element, THIRD_DIVISOR))
-      {
-         dam += get_spellpower(ch) / 3;
-         REMOVE_BIT(element, THIRD_DIVISOR);
-      }
-      else if (IS_SET(element, SECOND_DIVISOR))
-      {
-         dam += get_spellpower(ch) / 2;
-         REMOVE_BIT(element, SECOND_DIVISOR);
-      }
-      else
-         dam += get_spellpower(ch);
 
       if (stance_app[ch->stance].spell_mod != 0)
          dam += dam * stance_app[ch->stance].spell_mod / 10;
@@ -306,7 +312,10 @@ int calculate_damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt, int elem
          dam = dam * (100 + ch->overgrowth * 3) / 100;
    }
    else
-      dam += get_damroll(ch) / 3;
+   {
+      if (!no_stat_bonus)
+         dam += get_damroll(ch) / 3;
+   }
 
    if (!IS_SET(element, ELE_PHYSICAL))
    {
