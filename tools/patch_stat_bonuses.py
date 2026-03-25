@@ -64,18 +64,6 @@ def extract_nth_arg(s, n, start=0):
     return None
 
 
-def find_caster_var(script, call_line_start):
-    """
-    Figure out the caster variable name used in the script.
-    Looks backwards from the damage call for 'local ch = ctx.ch' or similar.
-    Returns 'ctx.ch' as default, or 'ch' if a local alias is found.
-    """
-    before = script[:call_line_start]
-    if "local ch = ctx.ch" in before:
-        return "ch"
-    return "ctx.ch"
-
-
 def find_indentation(line):
     """Return the leading whitespace of a line."""
     return line[: len(line) - len(line.lstrip())]
@@ -206,25 +194,16 @@ def patch_damage_non_physical(script):
 
 
 def patch_script(name, script):
-    """Determine which patches to apply based on script content."""
-    has_damage_from_obj = "mud.damage_from_obj(" in script
-    has_damage_physical = "mud.damage(" in script and "ELE.PHYSICAL" in script
-    # Non-physical mud.damage: has mud.damage but NOT damage_from_obj and NOT physical
-    # (dispel evil, high explosive, jackal's verdict)
-    has_damage_non_physical = (
-        "mud.damage(" in script
-        and not has_damage_from_obj
-        and "ELE.PHYSICAL" not in script
-    )
+    """Apply all three patch functions unconditionally.
 
-    patched = script
-    if has_damage_from_obj:
-        patched = patch_damage_from_obj(patched)
-    if has_damage_physical:
-        patched = patch_damage_physical(patched)
-    if has_damage_non_physical:
-        patched = patch_damage_non_physical(patched)
-
+    Each function only modifies lines matching its specific pattern, so running
+    them unconditionally is safe. This avoids the bug where a script with both
+    mud.damage_from_obj and a non-physical mud.damage call would have the
+    non-physical call missed.
+    """
+    patched = patch_damage_from_obj(script)
+    patched = patch_damage_physical(patched)
+    patched = patch_damage_non_physical(patched)
     return patched
 
 
