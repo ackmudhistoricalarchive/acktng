@@ -117,6 +117,8 @@ All tests must be run locally. Never run tests on remote systems or trigger remo
 
 **A PR may NEVER be merged unless all GitHub CI checks pass.** If CI fails, fix the failure before merging. No overrides, no exceptions.
 
+**Before every push to an existing branch, you MUST run `gh pr view <branch>` to check whether the PR is already merged.** If it is merged, stop. Do not push to that branch. Create a new branch from the current main and open a new PR instead. Pushing to a merged PR branch corrupts the git history and bypasses review. No exceptions.
+
 ## Pre-Push Requirements
 
 **Before committing or pushing any change, ALL of the following must pass — no exceptions:**
