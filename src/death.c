@@ -43,7 +43,15 @@ void make_corpse(CHAR_DATA *ch, char *argument)
          ROOM_INDEX_DATA *room;
          ROOM_AFFECT_DATA *raf;
          ROOM_AFFECT_DATA *raf_next;
-         corpse = create_object(get_obj_index(OBJ_VNUM_CAPTURED_SOUL), ch->level);
+         {
+            OBJ_INDEX_DATA *soul_idx = get_obj_index(OBJ_VNUM_CAPTURED_SOUL);
+            if (soul_idx == NULL)
+            {
+               bug("make_corpse: OBJ_VNUM_CAPTURED_SOUL %d not found", OBJ_VNUM_CAPTURED_SOUL);
+               return;
+            }
+            corpse = create_object(soul_idx, ch->level);
+         }
          corpse->level = ch->level;
          obj_to_room(corpse, ch->in_room);
          OREF(obj_next, OBJ_NEXTCONTENT);
@@ -74,7 +82,15 @@ void make_corpse(CHAR_DATA *ch, char *argument)
          time_t lifetime;
 
          name = ch->short_descr;
-         corpse = create_object(get_obj_index(OBJ_VNUM_CORPSE_NPC), 0);
+         {
+            OBJ_INDEX_DATA *corpse_idx = get_obj_index(OBJ_VNUM_CORPSE_NPC);
+            if (corpse_idx == NULL)
+            {
+               bug("make_corpse: OBJ_VNUM_CORPSE_NPC %d not found", OBJ_VNUM_CORPSE_NPC);
+               return;
+            }
+            corpse = create_object(corpse_idx, 0);
+         }
          corpse->timer = number_range(3, 6);
          corpse->level = ch->level; /* for animate/revenant spell */
          if (arg[0] != '\0')
@@ -108,7 +124,15 @@ void make_corpse(CHAR_DATA *ch, char *argument)
    else /* player */
    {
       name = ch->name;
-      corpse = create_object(get_obj_index(OBJ_VNUM_CORPSE_PC), 0);
+      {
+         OBJ_INDEX_DATA *corpse_idx = get_obj_index(OBJ_VNUM_CORPSE_PC);
+         if (corpse_idx == NULL)
+         {
+            bug("make_corpse: OBJ_VNUM_CORPSE_PC %d not found", OBJ_VNUM_CORPSE_PC);
+            return;
+         }
+         corpse = create_object(corpse_idx, 0);
+      }
       corpse->timer = number_range(20, 30);
 
       sprintf(buf, "%s", ch->name);
@@ -200,12 +224,21 @@ void make_corpse(CHAR_DATA *ch, char *argument)
 
    if (!IS_NPC(ch))
    {
+      ROOM_INDEX_DATA *corpse_room;
+
       if ((IS_SET(ch->pcdata->pflags, PFLAG_PKOK)) || has_hostile_clan_killer ||
           ((ch->level > 30) && (IS_SET(ch->act, PLR_KILLER) || IS_SET(ch->act, PLR_THIEF))) ||
           (leave_corpse))
-         obj_to_room(corpse, ch->in_room);
+         corpse_room = ch->in_room;
       else
-         obj_to_room(corpse, get_room_index(ROOM_VNUM_MORIBUND));
+         corpse_room = get_room_index(ROOM_VNUM_MORIBUND);
+
+      if (corpse_room == NULL)
+         corpse_room = ch->in_room;
+      if (corpse_room == NULL)
+         corpse_room = get_room_index(ROOM_VNUM_LIMBO);
+
+      obj_to_room(corpse, corpse_room);
       {
          CORPSE_DATA *this_corpse;
          GET_FREE(this_corpse, corpse_free);
@@ -219,7 +252,10 @@ void make_corpse(CHAR_DATA *ch, char *argument)
    }
    else
    {
-      obj_to_room(corpse, ch->in_room);
+      ROOM_INDEX_DATA *npc_room = ch->in_room;
+      if (npc_room == NULL)
+         npc_room = get_room_index(ROOM_VNUM_LIMBO);
+      obj_to_room(corpse, npc_room);
       return;
    }
 }
