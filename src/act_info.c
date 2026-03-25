@@ -2386,31 +2386,33 @@ void do_who(CHAR_DATA *ch, char *argument)
          }
          else if (is_remort(wch))
          {
-            /* Remort: display remort class levels */
+            /* Remort: display remort class abbreviations and levels */
             buf3[0] = '\0';
             for (cnt = 0; cnt < 2; cnt++)
             {
-               if (wch->remort_class[cnt] < 0)
+               if (wch->remort_class[cnt] < 0 || wch->remort_level[cnt] < 1)
                   continue;
                if (wch->remort_level[cnt] == MAX_MORTAL)
-                  sprintf(buf4, " @@m *@@N");
+                  sprintf(buf4, " @@m%.2s: *@@N", gclass_table[wch->remort_class[cnt]].who_name);
                else
-                  sprintf(buf4, " @@m%2d@@N", wch->remort_level[cnt]);
+                  sprintf(buf4, " @@m%.2s:%2d@@N", gclass_table[wch->remort_class[cnt]].who_name,
+                          wch->remort_level[cnt]);
                safe_strcat(MAX_STRING_LENGTH, buf3, buf4);
             }
          }
          else
          {
-            /* Mortal: display mortal class levels */
+            /* Mortal: display mortal class abbreviations and levels */
             buf3[0] = '\0';
             for (cnt = 0; cnt < 4; cnt++)
             {
-               if (wch->mortal_class[cnt] < 0)
+               if (wch->mortal_class[cnt] < 0 || wch->mortal_level[cnt] < 1)
                   continue;
                if (wch->mortal_level[cnt] == MAX_MORTAL)
-                  sprintf(buf4, " @@b *@@N");
+                  sprintf(buf4, " @@b%.2s: *@@N", gclass_table[wch->mortal_class[cnt]].who_name);
                else
-                  sprintf(buf4, " @@b%2d@@N", wch->mortal_level[cnt]);
+                  sprintf(buf4, " @@b%.2s:%2d@@N", gclass_table[wch->mortal_class[cnt]].who_name,
+                          wch->mortal_level[cnt]);
                safe_strcat(MAX_STRING_LENGTH, buf3, buf4);
             }
          }
@@ -5210,32 +5212,43 @@ void do_whois(CHAR_DATA *ch, char *argument)
       {
          int i;
          char class_buf[MAX_STRING_LENGTH];
+         char tmp[32];
+         bool has_mortal = FALSE;
+
          class_buf[0] = '\0';
          for (i = 0; i < 4; i++)
          {
-            if (victim->mortal_class[i] >= 0)
+            if (victim->mortal_class[i] >= 0 && victim->mortal_level[i] >= 1)
             {
-               char tmp[32];
+               has_mortal = TRUE;
                sprintf(tmp, " %s:%2d", gclass_table[victim->mortal_class[i]].who_name,
-                       victim->mortal_level[i] > 0 ? victim->mortal_level[i] : 0);
+                       victim->mortal_level[i]);
                strcat(class_buf, tmp);
             }
          }
-         sprintf(buf + strlen(buf), "Levels: [%s ]\n\r", class_buf);
+         if (has_mortal)
+            sprintf(buf + strlen(buf), "Mortal: [%s ]\n\r", class_buf);
+
          if (is_remort(victim))
          {
             class_buf[0] = '\0';
             for (i = 0; i < 2; i++)
             {
-               if (victim->remort_class[i] >= 0)
+               if (victim->remort_class[i] >= 0 && victim->remort_level[i] >= 1)
                {
-                  char tmp[32];
                   sprintf(tmp, " %s:%2d", gclass_table[victim->remort_class[i]].who_name,
-                          victim->remort_level[i] > 0 ? victim->remort_level[i] : 0);
+                          victim->remort_level[i]);
                   strcat(class_buf, tmp);
                }
             }
-            sprintf(buf + strlen(buf), "Remort: [%s ]\n\r", class_buf);
+            if (class_buf[0] != '\0')
+               sprintf(buf + strlen(buf), "Remort: [%s ]\n\r", class_buf);
+         }
+
+         if (is_adept(victim))
+         {
+            sprintf(buf + strlen(buf), "Adept:  [ %s:%2d ]\n\r",
+                    gclass_table[victim->adept_class].who_name, victim->adept_level);
          }
       }
    }
