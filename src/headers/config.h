@@ -998,7 +998,7 @@
 #define ACT_AI_DIALOGUE BIT_34 /* NPC responds to say via LLM */
 
 /* NPC Dialogue AI (tng-ai service) */
-#define TNGAI_URL_DEFAULT "http://10.1.0.111:8000/v1/chat"
+#define TNGAI_URL_DEFAULT "http://10.1.0.246:8000/v1/chat"
 #define TNGAI_MODEL "llama-3.3-70b-versatile"
 #define TNGAI_TIMEOUT 5L     /* socket timeout in seconds */
 #define TNGAI_MAX_TOKENS 100 /* token cap for NPC responses (1-3 sentences) */
