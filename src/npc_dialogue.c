@@ -521,7 +521,8 @@ static char tngai_path[256];
  */
 static bool parse_tngai_url(void)
 {
-   const char *url = TNGAI_URL;
+   const char *env = getenv("TNGAI_URL");
+   const char *url = (env != NULL && env[0] != '\0') ? env : TNGAI_URL_DEFAULT;
    const char *p;
    const char *host_start;
    const char *host_end;
@@ -1592,6 +1593,7 @@ void npc_dialogue_init(void)
       log_f("npc_dialogue_init: failed to parse TNGAI_URL");
       return;
    }
+   log_f("npc_dialogue_init: tng-ai at %s:%s%s", tngai_host, tngai_port, tngai_path);
    load_knowledge_blocks();
 
    if (pthread_create(&worker, NULL, npc_dialogue_worker, NULL) != 0)
