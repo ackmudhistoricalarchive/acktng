@@ -1,0 +1,13 @@
+name: acktng
+language: c
+build: cd src && make
+test: cd src && make lint && make unit-tests
+lint: cd src && make lint
+risky_paths:
+  - src/db_*.c         # database layer
+  - src/comm.c         # network/socket layer
+  - src/act_wiz.c      # staff commands
+definition_of_done:
+  - build succeeds
+  - lint clean
+  - unit tests pass
