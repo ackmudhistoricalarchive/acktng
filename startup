@@ -32,9 +32,9 @@
 #
 # Environment overrides:
 #   PORT      plain-telnet port       (default: 8890)
-#   TLS_PORT  TLS telnet port         (default: 9890)
-#   WSS_PORT  native WSS port         (default: 9891)
-#   WS_PORT   WebSocket loopback port (default: 18890)
+#   TLS_PORT  TLS telnet port         (default: 9890; 0 disables TLS/WSS)
+#   WSS_PORT  native WSS port         (default: 9891; 0 disables TLS/WSS)
+#   WS_PORT   WebSocket loopback port (default: 18890; 0 disables WS)
 #   TLS_CERT  path to PEM cert        (default: /etc/letsencrypt/live/ackmud.com/fullchain.pem)
 #   TLS_KEY   path to PEM key         (default: /etc/letsencrypt/live/ackmud.com/privkey.pem)
 #   TEST      set to 1 to use ephemeral OS-assigned ports (for testing)
@@ -77,13 +77,22 @@ echo "startup: building server..."
 TLS_ARGS=""
 
 if pkg-config --libs openssl >/dev/null 2>&1; then
-    if [ -f "$TLS_CERT" ] && [ -f "$TLS_KEY" ]; then
+    if [ "$TLS_PORT" = "0" ] || [ "$WSS_PORT" = "0" ]; then
+        echo "startup: TLS/WSS disabled by port override"
+    elif [ -f "$TLS_CERT" ] && [ -f "$TLS_KEY" ]; then
         echo "startup: using TLS certificate $TLS_CERT"
         TLS_ARGS="--tls-port $TLS_PORT --wss-port $WSS_PORT --tls-cert $TLS_CERT --tls-key $TLS_KEY"
     else
         echo "startup: WARNING: TLS cert not found at $TLS_CERT — TLS disabled" >&2
         echo "startup: WARNING: ensure Let's Encrypt certs are present before starting" >&2
     fi
+fi
+
+WS_ARGS=""
+if [ "$WS_PORT" = "0" ]; then
+    echo "startup: WebSocket disabled by port override"
+else
+    WS_ARGS="--ws-loopback $WS_PORT"
 fi
 
 # ---------------------------------------------------------------------------
@@ -98,4 +107,4 @@ fi
 # ---------------------------------------------------------------------------
 echo "startup: starting ACK!MUD — telnet $PORT, TLS $TLS_PORT, WSS $WSS_PORT, WS $WS_PORT..."
 # shellcheck disable=SC2086
-exec sh -c "cd '$AREA_DIR' && exec ../src/ack '$PORT' --ws-loopback '$WS_PORT' $TLS_ARGS"
+exec sh -c "cd '$AREA_DIR' && exec ../src/ack '$PORT' $WS_ARGS $TLS_ARGS"
